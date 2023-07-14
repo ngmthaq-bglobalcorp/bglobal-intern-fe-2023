@@ -1,6 +1,6 @@
 export class LangConst {
   public static LOCALES: Locales = {
-    en: { lng: "en", iso: "en" },
+    en: { lng: "en", iso: "en-us" },
     ja: { lng: "ja", iso: "ja" },
     vi: { lng: "vi", iso: "vi" },
   };

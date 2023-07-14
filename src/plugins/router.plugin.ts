@@ -1,25 +1,13 @@
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
-import { AdminPathConst } from "@/const/path.const";
-import { UserPathConst } from "@/const/path.const";
-import AdminNotFoundView from "@/views/AdminViews/NotFound/NotFoundView.vue";
-import UserNotFoundView from "@/views/UserViews/NotFound/NotFoundView.vue";
+import { PathConst } from "@/const/path.const";
+import NotFoundView from "@/views/Errors/NotFoundView.vue";
 
-export const adminRoutes = Object.values(AdminPathConst);
-export const userRoutes = Object.values(UserPathConst);
+export const routes = Object.values(PathConst);
 
-export const adminPathNotFound: RouteRecordRaw = {
-  path: "/admin/:pathMatch(.*)*",
-  name: "AdminPathNotFound",
-  component: AdminNotFoundView,
-  meta: {
-    title: "title.notFound",
-  },
-};
-
-export const userPathNotFound: RouteRecordRaw = {
+export const pathNotFound: RouteRecordRaw = {
   path: "/:pathMatch(.*)*",
-  name: "UserPathNotFound",
-  component: UserNotFoundView,
+  name: "pathNotFound",
+  component: NotFoundView,
   meta: {
     title: "title.notFound",
   },
@@ -27,5 +15,5 @@ export const userPathNotFound: RouteRecordRaw = {
 
 export const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
-  routes: [...adminRoutes, ...userRoutes, adminPathNotFound, userPathNotFound],
+  routes: [...routes, pathNotFound],
 });
