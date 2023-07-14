@@ -1,9 +1,11 @@
 export class LangConst {
   public static LOCALES: Locales = {
-    ja: { lng: "ja", iso: "ja-JP" },
+    en: { lng: "en", iso: "en" },
+    ja: { lng: "ja", iso: "ja" },
+    vi: { lng: "vi", iso: "vi" },
   };
 
-  public static DEFAULT_LOCALE: Locale = this.LOCALES.ja;
+  public static DEFAULT_LOCALE: Locale = this.LOCALES.en;
 
   public static DEFAULT_NS: string = "common";
 }
@@ -14,5 +16,7 @@ export type Locale = {
 };
 
 export type Locales = {
+  en: Locale;
   ja: Locale;
+  vi: Locale;
 };

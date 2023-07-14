@@ -70,7 +70,13 @@ export abstract class Fetch {
    * @param configs HttpRequestInit
    * @return Promise<Response>
    */
-  protected async fetch(uri: string, method: HttpMethods, params: HttpParams | null, body: HttpBody | null, configs: HttpRequestInit): Promise<Response> {
+  protected async fetch(
+    uri: string,
+    method: HttpMethods,
+    params: HttpParams | null,
+    body: HttpBody | null,
+    configs: HttpRequestInit,
+  ): Promise<Response> {
     try {
       const baseUrl = this.baseUrl ? (this.baseUrl.endsWith("/") ? this.baseUrl : this.baseUrl + "/") : "";
       const path = uri.startsWith("/") ? uri.substring(1) : uri;
@@ -96,23 +102,43 @@ export abstract class Fetch {
     }
   }
 
-  public async get(uri: string, params: HttpParams | null = null, configs: HttpRequestInit = defaultHttpRequestConfigs): Promise<Response> {
+  public async get(
+    uri: string,
+    params: HttpParams | null = null,
+    configs: HttpRequestInit = defaultHttpRequestConfigs,
+  ): Promise<Response> {
     return this.fetch(uri, "GET", params, null, configs);
   }
 
-  public async post(uri: string, body: HttpBody | null = null, configs: HttpRequestInit = defaultHttpRequestConfigs): Promise<Response> {
+  public async post(
+    uri: string,
+    body: HttpBody | null = null,
+    configs: HttpRequestInit = defaultHttpRequestConfigs,
+  ): Promise<Response> {
     return this.fetch(uri, "POST", null, body, configs);
   }
 
-  public async put(uri: string, body: HttpBody | null = null, configs: HttpRequestInit = defaultHttpRequestConfigs): Promise<Response> {
+  public async put(
+    uri: string,
+    body: HttpBody | null = null,
+    configs: HttpRequestInit = defaultHttpRequestConfigs,
+  ): Promise<Response> {
     return this.fetch(uri, "PUT", null, body, configs);
   }
 
-  public async patch(uri: string, body: HttpBody | null = null, configs: HttpRequestInit = defaultHttpRequestConfigs): Promise<Response> {
+  public async patch(
+    uri: string,
+    body: HttpBody | null = null,
+    configs: HttpRequestInit = defaultHttpRequestConfigs,
+  ): Promise<Response> {
     return this.fetch(uri, "PATCH", null, body, configs);
   }
 
-  public async delete(uri: string, body: HttpBody | null = null, configs: HttpRequestInit = defaultHttpRequestConfigs): Promise<Response> {
+  public async delete(
+    uri: string,
+    body: HttpBody | null = null,
+    configs: HttpRequestInit = defaultHttpRequestConfigs,
+  ): Promise<Response> {
     return this.fetch(uri, "DELETE", null, body, configs);
   }
 }

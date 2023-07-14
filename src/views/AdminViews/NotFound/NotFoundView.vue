@@ -1,6 +1,7 @@
 <template>
   <div>
     <h1>404</h1>
+    <p>Admin</p>
     <p>{{ app.t("title.notFound") }}</p>
   </div>
 </template>

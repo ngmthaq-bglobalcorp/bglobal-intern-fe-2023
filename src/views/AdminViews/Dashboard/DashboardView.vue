@@ -1,21 +1,17 @@
 <template>
-  <p>Unit {{ props.msg }}</p>
+  <AdminLayout>
+    <div>Dashboard</div>
+  </AdminLayout>
 </template>
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import type { UnitTestComponentProps } from "./UnitTestComponent";
-
-const props = defineProps<UnitTestComponentProps>();
+import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public constructor() {
       super();
-
-      this.commonStore.eventBus.on("click", (data) => {
-        console.log(data);
-      });
     }
   },
 );

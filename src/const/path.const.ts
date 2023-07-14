@@ -1,13 +1,26 @@
 import type { RouteRecordRaw } from "vue-router";
-import HomeViewVue from "@/views/home/HomeView.vue";
+import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
 
-export class PathConst {
+export class UserPathConst {
   public static home: Route = {
     path: "/",
-    name: "home",
+    name: "Home",
     component: HomeViewVue,
     meta: {
-      title: "title.home",
+      title: "title.user.home",
+    },
+  };
+}
+
+import DashboardViewVue from "@/views/AdminViews/Dashboard/DashboardView.vue";
+
+export class AdminPathConst {
+  public static dashboard: Route = {
+    path: "/admin",
+    name: "Dasboard",
+    component: DashboardViewVue,
+    meta: {
+      title: "title.admin.dashboard",
     },
   };
 }
