@@ -29,7 +29,9 @@ export class SearchParams extends Vue {
 
   public changeParams = (params: TmpSearchParamState) => {
     const string = this.convertObjectToString(params);
-    const newParams = Object.fromEntries(Object.entries(params).filter((param) => ![null, undefined, ""].includes(param[1])));
+    const newParams = Object.fromEntries(
+      Object.entries(params).filter((param) => ![null, undefined, ""].includes(param[1])),
+    );
     if (window.location.search !== string) {
       this.pushState(string);
       GlobalEvent.emit(SEARCH_PARAMS_EVENTS.updated, newParams);
