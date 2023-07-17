@@ -6,10 +6,10 @@
         <!-- Form -->
         <form @submit.prevent="app.submitForm">
           <div class="content-title">
-            <h1 class="title">Create your account</h1>
+            <h1 class="title">Sign in</h1>
             <span>
-              Already have an account?
-              <router-link to="/admin/signin" class="link">Sign in here</router-link>
+              Don't have an account yet?
+              <router-link to="/admin/signup" class="link">Sign up here</router-link>
             </span>
           </div>
 
@@ -17,7 +17,7 @@
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
                 <img class="avatar" src="@\assets\img\svg\google.svg" alt="Google Icon" />
-                Sign up with Google
+                Sign in with Google
               </span>
             </button>
           </div>
@@ -25,24 +25,6 @@
           <div class="content-or">
             <span class="divider text-muted">OR</span>
           </div>
-
-          <!-- Form Group -->
-          <div class="form-group">
-            <label class="input-label" for="organizationName">Organization name</label>
-
-            <input
-              type="text"
-              :class="['input-form', { 'is-invalid': false, 'is-valid': false }]"
-              name="name"
-              id="organizationName"
-              placeholder="Organization name"
-              v-model="app.organizationName.value"
-              required
-            />
-
-            <div class="invalid-feedback" v-if="false">Please enter your Organization name.</div>
-          </div>
-          <!-- End Form Group -->
 
           <!-- Form Group -->
           <div class="form-group">
@@ -64,7 +46,12 @@
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="password">Password</label>
+            <label class="input-label" for="password">
+              <span class="item">
+                Password
+                <router-link to="" class="link input-label-secondary">Forgot Password?</router-link>
+              </span>
+            </label>
 
             <input
               type="password"
@@ -80,50 +67,22 @@
           </div>
           <!-- End Form Group -->
 
-          <!-- Form Group -->
-          <div class="form-group">
-            <label class="input-label" for="confirmPassword">Confirm password</label>
-
-            <input
-              type="password"
-              :class="['input-form', { 'is-invalid': false, 'is-valid': false }]"
-              name="confirmPassword"
-              id="confirmPassword"
-              placeholder="8+ characters required"
-              v-model="app.confirmPassword.value"
-              required
-            />
-
-            <div class="invalid-feedback" v-if="false">Password does not match the confirm password.</div>
-          </div>
-          <!-- End Form Group -->
-
           <!-- Checkbox -->
           <div class="form-group">
             <div class="input-group">
               <input
                 type="checkbox"
                 :class="['custom-control-input', { 'is-invalid': false, 'is-valid': false }]"
-                name="termsCheckbox"
-                id="termsCheckbox"
-                required
+                name="rememberCheckbox"
+                id="rememberCheckbox"
               />
 
-              <label class="custom-control-label text-muted" for="termsCheckbox">
-                I accept the <router-link to="" class="link">Terms and Conditions</router-link>
-              </label>
+              <label class="custom-control-label text-muted" for="rememberCheckbox">Remember me</label>
             </div>
-
-            <div class="invalid-feedback" v-if="false">Please accept our Terms and Conditions.</div>
           </div>
           <!-- End Checkbox -->
 
-          <button type="submit" class="g-btn submit-btn">Create an account</button>
-
-          <button type="submit" class="g-btn trial-btn">
-            or Start your 30-day trial
-            <i class="tio-chevron-right"></i>
-          </button>
+          <button type="submit" class="g-btn submit-btn">Sign in</button>
         </form>
         <!-- End Form -->
       </div>
@@ -139,24 +98,18 @@ import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public organizationName: Ref<String> = this.ref("");
     public organizationEmail: Ref<String> = this.ref("");
     public password: Ref<String> = this.ref("");
-    public confirmPassword: Ref<String> = this.ref("");
 
     public constructor() {
       super();
     }
 
     public submitForm = () => {
-      console.log(this.organizationName.value);
       console.log(this.organizationEmail.value);
       console.log(this.password.value);
-      console.log(this.confirmPassword.value);
-      this.organizationName.value = "";
       this.organizationEmail.value = "";
       this.password.value = "";
-      this.confirmPassword.value = "";
     };
   },
 );
@@ -262,6 +215,22 @@ const app = defineClassComponent(
         & .input-label {
           display: block;
           font-size: 0.875rem;
+
+          & .item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            & .input-label-secondary {
+              color: #8c98a4 !important;
+              font-size: 0.8125rem;
+              margin-left: 0.25rem;
+
+              &:hover {
+                color: #0052ea !important;
+              }
+            }
+          }
         }
 
         & .input-form {
@@ -385,19 +354,6 @@ const app = defineClassComponent(
         &:hover {
           background-color: #1164ff;
           border-color: #045cff;
-        }
-      }
-
-      & .trial-btn {
-        color: var(--color-link);
-        background-color: transparent;
-        border: transparent;
-        margin-top: 0.5rem;
-
-        font-weight: 600;
-
-        &:hover {
-          color: #0052ea;
         }
       }
     }

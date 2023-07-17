@@ -120,9 +120,9 @@ label {
   text-align: center;
 
   padding: 0.875rem 1rem;
-  font-size: 1rem;
+  font-size: 1rem !important;
   font-weight: 400;
-  line-height: 1.5;
+  line-height: 1.5 !important;
   border-radius: 0.3125rem !important;
   transition: all 0.2s ease-in-out;
 }
@@ -130,4 +130,8 @@ label {
 .link {
   text-decoration: none !important;
   color: var(--color-link) !important;
+
+  &:hover {
+    color: #0052ea !important;
+  }
 }

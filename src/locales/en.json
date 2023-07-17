@@ -8,6 +8,7 @@
     },
     "admin": {
       "signup": "Sign Up",
+      "signin": "Sign In",
       "dashboard": "Dashboard"
     }
   }
