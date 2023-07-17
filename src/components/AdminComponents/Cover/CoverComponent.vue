@@ -13,23 +13,13 @@
           <select>
             <option value="language1">
               <span class="d-flex align-items-center">
-                <img
-                  class="avatar avatar-xss avatar-circle mr-2"
-                  src="@/assets/vendor/flag-icon-css/flags/1x1/us.svg"
-                  alt="Image description"
-                  width="16"
-                />
+                <img class="avatar avatar-xss avatar-circle mr-2" src="" alt="Image description" width="16" />
                 <span>English (US)</span>
               </span>
             </option>
             <option value="language2" selected>
               <span class="d-flex align-items-center">
-                <img
-                  class="avatar avatar-xss avatar-circle mr-2"
-                  src="@/assets/vendor/flag-icon-css/flags/1x1/gb.svg"
-                  alt="Image description"
-                  width="16"
-                />
+                <img class="avatar avatar-xss avatar-circle mr-2" src="" alt="Image description" width="16" />
                 <span>English (UK)</span>
               </span>
             </option>
