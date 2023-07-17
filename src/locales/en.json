@@ -9,6 +9,7 @@
     "admin": {
       "signup": "Sign Up",
       "signin": "Sign In",
+      "forgotPassword": "Forgot Password",
       "dashboard": "Dashboard"
     }
   },
@@ -17,7 +18,8 @@
     "errorEmail": "Please enter your Organization name.",
     "errorPassword": "Your password is invalid. Please try again.",
     "errorConfirmPassword": "Password does not match the confirm password.",
-    "errorTerms": "Please accept our Terms and Conditions."
+    "errorTerms": "Please accept our Terms and Conditions.",
+    "errorOtp": "Please enter a valid OTP."
   },
   "app": {
     "coverTitle": "The best part? Everything.",
@@ -58,6 +60,11 @@
     "dontHaveAccount": "Don't have an account yet?",
     "signupHere": "Sign up here",
     "signinGoogle": "Sign in with Google",
-    "rememberMe": "Remember me"
+    "rememberMe": "Remember me",
+    "forgotPasswordTitle": "Enter the email address you used when you joined and we'll send you instructions to reset your password.",
+    "emailOtp": "Email OTP",
+    "resendOtp": "Resend OTP?",
+    "submit": "Submit",
+    "backToSignin": "Back to Sign in"
   }
 }

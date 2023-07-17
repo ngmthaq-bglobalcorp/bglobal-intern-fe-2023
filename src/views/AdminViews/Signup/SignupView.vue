@@ -428,6 +428,11 @@ const app = defineClassComponent(
         & .custom-control-input:checked ~ .custom-control-label::after {
           background-image: url("@/assets/img/check.svg");
         }
+
+        & .custom-control-input.is-invalid ~ .custom-control-label::before {
+          border-color: $danger;
+          box-shadow: 0 0 10px rgba(237, 76, 120, 0.1);
+        }
       }
     }
 
