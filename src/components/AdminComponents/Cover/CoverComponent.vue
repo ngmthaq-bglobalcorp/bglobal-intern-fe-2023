@@ -7,32 +7,13 @@
         <router-link to="" class="link">
           <img src="@\assets\img\logo.svg" alt="Logo" />
         </router-link>
-
-        <!-- Select -->
-        <div class="select-custom">
-          <select>
-            <option value="language1">
-              <span class="d-flex align-items-center">
-                <img class="avatar avatar-xss avatar-circle mr-2" src="" alt="Image description" width="16" />
-                <span>English (US)</span>
-              </span>
-            </option>
-            <option value="language2" selected>
-              <span class="d-flex align-items-center">
-                <img class="avatar avatar-xss avatar-circle mr-2" src="" alt="Image description" width="16" />
-                <span>English (UK)</span>
-              </span>
-            </option>
-          </select>
-        </div>
-        <!-- End Select -->
       </div>
     </div>
     <!-- End Logo & Language -->
 
     <div class="content">
       <div class="content-image">
-        <img src="@\assets\img\svg\chat.svg" alt="Image" />
+        <img src="@\assets\img\chat.svg" alt="Image" />
       </div>
 
       <div class="content-title">
@@ -80,6 +61,7 @@ const app = defineClassComponent(
 @import "@/assets/scss/modules";
 
 .cover {
+  flex: 1;
   max-width: 50%;
   min-height: 100vh;
   display: flex;
@@ -87,7 +69,7 @@ const app = defineClassComponent(
   align-items: center;
   justify-content: center;
   position: relative;
-  background-color: var(--color-cover-background);
+  background-color: $light;
   padding: 0;
 
   & .logo-language {
@@ -99,19 +81,11 @@ const app = defineClassComponent(
 
     & .logo-language-content {
       display: flex;
-      justify-content: space-between;
+      justify-content: flex-start;
 
       & img {
         min-width: 6rem;
         max-width: 6rem;
-      }
-
-      & .select-custom {
-        position: relative;
-
-        & select {
-          background-color: transparent;
-        }
       }
     }
   }
@@ -175,12 +149,12 @@ const app = defineClassComponent(
       display: flex;
       justify-content: space-between;
       margin-top: 2rem;
-      gap: 1rem;
 
       & img {
         max-width: 100px;
         height: auto;
-        color: gray;
+        color: $gray;
+        margin-right: 1rem;
       }
     }
   }

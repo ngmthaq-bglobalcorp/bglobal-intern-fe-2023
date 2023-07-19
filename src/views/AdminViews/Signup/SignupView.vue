@@ -1,6 +1,5 @@
 <template>
-  <BaseLayout id="base-layout">
-    <CoverComponent id="cover"></CoverComponent>
+  <CoverLayout>
     <div class="signup-container">
       <div class="content">
         <!-- Form -->
@@ -13,7 +12,7 @@
           <div class="signup-google">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
-                <img class="avatar" src="@\assets\img\svg\google.svg" alt="Google Icon" />
+                <img class="avatar" src="@\assets\img\google.svg" alt="Google Icon" />
                 Sign up with Google
               </span>
             </button>
@@ -29,15 +28,15 @@
 
             <input
               type="text"
-              :class="['input-form', { 'is-invalid': false, 'is-valid': false }]"
+              :class="['input-form', { 'is-invalid': app.errorName.value !== '' }]"
               name="name"
               id="organizationName"
               placeholder="Organization name"
               v-model="app.organizationName.value"
-              required
+              @focus="app.focusName"
             />
 
-            <div class="invalid-feedback" v-if="false">Please enter your Organization name.</div>
+            <div class="invalid-feedback" v-if="app.errorName.value !== ''">{{ app.errorName.value }}</div>
           </div>
           <!-- End Form Group -->
 
@@ -47,15 +46,15 @@
 
             <input
               type="email"
-              :class="['input-form', { 'is-invalid': false, 'is-valid': false }]"
+              :class="['input-form', { 'is-invalid': app.errorEmail.value !== '' }]"
               name="email"
               id="organizationEmail"
               placeholder="Email@organization.com"
               v-model="app.organizationEmail.value"
-              required
+              @focus="app.focusEmail"
             />
 
-            <div class="invalid-feedback" v-if="false">Please enter a valid email address.</div>
+            <div class="invalid-feedback" v-if="app.errorEmail.value !== ''">{{ app.errorEmail.value }}</div>
           </div>
           <!-- End Form Group -->
 
@@ -65,15 +64,15 @@
 
             <input
               type="password"
-              :class="['input-form', { 'is-invalid': false, 'is-valid': false }]"
+              :class="['input-form', { 'is-invalid': app.errorPassword.value !== '' }]"
               name="password"
               id="password"
               placeholder="8+ characters required"
               v-model="app.password.value"
-              required
+              @focus="app.focusPassword"
             />
 
-            <div class="invalid-feedback" v-if="false">Your password is invalid. Please try again.</div>
+            <div class="invalid-feedback" v-if="app.errorPassword.value !== ''">{{ app.errorPassword.value }}</div>
           </div>
           <!-- End Form Group -->
 
@@ -83,15 +82,17 @@
 
             <input
               type="password"
-              :class="['input-form', { 'is-invalid': false, 'is-valid': false }]"
+              :class="['input-form', { 'is-invalid': app.errorConfirmPassword.value !== '' }]"
               name="confirmPassword"
               id="confirmPassword"
               placeholder="8+ characters required"
               v-model="app.confirmPassword.value"
-              required
+              @focus="app.focusConfirmPassword"
             />
 
-            <div class="invalid-feedback" v-if="false">Password does not match the confirm password.</div>
+            <div class="invalid-feedback" v-if="app.errorConfirmPassword.value !== ''">
+              {{ app.errorConfirmPassword.value }}
+            </div>
           </div>
           <!-- End Form Group -->
 
@@ -100,10 +101,11 @@
             <div class="input-group">
               <input
                 type="checkbox"
-                :class="['custom-control-input', { 'is-invalid': false, 'is-valid': false }]"
+                :class="['custom-control-input', { 'is-invalid': app.errorTerms.value }]"
                 name="termsCheckbox"
                 id="termsCheckbox"
-                required
+                v-model="app.termsAndConditions.value"
+                @focus="app.focusTerms"
               />
 
               <label class="custom-control-label text-muted" for="termsCheckbox">
@@ -111,7 +113,7 @@
               >
             </div>
 
-            <div class="invalid-feedback" v-if="false">Please accept our Terms and Conditions.</div>
+            <div class="invalid-feedback" v-if="app.errorTerms.value">{{ app.errorTerms.value }}</div>
           </div>
           <!-- End Checkbox -->
 
@@ -125,35 +127,108 @@
         <!-- End Form -->
       </div>
     </div>
-  </BaseLayout>
+  </CoverLayout>
 </template>
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import BaseLayout from "@/layouts/BaseLayout.vue";
-import CoverComponent from "@/components/AdminComponents/Cover/CoverComponent.vue";
+import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public organizationName: Ref<String> = this.ref("");
-    public organizationEmail: Ref<String> = this.ref("");
-    public password: Ref<String> = this.ref("");
-    public confirmPassword: Ref<String> = this.ref("");
+    public organizationName: Ref<string> = this.ref("");
+    public organizationEmail: Ref<string> = this.ref("");
+    public password: Ref<string> = this.ref("");
+    public confirmPassword: Ref<string> = this.ref("");
+    public termsAndConditions: Ref<Boolean> = this.ref(false);
+    public errorName: Ref<string> = this.ref("");
+    public errorEmail: Ref<string> = this.ref("");
+    public errorPassword: Ref<string> = this.ref("");
+    public errorConfirmPassword: Ref<string> = this.ref("");
+    public errorTerms: Ref<string> = this.ref("");
 
     public constructor() {
       super();
     }
 
+    public validEmail = (email: string) => {
+      const expression: RegExp =
+        /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
+
+      const result: boolean = expression.test(email);
+      return result;
+    };
+
+    public validPassword = (password: string) => {
+      if (password.length < 8) {
+        return false;
+      }
+      return true;
+    };
+
     public submitForm = () => {
-      console.log(this.organizationName.value);
-      console.log(this.organizationEmail.value);
-      console.log(this.password.value);
-      console.log(this.confirmPassword.value);
-      this.organizationName.value = "";
-      this.organizationEmail.value = "";
-      this.password.value = "";
-      this.confirmPassword.value = "";
+      if (!this.organizationName.value) {
+        this.errorName.value = "Please enter your Organization name.";
+      } else {
+        this.errorName.value = "";
+      }
+      if (!this.organizationEmail.value || !this.validEmail(this.organizationEmail.value)) {
+        this.errorEmail.value = "Please enter a valid email address.";
+      } else {
+        this.errorEmail.value = "";
+      }
+      if (!this.password.value || !this.validPassword(this.password.value)) {
+        this.errorPassword.value = "Your password is invalid. Please try again.";
+      } else {
+        this.errorPassword.value = "";
+      }
+      if (!this.confirmPassword.value || !this.validPassword(this.confirmPassword.value)) {
+        this.errorConfirmPassword.value = "Password does not match the confirm password.";
+      } else if (this.confirmPassword.value !== this.password.value) {
+        this.errorConfirmPassword.value = "Password does not match the confirm password.";
+      } else {
+        this.errorConfirmPassword.value = "";
+      }
+      if (!this.termsAndConditions.value) {
+        this.errorTerms.value = "Please accept our Terms and Conditions.";
+      } else {
+        this.errorTerms.value = "";
+      }
+    };
+
+    public focusName = () => {
+      if (this.errorName.value) {
+        this.errorName.value = "";
+        this.organizationName.value = "";
+      }
+    };
+
+    public focusEmail = () => {
+      if (this.errorEmail.value) {
+        this.errorEmail.value = "";
+        this.organizationEmail.value = "";
+      }
+    };
+
+    public focusPassword = () => {
+      if (this.errorPassword.value) {
+        this.errorPassword.value = "";
+        this.password.value = "";
+      }
+    };
+
+    public focusConfirmPassword = () => {
+      if (this.errorConfirmPassword.value) {
+        this.errorConfirmPassword.value = "";
+        this.confirmPassword.value = "";
+      }
+    };
+
+    public focusTerms = () => {
+      if (this.errorTerms.value) {
+        this.errorTerms.value = "";
+      }
     };
   },
 );
@@ -161,241 +236,233 @@ const app = defineClassComponent(
 
 <style scoped lang="scss">
 @import "@/assets/scss/modules";
+@import "@/assets/scss/admin";
 
-#base-layout {
+.signup-container {
+  flex: 1;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
 
-  & #cover {
-    flex: 1;
-  }
+  & .content {
+    width: 100%;
+    padding: 3rem 0;
+    max-width: 25rem;
 
-  & .signup-container {
-    flex: 1;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
+    & .content-title {
+      text-align: center;
+      margin-bottom: 2rem;
 
-    & .content {
-      width: 100%;
-      padding: 3rem 0;
-      max-width: 25rem;
-
-      & .content-title {
-        text-align: center;
-        margin-bottom: 2rem;
-
-        & .title {
-          font-size: 1.75rem;
-          font-weight: 600;
-          line-height: 1.4;
-        }
-
-        & span {
-          margin-bottom: 1rem;
-        }
+      & .title {
+        font-size: 1.75rem;
+        font-weight: 600;
+        line-height: 1.4;
       }
 
-      & .signup-google {
-        margin-bottom: 1.5rem;
+      & span {
+        margin-bottom: 1rem;
+      }
+    }
 
-        & .google-btn {
-          color: var(--color-dark-variant);
-          background-color: var(--color-white);
-          border: 1px solid var(--color-border);
+    & .signup-google {
+      margin-bottom: 1.5rem;
 
-          &:hover {
-            box-shadow: 0 3px 6px -2px rgba(140, 152, 164, 0.25);
+      & .google-btn {
+        color: $dark-variant;
+        background-color: $white;
+        border: 1px solid $border;
 
-            & .item {
-              color: var(--color-link);
-            }
-          }
+        &:hover {
+          box-shadow: 0 3px 6px -2px rgba(140, 152, 164, 0.25);
 
           & .item {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.5rem;
-            color: var(--color-dark-variant);
-
-            & .avatar {
-              width: 1rem;
-              height: 1rem;
-            }
+            color: $blue;
           }
         }
-      }
 
-      & .content-or {
-        text-align: center;
-        margin-bottom: 1.5rem;
-
-        & .divider {
+        & .item {
           display: flex;
           align-items: center;
+          justify-content: center;
+          gap: 0.5rem;
+          color: $dark-variant;
 
-          &::before,
-          &::after {
-            content: "";
-            flex: 1 1 0%;
-            border-top: 0.0625rem solid var(--color-border);
-            margin-top: 0.0625rem;
+          & .avatar {
+            width: 1rem;
+            height: 1rem;
           }
+        }
+      }
+    }
+
+    & .content-or {
+      text-align: center;
+      margin-bottom: 1.5rem;
+
+      & .divider {
+        display: flex;
+        align-items: center;
+
+        &::before,
+        &::after {
+          content: "";
+          flex: 1 1 0%;
+          border-top: 0.0625rem solid $border;
+          margin-top: 0.0625rem;
+        }
+
+        &::before {
+          margin-right: 1.5rem;
+        }
+
+        &::after {
+          margin-left: 1.5rem;
+        }
+      }
+    }
+
+    & .form-group {
+      margin-bottom: 1.5rem;
+
+      & .input-label {
+        display: block;
+        font-size: 0.875rem;
+      }
+
+      & .input-form {
+        display: block;
+        width: 100%;
+        height: calc(1.5em + 1.875rem);
+        padding: 0.875rem 1.09375rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: $dark;
+        background-color: $white;
+        background-clip: padding-box;
+        border: 0.0625rem solid $border;
+        border-radius: 0.3125rem;
+        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+
+        &::placeholder {
+          color: #97a4af;
+          opacity: 1;
+        }
+
+        &:focus {
+          color: $dark;
+          background-color: $white;
+          outline: 0;
+          border-color: rgba(55, 125, 255, 0.4);
+          box-shadow: 0 0 10px rgba(55, 125, 255, 0.1);
+        }
+      }
+
+      & .is-invalid,
+      & .is-invalid:focus {
+        border-color: $danger;
+        box-shadow: 0 0 10px rgba(237, 76, 120, 0.1);
+      }
+
+      & .is-valid,
+      & .is-valid:focus {
+        border-color: $success;
+        box-shadow: 0 0 10px rgba(0, 201, 167, 0.1);
+      }
+
+      & .invalid-feedback {
+        display: block;
+        width: 100%;
+        margin-top: 0.25rem;
+        font-size: 80%;
+        color: $danger;
+      }
+
+      & .input-group {
+        position: relative;
+        z-index: 1;
+        display: block;
+        min-height: 1.4rem;
+        padding-left: 1.5rem;
+
+        & .custom-control-input {
+          position: absolute;
+          left: 0;
+          z-index: -1;
+          width: 1rem;
+          height: 1.2rem;
+          opacity: 0;
+          border-radius: 0.25rem;
+        }
+
+        & .custom-control-label {
+          position: relative;
+          margin-bottom: 0;
+          vertical-align: top;
+          cursor: pointer;
 
           &::before {
-            margin-right: 1.5rem;
+            content: "";
+            position: absolute;
+            display: block;
+            top: 0.2rem;
+            left: -1.5rem;
+            width: 1rem;
+            height: 1rem;
+            pointer-events: none;
+            background-color: $white;
+            border: 0.0625rem solid $border;
+            border-radius: 0.25rem;
+            transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
           }
 
           &::after {
-            margin-left: 1.5rem;
-          }
-        }
-      }
-
-      & .form-group {
-        margin-bottom: 1.5rem;
-
-        & .input-label {
-          display: block;
-          font-size: 0.875rem;
-        }
-
-        & .input-form {
-          display: block;
-          width: 100%;
-          height: calc(1.5em + 1.875rem);
-          padding: 0.875rem 1.09375rem;
-          font-size: 1rem;
-          font-weight: 400;
-          line-height: 1.5;
-          color: var(--color-dark);
-          background-color: #fff;
-          background-clip: padding-box;
-          border: 0.0625rem solid var(--color-border);
-          border-radius: 0.3125rem;
-          transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-
-          &::placeholder {
-            color: #97a4af;
-            opacity: 1;
-          }
-
-          &:focus {
-            color: var(--color-dark);
-            background-color: var(--color-white);
-            outline: 0;
-            border-color: rgba(55, 125, 255, 0.4);
-            box-shadow: 0 0 10px rgba(55, 125, 255, 0.1);
-          }
-        }
-
-        & .is-invalid,
-        & .is-invalid:focus {
-          border-color: var(--color-danger);
-          box-shadow: 0 0 10px rgba(237, 76, 120, 0.1);
-        }
-
-        & .is-valid,
-        & .is-valid:focus {
-          border-color: var(--color-success);
-          box-shadow: 0 0 10px rgba(0, 201, 167, 0.1);
-        }
-
-        & .invalid-feedback {
-          display: block;
-          width: 100%;
-          margin-top: 0.25rem;
-          font-size: 80%;
-          color: var(--color-danger);
-        }
-
-        & .input-group {
-          position: relative;
-          z-index: 1;
-          display: block;
-          min-height: 1.4rem;
-          padding-left: 1.5rem;
-
-          & .custom-control-input {
+            content: "";
             position: absolute;
-            left: 0;
-            z-index: -1;
+            display: block;
+            top: 0.2rem;
+            left: -1.5rem;
             width: 1rem;
-            height: 1.2rem;
-            opacity: 0;
-            border-radius: 0.25rem;
+            height: 1rem;
+            background: no-repeat 50%/50% 50%;
           }
+        }
 
-          & .custom-control-label {
-            position: relative;
-            margin-bottom: 0;
-            vertical-align: top;
-            cursor: pointer;
+        & .custom-control-input:checked ~ .custom-control-label::before {
+          color: $white;
+          border-color: $blue-light;
+          background-color: $blue-light;
+        }
 
-            &::before {
-              content: "";
-              position: absolute;
-              display: block;
-              top: 0.2rem;
-              left: -1.5rem;
-              width: 1rem;
-              height: 1rem;
-              pointer-events: none;
-              background-color: var(--color-white);
-              border: 0.0625rem solid #d6dbeb;
-              border-radius: 0.25rem;
-              transition: background-color 0.15s ease-in-out, border-color 0.15s ease-in-out,
-                box-shadow 0.15s ease-in-out;
-            }
-
-            &::after {
-              content: "";
-              position: absolute;
-              display: block;
-              top: 0.2rem;
-              left: -1.5rem;
-              width: 1rem;
-              height: 1rem;
-              background: no-repeat 50%/50% 50%;
-            }
-          }
-
-          & .custom-control-input:checked ~ .custom-control-label::before {
-            color: #fff;
-            border-color: #377dff;
-            background-color: #377dff;
-          }
-
-          & .custom-control-input:checked ~ .custom-control-label::after {
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' width='110' height='110' viewBox='0 0 110 110'%3e%3cpath fill='%23fff' d='M98.1,16.2c-2.5-2.3-6.4-2.2-8.7,0.2L36.7,70.1l-13-15.5c-2.9-3.5-7.9-4.1-11.1-1.4c-2.9,2.4-3.5,6.6-1.4,10.1 l16.5,28c3.2,5.4,10.8,5.8,14.5,0.8l56.5-67.3C100.7,22.1,100.4,18.5,98.1,16.2z'/%3e%3c/svg%3e");
-          }
+        & .custom-control-input:checked ~ .custom-control-label::after {
+          background-image: url("@/assets/img/check.svg");
         }
       }
+    }
 
-      & .submit-btn {
-        color: var(--color-white);
-        background-color: #377dff;
-        border-color: #377dff;
-        margin-bottom: 0.5rem;
+    & .submit-btn {
+      color: $white;
+      background-color: $blue-light;
+      border-color: $blue-light;
+      margin-bottom: 0.5rem;
 
-        &:hover {
-          background-color: #1164ff;
-          border-color: #045cff;
-        }
+      &:hover {
+        background-color: $blue;
+        border-color: $blue;
       }
+    }
 
-      & .trial-btn {
-        color: var(--color-link);
-        background-color: transparent;
-        border: transparent;
-        margin-top: 0.5rem;
+    & .trial-btn {
+      color: $blue-light;
+      background-color: transparent;
+      border: transparent;
+      margin-top: 0.5rem;
 
-        font-weight: 600;
+      font-weight: 600;
 
-        &:hover {
-          color: #0052ea;
-        }
+      &:hover {
+        color: $blue;
       }
     }
   }
