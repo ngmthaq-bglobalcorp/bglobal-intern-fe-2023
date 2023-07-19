@@ -8,6 +8,7 @@
     },
     "admin": {
       "signup": "Sign Up",
+      "signin": "Sign In",
       "dashboard": "Dashboard"
     }
   },
@@ -47,10 +48,16 @@
     "organizationEmail": "Organization email",
     "password": "Password",
     "confirmPassword": "Confirm password",
+    "forgotPassword": "Forgot Password?",
     "passwordRequired": "8+ characters required",
     "iAccept": "I accept the ",
     "termsAndConditions": "Terms and Conditions",
     "buttonCreate": "Create an account",
-    "startTrial": "or Start your 30-day trial"
+    "startTrial": "or Start your 30-day trial",
+    "signin": "Sign in",
+    "dontHaveAccount": "Don't have an account yet?",
+    "signupHere": "Sign up here",
+    "signinGoogle": "Sign in with Google",
+    "rememberMe": "Remember me"
   }
 }
