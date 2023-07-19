@@ -3,7 +3,7 @@
     <p class="tittle">News</p>
     <a class="link" target="_blank" href="https://secure.haj.co.jp/event/spsnCF_230728/?mediaid=25&amp;application=pwa"
       ><div class="image">
-        <img src="../../../../assets/img/tải xuống (8).png" class="icon" />
+        <img src="@/assets/img/seminar.png" class="icon" />
 
         <p class="time">7/26</p>
       </div>
@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts">
-import { BaseComponent, defineClassComponent } from "../../../../plugins/component.plugin";
+import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
