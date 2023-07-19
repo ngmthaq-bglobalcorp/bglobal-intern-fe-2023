@@ -8,7 +8,56 @@
     },
     "admin": {
       "signup": "Sign Up",
+      "signin": "Sign In",
       "dashboard": "Dashboard"
     }
+  },
+  "message": {
+    "errorName": "Please enter your Organization name.",
+    "errorEmail": "Please enter your Organization name.",
+    "errorPassword": "Your password is invalid. Please try again.",
+    "errorConfirmPassword": "Password does not match the confirm password.",
+    "errorTerms": "Please accept our Terms and Conditions."
+  },
+  "app": {
+    "coverTitle": "The best part? Everything.",
+    "coverContent": [
+      {
+        "title": "Stick to your budget",
+        "content": "Find the right service for every price point. No hourly rates, just project-based pricing."
+      },
+      {
+        "title": "Get quality work done quickly",
+        "content": "Hand your project over to a talented freelancer in minutes, get long-lasting results."
+      },
+      {
+        "title": "Pay when you're happy",
+        "content": "Upfront quotes mean no surprises. Payments only get released when you approve."
+      },
+      {
+        "title": "Count on 24/7 support",
+        "content": "Our round-the-clock support team is available to help anytime, anywhere."
+      }
+    ],
+    "createAccount": "Create your account",
+    "haveAccount": "Already have an account?",
+    "signinHere": "Sign in here",
+    "signupGoogle": "Sign up with Google",
+    "or": "OR",
+    "organizationName": "Organization name",
+    "organizationEmail": "Organization email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "forgotPassword": "Forgot Password?",
+    "passwordRequired": "8+ characters required",
+    "iAccept": "I accept the ",
+    "termsAndConditions": "Terms and Conditions",
+    "buttonCreate": "Create an account",
+    "startTrial": "or Start your 30-day trial",
+    "signin": "Sign in",
+    "dontHaveAccount": "Don't have an account yet?",
+    "signupHere": "Sign up here",
+    "signinGoogle": "Sign in with Google",
+    "rememberMe": "Remember me"
   }
 }

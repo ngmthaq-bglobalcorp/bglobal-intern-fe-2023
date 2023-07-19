@@ -1,6 +1,7 @@
 import type { RouteRecordRaw } from "vue-router";
 import DashboardViewVue from "@/views/AdminViews/Dashboard/DashboardView.vue";
 import SignupViewVue from "@/views/AdminViews/Signup/SignupView.vue";
+import SigninViewVue from "@/views/AdminViews/Signin/SigninView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
 
 export class PathConst {
@@ -10,6 +11,15 @@ export class PathConst {
     component: SignupViewVue,
     meta: {
       title: "title.admin.signup",
+    },
+  };
+
+  public static adminSignin: Route = {
+    path: "/admin/signin",
+    name: "adminSignin",
+    component: SigninViewVue,
+    meta: {
+      title: "title.admin.signin",
     },
   };
 
