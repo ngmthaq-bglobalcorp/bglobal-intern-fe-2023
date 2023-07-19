@@ -96,6 +96,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import type { Ref } from "vue";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -109,28 +110,13 @@ const app = defineClassComponent(
       super();
     }
 
-    public validEmail = (email: string) => {
-      const expression: RegExp =
-        /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
-
-      const result: boolean = expression.test(email);
-      return result;
-    };
-
-    public validPassword = (password: string) => {
-      if (password.length < 8) {
-        return false;
-      }
-      return true;
-    };
-
     public submitForm = () => {
-      if (!this.organizationEmail.value || !this.validEmail(this.organizationEmail.value)) {
+      if (!this.organizationEmail.value || !PrimitiveHelper.isValidEmail(this.organizationEmail.value)) {
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorEmail.value = "";
       }
-      if (!this.password.value || !this.validPassword(this.password.value)) {
+      if (!this.password.value || !PrimitiveHelper.isValidPassword(this.password.value)) {
         this.errorPassword.value = this.t(`message.errorPassword`);
       } else {
         this.errorPassword.value = "";
