@@ -5,48 +5,51 @@
         <!-- Form -->
         <form @submit.prevent="app.submitForm">
           <div class="content-title">
-            <h1 class="title">Create your account</h1>
-            <span>Already have an account? <router-link to="" class="link">Sign in here</router-link></span>
+            <h1 class="title">{{ app.t("app.createAccount") }}</h1>
+            <span>
+              {{ app.t("app.haveAccount") }}
+              <router-link to="" class="link">{{ app.t("app.signinHere") }}</router-link>
+            </span>
           </div>
 
           <div class="signup-google">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
-                <img class="avatar" src="@\assets\img\google.svg" alt="Google Icon" />
-                Sign up with Google
+                <img class="avatar" src="@\assets\img\google.svg" alt="Google" />
+                {{ app.t("app.signupGoogle") }}
               </span>
             </button>
           </div>
 
           <div class="content-or">
-            <span class="divider text-muted">OR</span>
+            <span class="divider text-muted">{{ app.t("app.or") }}</span>
           </div>
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationName">Organization name</label>
+            <label class="input-label" for="organizationName">{{ app.t("app.organizationName") }}</label>
 
             <input
               type="text"
-              :class="['input-form', { 'is-invalid': app.errorName.value !== '' }]"
+              :class="['input-form', { 'is-invalid': app.errorName.value }]"
               name="name"
               id="organizationName"
-              placeholder="Organization name"
+              :placeholder="app.t('app.organizationName')"
               v-model="app.organizationName.value"
               @focus="app.focusName"
             />
 
-            <div class="invalid-feedback" v-if="app.errorName.value !== ''">{{ app.errorName.value }}</div>
+            <div class="invalid-feedback" v-if="app.errorName.value">{{ app.errorName.value }}</div>
           </div>
           <!-- End Form Group -->
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationEmail">Organization email</label>
+            <label class="input-label" for="organizationEmail">{{ app.t("app.organizationEmail") }}</label>
 
             <input
               type="email"
-              :class="['input-form', { 'is-invalid': app.errorEmail.value !== '' }]"
+              :class="['input-form', { 'is-invalid': app.errorEmail.value }]"
               name="email"
               id="organizationEmail"
               placeholder="Email@organization.com"
@@ -54,43 +57,43 @@
               @focus="app.focusEmail"
             />
 
-            <div class="invalid-feedback" v-if="app.errorEmail.value !== ''">{{ app.errorEmail.value }}</div>
+            <div class="invalid-feedback" v-if="app.errorEmail.value">{{ app.errorEmail.value }}</div>
           </div>
           <!-- End Form Group -->
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="password">Password</label>
+            <label class="input-label" for="password">{{ app.t("app.password") }}</label>
 
             <input
               type="password"
-              :class="['input-form', { 'is-invalid': app.errorPassword.value !== '' }]"
+              :class="['input-form', { 'is-invalid': app.errorPassword.value }]"
               name="password"
               id="password"
-              placeholder="8+ characters required"
+              :placeholder="app.t('app.passwordRequired')"
               v-model="app.password.value"
               @focus="app.focusPassword"
             />
 
-            <div class="invalid-feedback" v-if="app.errorPassword.value !== ''">{{ app.errorPassword.value }}</div>
+            <div class="invalid-feedback" v-if="app.errorPassword.value">{{ app.errorPassword.value }}</div>
           </div>
           <!-- End Form Group -->
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="confirmPassword">Confirm password</label>
+            <label class="input-label" for="confirmPassword">{{ app.t("app.confirmPassword") }}</label>
 
             <input
               type="password"
-              :class="['input-form', { 'is-invalid': app.errorConfirmPassword.value !== '' }]"
+              :class="['input-form', { 'is-invalid': app.errorConfirmPassword.value }]"
               name="confirmPassword"
               id="confirmPassword"
-              placeholder="8+ characters required"
+              :placeholder="app.t('app.passwordRequired')"
               v-model="app.confirmPassword.value"
               @focus="app.focusConfirmPassword"
             />
 
-            <div class="invalid-feedback" v-if="app.errorConfirmPassword.value !== ''">
+            <div class="invalid-feedback" v-if="app.errorConfirmPassword.value">
               {{ app.errorConfirmPassword.value }}
             </div>
           </div>
@@ -109,7 +112,8 @@
               />
 
               <label class="custom-control-label text-muted" for="termsCheckbox">
-                I accept the <router-link to="#" class="link">Terms and Conditions</router-link></label
+                {{ app.t("app.iAccept") }}
+                <router-link to="#" class="link">{{ app.t("app.termsAndConditions") }}</router-link></label
               >
             </div>
 
@@ -117,10 +121,10 @@
           </div>
           <!-- End Checkbox -->
 
-          <button type="submit" class="g-btn submit-btn">Create an account</button>
+          <button type="submit" class="g-btn submit-btn">{{ app.t("app.buttonCreate") }}</button>
 
           <button type="submit" class="g-btn trial-btn">
-            or Start your 30-day trial
+            {{ app.t("app.startTrial") }}
             <i class="tio-chevron-right"></i>
           </button>
         </form>
@@ -169,29 +173,29 @@ const app = defineClassComponent(
 
     public submitForm = () => {
       if (!this.organizationName.value) {
-        this.errorName.value = "Please enter your Organization name.";
+        this.errorName.value = this.t("message.errorName");
       } else {
         this.errorName.value = "";
       }
       if (!this.organizationEmail.value || !this.validEmail(this.organizationEmail.value)) {
-        this.errorEmail.value = "Please enter a valid email address.";
+        this.errorEmail.value = this.t("message.errorEmail");
       } else {
         this.errorEmail.value = "";
       }
       if (!this.password.value || !this.validPassword(this.password.value)) {
-        this.errorPassword.value = "Your password is invalid. Please try again.";
+        this.errorPassword.value = this.t("message.errorPassword");
       } else {
         this.errorPassword.value = "";
       }
       if (!this.confirmPassword.value || !this.validPassword(this.confirmPassword.value)) {
-        this.errorConfirmPassword.value = "Password does not match the confirm password.";
+        this.errorConfirmPassword.value = this.t("message.errorConfirmPassword");
       } else if (this.confirmPassword.value !== this.password.value) {
-        this.errorConfirmPassword.value = "Password does not match the confirm password.";
+        this.errorConfirmPassword.value = this.t("message.errorConfirmPassword");
       } else {
         this.errorConfirmPassword.value = "";
       }
       if (!this.termsAndConditions.value) {
-        this.errorTerms.value = "Please accept our Terms and Conditions.";
+        this.errorTerms.value = this.t("message.errorTerms");
       } else {
         this.errorTerms.value = "";
       }

@@ -17,21 +17,15 @@
       </div>
 
       <div class="content-title">
-        <h2 class="title">Build digital products with:</h2>
+        <h2 class="title">{{ app.t(`app.coverTitle`) }}</h2>
       </div>
 
       <!-- List Checked -->
       <ul class="list-checked">
-        <li class="list-checked-item">
+        <li class="list-checked-item" v-for="index in 3" :key="index">
           <i class="bi bi-check-lg"></i>
-          <span>All-in-one tool</span>
-          Build, run, and scale your apps - end to end
-        </li>
-
-        <li class="list-checked-item">
-          <i class="bi bi-check-lg"></i>
-          <span>Easily add &amp; manage your services</span>
-          It brings together your tasks, projects, timelines, files and more
+          <span>{{ app.t(`app.coverContent.${index}.title`) }}</span>
+          {{ app.t(`app.coverContent.${index}.content`) }}
         </li>
       </ul>
       <!-- End List Checked -->
@@ -91,7 +85,7 @@ const app = defineClassComponent(
   }
 
   & .content {
-    max-width: 23rem;
+    max-width: 25rem;
 
     & .content-image {
       text-align: center;
