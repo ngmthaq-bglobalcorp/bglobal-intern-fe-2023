@@ -25,7 +25,7 @@ export class PathConst {
   };
 
   public static adminForgot: Route = {
-    path: "/admin/forgot-password",
+    path: "/admin/password/forgot",
     name: "adminForgot",
     component: ForgotPasswordViewVue,
     meta: {
