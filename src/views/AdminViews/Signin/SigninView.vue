@@ -48,7 +48,9 @@
             <label class="input-label" for="password">
               <span class="item">
                 {{ app.t(`app.password`) }}
-                <router-link to="" class="link input-label-secondary">{{ app.t(`app.forgotPassword`) }}</router-link>
+                <router-link to="/admin/forgot-password" class="link input-label-secondary">
+                  {{ app.t(`app.forgotPassword`) }}
+                </router-link>
               </span>
             </label>
 
@@ -93,10 +95,10 @@
 </template>
 
 <script setup lang="ts">
-import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
-import type { Ref } from "vue";
+import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {

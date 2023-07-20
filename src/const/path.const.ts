@@ -2,6 +2,7 @@ import type { RouteRecordRaw } from "vue-router";
 import DashboardViewVue from "@/views/AdminViews/Dashboard/DashboardView.vue";
 import SignupViewVue from "@/views/AdminViews/Signup/SignupView.vue";
 import SigninViewVue from "@/views/AdminViews/Signin/SigninView.vue";
+import ForgotPasswordViewVue from "@/views/AdminViews/ForgotPassword/ForgotPasswordView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
 
 export class PathConst {
@@ -20,6 +21,15 @@ export class PathConst {
     component: SigninViewVue,
     meta: {
       title: "title.admin.signin",
+    },
+  };
+
+  public static adminForgot: Route = {
+    path: "/admin/password/forgot",
+    name: "adminForgot",
+    component: ForgotPasswordViewVue,
+    meta: {
+      title: "title.admin.forgotPassword",
     },
   };
 
