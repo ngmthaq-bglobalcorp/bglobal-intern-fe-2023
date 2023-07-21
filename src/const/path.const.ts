@@ -1,8 +1,11 @@
 import type { RouteRecordRaw } from "vue-router";
-import DashboardViewVue from "@/views/AdminViews/Dashboard/DashboardView.vue";
 import SignupViewVue from "@/views/AdminViews/Signup/SignupView.vue";
 import SigninViewVue from "@/views/AdminViews/Signin/SigninView.vue";
 import ForgotPasswordViewVue from "@/views/AdminViews/ForgotPassword/ForgotPasswordView.vue";
+import DashboardViewVue from "@/views/AdminViews/Dashboard/DashboardView.vue";
+import SeekersViewVue from "@/views/AdminViews/Seekers/SeekersView.vue";
+import HiringOrganizationViewVue from "@/views/AdminViews/HiringOrganization/HiringOrganizationView.vue";
+import NewsViewVue from "@/views/AdminViews/News/NewsView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
 
 export class PathConst {
@@ -39,6 +42,33 @@ export class PathConst {
     component: DashboardViewVue,
     meta: {
       title: "title.admin.dashboard",
+    },
+  };
+
+  public static adminSeekers: Route = {
+    path: "/admin/seekers",
+    name: "adminSeekers",
+    component: SeekersViewVue,
+    meta: {
+      title: "title.admin.seekers",
+    },
+  };
+
+  public static adminOrganization: Route = {
+    path: "/admin/organization",
+    name: "adminOrganization",
+    component: HiringOrganizationViewVue,
+    meta: {
+      title: "title.admin.hiringOrganization",
+    },
+  };
+
+  public static adminNews: Route = {
+    path: "/admin/news",
+    name: "adminNews",
+    component: NewsViewVue,
+    meta: {
+      title: "title.admin.news",
     },
   };
 

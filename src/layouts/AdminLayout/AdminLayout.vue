@@ -3,7 +3,9 @@
     <SidebarComponent />
     <div class="layout-content">
       <NavbarComponent />
-      <slot></slot>
+      <div class="content">
+        <slot></slot>
+      </div>
     </div>
   </div>
 </template>
@@ -28,6 +30,10 @@ import NavbarComponent from "@/components/AdminComponents/Navbar/NavbarComponent
     flex-direction: column;
     height: 100vh;
     width: 100%;
+
+    & .content {
+      padding: 1.75rem 1.5rem;
+    }
   }
 }
 </style>
