@@ -10,7 +10,8 @@
       "signup": "Sign Up",
       "signin": "Sign In",
       "forgotPassword": "Forgot Password",
-      "dashboard": "Dashboard"
+      "dashboard": "Dashboard",
+      "seekers": "Seekers"
     }
   },
   "message": {
@@ -65,6 +66,16 @@
     "emailOtp": "Email OTP",
     "resendOtp": "Resend OTP?",
     "submit": "Submit",
-    "backToSignin": "Back to Sign in"
+    "backToSignin": "Back to Sign in",
+    "search": "Search...",
+    "profile": "Profile",
+    "settings": "Settings",
+    "signout": "Sign out",
+    "dashboard": "Dashboard",
+    "manage": "Manage",
+    "seekers": "Seekers",
+    "hiringOrganization": "Hiring Organization",
+    "news": "News",
+    "add": "Add {value}"
   }
 }

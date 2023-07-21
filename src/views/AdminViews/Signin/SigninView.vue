@@ -15,7 +15,7 @@
           <div class="signin-google">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
-                <img class="avatar" src="@\assets\img\google.svg" alt="Google" />
+                <img src="@\assets\img\google.svg" alt="Google" class="image avatar" />
                 {{ app.t(`app.signinGoogle`) }}
               </span>
             </button>
@@ -235,7 +235,9 @@ const app = defineClassComponent(
 
       & .input-label {
         display: block;
+        color: $black;
         font-size: 0.875rem;
+        margin-bottom: 0.5rem;
 
         & .item {
           display: flex;
