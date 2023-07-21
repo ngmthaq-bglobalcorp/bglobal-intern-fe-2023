@@ -48,7 +48,7 @@
             <label class="input-label" for="password">
               <span class="item">
                 {{ app.t(`app.password`) }}
-                <router-link to="/admin/forgot-password" class="link input-label-secondary">
+                <router-link to="/admin/password/forgot" class="link input-label-secondary">
                   {{ app.t(`app.forgotPassword`) }}
                 </router-link>
               </span>
