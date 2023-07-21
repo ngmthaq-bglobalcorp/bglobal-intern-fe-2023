@@ -1,6 +1,6 @@
 <template>
   <!-- Navbar Vertical -->
-  <aside class="sidebar-aside sidebar-fixed" :class="{ 'sidebar-collapse': app.collapse.value }">
+  <aside class="sidebar-aside" :class="{ 'sidebar-collapse': app.collapse.value }">
     <div class="sidebar-container">
       <!-- Logo -->
       <div class="sidebar-logo-wrapper">
@@ -12,7 +12,7 @@
 
       <!-- Sidebar Toggle -->
       <div class="sidebar-toggle-wrapper">
-        <button class="icon-btn toggle-btn" @click.prevent="app.collapseSidebar">
+        <button class="icon-btn toggle-btn" @click.prevent="app.handleCollapseSidebar">
           <i class="bi bi-arrow-bar-right icon" v-if="app.collapse.value"></i>
           <i class="bi bi-arrow-bar-left icon" v-else></i>
         </button>
@@ -64,7 +64,7 @@
       <div class="sidebar-footer-wrapper">
         <ul class="footer-list">
           <li class="footer-item">
-            <button class="icon-btn" @click.prevent="app.changeMode">
+            <button class="icon-btn" @click.prevent="app.handleChangeMode">
               <i class="bi bi-sun icon" v-if="app.darkMode.value"></i>
               <i class="bi bi-moon icon" v-else></i>
             </button>
@@ -94,11 +94,11 @@ const app = defineClassComponent(
       super();
     }
 
-    public changeMode = () => {
+    public handleChangeMode = () => {
       this.darkMode.value = !this.darkMode.value;
     };
 
-    public collapseSidebar = () => {
+    public handleCollapseSidebar = () => {
       this.collapse.value = !this.collapse.value;
     };
   },
@@ -111,28 +111,19 @@ const app = defineClassComponent(
 
 .sidebar-aside {
   display: block;
-  position: fixed;
-  margin: 0;
-  padding: 0;
+  height: 100vh;
+  width: 16.25rem;
+  z-index: 100;
   border-right: 1px solid $border;
   background-color: $white;
   transition: 0.2s ease-in-out;
-
-  &.sidebar-fixed {
-    position: fixed;
-    top: 0;
-    left: 0;
-    bottom: 0;
-    z-index: 100;
-    width: 16.25rem;
-    height: 100vh;
-  }
 
   &.sidebar-collapse {
     width: 5.25rem;
 
     & .sidebar-logo-wrapper {
-      padding: 0 !important;
+      padding-left: 0 !important;
+      padding-right: 0 !important;
     }
 
     & .sidebar-content-wrapper {
@@ -147,8 +138,13 @@ const app = defineClassComponent(
           display: none !important;
         }
 
-        & .item-text {
-          display: none !important;
+        & .item-link {
+          padding: 0.5rem 0 !important;
+          justify-content: center;
+
+          & .item-text {
+            display: none !important;
+          }
         }
       }
     }
@@ -156,15 +152,16 @@ const app = defineClassComponent(
 
   & .sidebar-container {
     position: relative;
+    display: flex;
+    flex-direction: column;
     height: 100%;
-    padding-bottom: 4.25rem;
 
     & .sidebar-logo-wrapper {
       display: flex;
       align-items: center;
       justify-content: center;
       height: 3.75rem;
-      padding: 0 1.75rem;
+      padding: 0.625rem 1.75rem;
 
       & .brand-logo {
         display: block;
@@ -255,10 +252,6 @@ const app = defineClassComponent(
     }
 
     & .sidebar-footer-wrapper {
-      position: absolute;
-      right: 0;
-      bottom: 0;
-      left: 0;
       border-top: 1px solid $border;
 
       & .footer-list {
