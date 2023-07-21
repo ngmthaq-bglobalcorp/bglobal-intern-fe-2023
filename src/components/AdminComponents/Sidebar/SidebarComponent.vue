@@ -44,13 +44,13 @@
             </router-link>
           </li>
           <li class="content-item" :class="{ active: app.route.name === 'adminOrganization' }">
-            <router-link to="" class="item-link link">
+            <router-link to="/admin/organization" class="item-link link">
               <i class="bi bi-buildings icon"></i>
               <span class="item-text">{{ app.t(`app.hiringOrganization`) }}</span>
             </router-link>
           </li>
           <li class="content-item" :class="{ active: app.route.name === 'adminNews' }">
-            <router-link to="" class="item-link link">
+            <router-link to="/admin/news" class="item-link link">
               <i class="bi bi-newspaper icon"></i>
               <span class="item-text">{{ app.t(`app.news`) }}</span>
             </router-link>
