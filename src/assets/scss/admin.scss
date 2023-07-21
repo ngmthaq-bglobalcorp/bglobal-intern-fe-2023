@@ -5,6 +5,11 @@
   src: url("../fonts/Ubuntu/Ubuntu-Regular.ttf") format("truetype");
 }
 
+button,
+input {
+  overflow: visible;
+}
+
 img {
   display: block;
   width: 100%;
@@ -71,4 +76,36 @@ ul {
 
 .icon {
   font-size: 1.2rem;
+}
+
+.dropdown-menu {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 98;
+  display: none;
+  float: left;
+  min-width: 8.4375rem;
+  padding: 1rem 0;
+  margin: 0.625rem 0 0;
+  font-size: 0.875rem;
+  color: $dark-variant;
+  text-align: left;
+  list-style: none;
+  background-color: $white;
+  background-clip: padding-box;
+  border: 0 solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.75rem;
+
+  &.menu-show {
+    display: block !important;
+    opacity: 1 !important;
+    visibility: visible !important;
+  }
+
+  &.menu-hidden {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+  }
 }
