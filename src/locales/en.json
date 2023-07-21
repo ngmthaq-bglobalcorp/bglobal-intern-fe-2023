@@ -10,7 +10,8 @@
       "signup": "Sign Up",
       "signin": "Sign In",
       "forgotPassword": "Forgot Password",
-      "dashboard": "Dashboard"
+      "dashboard": "Dashboard",
+      "seekers": "Seekers"
     }
   },
   "message": {
@@ -70,10 +71,11 @@
     "profile": "Profile",
     "settings": "Settings",
     "signout": "Sign out",
-    "dashboards": "Dashboards",
+    "dashboard": "Dashboard",
     "manage": "Manage",
-    "seeker": "Seeker",
+    "seekers": "Seekers",
     "hiringOrganization": "Hiring Organization",
-    "news": "News"
+    "news": "News",
+    "add": "Add {value}"
   }
 }

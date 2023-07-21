@@ -5,7 +5,7 @@
       <!-- Logo -->
       <div class="sidebar-logo-wrapper">
         <router-link to="/admin" class="link">
-          <img class="brand-logo" src="@\assets\img\logo.svg" alt="Logo" />
+          <img src="@\assets\img\logo.svg" alt="Logo" class="image brand-logo" />
         </router-link>
       </div>
       <!-- End Logo -->
@@ -21,12 +21,12 @@
 
       <!-- Content -->
       <div class="sidebar-content-wrapper">
-        <ul class="content-list">
+        <ul class="list content-list">
           <!-- Dashboards -->
-          <li class="content-item active">
-            <router-link to="" class="item-link link">
+          <li class="content-item" :class="{ active: app.route.name === 'adminDashboard' }">
+            <router-link to="/admin" class="item-link link">
               <i class="bi bi-house icon"></i>
-              <span class="item-text">{{ app.t(`app.dashboards`) }}</span>
+              <span class="item-text">{{ app.t(`app.dashboard`) }}</span>
             </router-link>
           </li>
           <!-- End Dashboards -->
@@ -37,19 +37,19 @@
           </li>
 
           <!-- Manage -->
-          <li class="content-item">
-            <router-link to="" class="item-link link">
+          <li class="content-item" :class="{ active: app.route.name === 'adminSeekers' }">
+            <router-link to="/admin/seekers" class="item-link link">
               <i class="bi bi-people icon"></i>
-              <span class="item-text">{{ app.t(`app.seeker`) }}</span>
+              <span class="item-text">{{ app.t(`app.seekers`) }}</span>
             </router-link>
           </li>
-          <li class="content-item">
+          <li class="content-item" :class="{ active: app.route.name === 'adminOrganization' }">
             <router-link to="" class="item-link link">
               <i class="bi bi-buildings icon"></i>
               <span class="item-text">{{ app.t(`app.hiringOrganization`) }}</span>
             </router-link>
           </li>
-          <li class="content-item">
+          <li class="content-item" :class="{ active: app.route.name === 'adminNews' }">
             <router-link to="" class="item-link link">
               <i class="bi bi-newspaper icon"></i>
               <span class="item-text">{{ app.t(`app.news`) }}</span>
@@ -62,7 +62,7 @@
 
       <!-- Footer -->
       <div class="sidebar-footer-wrapper">
-        <ul class="footer-list">
+        <ul class="list footer-list">
           <li class="footer-item">
             <button class="icon-btn" @click.prevent="app.onToggleChangeMode">
               <i class="bi bi-sun icon" v-if="app.darkMode.value"></i>

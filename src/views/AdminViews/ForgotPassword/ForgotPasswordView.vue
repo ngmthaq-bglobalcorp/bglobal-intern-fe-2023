@@ -154,7 +154,9 @@ const app = defineClassComponent(
 
       & .input-label {
         display: block;
+        color: $black;
         font-size: 0.875rem;
+        margin-bottom: 0.5rem;
 
         & .item {
           display: flex;

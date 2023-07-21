@@ -5,7 +5,7 @@
     <div class="logo-language">
       <div class="logo-language-content">
         <router-link to="" class="link">
-          <img src="@\assets\img\logo.svg" alt="Logo" />
+          <img src="@\assets\img\logo.svg" alt="Logo" class="image" />
         </router-link>
       </div>
     </div>
@@ -13,7 +13,7 @@
 
     <div class="content">
       <div class="content-image">
-        <img src="@\assets\img\chat.svg" alt="Image" />
+        <img src="@\assets\img\chat.svg" alt="Image" class="image" />
       </div>
 
       <div class="content-title">
@@ -21,7 +21,7 @@
       </div>
 
       <!-- List Checked -->
-      <ul class="list-checked">
+      <ul class="list list-checked">
         <li class="list-checked-item" v-for="index in 3" :key="index">
           <i class="bi bi-check-lg"></i>
           <span>{{ app.t(`app.coverContent.${index}.title`) }}</span>
@@ -31,7 +31,7 @@
       <!-- End List Checked -->
 
       <div class="content-logo">
-        <img src="@\assets\img\bglobal.png" alt="Logo" />
+        <img src="@\assets\img\bglobal.png" alt="Logo" class="image" />
       </div>
       <!-- End Row -->
     </div>

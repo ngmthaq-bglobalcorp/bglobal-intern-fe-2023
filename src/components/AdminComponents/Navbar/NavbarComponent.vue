@@ -16,19 +16,19 @@
 
       <!-- Right content -->
       <div class="navbar-right-wrapper">
-        <ul class="right-content">
+        <ul class="list right-content">
           <li class="right-item"></li>
           <li class="right-item">
             <button class="account-wrapper icon-btn" @click.prevent="app.onToggleOpenMenu">
               <div class="avatar">
-                <img src="@/assets/img/logo.svg" alt="Avatar" class="avatar-img" />
+                <img src="@/assets/img/logo.svg" alt="Avatar" class="image avatar-img" />
                 <span class="status status-available"></span>
               </div>
             </button>
             <div :class="['dropdown-menu', 'menu-hidden', { 'menu-show': app.isMenuOpen.value }]">
               <div class="dropdown-item-header">
                 <div class="avatar">
-                  <img src="@/assets/img/logo.svg" alt="Avatar" class="avatar-img" />
+                  <img src="@/assets/img/logo.svg" alt="Avatar" class="image avatar-img" />
                 </div>
                 <div class="media-body">
                   <span class="card-title">Minh Duc</span>
