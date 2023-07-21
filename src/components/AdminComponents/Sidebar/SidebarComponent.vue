@@ -12,7 +12,7 @@
 
       <!-- Sidebar Toggle -->
       <div class="sidebar-toggle-wrapper">
-        <button class="icon-btn toggle-btn" @click.prevent="app.handleCollapseSidebar">
+        <button class="icon-btn toggle-btn" @click.prevent="app.onToggleCollapseSidebar">
           <i class="bi bi-arrow-bar-right icon" v-if="app.collapse.value"></i>
           <i class="bi bi-arrow-bar-left icon" v-else></i>
         </button>
@@ -26,33 +26,33 @@
           <li class="content-item active">
             <router-link to="" class="item-link link">
               <i class="bi bi-house icon"></i>
-              <span class="item-text">Dashboards</span>
+              <span class="item-text">{{ app.t(`app.dashboards`) }}</span>
             </router-link>
           </li>
           <!-- End Dashboards -->
 
           <li class="content-item">
             <i class="bi bi-three-dots icon-subtitle"></i>
-            <span class="item-subtitle">Manage</span>
+            <span class="item-subtitle">{{ app.t(`app.manage`) }}</span>
           </li>
 
           <!-- Manage -->
           <li class="content-item">
             <router-link to="" class="item-link link">
               <i class="bi bi-people icon"></i>
-              <span class="item-text">Seeker</span>
+              <span class="item-text">{{ app.t(`app.seeker`) }}</span>
             </router-link>
           </li>
           <li class="content-item">
             <router-link to="" class="item-link link">
               <i class="bi bi-buildings icon"></i>
-              <span class="item-text">Hiring Organization</span>
+              <span class="item-text">{{ app.t(`app.hiringOrganization`) }}</span>
             </router-link>
           </li>
           <li class="content-item">
             <router-link to="" class="item-link link">
               <i class="bi bi-newspaper icon"></i>
-              <span class="item-text">News</span>
+              <span class="item-text">{{ app.t(`app.news`) }}</span>
             </router-link>
           </li>
           <!-- End Manege -->
@@ -64,7 +64,7 @@
       <div class="sidebar-footer-wrapper">
         <ul class="footer-list">
           <li class="footer-item">
-            <button class="icon-btn" @click.prevent="app.handleChangeMode">
+            <button class="icon-btn" @click.prevent="app.onToggleChangeMode">
               <i class="bi bi-sun icon" v-if="app.darkMode.value"></i>
               <i class="bi bi-moon icon" v-else></i>
             </button>
@@ -94,11 +94,11 @@ const app = defineClassComponent(
       super();
     }
 
-    public handleChangeMode = () => {
+    public onToggleChangeMode = () => {
       this.darkMode.value = !this.darkMode.value;
     };
 
-    public handleCollapseSidebar = () => {
+    public onToggleCollapseSidebar = () => {
       this.collapse.value = !this.collapse.value;
     };
   },

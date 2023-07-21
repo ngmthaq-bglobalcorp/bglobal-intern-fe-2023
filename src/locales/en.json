@@ -65,6 +65,15 @@
     "emailOtp": "Email OTP",
     "resendOtp": "Resend OTP?",
     "submit": "Submit",
-    "backToSignin": "Back to Sign in"
+    "backToSignin": "Back to Sign in",
+    "search": "Search...",
+    "profile": "Profile",
+    "settings": "Settings",
+    "signout": "Sign out",
+    "dashboards": "Dashboards",
+    "manage": "Manage",
+    "seeker": "Seeker",
+    "hiringOrganization": "Hiring Organization",
+    "news": "News"
   }
 }

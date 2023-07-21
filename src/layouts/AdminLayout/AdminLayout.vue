@@ -21,7 +21,6 @@ import NavbarComponent from "@/components/AdminComponents/Navbar/NavbarComponent
   font-family: "Ubuntu", "Open Sans", sans-serif;
   color: $dark-variant;
   background-color: $white;
-
   display: flex;
 
   & .layout-content {

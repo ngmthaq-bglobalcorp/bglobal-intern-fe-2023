@@ -8,7 +8,7 @@
           <div class="input-group-icon">
             <i class="bi bi-search icon"></i>
           </div>
-          <input type="search" class="search-input" placeholder="Search..." />
+          <input type="search" class="search-input" :placeholder="app.t(`app.search`)" />
         </form>
         <!-- End Search Form -->
       </div>
@@ -19,7 +19,7 @@
         <ul class="right-content">
           <li class="right-item"></li>
           <li class="right-item">
-            <button class="account-wrapper icon-btn" @click.prevent="app.handleOpenMenu">
+            <button class="account-wrapper icon-btn" @click.prevent="app.onToggleOpenMenu">
               <div class="avatar">
                 <img src="@/assets/img/logo.svg" alt="Avatar" class="avatar-img" />
                 <span class="status status-available"></span>
@@ -37,14 +37,14 @@
               </div>
               <div class="dropdown-divider"></div>
               <div class="dropdown-item">
-                <router-link to="" class="link">Profile</router-link>
+                <router-link to="" class="link">{{ app.t(`app.profile`) }}</router-link>
               </div>
               <div class="dropdown-item">
-                <router-link to="" class="link">Settings</router-link>
+                <router-link to="" class="link">{{ app.t(`app.settings`) }}</router-link>
               </div>
               <div class="dropdown-divider"></div>
               <div class="dropdown-item">
-                <router-link to="" class="link">Sign out</router-link>
+                <router-link to="" class="link">{{ app.t(`app.signout`) }}</router-link>
               </div>
             </div>
           </li>
@@ -67,8 +67,12 @@ const app = defineClassComponent(
       super();
     }
 
-    public handleOpenMenu = () => {
+    public onToggleOpenMenu = () => {
       this.isMenuOpen.value = !this.isMenuOpen.value;
+    };
+
+    public onToggleCloseMenu = () => {
+      this.isMenuOpen.value = false;
     };
   },
 );
