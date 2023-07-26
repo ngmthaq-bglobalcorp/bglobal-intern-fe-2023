@@ -92,5 +92,9 @@
     "uploadCover": "Upload cover",
     "jobsList": "Jobs list",
     "edit": "Edit {value}",
+    "completeProfile": "Complete your profile",
+    "about": "About",
+    "contacts": "Contacts",
+    "introduction": "Introduction"
   }
 }

@@ -2,7 +2,7 @@
   <div class="profile-card-container">
     <!-- Card -->
     <div class="profile-card-complete custom-card">
-      <h5 class="complete-title">Complete your profile</h5>
+      <h5 class="complete-title">{{ app.t(`app.completeProfile`) }}</h5>
 
       <!-- Progress -->
       <div class="d-flex justify-content-between align-items-center">
@@ -23,7 +23,7 @@
     <div class="profile-card-detail custom-card">
       <!-- Header -->
       <div class="card-header">
-        <h2 class="card-header-title h5">Profile</h2>
+        <h2 class="card-header-title h5">{{ app.t(`app.profile`) }}</h2>
       </div>
       <!-- End Header -->
 
@@ -31,7 +31,7 @@
       <div class="profile-card-body">
         <ul class="card-list list">
           <li class="card-item">
-            <small class="card-subtitle">About</small>
+            <small class="card-subtitle">{{ app.t(`app.about`) }}</small>
           </li>
 
           <li class="card-item" v-if="app.profile.username">
@@ -44,7 +44,7 @@
           </li>
 
           <li class="card-item pt-2 pb-0">
-            <small class="card-subtitle">Contacts</small>
+            <small class="card-subtitle">{{ app.t(`app.contacts`) }}</small>
           </li>
 
           <li class="card-item" v-if="app.profile.email">
@@ -65,7 +65,7 @@
           </li>
 
           <li class="card-item pt-2 pb-0">
-            <small class="card-subtitle">Introduction</small>
+            <small class="card-subtitle">{{ app.t(`app.introduction`) }}</small>
           </li>
           <li class="card-item" v-if="app.profile.introduction">
             <i class="bi bi-bookmarks icon"></i>
