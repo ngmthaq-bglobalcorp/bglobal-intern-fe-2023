@@ -13,7 +13,8 @@
       "dashboard": "Dashboard",
       "seekers": "Seekers",
       "hiringOrganization": "Hiring Organization",
-      "news": "News"
+      "news": "News",
+      "userProfile": "Profile"
     }
   },
   "message": {
@@ -87,6 +88,9 @@
     "showing": "Showing:",
     "of": "of",
     "prev": "Prev",
-    "next": "Next"
+    "next": "Next",
+    "uploadCover": "Upload cover",
+    "jobsList": "Jobs list",
+    "edit": "Edit {value}",
   }
 }

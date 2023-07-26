@@ -41,7 +41,7 @@
               </div>
               <div class="dropdown-divider"></div>
               <div class="dropdown-item">
-                <router-link to="" class="link">{{ app.t(`app.profile`) }}</router-link>
+                <router-link to="/admin/user/profile" class="link">{{ app.t(`app.profile`) }}</router-link>
               </div>
               <div class="dropdown-item">
                 <router-link to="" class="link">{{ app.t(`app.settings`) }}</router-link>
