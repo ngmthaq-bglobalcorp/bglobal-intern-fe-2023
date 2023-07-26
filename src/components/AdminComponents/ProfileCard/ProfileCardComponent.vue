@@ -1,8 +1,8 @@
 <template>
-  <div class="profile-card-container custom-card">
+  <div class="profile-card-container">
     <!-- Card -->
-    <div class="card card-body mb-3 mb-lg-5">
-      <h5>Complete your profile</h5>
+    <div class="profile-card-complete custom-card">
+      <h5 class="complete-title">Complete your profile</h5>
 
       <!-- Progress -->
       <div class="d-flex justify-content-between align-items-center">
@@ -10,72 +10,66 @@
           <div
             class="progress-bar bg-primary"
             role="progressbar"
-            style="width: 15%"
-            aria-valuenow="15"
-            aria-valuemin="0"
-            aria-valuemax="100"
+            :style="{ width: app.profilePercent.value + '%' }"
           ></div>
         </div>
-        <span class="ml-4">15%</span>
+        <span class="ms-4">{{ app.profilePercent.value }}%</span>
       </div>
       <!-- End Progress -->
     </div>
     <!-- End Card -->
 
     <!-- Card -->
-    <div class="card mb-3 mb-lg-5">
+    <div class="profile-card-detail custom-card">
       <!-- Header -->
       <div class="card-header">
         <h2 class="card-header-title h5">Profile</h2>
-
-        <a class="btn btn-sm btn-white" href="account-settings.html">Edit</a>
       </div>
       <!-- End Header -->
 
       <!-- Body -->
-      <div class="card-body">
-        <ul class="list-unstyled list-unstyled-py-3 text-dark mb-3">
-          <li class="py-0">
+      <div class="profile-card-body">
+        <ul class="card-list list">
+          <li class="card-item">
             <small class="card-subtitle">About</small>
           </li>
 
-          <li>
-            <i class="tio-user-outlined nav-icon"></i>
-            Mark Williams
+          <li class="card-item" v-if="app.profile.username">
+            <i class="bi bi-person-circle icon"></i>
+            {{ app.profile.username }}
           </li>
-          <li>
-            <i class="tio-briefcase-outlined nav-icon"></i>
-            No department title
-          </li>
-          <li>
-            <i class="tio-city nav-icon"></i>
-            Pixeel Ltd.
+          <li class="card-item" v-if="app.profile.name">
+            <i class="bi bi-person icon"></i>
+            {{ app.profile.name }}
           </li>
 
-          <li class="pt-2 pb-0">
+          <li class="card-item pt-2 pb-0">
             <small class="card-subtitle">Contacts</small>
           </li>
 
-          <li>
-            <i class="tio-online nav-icon"></i>
-            mark@example.com
+          <li class="card-item" v-if="app.profile.email">
+            <i class="bi bi-envelope icon"></i>
+            {{ app.profile.email }}
           </li>
-          <li>
-            <i class="tio-android-phone-vs nav-icon"></i>
-            +1 (555) 752-01-10
+          <li class="card-item" v-if="app.profile.phone_number">
+            <i class="bi bi-phone icon"></i>
+            {{ app.profile.phone_number }}
+          </li>
+          <li class="card-item" v-if="app.profile.webside">
+            <i class="bi bi-globe icon"></i>
+            {{ app.profile.webside }}
+          </li>
+          <li class="card-item" v-if="app.profile.adress">
+            <i class="bi bi-buildings icon"></i>
+            {{ app.profile.adress }}
           </li>
 
-          <li class="pt-2 pb-0">
-            <small class="card-subtitle">Teams</small>
+          <li class="card-item pt-2 pb-0">
+            <small class="card-subtitle">Introduction</small>
           </li>
-
-          <li class="font-size-sm text-body">
-            <i class="tio-group-equal nav-icon"></i>
-            You are not a member of any teams
-          </li>
-          <li class="font-size-sm text-body">
-            <i class="tio-briefcase-outlined nav-icon"></i>
-            You are not working on any projects
+          <li class="card-item" v-if="app.profile.introduction">
+            <i class="bi bi-bookmarks icon"></i>
+            {{ app.profile.introduction }}
           </li>
         </ul>
       </div>
@@ -87,9 +81,49 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import type { Ref } from "vue";
+import type { OrganizationModel } from "@/models/organization.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public profile: OrganizationModel = {
+      id: 1,
+      username: "minhduc",
+      name: "Minh Duc",
+      email: "minhduc.mll@gmail.com",
+      phone_number: "0912345678",
+      webside: "",
+      adress: "Ha Noi",
+      introduction:
+        "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
+      organizationType: 0,
+      status: 0,
+      createdAt: new Date("2023-07-01"),
+      updatedAt: new Date("2023-07-01"),
+    };
+    public profilePercent: Ref<number> = this.computed(() => {
+      let percent = 0;
+      if (this.profile.name) {
+        percent++;
+      }
+      if (this.profile.email) {
+        percent++;
+      }
+      if (this.profile.phone_number) {
+        percent++;
+      }
+      if (this.profile.webside) {
+        percent++;
+      }
+      if (this.profile.adress) {
+        percent++;
+      }
+      if (this.profile.introduction) {
+        percent++;
+      }
+      return Math.round((percent / 6) * 100);
+    });
+
     public constructor() {
       super();
     }
@@ -104,5 +138,69 @@ const app = defineClassComponent(
 .profile-card-container {
   display: flex;
   flex-direction: column;
+  flex-wrap: wrap;
+
+  & .profile-card-complete {
+    padding: 1.3125rem;
+    margin-bottom: 2rem;
+
+    & .complete-title {
+      font-size: 0.875rem;
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+      color: $dark;
+    }
+
+    & .progress {
+      height: 0.5rem;
+    }
+  }
+
+  & .profile-card-detail {
+    & .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.5rem;
+      padding: 1rem 1.3125rem;
+      border-bottom: 0.0625rem solid $border;
+
+      & .card-header-title {
+        font-size: 1rem;
+        font-weight: 600;
+        line-height: 1.2;
+        color: $dark;
+      }
+    }
+
+    & .profile-card-body {
+      padding: 1.3125rem;
+
+      & .card-list {
+        display: flex;
+        flex-direction: column;
+
+        & .card-item {
+          padding: 0.5rem 0;
+          color: $dark;
+
+          & .card-subtitle {
+            display: block;
+            color: #8c98a4;
+            text-transform: uppercase;
+            font-size: 0.7109375rem;
+            margin-bottom: 0.25rem;
+          }
+
+          & .icon {
+            font-size: 0.875rem;
+            color: #8c98a4;
+            margin-right: 0.5rem;
+          }
+        }
+      }
+    }
+  }
 }
 </style>

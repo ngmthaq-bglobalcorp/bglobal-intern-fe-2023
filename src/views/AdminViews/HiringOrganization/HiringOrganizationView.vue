@@ -22,7 +22,21 @@ const app = defineClassComponent(
       { field: "status", headerName: "status" },
     ];
     public data: Array<OrganizationModel> = [
-      { id: 1, name: "Minh Duc", email: "minhduc.mll@gmail.com", phone: "0912345678", status: "active" },
+      {
+        id: 1,
+        username: "minhduc",
+        name: "Minh Duc",
+        email: "minhduc.mll@gmail.com",
+        phone_number: "0912345678",
+        webside: "minhduc.com",
+        adress: "Ha Noi",
+        introduction:
+          "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
+        organizationType: 0,
+        status: 0,
+        createdAt: new Date("2023-07-01"),
+        updatedAt: new Date("2023-07-01"),
+      },
     ];
 
     public constructor() {
