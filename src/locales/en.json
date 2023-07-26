@@ -70,6 +70,7 @@
     "submit": "Submit",
     "backToSignin": "Back to Sign in",
     "search": "Search...",
+    "searchSeekers": "Search seekers",
     "profile": "Profile",
     "settings": "Settings",
     "signout": "Sign out",
@@ -78,6 +79,14 @@
     "seekers": "Seekers",
     "hiringOrganization": "Hiring Organization",
     "news": "News",
-    "add": "Add {value}"
+    "add": "Add {value}",
+    "selected": "Selected",
+    "delete": "Delete",
+    "unlock": "Unlock",
+    "lock": "Lock",
+    "showing": "Showing:",
+    "of": "of",
+    "prev": "Prev",
+    "next": "Next"
   }
 }
