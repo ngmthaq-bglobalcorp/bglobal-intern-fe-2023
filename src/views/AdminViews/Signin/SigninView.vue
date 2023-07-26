@@ -1,22 +1,22 @@
 <template>
   <CoverLayout>
-    <div class="signup-container">
+    <div class="signin-container">
       <div class="content">
         <!-- Form -->
         <form @submit.prevent="app.submitForm">
           <div class="content-title">
-            <h1 class="title">{{ app.t(`app.createAccount`) }}</h1>
+            <h1 class="title">{{ app.t(`app.signin`) }}</h1>
             <span>
-              {{ app.t(`app.haveAccount`) }}
-              <router-link to="/admin/signin" class="link">{{ app.t(`app.signinHere`) }}</router-link>
+              {{ app.t(`app.dontHaveAccount`) }}
+              <router-link to="/admin/signup" class="link">{{ app.t(`app.signupHere`) }}</router-link>
             </span>
           </div>
 
-          <div class="signup-google">
+          <div class="signin-google">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
                 <img src="@\assets\img\google.svg" alt="Google" class="image avatar" />
-                {{ app.t(`app.signupGoogle`) }}
+                {{ app.t(`app.signinGoogle`) }}
               </span>
             </button>
           </div>
@@ -24,24 +24,6 @@
           <div class="content-or">
             <span class="divider text-muted">{{ app.t(`app.or`) }}</span>
           </div>
-
-          <!-- Form Group -->
-          <div class="form-group">
-            <label class="input-label" for="organizationName">{{ app.t(`app.organizationName`) }}</label>
-
-            <input
-              type="text"
-              :class="['input-form', { 'is-invalid': app.errorName.value }]"
-              name="name"
-              id="organizationName"
-              :placeholder="app.t(`app.organizationName`)"
-              v-model="app.organizationName.value"
-              @focus="app.focusName"
-            />
-
-            <div class="invalid-feedback" v-if="app.errorName.value">{{ app.errorName.value }}</div>
-          </div>
-          <!-- End Form Group -->
 
           <!-- Form Group -->
           <div class="form-group">
@@ -63,7 +45,14 @@
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="password">{{ app.t(`app.password`) }}</label>
+            <label class="input-label" for="password">
+              <span class="item">
+                {{ app.t(`app.password`) }}
+                <router-link to="/admin/forgot-password" class="link input-label-secondary">
+                  {{ app.t(`app.forgotPassword`) }}
+                </router-link>
+              </span>
+            </label>
 
             <input
               type="password"
@@ -79,54 +68,25 @@
           </div>
           <!-- End Form Group -->
 
-          <!-- Form Group -->
-          <div class="form-group">
-            <label class="input-label" for="confirmPassword">{{ app.t(`app.confirmPassword`) }}</label>
-
-            <input
-              type="password"
-              :class="['input-form', { 'is-invalid': app.errorConfirmPassword.value }]"
-              name="confirmPassword"
-              id="confirmPassword"
-              :placeholder="app.t(`app.passwordRequired`)"
-              v-model="app.confirmPassword.value"
-              @focus="app.focusConfirmPassword"
-            />
-
-            <div class="invalid-feedback" v-if="app.errorConfirmPassword.value">
-              {{ app.errorConfirmPassword.value }}
-            </div>
-          </div>
-          <!-- End Form Group -->
-
           <!-- Checkbox -->
           <div class="form-group">
             <div class="input-group">
               <input
                 type="checkbox"
-                :class="['custom-control-input', { 'is-invalid': app.errorTerms.value }]"
-                name="termsCheckbox"
-                id="termsCheckbox"
-                v-model="app.termsAndConditions.value"
-                @focus="app.focusTerms"
+                class="custom-control-input"
+                name="rememberCheckbox"
+                id="rememberCheckbox"
+                v-model="app.remember.value"
               />
 
-              <label class="custom-control-label text-muted" for="termsCheckbox">
-                {{ app.t(`app.iAccept`) }}
-                <router-link to="#" class="link">{{ app.t(`app.termsAndConditions`) }}</router-link></label
-              >
+              <label class="custom-control-label text-muted" for="rememberCheckbox">
+                {{ app.t(`app.rememberMe`) }}
+              </label>
             </div>
-
-            <div class="invalid-feedback" v-if="app.errorTerms.value">{{ app.errorTerms.value }}</div>
           </div>
           <!-- End Checkbox -->
 
-          <button type="submit" class="g-btn submit-btn">{{ app.t(`app.buttonCreate`) }}</button>
-
-          <button type="submit" class="g-btn trial-btn">
-            {{ app.t(`app.startTrial`) }}
-            <i class="tio-chevron-right"></i>
-          </button>
+          <button type="submit" class="g-btn submit-btn">{{ app.t(`app.signin`) }}</button>
         </form>
         <!-- End Form -->
       </div>
@@ -142,55 +102,26 @@ import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public organizationName: Ref<string> = this.ref("");
     public organizationEmail: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");
-    public confirmPassword: Ref<string> = this.ref("");
-    public termsAndConditions: Ref<Boolean> = this.ref(false);
-    public errorName: Ref<string> = this.ref("");
+    public remember: Ref<Boolean> = this.ref(false);
     public errorEmail: Ref<string> = this.ref("");
     public errorPassword: Ref<string> = this.ref("");
-    public errorConfirmPassword: Ref<string> = this.ref("");
-    public errorTerms: Ref<string> = this.ref("");
 
     public constructor() {
       super();
     }
 
     public submitForm = () => {
-      if (!this.organizationName.value) {
-        this.errorName.value = this.t("message.errorName");
-      } else {
-        this.errorName.value = "";
-      }
       if (!this.organizationEmail.value || !PrimitiveHelper.isValidEmail(this.organizationEmail.value)) {
-        this.errorEmail.value = this.t("message.errorEmail");
+        this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorEmail.value = "";
       }
       if (!this.password.value || !PrimitiveHelper.isValidPassword(this.password.value)) {
-        this.errorPassword.value = this.t("message.errorPassword");
+        this.errorPassword.value = this.t(`message.errorPassword`);
       } else {
         this.errorPassword.value = "";
-      }
-      if (!this.confirmPassword.value || !PrimitiveHelper.isValidPassword(this.confirmPassword.value)) {
-        this.errorConfirmPassword.value = this.t("message.errorConfirmPassword");
-      } else if (this.confirmPassword.value !== this.password.value) {
-        this.errorConfirmPassword.value = this.t("message.errorConfirmPassword");
-      } else {
-        this.errorConfirmPassword.value = "";
-      }
-      if (!this.termsAndConditions.value) {
-        this.errorTerms.value = this.t("message.errorTerms");
-      } else {
-        this.errorTerms.value = "";
-      }
-    };
-
-    public focusName = () => {
-      if (this.errorName.value) {
-        this.errorName.value = "";
-        this.organizationName.value = "";
       }
     };
 
@@ -207,19 +138,6 @@ const app = defineClassComponent(
         this.password.value = "";
       }
     };
-
-    public focusConfirmPassword = () => {
-      if (this.errorConfirmPassword.value) {
-        this.errorConfirmPassword.value = "";
-        this.confirmPassword.value = "";
-      }
-    };
-
-    public focusTerms = () => {
-      if (this.errorTerms.value) {
-        this.errorTerms.value = "";
-      }
-    };
   },
 );
 </script>
@@ -228,7 +146,7 @@ const app = defineClassComponent(
 @import "@/assets/scss/modules";
 @import "@/assets/scss/admin";
 
-.signup-container {
+.signin-container {
   flex: 1;
   display: flex;
   align-items: center;
@@ -255,7 +173,7 @@ const app = defineClassComponent(
       }
     }
 
-    & .signup-google {
+    & .signin-google {
       margin-bottom: 1.5rem;
 
       & .google-btn {
@@ -320,6 +238,22 @@ const app = defineClassComponent(
         color: $black;
         font-size: 0.875rem;
         margin-bottom: 0.5rem;
+
+        & .item {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          & .input-label-secondary {
+            color: #8c98a4 !important;
+            font-size: 0.8125rem;
+            margin-left: 0.25rem;
+
+            &:hover {
+              color: $blue !important;
+            }
+          }
+        }
       }
 
       & .input-form {
@@ -430,11 +364,6 @@ const app = defineClassComponent(
         & .custom-control-input:checked ~ .custom-control-label::after {
           background-image: url("@/assets/img/check.svg");
         }
-
-        & .custom-control-input.is-invalid ~ .custom-control-label::before {
-          border-color: $danger;
-          box-shadow: 0 0 10px rgba(237, 76, 120, 0.1);
-        }
       }
     }
 
@@ -447,19 +376,6 @@ const app = defineClassComponent(
       &:hover {
         background-color: $blue;
         border-color: $blue;
-      }
-    }
-
-    & .trial-btn {
-      color: $blue-light;
-      background-color: transparent;
-      border: transparent;
-      margin-top: 0.5rem;
-
-      font-weight: 600;
-
-      &:hover {
-        color: $blue;
       }
     }
   }

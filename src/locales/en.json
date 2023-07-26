@@ -10,7 +10,12 @@
     },
     "admin": {
       "signup": "Sign Up",
-      "dashboard": "Dashboard"
+      "signin": "Sign In",
+      "forgotPassword": "Forgot Password",
+      "dashboard": "Dashboard",
+      "seekers": "Seekers",
+      "hiringOrganization": "Hiring Organization",
+      "news": "News"
     }
   },
   "message": {
@@ -18,7 +23,8 @@
     "errorEmail": "Please enter your Organization name.",
     "errorPassword": "Your password is invalid. Please try again.",
     "errorConfirmPassword": "Password does not match the confirm password.",
-    "errorTerms": "Please accept our Terms and Conditions."
+    "errorTerms": "Please accept our Terms and Conditions.",
+    "errorOtp": "Please enter a valid OTP."
   },
   "app": {
     "coverTitle": "The best part? Everything.",
@@ -49,11 +55,32 @@
     "organizationEmail": "Organization email",
     "password": "Password",
     "confirmPassword": "Confirm password",
+    "forgotPassword": "Forgot Password?",
     "passwordRequired": "8+ characters required",
     "iAccept": "I accept the ",
     "termsAndConditions": "Terms and Conditions",
     "buttonCreate": "Create an account",
-    "startTrial": "or Start your 30-day trial"
+    "startTrial": "or Start your 30-day trial",
+    "signin": "Sign in",
+    "dontHaveAccount": "Don't have an account yet?",
+    "signupHere": "Sign up here",
+    "signinGoogle": "Sign in with Google",
+    "rememberMe": "Remember me",
+    "forgotPasswordTitle": "Enter the email address you used when you joined and we'll send you instructions to reset your password.",
+    "emailOtp": "Email OTP",
+    "resendOtp": "Resend OTP?",
+    "submit": "Submit",
+    "backToSignin": "Back to Sign in",
+    "search": "Search...",
+    "profile": "Profile",
+    "settings": "Settings",
+    "signout": "Sign out",
+    "dashboard": "Dashboard",
+    "manage": "Manage",
+    "seekers": "Seekers",
+    "hiringOrganization": "Hiring Organization",
+    "news": "News",
+    "add": "Add {value}"
   },
   "jobsApp": {
     "header": {
