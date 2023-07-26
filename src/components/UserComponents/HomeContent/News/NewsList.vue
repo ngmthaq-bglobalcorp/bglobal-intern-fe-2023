@@ -1,6 +1,6 @@
 <template>
   <div class="news">
-    <p class="tittle">News</p>
+    <p class="tittle">{{ app.t("jobsApp.news.title") }}</p>
     <a class="link" target="_blank" href="https://secure.haj.co.jp/event/spsnCF_230728/?mediaid=25&amp;application=pwa"
       ><div class="image">
         <img src="@/assets/img/seminar.png" class="icon" />

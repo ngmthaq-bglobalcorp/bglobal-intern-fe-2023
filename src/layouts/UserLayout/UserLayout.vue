@@ -14,5 +14,7 @@ import FooterComponent from "@/components/UserComponents/Footer/FooterComponent.
 #user-layout {
   background: linear-gradient(12.02deg, #dfd1c5, #fff6eb);
   overflow: hidden;
+  width: 500px;
+  margin: auto;
 }
 </style>

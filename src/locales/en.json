@@ -4,10 +4,111 @@
     "notFound": "Not Found",
     "internalError": "Error",
     "user": {
-      "home": "Homepage"
+      "home": "Homepage",
+      "signup": "Sign Up",
+      "joblist": "Job list"
     },
     "admin": {
+      "signup": "Sign Up",
       "dashboard": "Dashboard"
+    }
+  },
+  "message": {
+    "errorName": "Please enter your Organization name.",
+    "errorEmail": "Please enter your Organization name.",
+    "errorPassword": "Your password is invalid. Please try again.",
+    "errorConfirmPassword": "Password does not match the confirm password.",
+    "errorTerms": "Please accept our Terms and Conditions."
+  },
+  "app": {
+    "coverTitle": "The best part? Everything.",
+    "coverContent": [
+      {
+        "title": "Stick to your budget",
+        "content": "Find the right service for every price point. No hourly rates, just project-based pricing."
+      },
+      {
+        "title": "Get quality work done quickly",
+        "content": "Hand your project over to a talented freelancer in minutes, get long-lasting results."
+      },
+      {
+        "title": "Pay when you're happy",
+        "content": "Upfront quotes mean no surprises. Payments only get released when you approve."
+      },
+      {
+        "title": "Count on 24/7 support",
+        "content": "Our round-the-clock support team is available to help anytime, anywhere."
+      }
+    ],
+    "createAccount": "Create your account",
+    "haveAccount": "Already have an account?",
+    "signinHere": "Sign in here",
+    "signupGoogle": "Sign up with Google",
+    "or": "OR",
+    "organizationName": "Organization name",
+    "organizationEmail": "Organization email",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "passwordRequired": "8+ characters required",
+    "iAccept": "I accept the ",
+    "termsAndConditions": "Terms and Conditions",
+    "buttonCreate": "Create an account",
+    "startTrial": "or Start your 30-day trial"
+  },
+  "jobsApp": {
+    "header": {
+      "home": "Home",
+      "history": "History",
+
+      "secondHeader": [
+        {
+          "title": "Sudden rest"
+        },
+        {
+          "title": "Workplace tour"
+        },
+        {
+          "title": "No overtime principle"
+        }
+      ],
+      "caption": "Carefully selected only the work!"
+    },
+    "form": {
+      "location": "Location",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "conditions": {
+        "title": "Conditions",
+        "holiday": "Holiday",
+        "rest": "3 days/week",
+        "allowance": "The allowance for dependents",
+        "station": "Around JR/subway stations",
+        "commuting": "Commuting by car"
+      },
+      "applicable": {
+        "title": "Applicable job",
+        "result": "View search results",
+        "searchCondition": "Search condition"
+      }
+    },
+    "news": {
+      "title": "News"
+    },
+    "companyDescribe": {
+      "describe": "Job search support center consultation reservation",
+      "weWillHelp": "We will help and support you with your concerns. It doesn't matter if you're having trouble finding a job, worrying about it, or even something trivial. You can consult either face-to-face interview, web remote interview, or both.",
+      "link": "Consultation application form"
+    },
+    "footer": {
+      "termOfService": "Term of service",
+      "privacyPolicy": "Privacy policy",
+      "socialMediaPolicy": "Social media policy",
+      "inquiry": "Inquiry",
+      "postingOnShufukita": "Posting on Shufukita",
+      "license": {
+        "company": "HAJ Co., Ltd. Hokkaido part-time job information company",
+        "title": "(c) Hokkaido Arbeit Johosha co.,ltd. All Rights Reserved."
+      }
     }
   }
 }

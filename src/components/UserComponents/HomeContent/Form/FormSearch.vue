@@ -3,9 +3,9 @@
     <form class="form-search" id="homepage_search_form_id">
       <div class="select-1">
         <div class="location-time">
-          <p>Service</p>
+          <p>{{ app.t("jobsApp.form.location") }}</p>
           <select class="first_search_row custom_select" style="width: 136px">
-            <option value="_default_selection">Location</option>
+            <option value="_default_selection">{{ app.t("jobsApp.form.location") }}</option>
             <option value="2,3,4,8,10,5,9,6,11,7">1</option>
             <option value="2">&nbsp; &nbsp;中央区</option>
             <option value="3">&nbsp; &nbsp;北区</option>
@@ -31,142 +31,28 @@
             <option value="23">複数エリア</option>
           </select>
         </div>
-        <svg
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14cq1u6"
-          focusable="false"
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          data-testid="ClearIcon"
-        >
-          <path
-            d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-          ></path>
-        </svg>
+        <i class="bi bi-x-lg"></i>
         <div class="location-time">
-          <p>Start time</p>
+          <p>{{ app.t("jobsApp.form.startTime") }}</p>
           <select class="jss86 custom_select">
-            <option value="_default_selection">Time</option>
-            <option value="0000">00:00</option>
-            <option value="0030">00:30</option>
-            <option value="0100">01:00</option>
-            <option value="0130">01:30</option>
-            <option value="0200">02:00</option>
-            <option value="0230">02:30</option>
-            <option value="0300">03:00</option>
-            <option value="0330">03:30</option>
-            <option value="0400">04:00</option>
-            <option value="0430">04:30</option>
-            <option value="0500">05:00</option>
-            <option value="0530">05:30</option>
-            <option value="0600">06:00</option>
-            <option value="0630">06:30</option>
-            <option value="0700">07:00</option>
-            <option value="0730">07:30</option>
-            <option value="0800">08:00</option>
-            <option value="0830">08:30</option>
-            <option value="0900">09:00</option>
-            <option value="0930">09:30</option>
-            <option value="1000">10:00</option>
-            <option value="1030">10:30</option>
-            <option value="1100">11:00</option>
-            <option value="1130">11:30</option>
-            <option value="1200">12:00</option>
-            <option value="1230">12:30</option>
-            <option value="1300">13:00</option>
-            <option value="1330">13:30</option>
-            <option value="1400">14:00</option>
-            <option value="1430">14:30</option>
-            <option value="1500">15:00</option>
-            <option value="1530">15:30</option>
-            <option value="1600">16:00</option>
-            <option value="1630">16:30</option>
-            <option value="1700">17:00</option>
-            <option value="1730">17:30</option>
-            <option value="1800">18:00</option>
-            <option value="1830">18:30</option>
-            <option value="1900">19:00</option>
-            <option value="1930">19:30</option>
-            <option value="2000">20:00</option>
-            <option value="2030">20:30</option>
-            <option value="2100">21:00</option>
-            <option value="2130">21:30</option>
-            <option value="2200">22:00</option>
-            <option value="2230">22:30</option>
-            <option value="2300">23:00</option>
-            <option value="2330">23:30</option>
+            <option value="_default_selection">{{ app.t("jobsApp.form.startTime") }}</option>
+            <option v-for="hour in PrimitiveHelper.time()" :key="hour">{{ hour }}</option>
           </select>
         </div>
-        <svg
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium css-14cq1u6"
-          focusable="false"
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          data-testid="ClearIcon"
-        >
-          <path
-            d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"
-          ></path>
-        </svg>
+        <i class="bi bi-x-lg"></i>
         <div class="location-time">
-          <p>End time</p>
+          <p>{{ app.t("jobsApp.form.endTime") }}</p>
           <select class="jss86 custom_select">
-            <option value="_default_selection">End</option>
-            <option value="0000">00:00</option>
-            <option value="0030">00:30</option>
-            <option value="0100">01:00</option>
-            <option value="0130">01:30</option>
-            <option value="0200">02:00</option>
-            <option value="0230">02:30</option>
-            <option value="0300">03:00</option>
-            <option value="0330">03:30</option>
-            <option value="0400">04:00</option>
-            <option value="0430">04:30</option>
-            <option value="0500">05:00</option>
-            <option value="0530">05:30</option>
-            <option value="0600">06:00</option>
-            <option value="0630">06:30</option>
-            <option value="0700">07:00</option>
-            <option value="0730">07:30</option>
-            <option value="0800">08:00</option>
-            <option value="0830">08:30</option>
-            <option value="0900">09:00</option>
-            <option value="0930">09:30</option>
-            <option value="1000">10:00</option>
-            <option value="1030">10:30</option>
-            <option value="1100">11:00</option>
-            <option value="1130">11:30</option>
-            <option value="1200">12:00</option>
-            <option value="1230">12:30</option>
-            <option value="1300">13:00</option>
-            <option value="1330">13:30</option>
-            <option value="1400">14:00</option>
-            <option value="1430">14:30</option>
-            <option value="1500">15:00</option>
-            <option value="1530">15:30</option>
-            <option value="1600">16:00</option>
-            <option value="1630">16:30</option>
-            <option value="1700">17:00</option>
-            <option value="1730">17:30</option>
-            <option value="1800">18:00</option>
-            <option value="1830">18:30</option>
-            <option value="1900">19:00</option>
-            <option value="1930">19:30</option>
-            <option value="2000">20:00</option>
-            <option value="2030">20:30</option>
-            <option value="2100">21:00</option>
-            <option value="2130">21:30</option>
-            <option value="2200">22:00</option>
-            <option value="2230">22:30</option>
-            <option value="2300">23:00</option>
-            <option value="2330">23:30</option>
+            <option value="_default_selection">{{ app.t("jobsApp.form.endTime") }}</option>
+            <option v-for="hour in PrimitiveHelper.time()" :key="hour">{{ hour }}</option>
           </select>
         </div>
       </div>
       <div class="select-2">
         <div class="location-sub-2-3">
-          <p>Service 2</p>
+          <p>Second {{ app.t("jobsApp.form.location") }}</p>
           <select class="custom_select">
-            <option value="_default_selection">Location</option>
+            <option value="_default_selection">{{ app.t("jobsApp.form.location") }}</option>
             <option value="2,3,4,8,10,5,9,6,11,7">札幌市</option>
             <option value="2">&nbsp; &nbsp;中央区</option>
             <option value="3">&nbsp; &nbsp;北区</option>
@@ -193,9 +79,9 @@
           </select>
         </div>
         <div class="location-sub-2-3">
-          <p>Service 3</p>
+          <p>Third {{ app.t("jobsApp.form.location") }}</p>
           <select class="custom_select">
-            <option value="_default_selection">Location</option>
+            <option value="_default_selection">{{ app.t("jobsApp.form.location") }}</option>
             <option value="2,3,4,8,10,5,9,6,11,7">札幌市</option>
             <option value="2">&nbsp; &nbsp;中央区</option>
             <option value="3">&nbsp; &nbsp;北区</option>
@@ -223,38 +109,33 @@
         </div>
       </div>
       <div class="condition">
-        <p>Discerning condition</p>
+        <p>{{ app.t("jobsApp.form.conditions.title") }}</p>
         <div class="tag">
           <label for="8264"
-            >Holidays<input class="jss185 MuiBox-root css-0" id="8264" type="checkbox" name="8264" value="8264"
+            >{{ app.t("jobsApp.form.conditions.holiday")
+            }}<input class="" id="8264" type="checkbox" name="8264" value="8264"
           /></label>
           <label for="8272"
-            >3 days/week<input class="jss185 MuiBox-root css-0" id="8272" type="checkbox" name="8272" value="8272"
+            >{{ app.t("jobsApp.form.conditions.rest")
+            }}<input class="" id="8272" type="checkbox" name="8272" value="8272"
           /></label>
           <label for="8265"
-            >The allowance for dependents<input
-              class="jss185 MuiBox-root css-0"
-              id="8265"
-              type="checkbox"
-              name="8265"
-              value="8265"
+            >{{ app.t("jobsApp.form.conditions.allowance")
+            }}<input class="" id="8265" type="checkbox" name="8265" value="8265"
           /></label>
           <label for="8274"
-            >Around JR/subway stations<input
-              class="jss185 MuiBox-root css-0"
-              id="8274"
-              type="checkbox"
-              name="8274"
-              value="8274"
+            >{{ app.t("jobsApp.form.conditions.station")
+            }}<input class="" id="8274" type="checkbox" name="8274" value="8274"
           /></label>
           <label for="8263"
-            >Commuting by car<input class="jss185 MuiBox-root css-0" id="8263" type="checkbox" name="8263" value="8263"
+            >{{ app.t("jobsApp.form.conditions.commuting")
+            }}<input class="" id="8263" type="checkbox" name="8263" value="8263"
           /></label>
         </div>
       </div>
       <div class="applicable">
         <div class="suitable">
-          <p class="title">Applicable job</p>
+          <p class="title">{{ app.t("jobsApp.form.applicable.title") }}</p>
 
           <div class="result">
             <p class="result-match">2</p>
@@ -264,24 +145,27 @@
           </div>
         </div>
         <button class="view-result" tabindex="0" type="submit" form="homepage_search_form_id">
-          View search results<span class="MuiTouchRipple-root css-w0pj6f"></span>
+          {{ app.t("jobsApp.form.applicable.result") }}<span class="MuiTouchRipple-root css-w0pj6f"></span>
         </button>
       </div>
     </form>
     <div class="search-condition">
-      <img class="MuiBox-root css-0" src="../../../../assets/img/ic_search.71514682dc7410fdb320ef5038e30837.svg" />
-      <p class="MuiTypography-root MuiTypography-body1 css-9l3uo3">Search condition</p>
+      <img class="" src="@/assets/img/ic_search.71514682dc7410fdb320ef5038e30837.svg" />
+      <p class="">{{ app.t("jobsApp.form.applicable.searchCondition") }}</p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { BaseComponent, defineClassComponent } from "../../../../plugins/component.plugin";
+import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public constructor() {
       super();
+
+      PrimitiveHelper.time();
     }
   },
 );
@@ -327,17 +211,6 @@ const app = defineClassComponent(
           background-size: 24px;
         }
       }
-      & .css-14cq1u6 {
-        user-select: none;
-        width: 1em;
-        height: 1em;
-        display: inline-block;
-        fill: currentcolor;
-        flex-shrink: 0;
-        transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        font-size: 16px;
-        margin: 0px 4px;
-      }
     }
     & .select-2 {
       display: flex;
@@ -370,7 +243,7 @@ const app = defineClassComponent(
           background-color: #fff;
           appearance: none;
           background: transparent;
-          background-image: url(../../../../assets/img/ic_expand.9b23fd7b7dbca75cefd0.svg);
+          background-image: url(@/assets/img/ic_expand.9b23fd7b7dbca75cefd0.svg);
           background-position-x: 92%;
           background-position-y: 52%;
           background-repeat: no-repeat;
@@ -492,7 +365,7 @@ const app = defineClassComponent(
     justify-content: center;
     background-repeat: no-repeat;
     background-position: top center;
-    background-image: url(../../../../assets/img/tab.png);
+    background-image: url(@/assets/img/tab.png);
     & p {
       color: #000;
       font-size: 16px;
