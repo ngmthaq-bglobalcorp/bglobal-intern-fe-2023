@@ -34,42 +34,42 @@
             <small class="card-subtitle">{{ app.t(`app.about`) }}</small>
           </li>
 
-          <li class="card-item" v-if="app.profile.username">
+          <li class="card-item" v-if="props.profile.username">
             <i class="bi bi-person-circle icon"></i>
-            {{ app.profile.username }}
+            {{ props.profile.username }}
           </li>
-          <li class="card-item" v-if="app.profile.name">
+          <li class="card-item" v-if="props.profile.name">
             <i class="bi bi-person icon"></i>
-            {{ app.profile.name }}
+            {{ props.profile.name }}
           </li>
 
           <li class="card-item pt-2 pb-0">
             <small class="card-subtitle">{{ app.t(`app.contacts`) }}</small>
           </li>
 
-          <li class="card-item" v-if="app.profile.email">
+          <li class="card-item" v-if="props.profile.email">
             <i class="bi bi-envelope icon"></i>
-            {{ app.profile.email }}
+            {{ props.profile.email }}
           </li>
-          <li class="card-item" v-if="app.profile.phone_number">
+          <li class="card-item" v-if="props.profile.phone_number">
             <i class="bi bi-phone icon"></i>
-            {{ app.profile.phone_number }}
+            {{ props.profile.phone_number }}
           </li>
-          <li class="card-item" v-if="app.profile.webside">
+          <li class="card-item" v-if="props.profile.webside">
             <i class="bi bi-globe icon"></i>
-            {{ app.profile.webside }}
+            {{ props.profile.webside }}
           </li>
-          <li class="card-item" v-if="app.profile.adress">
+          <li class="card-item" v-if="props.profile.adress">
             <i class="bi bi-buildings icon"></i>
-            {{ app.profile.adress }}
+            {{ props.profile.adress }}
           </li>
 
           <li class="card-item pt-2 pb-0">
             <small class="card-subtitle">{{ app.t(`app.introduction`) }}</small>
           </li>
-          <li class="card-item" v-if="app.profile.introduction">
+          <li class="card-item" v-if="props.profile.introduction">
             <i class="bi bi-bookmarks icon"></i>
-            {{ app.profile.introduction }}
+            {{ props.profile.introduction }}
           </li>
         </ul>
       </div>
@@ -82,43 +82,30 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import type { Ref } from "vue";
-import type { OrganizationModel } from "@/models/organization.model";
+import type { ProfileCardProps } from "@/views/AdminViews/UserProfile/UserProfileView";
+
+const props = defineProps<ProfileCardProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public profile: OrganizationModel = {
-      id: 1,
-      username: "minhduc",
-      name: "Minh Duc",
-      email: "minhduc.mll@gmail.com",
-      phone_number: "0912345678",
-      webside: "",
-      adress: "Ha Noi",
-      introduction:
-        "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
-      organizationType: 0,
-      status: 0,
-      createdAt: new Date("2023-07-01"),
-      updatedAt: new Date("2023-07-01"),
-    };
     public profilePercent: Ref<number> = this.computed(() => {
       let percent = 0;
-      if (this.profile.name) {
+      if (props.profile.name) {
         percent++;
       }
-      if (this.profile.email) {
+      if (props.profile.email) {
         percent++;
       }
-      if (this.profile.phone_number) {
+      if (props.profile.phone_number) {
         percent++;
       }
-      if (this.profile.webside) {
+      if (props.profile.webside) {
         percent++;
       }
-      if (this.profile.adress) {
+      if (props.profile.adress) {
         percent++;
       }
-      if (this.profile.introduction) {
+      if (props.profile.introduction) {
         percent++;
       }
       return Math.round((percent / 6) * 100);
