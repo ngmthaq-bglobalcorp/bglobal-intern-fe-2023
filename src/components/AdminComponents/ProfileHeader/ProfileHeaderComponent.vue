@@ -63,7 +63,7 @@
         </li>
 
         <li class="nav-item ms-auto">
-          <button class="update-btn small-btn">
+          <button class="update-btn small-btn" @click="app.onToggleUpdate">
             <i class="bi bi-person-fill-gear icon"></i>
             {{ app.t(`app.update`, { value: app.t(`app.profile`) }) }}
           </button>
@@ -85,6 +85,10 @@ const app = defineClassComponent(
     public constructor() {
       super();
     }
+
+    public onToggleUpdate = () => {
+      this.router.push({ path: "/admin/user/profile/update", name: "adminUpdateProfile" });
+    };
   },
 );
 </script>

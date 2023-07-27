@@ -23,7 +23,7 @@
     <div class="profile-card-detail custom-card">
       <!-- Header -->
       <div class="card-header">
-        <h2 class="card-header-title h5">{{ app.t(`app.profile`) }}</h2>
+        <h2 class="card-title">{{ app.t(`props.profile`) }}</h2>
       </div>
       <!-- End Header -->
 
@@ -34,42 +34,42 @@
             <small class="card-subtitle">{{ app.t(`app.about`) }}</small>
           </li>
 
-          <li class="card-item" v-if="props.profile.username">
+          <li class="card-item" v-if="app.profile.value.username">
             <i class="bi bi-person-circle icon"></i>
-            {{ props.profile.username }}
+            {{ app.profile.value.username }}
           </li>
-          <li class="card-item" v-if="props.profile.name">
+          <li class="card-item" v-if="app.profile.value.name">
             <i class="bi bi-person icon"></i>
-            {{ props.profile.name }}
+            {{ app.profile.value.name }}
           </li>
 
           <li class="card-item pt-2 pb-0">
             <small class="card-subtitle">{{ app.t(`app.contacts`) }}</small>
           </li>
 
-          <li class="card-item" v-if="props.profile.email">
+          <li class="card-item" v-if="app.profile.value.email">
             <i class="bi bi-envelope icon"></i>
-            {{ props.profile.email }}
+            {{ app.profile.value.email }}
           </li>
-          <li class="card-item" v-if="props.profile.phone_number">
+          <li class="card-item" v-if="app.profile.value.phone_number">
             <i class="bi bi-phone icon"></i>
-            {{ props.profile.phone_number }}
+            {{ app.profile.value.phone_number }}
           </li>
-          <li class="card-item" v-if="props.profile.webside">
+          <li class="card-item" v-if="app.profile.value.webside">
             <i class="bi bi-globe icon"></i>
-            {{ props.profile.webside }}
+            {{ app.profile.value.webside }}
           </li>
-          <li class="card-item" v-if="props.profile.adress">
+          <li class="card-item" v-if="app.profile.value.adress">
             <i class="bi bi-buildings icon"></i>
-            {{ props.profile.adress }}
+            {{ app.profile.value.adress }}
           </li>
 
           <li class="card-item pt-2 pb-0">
             <small class="card-subtitle">{{ app.t(`app.introduction`) }}</small>
           </li>
-          <li class="card-item" v-if="props.profile.introduction">
+          <li class="card-item" v-if="app.profile.value.introduction">
             <i class="bi bi-bookmarks icon"></i>
-            {{ props.profile.introduction }}
+            {{ app.profile.value.introduction }}
           </li>
         </ul>
       </div>
@@ -83,29 +83,31 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import type { Ref } from "vue";
 import type { ProfileCardProps } from "./ProfileCardComponent";
+import type { OrganizationModel } from "@/models/organization.model";
 
 const props = defineProps<ProfileCardProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public profile: Ref<OrganizationModel> = this.ref(props.profile);
     public profilePercent: Ref<number> = this.computed(() => {
       let percent = 0;
-      if (props.profile.name) {
+      if (this.profile.value.name) {
         percent++;
       }
-      if (props.profile.email) {
+      if (this.profile.value.email) {
         percent++;
       }
-      if (props.profile.phone_number) {
+      if (this.profile.value.phone_number) {
         percent++;
       }
-      if (props.profile.webside) {
+      if (this.profile.value.webside) {
         percent++;
       }
-      if (props.profile.adress) {
+      if (this.profile.value.adress) {
         percent++;
       }
-      if (props.profile.introduction) {
+      if (this.profile.value.introduction) {
         percent++;
       }
       return Math.round((percent / 6) * 100);
@@ -153,7 +155,7 @@ const app = defineClassComponent(
       padding: 1rem 1.3125rem;
       border-bottom: 0.0625rem solid $border;
 
-      & .card-header-title {
+      & .card-title {
         font-size: 1rem;
         font-weight: 600;
         line-height: 1.2;
