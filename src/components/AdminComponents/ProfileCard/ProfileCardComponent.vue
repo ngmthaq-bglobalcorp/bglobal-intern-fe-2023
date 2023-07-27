@@ -82,7 +82,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import type { Ref } from "vue";
-import type { ProfileCardProps } from "@/views/AdminViews/UserProfile/UserProfileView";
+import type { ProfileCardProps } from "./ProfileCardComponent";
 
 const props = defineProps<ProfileCardProps>();
 
