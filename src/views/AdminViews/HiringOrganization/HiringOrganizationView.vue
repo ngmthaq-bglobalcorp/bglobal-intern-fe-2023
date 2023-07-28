@@ -1,7 +1,7 @@
 <template>
   <AdminLayout>
     <PageHeader route="hiringOrganization" />
-    <Datatable :columns="app.columns" :data="app.data"></Datatable>
+    <Datatable :columns="app.columns" :data="app.data" />
   </AdminLayout>
 </template>
 
@@ -32,7 +32,7 @@ const app = defineClassComponent(
         adress: "Ha Noi",
         introduction:
           "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
-        organizationType: 0,
+        organizationType: "B",
         status: 0,
         createdAt: new Date("2023-07-01"),
         updatedAt: new Date("2023-07-01"),

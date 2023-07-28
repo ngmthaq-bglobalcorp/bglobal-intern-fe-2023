@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <PageHeader route="settings"></PageHeader>
+    <PageHeader route="settings" />
     <div class="update-profile-container">
       <!-- Navbar -->
       <div class="profile-nav custom-card">

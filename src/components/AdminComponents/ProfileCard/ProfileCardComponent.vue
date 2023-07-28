@@ -23,7 +23,7 @@
     <div class="profile-card-detail custom-card">
       <!-- Header -->
       <div class="card-header">
-        <h2 class="card-title">{{ app.t(`props.profile`) }}</h2>
+        <h2 class="card-title">{{ app.t(`app.profile`) }}</h2>
       </div>
       <!-- End Header -->
 

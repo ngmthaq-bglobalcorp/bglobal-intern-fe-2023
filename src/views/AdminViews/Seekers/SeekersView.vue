@@ -2,7 +2,7 @@
   <AdminLayout>
     <div class="seeker-contaier">
       <PageHeader route="seekers" />
-      <Datatable :columns="app.columns" :data="app.data"></Datatable>
+      <Datatable :columns="app.columns" :data="app.data" />
     </div>
   </AdminLayout>
 </template>
