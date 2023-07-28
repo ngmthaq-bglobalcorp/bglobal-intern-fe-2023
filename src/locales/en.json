@@ -20,11 +20,12 @@
   },
   "message": {
     "errorName": "Please enter your Organization name.",
-    "errorEmail": "Please enter your Organization name.",
+    "errorEmail": "Please enter a valid email address.",
     "errorPassword": "Your password is invalid. Please try again.",
     "errorConfirmPassword": "Password does not match the confirm password.",
     "errorTerms": "Please accept our Terms and Conditions.",
-    "errorOtp": "Please enter a valid OTP."
+    "errorOtp": "Please enter a valid OTP.",
+    "errorPhoneNumber": "Please enter a valid phone number."
   },
   "app": {
     "coverTitle": "The best part? Everything.",

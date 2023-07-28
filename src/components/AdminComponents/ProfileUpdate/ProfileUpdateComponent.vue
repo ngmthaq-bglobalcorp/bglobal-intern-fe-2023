@@ -20,12 +20,15 @@
             <div class="custom-input-group">
               <input
                 type="text"
-                class="input-form"
+                :class="['input-form', { 'is-invalid': app.errorName.value }]"
                 name="name"
                 id="organizationName"
                 :placeholder="app.t(`app.organizationName`)"
                 v-model="app.organizationName.value"
+                @focus="app.focusName"
               />
+
+              <div class="invalid-feedback" v-if="app.errorName.value">{{ app.errorName.value }}</div>
             </div>
           </div>
           <!-- End Form Group -->
@@ -40,13 +43,15 @@
             <div class="custom-input-group">
               <input
                 type="text"
-                class="input-form"
+                :class="['input-form', { 'is-invalid': app.errorEmail.value }]"
                 name="name"
                 id="organizationEmail"
                 placeholder="Email@organization.com"
                 v-model="app.organizationEmail.value"
                 readonly
               />
+
+              <div class="invalid-feedback" v-if="app.errorEmail.value">{{ app.errorEmail.value }}</div>
             </div>
           </div>
           <!-- End Form Group -->
@@ -61,12 +66,15 @@
             <div class="custom-input-group">
               <input
                 type="text"
-                class="input-form"
+                :class="['input-form', { 'is-invalid': app.errorPhoneNumber.value }]"
                 name="phoneNumber"
                 id="organizationPhone"
                 :placeholder="app.t(`app.phoneNumber`)"
                 v-model="app.phoneNumber.value"
+                @focus="app.focusPhoneNumber"
               />
+
+              <div class="invalid-feedback" v-if="app.errorPhoneNumber.value">{{ app.errorPhoneNumber.value }}</div>
             </div>
           </div>
           <!-- End Form Group -->
@@ -136,6 +144,7 @@
                   :for="accountType.value"
                   v-for="accountType in app.typeArray"
                   :key="accountType.id"
+                  @click="app.onSelectAccountType(accountType.value)"
                 >
                   <span class="custom-check">
                     <input
@@ -185,12 +194,15 @@
             <div class="custom-input-group">
               <input
                 type="email"
-                class="input-form"
+                :class="['input-form', { 'is-invalid': app.errorNewEmail.value }]"
                 name="newEmail"
                 id="newOrganizationEmail"
                 :placeholder="app.t(`app.enterNewEmail`)"
                 v-model="app.newEmail.value"
+                @focus="app.focusEmail"
               />
+
+              <div class="invalid-feedback" v-if="app.errorNewEmail.value">{{ app.errorNewEmail.value }}</div>
             </div>
           </div>
           <!-- End Form Group -->
@@ -222,11 +234,17 @@
             <div class="custom-input-group">
               <input
                 type="password"
-                class="input-form"
+                :class="['input-form', { 'is-invalid': app.errorCurrentPassword.value }]"
                 name="currentPassword"
                 id="currentPassword"
                 :placeholder="app.t(`app.enterCurrentPassword`)"
+                v-model="app.currentPassword.value"
+                @focus="app.focusCurrentPassword"
               />
+
+              <div class="invalid-feedback" v-if="app.errorCurrentPassword.value">
+                {{ app.errorCurrentPassword.value }}
+              </div>
             </div>
           </div>
           <!-- End Form Group -->
@@ -238,11 +256,15 @@
             <div class="custom-input-group">
               <input
                 type="password"
-                class="input-form"
+                :class="['input-form', { 'is-invalid': app.errorNewPassword.value }]"
                 name="newPassword"
                 id="newPassword"
                 :placeholder="app.t(`app.enterNewPassword`)"
+                v-model="app.newPassword.value"
+                @focus="app.focusNewPassword"
               />
+
+              <div class="invalid-feedback" v-if="app.errorNewPassword.value">{{ app.errorNewPassword.value }}</div>
             </div>
           </div>
           <!-- End Form Group -->
@@ -254,11 +276,17 @@
             <div class="custom-input-group">
               <input
                 type="password"
-                class="input-form"
+                :class="['input-form', { 'is-invalid': app.errorConfirmNewPassword.value }]"
                 name="confirmNewPassword"
                 id="confirmNewPassword"
                 :placeholder="app.t(`app.confirmNewPassword`)"
+                v-model="app.confirmNewPassword.value"
+                @focus="app.focusConfirmNewPassword"
               />
+
+              <div class="invalid-feedback" v-if="app.errorConfirmNewPassword.value">
+                {{ app.errorConfirmNewPassword.value }}
+              </div>
             </div>
           </div>
           <!-- End Form Group -->
@@ -378,6 +406,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { LangConst } from "@/const/lang.const";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { Ref } from "vue";
 import type { ProfileUpdateProps } from "./ProfileUpdateComponent";
 import type { OrganizationModel } from "@/models/organization.model";
@@ -388,9 +417,9 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public addressArray = ["Ha Noi", "Ho Chi Minh", "Hai Phong"];
     public typeArray = [
-      { id: 1, value: "B", text: "Type B", isChecked: true },
-      { id: 2, value: "C", text: "Type C", isChecked: false },
-      { id: 3, value: "E", text: "Type E", isChecked: false },
+      { id: 1, value: "B", text: "Type B" },
+      { id: 2, value: "C", text: "Type C" },
+      { id: 3, value: "E", text: "Type E" },
     ];
     public profile: Ref<OrganizationModel> = this.ref(props.profile);
     public organizationName: Ref<string> = this.ref(this.profile.value.name);
@@ -404,6 +433,13 @@ const app = defineClassComponent(
     public currentPassword: Ref<string> = this.ref("");
     public newPassword: Ref<string> = this.ref("");
     public confirmNewPassword: Ref<string> = this.ref("");
+    public errorName: Ref<string> = this.ref("");
+    public errorEmail: Ref<string> = this.ref("");
+    public errorPhoneNumber: Ref<string> = this.ref("");
+    public errorNewEmail: Ref<string> = this.ref("");
+    public errorCurrentPassword: Ref<string> = this.ref("");
+    public errorNewPassword: Ref<string> = this.ref("");
+    public errorConfirmNewPassword: Ref<string> = this.ref("");
     public language: Ref<string> = this.ref(this.i18n.locale.value);
     public isConfirmDelete: Ref<boolean> = this.ref(false);
 
@@ -411,7 +447,26 @@ const app = defineClassComponent(
       super();
     }
 
+    public onSelectAccountType = (accountType: string) => {
+      this.organizationType.value = accountType;
+    };
+
     public onUpdateInfomation = () => {
+      if (!this.organizationName.value) {
+        this.errorName.value = this.t(`message.errorName`);
+      } else {
+        this.errorName.value = "";
+      }
+      if (!this.organizationEmail.value || !PrimitiveHelper.isValidEmail(this.organizationEmail.value)) {
+        this.errorEmail.value = this.t(`message.errorEmail`);
+      } else {
+        this.errorEmail.value = "";
+      }
+      if (!this.phoneNumber.value || !PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
+        this.errorPhoneNumber.value = this.t(`message.errorPhoneNumber`);
+      } else {
+        this.errorPhoneNumber.value = "";
+      }
       console.log(this.organizationName.value);
       console.log(this.organizationEmail.value);
       console.log(this.phoneNumber.value);
@@ -422,10 +477,32 @@ const app = defineClassComponent(
     };
 
     public onUpdateEmail = () => {
+      if (!this.newEmail.value || !PrimitiveHelper.isValidEmail(this.newEmail.value)) {
+        this.errorNewEmail.value = this.t(`message.errorEmail`);
+      } else {
+        this.errorNewEmail.value = "";
+      }
       console.log(this.newEmail.value);
     };
 
     public onUpdatePassword = () => {
+      if (!this.currentPassword.value || !PrimitiveHelper.isValidPassword(this.currentPassword.value)) {
+        this.errorCurrentPassword.value = this.t(`message.errorPassword`);
+      } else {
+        this.errorCurrentPassword.value = "";
+      }
+      if (!this.newPassword.value || !PrimitiveHelper.isValidPassword(this.newPassword.value)) {
+        this.errorNewPassword.value = this.t(`message.errorPassword`);
+      } else {
+        this.errorNewPassword.value = "";
+      }
+      if (!this.confirmNewPassword.value || !PrimitiveHelper.isValidPassword(this.confirmNewPassword.value)) {
+        this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
+      } else if (this.confirmNewPassword.value !== this.newPassword.value) {
+        this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
+      } else {
+        this.errorConfirmNewPassword.value = "";
+      }
       console.log(this.currentPassword.value);
       console.log(this.newPassword.value);
       console.log(this.confirmNewPassword.value);
@@ -438,6 +515,48 @@ const app = defineClassComponent(
 
     public onToggleDeleteAccount = () => {
       console.log(this.isConfirmDelete.value);
+    };
+
+    public focusName = () => {
+      if (this.errorName.value) {
+        this.errorName.value = "";
+        this.organizationName.value = "";
+      }
+    };
+
+    public focusEmail = () => {
+      if (this.errorEmail.value) {
+        this.errorEmail.value = "";
+        this.organizationEmail.value = "";
+      }
+    };
+
+    public focusPhoneNumber = () => {
+      if (this.errorPhoneNumber.value) {
+        this.errorPhoneNumber.value = "";
+        this.phoneNumber.value = "";
+      }
+    };
+
+    public focusCurrentPassword = () => {
+      if (this.errorCurrentPassword.value) {
+        this.errorCurrentPassword.value = "";
+        this.currentPassword.value = "";
+      }
+    };
+
+    public focusNewPassword = () => {
+      if (this.errorNewPassword.value) {
+        this.errorNewPassword.value = "";
+        this.newPassword.value = "";
+      }
+    };
+
+    public focusConfirmNewPassword = () => {
+      if (this.errorConfirmNewPassword.value) {
+        this.errorConfirmNewPassword.value = "";
+        this.confirmNewPassword.value = "";
+      }
     };
   },
 );
@@ -531,9 +650,29 @@ const app = defineClassComponent(
               color: $dark;
               background-color: $white;
               outline: 0;
-              border-color: rgba(55, 125, 255, 0.4);
+              border-color: rgba($blue, 0.6);
               box-shadow: 0 0 10px rgba(55, 125, 255, 0.1);
             }
+          }
+
+          & .is-invalid,
+          & .is-invalid:focus {
+            border-color: $danger;
+            box-shadow: 0 0 10px rgba(237, 76, 120, 0.1);
+          }
+
+          & .is-valid,
+          & .is-valid:focus {
+            border-color: $success;
+            box-shadow: 0 0 10px rgba(0, 201, 167, 0.1);
+          }
+
+          & .invalid-feedback {
+            display: block;
+            width: 100%;
+            margin-top: 0.25rem;
+            font-size: 80%;
+            color: $danger;
           }
         }
 
@@ -558,26 +697,6 @@ const app = defineClassComponent(
             font-size: 0.875rem;
             cursor: pointer;
           }
-        }
-
-        & .is-invalid,
-        & .is-invalid:focus {
-          border-color: $danger;
-          box-shadow: 0 0 10px rgba(237, 76, 120, 0.1);
-        }
-
-        & .is-valid,
-        & .is-valid:focus {
-          border-color: $success;
-          box-shadow: 0 0 10px rgba(0, 201, 167, 0.1);
-        }
-
-        & .invalid-feedback {
-          display: block;
-          width: 100%;
-          margin-top: 0.25rem;
-          font-size: 80%;
-          color: $danger;
         }
 
         & .input-required {
