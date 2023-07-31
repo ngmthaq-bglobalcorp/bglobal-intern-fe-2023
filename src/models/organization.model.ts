@@ -6,6 +6,7 @@ export class OrganizationModel extends BaseModel implements IOrganization {
   public email: string;
   public phone: string;
   public status: string;
+  public isSelected: boolean;
 
   public constructor(data: any) {
     super();
@@ -14,6 +15,7 @@ export class OrganizationModel extends BaseModel implements IOrganization {
     this.email = data.email || "";
     this.phone = data.phone || "";
     this.status = data.status || "";
+    this.isSelected = data.isSelected || false;
   }
 }
 
@@ -23,4 +25,5 @@ export interface IOrganization {
   email: string;
   phone: string;
   status: string;
+  isSelected: boolean;
 }

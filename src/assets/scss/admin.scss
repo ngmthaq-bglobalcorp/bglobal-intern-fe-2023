@@ -46,7 +46,7 @@
   transition: all 0.2s ease-in-out;
   cursor: pointer;
 
-  &.disabled {
+  &:disabled {
     color: $disabled-color !important;
     pointer-events: none;
   }
@@ -63,7 +63,7 @@
     border-color: $blue;
   }
 
-  &.disabled {
+  &:disabled {
     color: $white;
     background-color: $disabled-color;
     border-color: $disabled-color;
