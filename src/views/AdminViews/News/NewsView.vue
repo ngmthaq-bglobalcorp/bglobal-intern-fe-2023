@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <PageHeader route="news" />
+    <PageHeader route="news" path="/admin/news/add" :have-add-button="true" />
     <TimelineList :data="app.news" :limit="5" />
   </AdminLayout>
 </template>

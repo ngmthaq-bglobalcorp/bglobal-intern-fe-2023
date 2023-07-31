@@ -1,1 +1,5 @@
-export type PageHeaderProps = { route: String };
+export type PageHeaderProps = {
+  route: String;
+  path: string;
+  haveAddButton: boolean;
+};

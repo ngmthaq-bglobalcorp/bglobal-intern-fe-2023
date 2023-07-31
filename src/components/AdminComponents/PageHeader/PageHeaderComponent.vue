@@ -8,10 +8,12 @@
       </div>
       <div class="header-title">
         <h1>{{ app.t(`app.${props.route}`) }}</h1>
-        <button class="add-btn small-btn primary-btn">
-          <i class="bi bi-person-plus-fill"></i>
-          {{ app.t(`app.add`, { value: app.t(`app.${props.route}`) }) }}
-        </button>
+        <template v-if="props.haveAddButton">
+          <button class="add-btn small-btn primary-btn" @click="app.onToggleAddButton">
+            <i class="bi bi-person-plus-fill"></i>
+            {{ app.t(`app.add`, { value: app.t(`app.${props.route}`) }) }}
+          </button>
+        </template>
       </div>
     </div>
   </div>
@@ -28,6 +30,10 @@ const app = defineClassComponent(
     public constructor() {
       super();
     }
+
+    public onToggleAddButton = () => {
+      this.router.push({ path: props.path });
+    };
   },
 );
 </script>

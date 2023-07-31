@@ -6,6 +6,7 @@ import DashboardViewVue from "@/views/AdminViews/Dashboard/DashboardView.vue";
 import SeekersViewVue from "@/views/AdminViews/Seekers/SeekersView.vue";
 import HiringOrganizationViewVue from "@/views/AdminViews/HiringOrganization/HiringOrganizationView.vue";
 import NewsViewVue from "@/views/AdminViews/News/NewsView.vue";
+import AddNewsViewVue from "@/views/AdminViews/AddNews/AddNewsView.vue";
 import UserProfileViewVue from "@/views/AdminViews/UserProfile/UserProfileView.vue";
 import UpdateProfileViewVue from "@/views/AdminViews/UpdateProfile/UpdateProfileView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
@@ -71,6 +72,15 @@ export class PathConst {
     component: NewsViewVue,
     meta: {
       title: "title.admin.news",
+    },
+  };
+
+  public static adminAddNews: Route = {
+    path: "/admin/news/add",
+    name: "adminAddNews",
+    component: AddNewsViewVue,
+    meta: {
+      title: "title.admin.addNews",
     },
   };
 

@@ -1,7 +1,7 @@
 <template>
   <AdminLayout>
     <div class="seeker-contaier">
-      <PageHeader route="seekers" />
+      <PageHeader route="seekers" path="" :have-add-button="false" />
       <Datatable :columns="app.columns" :data="app.data" />
     </div>
   </AdminLayout>

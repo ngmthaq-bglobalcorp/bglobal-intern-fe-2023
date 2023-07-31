@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <PageHeader route="settings" />
+    <PageHeader route="settings" path="" :haveAddButton="false" />
     <div class="update-profile-container">
       <!-- Navbar -->
       <div class="profile-nav custom-card">
