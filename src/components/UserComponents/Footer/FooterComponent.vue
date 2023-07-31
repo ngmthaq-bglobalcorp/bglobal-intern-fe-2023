@@ -38,10 +38,12 @@ const app = defineClassComponent(
 
 .footer {
   margin-top: 45px;
+
   & .rule {
     display: flex;
     margin-bottom: 15px;
     justify-content: center;
+
     & a {
       color: #000;
       font-size: 11px;
@@ -54,6 +56,7 @@ const app = defineClassComponent(
   & .license {
     padding: 10px;
     background: #e65078;
+
     & a {
       color: black;
       display: block;
@@ -62,6 +65,7 @@ const app = defineClassComponent(
       font-weight: 400;
       line-height: 12px;
     }
+
     & p {
       color: #fff;
       font-size: 9px;
@@ -70,6 +74,7 @@ const app = defineClassComponent(
       line-height: 11px;
       padding-top: 6px;
     }
+
     & span {
       display: block;
       font-size: 11px;

@@ -5,6 +5,7 @@
       <NewsList></NewsList>
       <CompanyDescribe></CompanyDescribe>
     </div>
+    <FooterComponent></FooterComponent>
   </UserLayout>
 </template>
 
@@ -14,6 +15,7 @@ import UserLayout from "@/layouts/UserLayout/UserLayout.vue";
 import FormSearch from "@/components/UserComponents/HomeContent/Form/FormSearch.vue";
 import NewsList from "@/components/UserComponents/HomeContent/News/NewsList.vue";
 import CompanyDescribe from "@/components/UserComponents/HomeContent/CompanyDescribe/CompanyDescribe.vue";
+import FooterComponent from "@/components/UserComponents/Footer/FooterComponent.vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {

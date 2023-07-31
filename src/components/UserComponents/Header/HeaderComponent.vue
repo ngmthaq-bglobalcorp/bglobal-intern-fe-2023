@@ -63,6 +63,7 @@ const app = defineClassComponent(
 
 <style scoped lang="scss">
 @import "@/assets/scss/modules";
+
 .first-header {
   height: 52px;
   display: flex;

@@ -145,7 +145,7 @@
           </div>
         </div>
         <button class="view-result" tabindex="0" type="submit" form="homepage_search_form_id">
-          {{ app.t("jobsApp.form.applicable.result") }}<span class="MuiTouchRipple-root css-w0pj6f"></span>
+          {{ app.t("jobsApp.form.applicable.result") }}
         </button>
       </div>
     </form>
