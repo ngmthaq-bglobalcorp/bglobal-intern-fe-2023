@@ -63,7 +63,9 @@
     <div class="profile-nav" v-if="!props.isUpdate">
       <ul class="nav-list list">
         <li class="nav-item">
-          <router-link to="" class="nav-link link active disabled">{{ app.t(`app.profile`) }}</router-link>
+          <router-link :to="PathConst.adminUserProfile" class="nav-link link active disabled">
+            {{ app.t(`app.profile`) }}
+          </router-link>
         </li>
         <li class="nav-item">
           <router-link to="" class="nav-link link disabled">{{ app.t(`app.jobsList`) }}</router-link>
@@ -83,6 +85,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import type { ProfileHeaderProps } from "./ProfileHeaderComponent";
 
 const props = defineProps<ProfileHeaderProps>();
