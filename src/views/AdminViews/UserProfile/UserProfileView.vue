@@ -1,7 +1,7 @@
 <template>
   <AdminLayout>
     <div class="user-profile-container">
-      <ProfileHeader :isUpdate="false" />
+      <ProfileHeader :isUpdate="false" :editable="true" />
       <ProfileCard :profile="app.profile" />
     </div>
   </AdminLayout>
@@ -30,6 +30,7 @@ const app = defineClassComponent(
       status: 0,
       createdAt: new Date("2023-07-01"),
       updatedAt: new Date("2023-07-01"),
+      isSelected: false,
     };
 
     public constructor() {

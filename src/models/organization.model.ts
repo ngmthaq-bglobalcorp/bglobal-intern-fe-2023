@@ -13,6 +13,7 @@ export class OrganizationModel extends BaseModel implements IOrganization {
   public status: number;
   public createdAt: Date;
   public updatedAt: Date;
+  public isSelected: boolean;
 
   public constructor(data: any) {
     super();
@@ -28,6 +29,7 @@ export class OrganizationModel extends BaseModel implements IOrganization {
     this.status = data.status || 0;
     this.createdAt = data.createdAt || Date.now();
     this.updatedAt = data.updatedAt || Date.now();
+    this.isSelected = data.isSelected || false;
   }
 }
 
@@ -44,4 +46,5 @@ export interface IOrganization {
   status: number;
   createdAt: Date;
   updatedAt: Date;
+  isSelected: boolean;
 }
