@@ -41,7 +41,7 @@
               </div>
               <div class="dropdown-divider"></div>
               <div class="dropdown-item">
-                <router-link to="" class="link">{{ app.t(`app.profile`) }}</router-link>
+                <router-link :to="PathConst.adminUserProfile" class="link">{{ app.t(`app.profile`) }}</router-link>
               </div>
               <div class="dropdown-item">
                 <router-link to="" class="link">{{ app.t(`app.settings`) }}</router-link>
@@ -61,6 +61,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(

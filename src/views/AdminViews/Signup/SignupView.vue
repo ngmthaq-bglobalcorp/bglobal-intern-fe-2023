@@ -8,7 +8,7 @@
             <h1 class="title">{{ app.t(`app.createAccount`) }}</h1>
             <span>
               {{ app.t(`app.haveAccount`) }}
-              <router-link to="/admin/signin" class="link">{{ app.t(`app.signinHere`) }}</router-link>
+              <router-link :to="PathConst.adminSignin" class="link">{{ app.t(`app.signinHere`) }}</router-link>
             </span>
           </div>
 
@@ -113,7 +113,7 @@
 
               <label class="custom-control-label text-muted" for="termsCheckbox">
                 {{ app.t(`app.iAccept`) }}
-                <router-link to="#" class="link">{{ app.t(`app.termsAndConditions`) }}</router-link></label
+                <router-link to="" class="link">{{ app.t(`app.termsAndConditions`) }}</router-link></label
               >
             </div>
 
@@ -137,6 +137,7 @@
 <script setup lang="ts">
 import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { Ref } from "vue";
 

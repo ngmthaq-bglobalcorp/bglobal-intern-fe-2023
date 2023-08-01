@@ -8,7 +8,7 @@
             <h1 class="title">{{ app.t(`app.signin`) }}</h1>
             <span>
               {{ app.t(`app.dontHaveAccount`) }}
-              <router-link to="/admin/signup" class="link">{{ app.t(`app.signupHere`) }}</router-link>
+              <router-link :to="PathConst.adminSignup" class="link">{{ app.t(`app.signupHere`) }}</router-link>
             </span>
           </div>
 
@@ -48,7 +48,7 @@
             <label class="input-label" for="password">
               <span class="item">
                 {{ app.t(`app.password`) }}
-                <router-link to="/admin/forgot-password" class="link input-label-secondary">
+                <router-link :to="PathConst.adminForgot" class="link input-label-secondary">
                   {{ app.t(`app.forgotPassword`) }}
                 </router-link>
               </span>
@@ -97,6 +97,7 @@
 <script setup lang="ts">
 import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { Ref } from "vue";
 

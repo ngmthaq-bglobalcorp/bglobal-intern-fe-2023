@@ -170,14 +170,10 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import type { Ref } from "vue";
-import type { DatatableProps } from "./DatatableComponent";
+import type { DatatableEmits, DatatableProps } from "./DatatableComponent";
 
 const props = defineProps<DatatableProps>();
-const emit = defineEmits<{
-  (e: "onDeleteSelected", selectedArray: Array<number>): void;
-  (e: "onLockSelected", id: number): void;
-  (e: "onUnlockSelected", id: number): void;
-}>();
+const emit = defineEmits<DatatableEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -243,7 +239,6 @@ const app = defineClassComponent(
 
     public onToggleSelectData = (data: any) => {
       data.isSelected = !data.isSelected;
-      //this.totalSelected.value = props.data.reduce((acc: number, cur: any) => acc + (cur.isSelected ? 1 : 0), 0);
     };
 
     public onToggleSelectAll = () => {
@@ -252,13 +247,11 @@ const app = defineClassComponent(
         props.data.filter((value) => {
           value.isSelected = false;
         });
-        //this.totalSelected.value = 0;
       } else {
         this.selectedAll.value = true;
         props.data.filter((value) => {
           value.isSelected = true;
         });
-        //this.totalSelected.value = this.totalData.value;
       }
     };
 

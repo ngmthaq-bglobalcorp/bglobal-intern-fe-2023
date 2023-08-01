@@ -22,7 +22,7 @@
 
       <!-- List Checked -->
       <ul class="list list-checked">
-        <li class="list-checked-item" v-for="index in 3" :key="index">
+        <li class="list-checked-item" v-for="index in app.contentIndexArray.value" :key="index">
           <i class="bi bi-check-lg"></i>
           <span>{{ app.t(`app.coverContent.${index}.title`) }}</span>
           {{ app.t(`app.coverContent.${index}.content`) }}
@@ -41,9 +41,12 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public contentIndexArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.coverContent`)));
+
     public constructor() {
       super();
     }
@@ -64,7 +67,7 @@ const app = defineClassComponent(
   justify-content: center;
   position: relative;
   background-color: $light;
-  padding: 0;
+  padding: 3rem;
 
   & .logo-language {
     position: absolute;
@@ -119,7 +122,7 @@ const app = defineClassComponent(
         color: #677788;
         margin: 0.5rem;
         padding-left: 2.25rem;
-        padding-bottom: 1.5rem;
+        padding-bottom: 1rem;
 
         & i {
           position: absolute;

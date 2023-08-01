@@ -4,7 +4,7 @@
     <div class="sidebar-container">
       <!-- Logo -->
       <div class="sidebar-logo-wrapper">
-        <router-link to="/admin" class="link">
+        <router-link :to="PathConst.adminDashboard" class="link">
           <img src="@\assets\img\logo.svg" alt="Logo" class="image brand-logo" />
         </router-link>
       </div>
@@ -23,8 +23,8 @@
       <div class="sidebar-content-wrapper">
         <ul class="list content-list">
           <!-- Dashboards -->
-          <li class="content-item" :class="{ active: app.route.name === 'adminDashboard' }">
-            <router-link to="/admin" class="item-link link">
+          <li class="content-item" :class="{ active: app.route.name === PathConst.adminDashboard.name }">
+            <router-link :to="PathConst.adminDashboard" class="item-link link">
               <i class="bi bi-house icon"></i>
               <span class="item-text">{{ app.t(`app.dashboard`) }}</span>
             </router-link>
@@ -37,20 +37,20 @@
           </li>
 
           <!-- Manage -->
-          <li class="content-item" :class="{ active: app.route.name === 'adminSeekers' }">
-            <router-link to="/admin/seekers" class="item-link link">
+          <li class="content-item" :class="{ active: app.route.name === PathConst.adminSeekers.name }">
+            <router-link :to="PathConst.adminSeekers" class="item-link link">
               <i class="bi bi-people icon"></i>
               <span class="item-text">{{ app.t(`app.seekers`) }}</span>
             </router-link>
           </li>
-          <li class="content-item" :class="{ active: app.route.name === 'adminOrganization' }">
-            <router-link to="/admin/organization" class="item-link link">
+          <li class="content-item" :class="{ active: app.route.name === PathConst.adminOrganization.name }">
+            <router-link :to="PathConst.adminOrganization" class="item-link link">
               <i class="bi bi-buildings icon"></i>
               <span class="item-text">{{ app.t(`app.hiringOrganization`) }}</span>
             </router-link>
           </li>
-          <li class="content-item" :class="{ active: app.route.name === 'adminNews' }">
-            <router-link to="/admin/news" class="item-link link">
+          <li class="content-item" :class="{ active: app.route.name === PathConst.adminNews.name }">
+            <router-link :to="PathConst.adminNews" class="item-link link">
               <i class="bi bi-newspaper icon"></i>
               <span class="item-text">{{ app.t(`app.news`) }}</span>
             </router-link>
@@ -83,6 +83,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
