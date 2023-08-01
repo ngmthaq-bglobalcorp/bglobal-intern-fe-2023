@@ -47,8 +47,8 @@
   cursor: pointer;
 
   &:disabled {
-    opacity: 0.65;
-    cursor: default;
+    color: $disabled-color !important;
+    pointer-events: none;
   }
 }
 
@@ -58,13 +58,15 @@
   border-color: $blue-light;
 
   &:hover {
+    color: $white;
     background-color: $blue;
     border-color: $blue;
   }
 
   &:disabled {
-    background-color: $secondary;
-    border-color: $secondary;
+    color: $white;
+    background-color: $disabled-color;
+    border-color: $disabled-color;
   }
 }
 
@@ -93,6 +95,15 @@
 .link {
   text-decoration: none !important;
   color: $blue-light !important;
+
+  &:hover {
+    color: $blue !important;
+  }
+}
+
+.link-default {
+  text-decoration: none !important;
+  color: $dark-variant !important;
 
   &:hover {
     color: $blue !important;
@@ -133,4 +144,15 @@
     opacity: 0;
     visibility: hidden;
   }
+}
+
+.custom-card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  word-wrap: break-word;
+  background-color: $white;
+  background-clip: border-box;
+  border: 0.0625rem solid $border;
+  border-radius: 0.75rem;
 }
