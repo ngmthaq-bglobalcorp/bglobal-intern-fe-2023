@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <PageHeader route="settings"></PageHeader>
+    <PageHeader route="settings" @on-toggle-update-profile="app.onToggleUpdateProfile"></PageHeader>
     <div class="update-profile-container">
       <!-- Navbar -->
       <div class="profile-nav custom-card">
@@ -43,7 +43,7 @@
 
       <!-- Content -->
       <div class="profile-content">
-        <ProfileHeader :isUpdate="true" />
+        <ProfileHeader :isUpdate="true" :editable="true" />
         <ProfileUpdate :profile="app.profile" />
       </div>
       <!-- End Content -->
@@ -57,6 +57,7 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHeaderComponent.vue";
 import ProfileUpdate from "@/components/AdminComponents/ProfileUpdate/ProfileUpdateComponent.vue";
+import { PathConst } from "@/const/path.const";
 import type { OrganizationModel } from "@/models/organization.model";
 
 const app = defineClassComponent(
@@ -75,11 +76,16 @@ const app = defineClassComponent(
       status: 0,
       createdAt: new Date("2023-07-01"),
       updatedAt: new Date("2023-07-01"),
+      isSelected: false,
     };
 
     public constructor() {
       super();
     }
+
+    public onToggleUpdateProfile = () => {
+      this.router.push(PathConst.adminUpdateProfile.path);
+    };
   },
 );
 </script>

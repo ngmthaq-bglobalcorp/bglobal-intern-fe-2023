@@ -86,9 +86,10 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
-import type { ProfileHeaderProps } from "./ProfileHeaderComponent";
+import type { ProfileHeaderEmits, ProfileHeaderProps } from "./ProfileHeaderComponent";
 
 const props = defineProps<ProfileHeaderProps>();
+const emit = defineEmits<ProfileHeaderEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -97,7 +98,7 @@ const app = defineClassComponent(
     }
 
     public onToggleUpdate = () => {
-      this.router.push({ path: "/admin/user/profile/update", name: "adminUpdateProfile" });
+      emit("onToggleUpdateProfile");
     };
   },
 );
