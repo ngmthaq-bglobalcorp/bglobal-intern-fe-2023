@@ -22,40 +22,20 @@
       <!-- Content -->
       <div class="sidebar-content-wrapper">
         <ul class="list content-list">
-          <!-- Dashboards -->
-          <li class="content-item" :class="{ active: app.route.name === 'adminDashboard' }">
-            <router-link to="/admin" class="item-link link">
-              <i class="bi bi-house icon"></i>
-              <span class="item-text">{{ app.t(`app.dashboard`) }}</span>
-            </router-link>
-          </li>
-          <!-- End Dashboards -->
-
-          <li class="content-item">
-            <i class="bi bi-three-dots icon-subtitle"></i>
-            <span class="item-subtitle">{{ app.t(`app.manage`) }}</span>
-          </li>
-
-          <!-- Manage -->
-          <li class="content-item" :class="{ active: app.route.name === 'adminSeekers' }">
-            <router-link to="/admin/seekers" class="item-link link">
-              <i class="bi bi-people icon"></i>
-              <span class="item-text">{{ app.t(`app.seekers`) }}</span>
-            </router-link>
-          </li>
-          <li class="content-item" :class="{ active: app.route.name === 'adminOrganization' }">
-            <router-link to="/admin/organization" class="item-link link">
-              <i class="bi bi-buildings icon"></i>
-              <span class="item-text">{{ app.t(`app.hiringOrganization`) }}</span>
-            </router-link>
-          </li>
-          <li class="content-item" :class="{ active: app.route.name === 'adminNews' }">
-            <router-link to="/admin/news" class="item-link link">
-              <i class="bi bi-newspaper icon"></i>
-              <span class="item-text">{{ app.t(`app.news`) }}</span>
-            </router-link>
-          </li>
-          <!-- End Manege -->
+          <!-- Sidebar Item -->
+          <template v-for="item in app.sidebarItems.value" :key="item.name">
+            <li class="content-item" v-if="item.title">
+              <i class="bi bi-three-dots icon-subtitle"></i>
+              <span class="item-subtitle">{{ app.t(`app.manage`) }}</span>
+            </li>
+            <li class="content-item" :class="{ active: app.route.name === item.name }" v-else>
+              <router-link :to="item.link" class="item-link link">
+                <i :class="[item.icon, 'icon']"></i>
+                <span class="item-text">{{ item.text }}</span>
+              </router-link>
+            </li>
+          </template>
+          <!-- End Sidebar Item -->
         </ul>
       </div>
       <!-- End Content -->
@@ -87,6 +67,43 @@ import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public sidebarItems: Ref<Array<any>> = this.ref([
+      {
+        name: "adminDashboard",
+        text: this.t(`app.dashboard`),
+        link: "/admin",
+        icon: "bi bi-house",
+      },
+      {
+        title: true,
+        text: this.t(`app.manage`),
+        icon: "bi bi-three-dots",
+      },
+      {
+        name: "adminSeekers",
+        text: this.t(`app.seekers`),
+        link: "/admin/seekers",
+        icon: "bi bi-people",
+      },
+      {
+        name: "adminOrganization",
+        text: this.t(`app.hiringOrganization`),
+        link: "/admin/organization",
+        icon: "bi bi-buildings",
+      },
+      {
+        name: "adminNews",
+        text: this.t(`app.news`),
+        link: "/admin/news",
+        icon: "bi bi-newspaper",
+      },
+      {
+        name: "adminJobsList",
+        text: this.t(`app.jobs`),
+        link: "/admin/jobs",
+        icon: "bi bi-list-task",
+      },
+    ]);
     public darkMode: Ref<Boolean> = this.ref(false);
     public collapse: Ref<Boolean> = this.ref(false);
 

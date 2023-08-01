@@ -15,6 +15,7 @@
       "hiringOrganization": "Hiring Organization",
       "news": "News",
       "addNews": "Add news",
+      "jobs": "Jobs",
       "userProfile": "Profile",
       "updateProfile": "Update Profile"
     }
@@ -83,6 +84,7 @@
     "seekers": "Seekers",
     "hiringOrganization": "Hiring Organization",
     "news": "News",
+    "jobs": "Jobs",
     "add": "Add {value}",
     "selected": "Selected",
     "delete": "Delete",
