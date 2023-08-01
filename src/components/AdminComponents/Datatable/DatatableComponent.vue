@@ -42,8 +42,8 @@
           <tr>
             <th class="table-column-0" style="width: 45px">
               <div class="custom-control">
-                <input class="custom-control-input" id="selectedAll" type="checkbox" v-model="app.selectedAll.value" />
-                <label class="custom-control-label" for="selectedAll"></label>
+                <input class="custom-control-input" type="checkbox" :checked="app.selectedAll.value" />
+                <label class="custom-control-label" @click="app.onToggleSelectAll"></label>
               </div>
             </th>
             <th
@@ -64,16 +64,11 @@
         </thead>
 
         <tbody>
-          <tr v-for="(data, index) in app.filterData.value" :key="data.id">
+          <tr v-for="data in app.filterData.value" :key="data.id">
             <td class="table-column-0">
               <div class="custom-control">
-                <input
-                  class="custom-control-input"
-                  id="usersDataCheck1"
-                  type="checkbox"
-                  v-model="app.selectedArray.value[index]"
-                />
-                <label class="custom-control-label" for="usersDataCheck1"></label>
+                <input class="custom-control-input" type="checkbox" :checked="data.isSelected" />
+                <label class="custom-control-label" @click="app.onToggleSelectData(data)"></label>
               </div>
             </td>
             <td class="sorting-1" v-for="column in props.columns" :key="column.field">
@@ -142,7 +137,7 @@
         <ul class="list">
           <li class="page-item">
             <button
-              :class="['page-btn small-btn', { disabled: app.pageNumber.value === 1 }]"
+              :class="['page-btn small-btn', { disabled: app.pageNumber.value <= 1 }]"
               @click.prevent="app.onTogglePrev"
             >
               {{ app.t(`app.prev`) }}
@@ -158,7 +153,7 @@
           </li>
           <li class="page-item">
             <button
-              :class="['page-btn small-btn', { disabled: app.pageNumber.value === app.totalPages.value }]"
+              :class="['page-btn small-btn', { disabled: app.pageNumber.value >= app.totalPages.value }]"
               @click.prevent="app.onToggleNext"
             >
               {{ app.t(`app.next`) }}
@@ -178,40 +173,42 @@ import type { Ref } from "vue";
 import type { DatatableProps } from "./DatatableComponent";
 
 const props = defineProps<DatatableProps>();
+const emit = defineEmits<{
+  (e: "onDeleteSelected", selectedArray: Array<number>): void;
+  (e: "onLockSelected", id: number): void;
+  (e: "onUnlockSelected", id: number): void;
+}>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public sortingField: Ref<string> = this.ref("id");
+    public sortingField: Ref<string> = this.ref("");
     public sortingDirection: Ref<string> = this.ref("");
     public pageSize: Ref<number> = this.ref(10);
     public pageNumber: Ref<number> = this.ref(1);
+    public selectedAll: Ref<boolean> = this.ref(false);
+
     public totalData: Ref<number> = this.computed(() => props.data.length);
     public totalPages: Ref<number> = this.computed(() => {
       return Math.ceil(this.totalData.value / this.pageSize.value);
     });
-    public selectedArray: Ref<Array<boolean>> = this.ref(new Array(this.totalData.value).fill(false));
-    public selectedAll: Ref<boolean> = this.ref(false);
     public totalSelected: Ref<number> = this.computed(() => {
-      const count = this.selectedArray.value.reduce((acc: number, cur: boolean) => acc + (cur ? 1 : 0), 0);
-      return count;
+      return props.data.reduce((acc: number, cur: any) => acc + (cur.isSelected ? 1 : 0), 0);
     });
-
     public filterData = this.computed(() => {
-      const filterArray = props.data.filter((_, index) => {
+      const pageFilter = props.data.filter((_, index) => {
         return (
           index >= (this.pageNumber.value - 1) * this.pageSize.value &&
           index < this.pageNumber.value * this.pageSize.value
         );
       });
-      return filterArray;
+      if (pageFilter.length === 0) {
+        this.pageNumber.value--;
+      }
+      return pageFilter;
     });
 
     public constructor() {
       super();
-
-      this.onUpdated(() => {
-        console.log(this.selectedAll.value);
-      });
 
       this.watch(
         () => this.totalSelected.value,
@@ -223,36 +220,46 @@ const app = defineClassComponent(
           }
         },
       );
-
-      this.watch(
-        () => this.selectedAll.value,
-        (selectedAll) => {
-          if (selectedAll) {
-            this.selectedArray.value.fill(true);
-          } else if (this.totalSelected.value === this.totalData.value) {
-            this.selectedArray.value.fill(false);
-          }
-        },
-      );
     }
 
     public onToggleDelete = () => {
-      const deletedArray = this.selectedArray.value.reduce((acc: Array<number>, cur: boolean, index: number) => {
-        if (cur) {
-          acc.push(index);
+      const deletedArray = props.data.reduce((acc: Array<number>, cur: any) => {
+        if (cur.isSelected) {
+          acc.push(cur.id);
         }
         return acc;
       }, []);
 
-      console.log("Delete " + deletedArray);
-    };
-
-    public onToggleUnlock = (id: number) => {
-      console.log("Unlock " + id);
+      emit("onDeleteSelected", deletedArray);
     };
 
     public onToggleLock = (id: number) => {
-      console.log("Lock " + id);
+      emit("onLockSelected", id);
+    };
+
+    public onToggleUnlock = (id: number) => {
+      emit("onUnlockSelected", id);
+    };
+
+    public onToggleSelectData = (data: any) => {
+      data.isSelected = !data.isSelected;
+      //this.totalSelected.value = props.data.reduce((acc: number, cur: any) => acc + (cur.isSelected ? 1 : 0), 0);
+    };
+
+    public onToggleSelectAll = () => {
+      if (this.selectedAll.value) {
+        this.selectedAll.value = false;
+        props.data.filter((value) => {
+          value.isSelected = false;
+        });
+        //this.totalSelected.value = 0;
+      } else {
+        this.selectedAll.value = true;
+        props.data.filter((value) => {
+          value.isSelected = true;
+        });
+        //this.totalSelected.value = this.totalData.value;
+      }
     };
 
     public onToggleSorting = (field: string) => {
@@ -412,9 +419,18 @@ const app = defineClassComponent(
 
         & .custom-control {
           display: flex;
+          position: relative;
           vertical-align: middle;
 
           & .custom-control-input {
+            position: absolute;
+            visibility: hidden;
+            opacity: 0;
+          }
+
+          & .custom-control-label {
+            position: absolute;
+            transform: translate(0, -50%);
             width: 0.875rem;
             height: 0.875rem;
             vertical-align: top;
@@ -424,6 +440,7 @@ const app = defineClassComponent(
             background-size: contain;
             border: 1px solid rgba(231, 234, 243, 0.7);
             border-radius: 0.25em;
+            z-index: 3;
             cursor: pointer;
 
             &:checked {
@@ -432,6 +449,13 @@ const app = defineClassComponent(
               background-color: $blue-light;
               background-image: url("@/assets/img/check.svg");
             }
+          }
+
+          & .custom-control-input:checked ~ .custom-control-label {
+            color: $white;
+            border-color: $blue-light;
+            background-color: $blue-light;
+            background-image: url("@/assets/img/check.svg");
           }
         }
       }
