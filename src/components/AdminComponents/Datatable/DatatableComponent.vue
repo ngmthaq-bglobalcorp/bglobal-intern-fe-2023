@@ -82,8 +82,8 @@
                   <span
                     :class="[
                       'legend-indicator',
-                      { 'bg-success': data.status === 1 },
-                      { 'bg-danger': data.status === 0 },
+                      { 'bg-success': data.status === AppConst.STATUS.active },
+                      { 'bg-danger': data.status === AppConst.STATUS.disabled },
                     ]"
                   ></span>
                   {{ data[column.field] }}
@@ -169,6 +169,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { AppConst } from "@/const/app.const";
 import type { Ref } from "vue";
 import type { DatatableEmits, DatatableProps } from "./DatatableComponent";
 

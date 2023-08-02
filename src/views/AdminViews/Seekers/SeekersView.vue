@@ -8,7 +8,7 @@
         @on-delete-selected="app.onDeleteSelected"
         @on-lock-selected="app.onLockSelected"
         @on-unlock-selected="app.onUnlockSelected"
-      ></Datatable>
+      />
     </div>
   </AdminLayout>
 </template>
@@ -18,6 +18,7 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import Datatable from "@/components/AdminComponents/Datatable/DatatableComponent.vue";
+import { AppConst } from "@/const/app.const";
 import type { SeekerModel } from "@/models/seeker.model";
 import type { Ref } from "vue";
 
@@ -46,13 +47,13 @@ const app = defineClassComponent(
 
     public onLockSelected = (id: number) => {
       const selectedData = this.data.value.find((value) => value.id === id);
-      selectedData!.status = "lock";
+      selectedData!.status = AppConst.STATUS.disabled;
       console.log(id);
     };
 
     public onUnlockSelected = (id: number) => {
       const selectedData = this.data.value.find((value) => value.id === id);
-      selectedData!.status = "active";
+      selectedData!.status = AppConst.STATUS.active;
       console.log(id);
     };
   },

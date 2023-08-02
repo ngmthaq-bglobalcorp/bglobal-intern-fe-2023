@@ -1,3 +1,4 @@
+import { AppConst } from "@/const/app.const";
 import { BaseModel } from "./base.model";
 
 export class SeekerModel extends BaseModel implements ISeeker {
@@ -14,7 +15,7 @@ export class SeekerModel extends BaseModel implements ISeeker {
     this.name = data.name || "";
     this.email = data.email || "";
     this.phone = data.phone || "";
-    this.status = data.status || "";
+    this.status = data.status || AppConst.STATUS.disabled;
     this.isSelected = data.isSelected || false;
   }
 }
