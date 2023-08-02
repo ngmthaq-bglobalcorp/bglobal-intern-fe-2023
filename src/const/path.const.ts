@@ -7,6 +7,7 @@ import SeekersViewVue from "@/views/AdminViews/Seekers/SeekersView.vue";
 import HiringOrganizationViewVue from "@/views/AdminViews/HiringOrganization/HiringOrganizationView.vue";
 import NewsViewVue from "@/views/AdminViews/News/NewsView.vue";
 import UserProfileViewVue from "@/views/AdminViews/UserProfile/UserProfileView.vue";
+import UpdateProfileViewVue from "@/views/AdminViews/UpdateProfile/UpdateProfileView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
 
 export class PathConst {
@@ -79,6 +80,15 @@ export class PathConst {
     component: UserProfileViewVue,
     meta: {
       title: "title.admin.userProfile",
+    },
+  };
+
+  public static adminUpdateProfile: Route = {
+    path: "/admin/user/profile/update",
+    name: "adminUpdateProfile",
+    component: UpdateProfileViewVue,
+    meta: {
+      title: "title.admin.updateProfile",
     },
   };
 

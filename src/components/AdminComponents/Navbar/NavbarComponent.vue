@@ -40,16 +40,22 @@
                 </div>
               </div>
               <div class="dropdown-divider"></div>
-              <div class="dropdown-item">
-                <router-link :to="PathConst.adminUserProfile" class="link">{{ app.t(`app.profile`) }}</router-link>
-              </div>
-              <div class="dropdown-item">
-                <router-link to="" class="link">{{ app.t(`app.settings`) }}</router-link>
-              </div>
+              <router-link :to="PathConst.adminUserProfile" class="link">
+                <div class="dropdown-item">
+                  {{ app.t(`app.profile`) }}
+                </div>
+              </router-link>
+              <router-link :to="PathConst.adminUpdateProfile" class="link">
+                <div class="dropdown-item">
+                  {{ app.t(`app.settings`) }}
+                </div>
+              </router-link>
               <div class="dropdown-divider"></div>
-              <div class="dropdown-item">
-                <router-link to="" class="link">{{ app.t(`app.signout`) }}</router-link>
-              </div>
+              <router-link to="" class="link">
+                <div class="dropdown-item">
+                  {{ app.t(`app.signout`) }}
+                </div>
+              </router-link>
             </div>
           </li>
         </ul>
@@ -259,16 +265,16 @@ const app = defineClassComponent(
               border-top: 1px solid $border;
             }
 
-            & .dropdown-item {
-              display: block;
-              width: 100%;
-              padding: 0.375rem 1.5rem;
-              clear: both;
-              white-space: nowrap;
-              border: 0;
+            & .link {
+              color: $dark !important;
 
-              & .link {
-                color: $dark !important;
+              & .dropdown-item {
+                display: block;
+                width: 100%;
+                padding: 0.375rem 1.5rem;
+                clear: both;
+                white-space: nowrap;
+                border: 0;
               }
             }
           }

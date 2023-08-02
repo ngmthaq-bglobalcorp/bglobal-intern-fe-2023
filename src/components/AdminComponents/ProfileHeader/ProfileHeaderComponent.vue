@@ -72,7 +72,7 @@
         </li>
 
         <li class="nav-item ms-auto">
-          <button class="update-btn small-btn" v-if="props.editable">
+          <button class="update-btn small-btn" @click="app.onToggleUpdate" v-if="props.editable">
             <i class="bi bi-person-fill-gear icon"></i>
             {{ app.t(`app.update`, { value: app.t(`app.profile`) }) }}
           </button>
@@ -86,15 +86,20 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
-import type { ProfileHeaderProps } from "./ProfileHeaderComponent";
+import type { ProfileHeaderEmits, ProfileHeaderProps } from "./ProfileHeaderComponent";
 
 const props = defineProps<ProfileHeaderProps>();
+const emit = defineEmits<ProfileHeaderEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public constructor() {
       super();
     }
+
+    public onToggleUpdate = () => {
+      emit("onToggleUpdateProfile");
+    };
   },
 );
 </script>

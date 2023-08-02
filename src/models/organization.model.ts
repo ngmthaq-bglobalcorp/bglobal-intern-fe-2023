@@ -1,3 +1,4 @@
+import { AppConst } from "@/const/app.const";
 import { BaseModel } from "./base.model";
 
 export class OrganizationModel extends BaseModel implements IOrganization {
@@ -9,7 +10,7 @@ export class OrganizationModel extends BaseModel implements IOrganization {
   public webside: string;
   public adress: string;
   public introduction: string;
-  public organizationType: number;
+  public organizationType: string;
   public status: string;
   public createdAt: Date;
   public updatedAt: Date;
@@ -25,8 +26,8 @@ export class OrganizationModel extends BaseModel implements IOrganization {
     this.webside = data.webside || "";
     this.adress = data.adress || "";
     this.introduction = data.introduction || "";
-    this.organizationType = data.organizationType || 0;
-    this.status = data.status || "active";
+    this.organizationType = data.organizationType || AppConst.ORGANIZATION_TYPE.typeB;
+    this.status = data.status || AppConst.STATUS.disabled;
     this.createdAt = data.createdAt || Date.now();
     this.updatedAt = data.updatedAt || Date.now();
     this.isSelected = data.isSelected || false;
@@ -42,7 +43,7 @@ export interface IOrganization {
   webside: string;
   adress: string;
   introduction: string;
-  organizationType: number;
+  organizationType: string;
   status: string;
   createdAt: Date;
   updatedAt: Date;

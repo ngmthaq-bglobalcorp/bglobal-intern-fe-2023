@@ -32,7 +32,6 @@ export class PrimitiveHelper {
   public static isValidEmail = (email: string) => {
     const expression: RegExp =
       /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
-
     const result: boolean = expression.test(email);
     return result;
   };
@@ -42,5 +41,11 @@ export class PrimitiveHelper {
       return false;
     }
     return true;
+  };
+
+  public static isValidPhoneNumber = (phone: string) => {
+    const expression: RegExp = /^(0[2-9]|84[2-9]|\+84[2-9])(\d{8}|\d{9})$/;
+    const result: boolean = expression.test(phone);
+    return result;
   };
 }

@@ -47,7 +47,9 @@
   cursor: pointer;
 
   &:disabled {
-    color: $disabled-color !important;
+    color: $white !important;
+    background-color: $disabled-color !important;
+    border-color: $disabled-color !important;
     pointer-events: none;
   }
 }
@@ -61,12 +63,14 @@
     color: $white;
     background-color: $blue;
     border-color: $blue;
+    box-shadow: 0 4px 11px rgba($blue, 0.36);
   }
 
   &:disabled {
     color: $white;
     background-color: $disabled-color;
     border-color: $disabled-color;
+    pointer-events: none;
   }
 }
 
