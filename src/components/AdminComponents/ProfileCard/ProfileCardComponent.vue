@@ -83,13 +83,12 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import type { Ref } from "vue";
 import type { ProfileCardProps } from "./ProfileCardComponent";
-import type { OrganizationModel } from "@/models/organization.model";
 
 const props = defineProps<ProfileCardProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public profile: Ref<OrganizationModel> = this.ref(props.profile);
+    public profile: Ref<any> = this.ref(props.profile);
     public profilePercent: Ref<number> = this.computed(() => {
       let percent = 0;
       if (this.profile.value.name) {

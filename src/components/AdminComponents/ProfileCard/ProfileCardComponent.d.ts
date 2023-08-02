@@ -1,3 +1,3 @@
-import type { OrganizationModel } from "@/models/organization.model";
-
-export type ProfileCardProps = { profile: OrganizationModel };
+export type ProfileCardProps = {
+  profile: any;
+};

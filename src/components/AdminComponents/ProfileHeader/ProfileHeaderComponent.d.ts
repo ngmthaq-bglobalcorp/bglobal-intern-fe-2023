@@ -1,1 +1,3 @@
-export type ProfileHeaderProps = { isUpdate: boolean };
+export type ProfileHeaderProps = {
+  isUpdate: boolean;
+};
