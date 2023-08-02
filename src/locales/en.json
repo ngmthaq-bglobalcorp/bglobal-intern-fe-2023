@@ -144,6 +144,9 @@
     "eventPageUrl": "Event page url",
     "eventStartAt": "Event start at",
     "eventEndAt": "Event end at",
-    "notBlank": "{value} cannot be blank"
+    "notBlank": "{value} cannot be blank",
+    "location": "Location",
+    "overview": "Overview",
+    "activity": "Activity"
   }
 }
