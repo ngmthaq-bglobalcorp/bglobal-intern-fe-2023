@@ -3,16 +3,17 @@
     <!-- Profile Cover -->
     <div class="profile-cover">
       <div class="profile-cover-wrapper">
-        <img class="profile-cover-img" src="@/assets/img/default-cover.jpg" alt="Cover" />
+        <img class="cover-img" src="@/assets/img/default-cover.jpg" alt="Cover" />
 
         <!-- Custom File Cover -->
-        <div class="profile-cover-uploader">
-          <input type="file" class="cover-uploader-input" id="profileCoverUplaoder" />
-          <label class="cover-uploader-label small-btn" for="profileCoverUplaoder">
+        <label class="cover-uploader-label" for="coverUploader" v-if="props.editable">
+          <input type="file" class="cover-uploader-input" id="coverUploader" />
+
+          <div class="cover-uploader-button small-btn">
             <i class="bi bi-camera-fill icon"></i>
             <span class="upload">{{ app.t(`app.uploadCover`) }}</span>
-          </label>
-        </div>
+          </div>
+        </label>
         <!-- End Custom File Cover -->
       </div>
     </div>
@@ -20,15 +21,21 @@
 
     <!-- Profile Avatar -->
     <div class="profile-avatar">
-      <label class="avatar-uploader-label" for="avatarUploader">
-        <img class="avatar-img" src="@/assets/img/logo.svg" alt="Avatar" />
+      <div class="profile-avatar-wrapper">
+        <!-- Custom File Avatar -->
+        <label class="avatar-uploader-label" for="avatarUploader">
+          <img class="avatar-img" src="@/assets/img/logo.svg" alt="Avatar" />
 
-        <input type="file" class="avatar-uploader-input" id="avatarUploader" />
+          <template v-if="props.editable">
+            <input type="file" class="avatar-uploader-input" id="avatarUploader" />
 
-        <span class="avatar-uploader-trigger">
-          <i class="bi bi-pencil-fill"></i>
-        </span>
-      </label>
+            <span class="avatar-uploader-trigger">
+              <i class="bi bi-pencil-fill"></i>
+            </span>
+          </template>
+        </label>
+        <!-- End Custom File Avatar -->
+      </div>
     </div>
     <!-- End Profile Avatar -->
 
@@ -56,14 +63,16 @@
     <div class="profile-nav" v-if="!props.isUpdate">
       <ul class="nav-list list">
         <li class="nav-item">
-          <router-link to="" class="nav-link link active disabled">{{ app.t(`app.profile`) }}</router-link>
+          <router-link :to="PathConst.adminUserProfile" class="nav-link link active disabled">
+            {{ app.t(`app.profile`) }}
+          </router-link>
         </li>
         <li class="nav-item">
           <router-link to="" class="nav-link link disabled">{{ app.t(`app.jobsList`) }}</router-link>
         </li>
 
         <li class="nav-item ms-auto">
-          <button class="update-btn small-btn" @click="app.onToggleUpdate">
+          <button class="update-btn small-btn" @click="app.onToggleUpdate" v-if="props.editable">
             <i class="bi bi-person-fill-gear icon"></i>
             {{ app.t(`app.update`, { value: app.t(`app.profile`) }) }}
           </button>
@@ -76,9 +85,11 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import type { ProfileHeaderProps } from "./ProfileHeaderComponent";
+import { PathConst } from "@/const/path.const";
+import type { ProfileHeaderEmits, ProfileHeaderProps } from "./ProfileHeaderComponent";
 
 const props = defineProps<ProfileHeaderProps>();
+const emit = defineEmits<ProfileHeaderEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -87,7 +98,7 @@ const app = defineClassComponent(
     }
 
     public onToggleUpdate = () => {
-      this.router.push({ path: "/admin/user/profile/update", name: "adminUpdateProfile" });
+      emit("onToggleUpdateProfile");
     };
   },
 );
@@ -114,38 +125,34 @@ const app = defineClassComponent(
       top: 0;
       right: 0;
       left: 0;
-      height: 10rem;
       background-color: $light;
-      border-radius: 0.75rem;
+      transition: 0.2s;
 
-      & .profile-cover-img {
+      & .cover-img {
         width: 100%;
-        height: 10rem;
+        height: 100%;
         -o-object-fit: cover;
         object-fit: cover;
         vertical-align: top;
         border-radius: 0.75rem;
       }
 
-      & .profile-cover-uploader {
+      & .cover-uploader-label {
         position: absolute;
         bottom: 0;
         right: 0;
-        overflow: hidden;
         margin-bottom: 0;
-        padding: 1rem;
+        margin: 1rem;
 
         & .cover-uploader-input {
           position: absolute;
-          top: 0;
-          left: 0;
           z-index: -1;
           width: 100%;
           height: 100%;
           opacity: 0;
         }
 
-        & .cover-uploader-label {
+        & .cover-uploader-button {
           color: $dark-variant;
           background-color: $white;
           border-color: $white;
@@ -172,9 +179,8 @@ const app = defineClassComponent(
     text-align: center;
     margin-bottom: 1.5rem;
 
-    & .avatar-uploader-label {
+    & .profile-avatar-wrapper {
       position: relative;
-      display: flex;
       width: 7.875rem;
       height: 7.875rem;
       border-radius: 50%;
@@ -182,42 +188,47 @@ const app = defineClassComponent(
       border: 0.25rem solid #fff;
       margin: -6.3rem auto 0.5rem auto;
       transition: 0.2s;
-      cursor: pointer;
 
-      & .avatar-img {
-        max-width: 100%;
-        height: 100%;
-        -o-object-fit: cover;
-        object-fit: cover;
-        border-radius: 50%;
-      }
-
-      & .avatar-uploader-input {
+      & .avatar-uploader-label {
         position: absolute;
         top: 0;
-        right: 0;
         left: 0;
-        z-index: -1;
-        opacity: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(19, 33, 68, 0.25);
-        border-radius: 50%;
-        transition: 0.2s;
-      }
-
-      & .avatar-uploader-trigger {
-        position: absolute;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.40625rem;
-        height: 2.40625rem;
-        background-color: $white;
         bottom: 0;
-        right: 0;
-        border-radius: 50%;
         cursor: pointer;
+
+        & .avatar-img {
+          width: 100%;
+          height: 100%;
+          -o-object-fit: cover;
+          object-fit: cover;
+          border-radius: 50%;
+        }
+
+        & .avatar-uploader-input {
+          position: absolute;
+          z-index: -1;
+          width: 100%;
+          height: 100%;
+          opacity: 0;
+        }
+
+        & .avatar-uploader-trigger {
+          position: absolute;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 2.40625rem;
+          height: 2.40625rem;
+          background-color: $white;
+          bottom: 0;
+          right: 0;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+
+        &:hover {
+          color: $blue;
+        }
       }
     }
   }

@@ -4,7 +4,7 @@
     <div class="sidebar-container">
       <!-- Logo -->
       <div class="sidebar-logo-wrapper">
-        <router-link to="/admin" class="link">
+        <router-link :to="PathConst.adminDashboard" class="link">
           <img src="@\assets\img\logo.svg" alt="Logo" class="image brand-logo" />
         </router-link>
       </div>
@@ -30,7 +30,7 @@
             </li>
             <li class="content-item" :class="{ active: app.route.name === item.name }" v-else>
               <router-link :to="item.link" class="item-link link">
-                <i :class="[item.icon, 'icon']"></i>
+                <i :class="['bi', item.icon, 'icon']"></i>
                 <span class="item-text">{{ item.text }}</span>
               </router-link>
             </li>
@@ -63,6 +63,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
@@ -72,36 +73,36 @@ const app = defineClassComponent(
         name: "adminDashboard",
         text: this.t(`app.dashboard`),
         link: "/admin",
-        icon: "bi bi-house",
+        icon: "bi-house",
       },
       {
         title: true,
         text: this.t(`app.manage`),
-        icon: "bi bi-three-dots",
+        icon: "bi-three-dots",
       },
       {
         name: "adminSeekers",
         text: this.t(`app.seekers`),
         link: "/admin/seekers",
-        icon: "bi bi-people",
+        icon: "bi-people",
       },
       {
         name: "adminOrganization",
         text: this.t(`app.hiringOrganization`),
         link: "/admin/organization",
-        icon: "bi bi-buildings",
+        icon: "bi-buildings",
       },
       {
         name: "adminNews",
         text: this.t(`app.news`),
         link: "/admin/news",
-        icon: "bi bi-newspaper",
+        icon: "bi-newspaper",
       },
       {
         name: "adminJobsList",
         text: this.t(`app.jobs`),
         link: "/admin/jobs",
-        icon: "bi bi-list-task",
+        icon: "bi-list-task",
       },
     ]);
     public darkMode: Ref<Boolean> = this.ref(false);

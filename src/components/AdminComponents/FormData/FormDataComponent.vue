@@ -113,18 +113,13 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import type { Ref } from "vue";
-import type { FormDataProps } from "./FormDataComponent";
+import type { FormDataEmits, FormDataProps } from "./FormDataComponent";
 
 const props = defineProps<FormDataProps>();
-const emit = defineEmits<{
-  (e: "onSubmitForm"): void;
-}>();
+const emit = defineEmits<FormDataEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public errorName: Ref<string> = this.ref("");
-
     public constructor() {
       super();
     }

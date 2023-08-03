@@ -1,5 +1,9 @@
 export type PageHeaderProps = {
-  route: String;
-  path: string;
-  haveAddButton: boolean;
+  target: string;
+  button: string;
+  icon: string;
+};
+
+export type PageHeaderEmits = {
+  (e: "onToggleButton"): void;
 };

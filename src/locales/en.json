@@ -132,6 +132,7 @@
     "yourTimezone": "Your time zone",
     "deleteNotice": "When you delete your account, you lose access to account services, and we permanently delete your personal data.",
     "confirmDelete": "Confirm that I want to delete my account.",
+    "loadMore": "Load more {value}",
     "category": "Category",
     "seminar": "Seminar",
     "corporateRecruitingSession": "Corporate recruiting session",
@@ -144,6 +145,8 @@
     "eventPageUrl": "Event page url",
     "eventStartAt": "Event start at",
     "eventEndAt": "Event end at",
-    "notBlank": "{value} cannot be blank"
+    "notBlank": "{value} cannot be blank",
+    "myProfile": "My profile",
+    "back": "Back"
   }
 }
