@@ -15,4 +15,9 @@ export class AppConst {
   };
 
   public static CITY = ["Ha Noi", "Ho Chi Minh", "Hai Phong"];
+
+  public static VIEW = {
+    columnView: "column",
+    listView: "list",
+  };
 }
