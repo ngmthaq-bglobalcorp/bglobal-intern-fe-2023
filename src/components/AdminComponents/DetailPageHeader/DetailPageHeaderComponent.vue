@@ -27,8 +27,9 @@
             <router-link
               :to="item.link"
               :class="['nav-link link', { active: item.name === app.route.name, disabled: item.disabled }]"
-              >{{ item.text }}</router-link
             >
+              {{ item.text }}
+            </router-link>
           </li>
         </ul>
       </div>

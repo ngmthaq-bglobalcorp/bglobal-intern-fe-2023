@@ -23,9 +23,10 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import AvatarComponent from "../Avatar/AvatarComponent.vue";
+import { PathConst } from "@/const/path.const";
+import { AppConst } from "@/const/app.const";
 import type { Ref } from "vue";
 import type { UserListProps } from "./UserListComponent";
-import { PathConst } from "@/const/path.const";
 
 const props = defineProps<UserListProps>();
 
@@ -42,7 +43,7 @@ const app = defineClassComponent(
     public filterData = this.computed(() => {
       const filterArray = props.data.filter((value, index) => {
         return (
-          value.status === "active" &&
+          value.status === AppConst.STATUS.active &&
           index >= (this.pageNumber.value - 1) * this.pageSize.value &&
           index < this.pageNumber.value * this.pageSize.value
         );

@@ -1,8 +1,8 @@
 <template>
   <div class="avatar-container">
     <div class="avatar-wrapper">
-      <img src="" alt="Avatar" class="avatar-img image" v-if="data.image" />
-      <span class="avatar-initials">{{ app.data.value.name[0] }}</span>
+      <img :src="app.data.value.image" alt="Avatar" class="avatar-img image" v-if="app.data.value.image" />
+      <span class="avatar-initials" v-else>{{ app.data.value.name[0] }}</span>
     </div>
   </div>
 </template>
