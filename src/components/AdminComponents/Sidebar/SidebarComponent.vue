@@ -72,7 +72,7 @@ const app = defineClassComponent(
       {
         name: "adminDashboard",
         text: this.t(`app.dashboard`),
-        link: "/admin",
+        link: PathConst.adminDashboard.path,
         icon: "bi-house",
       },
       {
@@ -83,25 +83,25 @@ const app = defineClassComponent(
       {
         name: "adminSeekers",
         text: this.t(`app.seekers`),
-        link: "/admin/seekers",
+        link: PathConst.adminSeekers.path,
         icon: "bi-people",
       },
       {
         name: "adminOrganization",
         text: this.t(`app.hiringOrganization`),
-        link: "/admin/organization",
+        link: PathConst.adminOrganization.path,
         icon: "bi-buildings",
       },
       {
         name: "adminNews",
         text: this.t(`app.news`),
-        link: "/admin/news",
+        link: PathConst.adminNews.path,
         icon: "bi-newspaper",
       },
       {
         name: "adminJobsList",
         text: this.t(`app.jobs`),
-        link: "/admin/jobs",
+        link: PathConst.adminJobsList.path,
         icon: "bi-list-task",
       },
     ]);
