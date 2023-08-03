@@ -1,7 +1,7 @@
 <template>
   <AdminLayout>
     <div class="seeker-contaier">
-      <PageHeader :target="app.t(`app.seekers`)" />
+      <PageHeader :target="app.t(`app.seekers`)" button="" icon="" />
       <Datatable
         :columns="app.columns.value"
         :data="app.data.value"

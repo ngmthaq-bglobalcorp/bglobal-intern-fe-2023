@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <PageHeader :target="app.t(`app.hiringOrganization`)" />
+    <PageHeader :target="app.t(`app.hiringOrganization`)" button="" icon="" />
     <Datatable
       :columns="app.columns.value"
       :data="app.data.value"

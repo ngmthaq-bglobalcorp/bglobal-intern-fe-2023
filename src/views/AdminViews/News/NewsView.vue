@@ -1,6 +1,11 @@
 <template>
   <AdminLayout>
-    <PageHeader :target="app.t(`app.news`)" />
+    <PageHeader
+      :target="app.t(`app.news`)"
+      :button="app.t(`app.add`, { value: app.t(`app.news`) })"
+      icon="bi-person-plus-fill"
+      @on-toggle-button="app.onToggleButton"
+    />
     <TimelineList :target="app.t(`app.news`)" :data="app.news.value" :limit="5" />
   </AdminLayout>
 </template>
@@ -10,6 +15,7 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import TimelineList from "@/components/AdminComponents/TimelineList/TimelineListComponent.vue";
+import { PathConst } from "@/const/path.const";
 import type { NewsModel } from "@/models/news.model";
 import type { Ref } from "vue";
 
@@ -20,6 +26,10 @@ const app = defineClassComponent(
     public constructor() {
       super();
     }
+
+    public onToggleButton = () => {
+      this.router.push(PathConst.adminAddNews);
+    };
   },
 );
 </script>
