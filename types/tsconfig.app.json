@@ -6,6 +6,7 @@
     "composite": true,
     "baseUrl": "../",
     "ignoreDeprecations": "5.0",
+    "lib": ["ES2017", "DOM"],
     "rootDir": "../",
     "paths": {
       "@/*": ["./src/*"],

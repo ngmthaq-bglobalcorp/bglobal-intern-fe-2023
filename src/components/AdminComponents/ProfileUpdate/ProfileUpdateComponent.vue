@@ -141,20 +141,20 @@
                 <!-- Custom Radio -->
                 <label
                   class="input-form"
-                  :for="accountType.value"
-                  v-for="accountType in app.typeArray"
-                  :key="accountType.id"
-                  @click="app.onSelectAccountType(accountType.value)"
+                  :for="accountType"
+                  v-for="accountType in app.typeArray.value"
+                  :key="accountType"
+                  @click="app.onSelectAccountType(accountType)"
                 >
                   <span class="custom-check">
                     <input
                       type="radio"
                       class="custom-check-input"
                       name="userAccountTypeRadio"
-                      :id="accountType.value"
-                      :checked="accountType.value === app.organizationType.value"
+                      :id="accountType"
+                      :checked="accountType === app.organizationType.value"
                     />
-                    <span class="custom-check-label">{{ accountType.text }}</span>
+                    <span class="custom-check-label">{{ `Type ${accountType}` }}</span>
                   </span>
                 </label>
                 <!-- End Custom Radio -->
@@ -299,7 +299,9 @@
               <span>{{ app.t(`app.ensureRequirements`) }}</span>
 
               <ul>
-                <li v-for="(_, index) in 4" :key="index">{{ app.t(`app.requirements.${index}`) }}</li>
+                <li v-for="index in app.requirementsIndexArray.value" :key="index">
+                  {{ app.t(`app.requirements.${index}`) }}
+                </li>
               </ul>
             </div>
           </div>
@@ -405,22 +407,20 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { AppConst } from "@/const/app.const";
 import { LangConst } from "@/const/lang.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
-import type { Ref } from "vue";
 import type { ProfileUpdateProps } from "./ProfileUpdateComponent";
+import type { Ref } from "vue";
 import type { OrganizationModel } from "@/models/organization.model";
 
 const props = defineProps<ProfileUpdateProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public addressArray = ["Ha Noi", "Ho Chi Minh", "Hai Phong"];
-    public typeArray = [
-      { id: 1, value: "B", text: "Type B" },
-      { id: 2, value: "C", text: "Type C" },
-      { id: 3, value: "E", text: "Type E" },
-    ];
+    public addressArray = AppConst.CITY;
+    public typeArray: Ref<Array<string>> = this.ref(Object.values(AppConst.ORGANIZATION_TYPE));
+    public requirementsIndexArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.requirements`)));
     public profile: Ref<OrganizationModel> = this.ref(props.profile);
     public organizationName: Ref<string> = this.ref(this.profile.value.name);
     public organizationEmail: Ref<string> = this.ref(this.profile.value.email);

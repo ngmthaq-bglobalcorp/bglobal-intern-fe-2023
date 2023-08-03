@@ -44,7 +44,7 @@
     <div class="d-grid">
       <button class="load-more-btn g-btn" @click="app.onToggleMoreData">
         <i class="bi bi-arrow-clockwise icon"></i>
-        Load more news
+        {{ app.t(`app.loadMore`, { value: app.target.value }) }}
       </button>
     </div>
   </div>
@@ -59,6 +59,7 @@ const props = defineProps<TimelineListProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public target: Ref<string> = this.ref(props.target);
     public limit: Ref<number> = this.ref(props.limit);
 
     public filtersData = this.computed(() => {

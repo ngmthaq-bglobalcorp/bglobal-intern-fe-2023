@@ -1,6 +1,11 @@
 <template>
   <AdminLayout>
-    <PageHeader route="settings" path="" :haveAddButton="false" />
+    <PageHeader
+      :target="app.t(`app.settings`)"
+      :button="app.t(`app.myProfile`)"
+      icon="bi-person-fill"
+      @on-toggle-button="app.onToggleButton"
+    />
     <div class="update-profile-container">
       <!-- Navbar -->
       <div class="profile-nav custom-card">
@@ -43,8 +48,8 @@
 
       <!-- Content -->
       <div class="profile-content">
-        <ProfileHeader :isUpdate="true" />
-        <ProfileUpdate :profile="app.profile" />
+        <ProfileHeader :isUpdate="true" :editable="true" />
+        <ProfileUpdate :profile="app.profile.value" />
       </div>
       <!-- End Content -->
     </div>
@@ -57,11 +62,14 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHeaderComponent.vue";
 import ProfileUpdate from "@/components/AdminComponents/ProfileUpdate/ProfileUpdateComponent.vue";
+import { AppConst } from "@/const/app.const";
+import { PathConst } from "@/const/path.const";
 import type { OrganizationModel } from "@/models/organization.model";
+import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public profile: OrganizationModel = {
+    public profile: Ref<OrganizationModel> = this.ref({
       id: 1,
       username: "minhduc",
       name: "Minh Duc",
@@ -71,15 +79,20 @@ const app = defineClassComponent(
       adress: "Ha Noi",
       introduction:
         "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
-      organizationType: "B",
-      status: 0,
+      organizationType: AppConst.ORGANIZATION_TYPE.typeB,
+      status: AppConst.STATUS.active,
       createdAt: new Date("2023-07-01"),
       updatedAt: new Date("2023-07-01"),
-    };
+      isSelected: false,
+    });
 
     public constructor() {
       super();
     }
+
+    public onToggleButton = () => {
+      this.router.push(PathConst.adminUserProfile);
+    };
   },
 );
 </script>

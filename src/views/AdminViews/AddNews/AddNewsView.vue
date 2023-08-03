@@ -1,6 +1,11 @@
 <template>
   <AdminLayout>
-    <PageHeader route="news" path="" :have-add-button="false" />
+    <PageHeader
+      :target="app.t(`app.add`, { value: app.t(`app.news`) })"
+      :button="app.t(`app.back`)"
+      icon="bi-caret-left-fill"
+      @on-toggle-button="app.onToggleButton"
+    />
     <div class="add-news-form">
       <FormData :input="app.newsInputs.value" @on-submit-form="app.onSubmitForm" />
     </div>
@@ -12,6 +17,7 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import FormData from "@/components/AdminComponents/FormData/FormDataComponent.vue";
+import { PathConst } from "@/const/path.const";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
@@ -168,6 +174,10 @@ const app = defineClassComponent(
     public constructor() {
       super();
     }
+
+    public onToggleButton = () => {
+      this.router.push(PathConst.adminNews);
+    };
 
     public onSubmitForm = () => {
       let news = {};

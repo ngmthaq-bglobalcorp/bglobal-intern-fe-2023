@@ -2,16 +2,16 @@
   <div class="page-header-container">
     <div class="header-wrapper">
       <div class="header-nav">
-        <router-link to="/admin" class="link">{{ app.t(`app.dashboard`) }}</router-link>
+        <router-link :to="PathConst.adminDashboard" class="link">{{ app.t(`app.dashboard`) }}</router-link>
         <span>/</span>
-        <router-link to="" class="link active">{{ app.t(`app.${props.route}`) }}</router-link>
+        <router-link to="" class="link active">{{ props.target }}</router-link>
       </div>
       <div class="header-title">
-        <h1>{{ app.t(`app.${props.route}`) }}</h1>
-        <template v-if="props.haveAddButton">
-          <button class="add-btn small-btn primary-btn" @click="app.onToggleAddButton">
-            <i class="bi bi-person-plus-fill"></i>
-            {{ app.t(`app.add`, { value: app.t(`app.${props.route}`) }) }}
+        <h1>{{ props.target }}</h1>
+        <template v-if="props.button || props.icon">
+          <button class="header-btn small-btn primary-btn" @click="app.onToggleButton">
+            <i :class="['bi', props.icon]"></i>
+            {{ props.button }}
           </button>
         </template>
       </div>
@@ -21,9 +21,11 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import type { PageHeaderProps } from "./PageHeaderComponent";
+import { PathConst } from "@/const/path.const";
+import type { PageHeaderEmits, PageHeaderProps } from "./PageHeaderComponent";
 
 const props = defineProps<PageHeaderProps>();
+const emits = defineEmits<PageHeaderEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -31,8 +33,8 @@ const app = defineClassComponent(
       super();
     }
 
-    public onToggleAddButton = () => {
-      this.router.push({ path: props.path });
+    public onToggleButton = () => {
+      emits("onToggleButton");
     };
   },
 );
@@ -84,7 +86,7 @@ const app = defineClassComponent(
         line-height: 1.2;
       }
 
-      & .add-btn {
+      & .header-btn {
         & i {
           margin-right: 0.25rem;
         }
