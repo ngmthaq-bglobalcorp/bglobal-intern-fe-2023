@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <PageHeader route="hiringOrganization" />
+    <PageHeader :target="app.t(`app.hiringOrganization`)" />
     <Datatable
       :columns="app.columns.value"
       :data="app.data.value"

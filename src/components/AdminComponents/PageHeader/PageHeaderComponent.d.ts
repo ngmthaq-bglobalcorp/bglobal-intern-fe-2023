@@ -1,1 +1,3 @@
-export type PageHeaderProps = { route: String };
+export type PageHeaderProps = {
+  target: string;
+};
