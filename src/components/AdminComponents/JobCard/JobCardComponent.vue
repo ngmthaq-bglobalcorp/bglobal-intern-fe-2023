@@ -75,7 +75,7 @@ const app = defineClassComponent(
       let text = "";
       this.job.value.workingHour.forEach((value, index) => {
         text += `${DatetimeHelper.getHourAndMinute(value.start)}~${DatetimeHelper.getHourAndMinute(value.end)}`;
-        if (value.is_full_time) {
+        if (value.isFullTime) {
           text += `(fulltime)`;
         } else {
           text += `(${value.hours} hours)`;
@@ -157,6 +157,7 @@ const app = defineClassComponent(
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
+        font-weight: 600;
         margin-bottom: 1rem;
 
         & .info-detail {

@@ -18,7 +18,7 @@ export class JobModel extends BaseModel implements IJob {
   public properties: Array<any>;
   public companySurvey: Array<string>;
   public barometer: Array<string>;
-  public photoGallery: Array<string>;
+  public photoGallery: Array<any>;
   public interview: Array<string>;
   public productCode: string;
   public opensAt: Date;
@@ -73,7 +73,7 @@ export interface IJob {
   properties: Array<any>;
   companySurvey: Array<string>;
   barometer: Array<string>;
-  photoGallery: Array<string>;
+  photoGallery: Array<any>;
   interview: Array<string>;
   productCode: string;
   opensAt: Date;
