@@ -43,7 +43,7 @@
 
       <!-- Content -->
       <div class="profile-content">
-        <ProfileHeader :isUpdate="true" />
+        <ProfileHeader :isUpdate="true" :editable="true" />
         <ProfileUpdate :profile="app.profile" />
       </div>
       <!-- End Content -->
@@ -57,6 +57,7 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHeaderComponent.vue";
 import ProfileUpdate from "@/components/AdminComponents/ProfileUpdate/ProfileUpdateComponent.vue";
+import { AppConst } from "@/const/app.const";
 import type { OrganizationModel } from "@/models/organization.model";
 
 const app = defineClassComponent(
@@ -71,10 +72,11 @@ const app = defineClassComponent(
       adress: "Ha Noi",
       introduction:
         "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
-      organizationType: "B",
-      status: 0,
+      organizationType: AppConst.ORGANIZATION_TYPE.typeB,
+      status: AppConst.STATUS.active,
       createdAt: new Date("2023-07-01"),
       updatedAt: new Date("2023-07-01"),
+      isSelected: false,
     };
 
     public constructor() {
