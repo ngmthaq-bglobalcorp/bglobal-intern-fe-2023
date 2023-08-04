@@ -12,8 +12,6 @@ const app = defineClassComponent(
   class Components extends BaseComponent {
     public constructor() {
       super();
-
-      document.body.classList.add("user-view");
     }
   },
 );
@@ -21,14 +19,10 @@ const app = defineClassComponent(
 <style scoped lang="scss">
 #base-layout {
   background: linear-gradient(12.02deg, #dfd1c5, #fff6eb);
-  width: 500px;
+  width: 100%;
   height: 100vh;
+  max-width: 500px;
   margin: auto;
-}
-</style>
-
-<style>
-.user-view {
-  background-color: aqua;
+  position: relative;
 }
 </style>

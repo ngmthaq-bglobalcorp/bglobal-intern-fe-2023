@@ -1,4 +1,20 @@
 <template>
+  <div class="result_search">
+    <div class="search_bar" :class="{ hide: !app.isShowFormSearch.value }">
+      <FormSearch is-disable-search-button></FormSearch>
+      <div class="search-condition" @click="app.onFormSearch()">
+        <div class="content" v-if="app.isShowFormSearch.value">
+          <i class="bi bi-arrow-up-short" style="font-size: 18px; color: #9f085f"></i>
+          <p class="">Close</p>
+        </div>
+        <div class="content" v-else>
+          <i class="bi bi-arrow-down-short" style="font-size: 18px; color: #9f085f"></i>
+          <p class="">Current search</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <div id="swiper">
     <div class="card" style="bottom: calc(0% - 25px); transform: translateX(-50%) scale(0.9375); opacity: 1">
       <div class="card_header">
@@ -64,7 +80,7 @@
     </button>
   </div>
   <div class="guide">
-    <button class="guide_swipe" tabindex="0" type="button">
+    <button class="guide_swipe" tabindex="0" type="button" @click="app.onToggleShowTutorial(true)">
       <svg
         class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06"
         focusable="false"
@@ -81,7 +97,7 @@
       </svg>
       <p class="title">Method of operation</p>
     </button>
-    <button class="guide_swipe" tabindex="0" type="button">
+    <button class="guide_swipe" tabindex="0" type="button" @click="app.onToggleShowUserGuide(true)">
       <svg
         class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06"
         focusable="false"
@@ -96,29 +112,116 @@
       <p class="title">What is keep/NG</p>
     </button>
   </div>
-  <!-- <div class="guide_content_swiper">
-    <button tabindex="0" type="button">
-      <i class="bi bi-x-circle"></i>
-      <img src="@/assets/img/img_tutorial.20233060d049d814fc33.png" />
+  <div
+    class="guide_content_swiper"
+    :class="{ hide: !app.isShowTutorial.value }"
+    @click="app.onToggleShowTutorial(false)"
+  >
+    <button tabindex="0" type="button" @click="app.onToggleShowTutorial(false)">
+      <i class="bi bi-x-circle" style="font-size: 2rem"></i>
+
       <span class="MuiTouchRipple-root css-w0pj6f"></span>
     </button>
-  </div> -->
+    <img src="@/assets/img/img_tutorial.20233060d049d814fc33.png" />
+  </div>
+  <div
+    class="guide_content_button"
+    :class="{ hide: !app.isShowUserGuild.value }"
+    @click="app.onToggleShowUserGuide(false)"
+  >
+    <button tabindex="0" type="button" @click="app.onToggleShowUserGuide(false)">
+      <i class="bi bi-x-circle" style="font-size: 2rem"></i>
+
+      <span class="MuiTouchRipple-root css-w0pj6f"></span>
+    </button>
+    <img src="@/assets/img/img_user_guide.0c961e271c9fdf1b1fbb.png" />
+  </div>
 </template>
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-
+import FormSearch from "../HomeContent/Form/FormSearch.vue";
+import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public isShowTutorial: Ref<boolean> = this.ref(false);
+    public isShowUserGuild: Ref<boolean> = this.ref(false);
+    public isShowFormSearch: Ref<boolean> = this.ref(false);
     public constructor() {
       super();
     }
+
+    public onToggleShowTutorial = (isShow: boolean) => {
+      this.isShowTutorial.value = isShow;
+    };
+    public onToggleShowUserGuide = (isShow: boolean) => {
+      this.isShowUserGuild.value = isShow;
+    };
+    public onFormSearch = () => {
+      this.isShowFormSearch.value = !this.isShowFormSearch.value;
+      if (this.isShowFormSearch.value) {
+        // Enable button
+        this.commonStore.eventBus.emit("showFormSearch", null);
+      } else {
+        // Disable button
+        this.commonStore.eventBus.emit("hideFormSearch", null);
+      }
+      return this.isShowFormSearch.value;
+    };
   },
 );
 </script>
 
 <style scoped lang="scss">
 @import "@/assets/scss/modules";
+.result_search {
+  margin: 0 10px;
+  position: relative;
+  height: 52px;
+  & .search_bar {
+    width: 100%;
+    transition: all 0.2s linear 0s;
+    position: absolute;
+    z-index: 2;
+    top: 0px;
+
+    & .search-condition {
+      width: 210px;
+      height: 40px;
+      margin: auto;
+      display: flex;
+      transform: translateY(-1px);
+      align-items: flex-start;
+      padding-top: 2px;
+      background-size: contain;
+      justify-content: center;
+      background-repeat: no-repeat;
+      background-position: top center;
+      background-image: url(@/assets/img/tab.png);
+
+      & .content {
+        display: flex;
+        cursor: pointer;
+
+        & p {
+          color: #9f085f;
+          font-size: 16px;
+          font-weight: 400;
+          line-height: 23px;
+          padding-left: 6px;
+        }
+      }
+    }
+  }
+  & .search_bar.hide {
+    top: -250px;
+    width: 100%;
+    transition: all 0.2s linear 0s;
+    position: absolute;
+    z-index: 2;
+  }
+}
+
 #swiper {
   position: relative;
   touch-action: none;
@@ -326,7 +429,7 @@ const app = defineClassComponent(
     -webkit-transform: translateX(-50%);
     transform: translateX(-50%);
     width: 45px;
-    bottom: 60px;
+    bottom: 80px;
 
     & img {
       -webkit-filter: drop-shadow(2px 2px 20px rgba(0, 0, 0, 0.5));
@@ -387,7 +490,7 @@ const app = defineClassComponent(
       margin: 0px;
       font-family: Roboto, Helvetica, Arial, sans-serif;
       font-weight: 400;
-      font-size: 1rem;
+      font-size: 14px;
       line-height: 1.5;
       letter-spacing: 0.00938em;
     }
@@ -399,12 +502,17 @@ const app = defineClassComponent(
   right: 0;
   bottom: 0;
   z-index: 9000;
-  position: fixed;
+  position: absolute;
   background: rgba(255, 255, 255, 0.7);
+
   & button {
     top: 8px;
     right: 8px;
     position: absolute;
+    background-color: transparent;
+    cursor: pointer;
+    outline: 0px;
+    border: 0px;
   }
   & img {
     top: 50%;
@@ -414,5 +522,38 @@ const app = defineClassComponent(
     position: absolute;
     transform: translate(-50%, -50%);
   }
+}
+.guide_content_swiper.hide {
+  display: none;
+}
+.guide_content_button {
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 9000;
+  position: absolute;
+  background: white;
+
+  & button {
+    top: 8px;
+    right: 8px;
+    position: absolute;
+    background-color: transparent;
+    cursor: pointer;
+    outline: 0px;
+    border: 0px;
+  }
+  & img {
+    top: 50%;
+    left: 50%;
+    width: 80%;
+    height: auto;
+    position: absolute;
+    transform: translate(-50%, -50%);
+  }
+}
+.guide_content_button.hide {
+  display: none;
 }
 </style>

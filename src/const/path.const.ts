@@ -91,7 +91,7 @@ export class PathConst {
     },
   };
   public static jobList: Route = {
-    path: "/joblist",
+    path: "/user/joblist",
     name: "JobList",
     component: JobList,
     meta: {

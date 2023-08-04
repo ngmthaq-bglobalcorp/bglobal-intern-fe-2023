@@ -2,6 +2,10 @@
   <UserLayout>
     <div class="userlayout">
       <FormSearch></FormSearch>
+      <div class="search-condition">
+        <img class="" src="@/assets/img/ic_search.71514682dc7410fdb320ef5038e30837.svg" />
+        <p class="">{{ app.t("jobsApp.form.applicable.searchCondition") }}</p>
+      </div>
       <NewsList></NewsList>
       <CompanyDescribe></CompanyDescribe>
     </div>
@@ -30,5 +34,26 @@ const app = defineClassComponent(
 @import "@/assets/scss/modules";
 .userlayout {
   padding: 0 12px;
+  & .search-condition {
+    width: 210px;
+    height: 40px;
+    margin: auto;
+    display: flex;
+    transform: translateY(-1px);
+    align-items: flex-start;
+    padding-top: 2px;
+    background-size: contain;
+    justify-content: center;
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-image: url(@/assets/img/tab.png);
+    & p {
+      color: #000;
+      font-size: 16px;
+      font-weight: 400;
+      line-height: 23px;
+      padding-left: 6px;
+    }
+  }
 }
 </style>

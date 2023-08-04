@@ -1,12 +1,9 @@
-<template>
-  <BaseLayout><JobCard></JobCard></BaseLayout>
-</template>
+<template></template>
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 
-import JobCard from "@/components/UserComponents/JobCard/JobCard.vue";
-import BaseLayout from "@/layouts/BaseLayout.vue";
+import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public constructor() {
