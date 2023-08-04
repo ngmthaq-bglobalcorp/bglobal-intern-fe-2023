@@ -52,7 +52,7 @@
 
           <button type="submit" class="g-btn submit-btn">{{ app.t(`app.submit`) }}</button>
           <div class="back-to-signin">
-            <router-link to="/admin/signin" class="link">
+            <router-link :to="PathConst.adminSignin" class="link">
               <i class="bi bi-chevron-left"></i> {{ app.t(`app.backToSignin`) }}
             </router-link>
           </div>
@@ -66,6 +66,7 @@
 <script setup lang="ts">
 import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { Ref } from "vue";
 

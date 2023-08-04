@@ -21,6 +21,9 @@ import NavbarComponent from "@/components/AdminComponents/Navbar/NavbarComponent
 
 #admin-layout {
   font-family: "Ubuntu", "Open Sans", sans-serif;
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
   color: $dark-variant;
   background-color: $white;
   display: flex;
@@ -33,6 +36,8 @@ import NavbarComponent from "@/components/AdminComponents/Navbar/NavbarComponent
 
     & .content {
       padding: 1.75rem 1.5rem;
+      height: calc(100vh - 3.75rem);
+      overflow: auto;
     }
   }
 }

@@ -4,11 +4,15 @@
       <!-- Left Content -->
       <div class="navbar-left-wrapper">
         <!-- Search Form -->
-        <form action="" class="search-form">
-          <div class="input-group-icon">
-            <i class="bi bi-search icon"></i>
+        <form>
+          <!-- Search -->
+          <div class="input-group">
+            <div class="input-group-icon">
+              <i class="bi bi-search icon"></i>
+            </div>
+            <input type="search" class="search-input" :placeholder="app.t(`app.search`)" />
           </div>
-          <input type="search" class="search-input" :placeholder="app.t(`app.search`)" />
+          <!-- End Search -->
         </form>
         <!-- End Search Form -->
       </div>
@@ -36,16 +40,22 @@
                 </div>
               </div>
               <div class="dropdown-divider"></div>
-              <div class="dropdown-item">
-                <router-link to="" class="link">{{ app.t(`app.profile`) }}</router-link>
-              </div>
-              <div class="dropdown-item">
-                <router-link to="" class="link">{{ app.t(`app.settings`) }}</router-link>
-              </div>
+              <router-link :to="PathConst.adminUserProfile" class="link">
+                <div class="dropdown-item">
+                  {{ app.t(`app.profile`) }}
+                </div>
+              </router-link>
+              <router-link :to="PathConst.adminUpdateProfile" class="link">
+                <div class="dropdown-item">
+                  {{ app.t(`app.settings`) }}
+                </div>
+              </router-link>
               <div class="dropdown-divider"></div>
-              <div class="dropdown-item">
-                <router-link to="" class="link">{{ app.t(`app.signout`) }}</router-link>
-              </div>
+              <router-link to="" class="link">
+                <div class="dropdown-item">
+                  {{ app.t(`app.signout`) }}
+                </div>
+              </router-link>
             </div>
           </li>
         </ul>
@@ -57,6 +67,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
@@ -102,23 +113,26 @@ const app = defineClassComponent(
       display: block;
       position: relative;
 
-      & .search-form {
+      & .input-group {
         position: relative;
         display: flex;
         flex-wrap: wrap;
         align-items: center;
         min-width: 21rem;
-        border-radius: 0.5rem;
 
         & .input-group-icon {
           position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
+          top: 1px;
+          bottom: 1px;
+          left: 1px;
           z-index: 4;
-          padding-left: 0.875rem;
           display: flex;
           align-items: center;
+          padding: 0.6125rem 1rem;
+
+          & i {
+            font-size: 0.875rem;
+          }
         }
 
         & .search-input {
@@ -127,8 +141,7 @@ const app = defineClassComponent(
           border: none;
           border-radius: 0.3125rem;
           box-shadow: none;
-          height: calc(1.6em + 1.21875rem);
-          padding: 0.54688rem 2.625rem;
+          padding: 0.54688rem 0.6125rem 0.54688rem 3.25rem;
           font-size: 0.875rem;
           font-weight: 400;
           line-height: 1.6;
@@ -252,16 +265,16 @@ const app = defineClassComponent(
               border-top: 1px solid $border;
             }
 
-            & .dropdown-item {
-              display: block;
-              width: 100%;
-              padding: 0.375rem 1.5rem;
-              clear: both;
-              white-space: nowrap;
-              border: 0;
+            & .link {
+              color: $dark !important;
 
-              & .link {
-                color: $dark !important;
+              & .dropdown-item {
+                display: block;
+                width: 100%;
+                padding: 0.375rem 1.5rem;
+                clear: both;
+                white-space: nowrap;
+                border: 0;
               }
             }
           }

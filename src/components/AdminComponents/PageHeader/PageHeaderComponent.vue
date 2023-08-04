@@ -2,7 +2,7 @@
   <div class="page-header-container">
     <div class="header-wrapper">
       <div class="header-nav">
-        <router-link to="/admin" class="link">{{ app.t(`app.dashboard`) }}</router-link>
+        <router-link :to="PathConst.adminDashboard" class="link">{{ app.t(`app.dashboard`) }}</router-link>
         <span>/</span>
         <router-link to="" class="link active">{{ app.t(`app.${props.route}`) }}</router-link>
       </div>
@@ -19,6 +19,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import type { PageHeaderProps } from "./PageHeaderComponent";
 
 const props = defineProps<PageHeaderProps>();
