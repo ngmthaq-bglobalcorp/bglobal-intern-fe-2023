@@ -3,6 +3,7 @@ import { BaseStore, defineClassStore } from "@/plugins/store.plugin";
 import { Api } from "@/plugins/api.plugin";
 import { ApiConst } from "@/const/api.const";
 import { KeyConst } from "@/const/key.const";
+import { PathConst } from "@/const/path.const";
 import { StorageHelper } from "@/helpers/storage.helper";
 
 export const api = new Api();
@@ -11,9 +12,16 @@ export const useAuthStore = defineClassStore(
   class Store extends BaseStore {
     public name: string = "auth";
 
-    public auth: Ref<string> = this.ref("");
+    public user: Ref<any> = this.ref();
 
-    public fetchSignIn = async (username: string, password: string) => {
+    public fetchAdminUser = () => {
+      const data: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
+      if (data) {
+        this.user.value = data;
+      }
+    };
+
+    public fetchAdminSignIn = async (username: string, password: string, remember: boolean = true) => {
       try {
         const res = await api.post(
           ApiConst.authEndpoints.login,
@@ -21,8 +29,16 @@ export const useAuthStore = defineClassStore(
         );
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
-          StorageHelper.setLocalStorage(KeyConst.localKeys.currentUser, data);
-          console.log(data);
+          this.user.value = data;
+          if (remember) {
+            StorageHelper.setLocalStorage(KeyConst.keys.currentUser, data);
+          } else {
+            StorageHelper.setSessionStorage(KeyConst.keys.currentUser, data);
+          }
+          window.location.assign(PathConst.adminDashboard.path);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -33,9 +49,9 @@ export const useAuthStore = defineClassStore(
       try {
         const res = await api.post(ApiConst.authEndpoints.logout);
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          StorageHelper.removeLocalStorage("currentUser");
-          console.log(data);
+          this.user.value = null;
+          StorageHelper.removeLocalStorage(KeyConst.keys.currentUser);
+          window.location.replace(PathConst.adminSignin.path);
         }
       } catch (error) {
         console.log(error);
@@ -50,8 +66,8 @@ export const useAuthStore = defineClassStore(
         );
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
-          StorageHelper.setLocalStorage("currentUser", data);
-          window.location.assign("/admin");
+          StorageHelper.setLocalStorage(KeyConst.keys.currentUser, data);
+          window.location.assign(PathConst.adminDashboard.path);
         }
       } catch (error) {
         console.log(error);
@@ -66,7 +82,7 @@ export const useAuthStore = defineClassStore(
         );
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
-          StorageHelper.setLocalStorage("currentUser", data);
+          StorageHelper.setLocalStorage(KeyConst.keys.currentUser, data);
           window.location.assign("/");
         }
       } catch (error) {

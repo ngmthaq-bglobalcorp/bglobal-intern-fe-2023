@@ -1,5 +1,6 @@
 export class KeyConst {
-  public static localKeys = {
+  public static keys = {
+    token: "token",
     currentUser: "currentUser",
   };
 }

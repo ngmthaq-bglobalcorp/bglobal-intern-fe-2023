@@ -23,7 +23,7 @@
       <div class="sidebar-content-wrapper">
         <ul class="list content-list">
           <!-- Sidebar Item -->
-          <template v-for="item in app.sidebarItems.value" :key="item.name">
+          <template v-for="item in app.filtersSidebarItem.value" :key="item.name">
             <li class="content-item" v-if="item.title">
               <i class="bi bi-three-dots icon-subtitle"></i>
               <span class="item-subtitle">{{ app.t(`app.manage`) }}</span>
@@ -64,11 +64,14 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
+import { AppConst } from "@/const/app.const";
+import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public sidebarItems: Ref<Array<any>> = this.ref([
+    public authStore = useAuthStore();
+    public adminItems: Ref<Array<any>> = this.ref([
       {
         name: "adminDashboard",
         text: this.t(`app.dashboard`),
@@ -98,6 +101,19 @@ const app = defineClassComponent(
         link: PathConst.adminNews.path,
         icon: "bi-newspaper",
       },
+    ]);
+    public organizationItems: Ref<Array<any>> = this.ref([
+      {
+        name: "adminDashboard",
+        text: this.t(`app.dashboard`),
+        link: PathConst.adminDashboard.path,
+        icon: "bi-house",
+      },
+      {
+        title: true,
+        text: this.t(`app.manage`),
+        icon: "bi-three-dots",
+      },
       {
         name: "adminJobsList",
         text: this.t(`app.jobs`),
@@ -107,6 +123,14 @@ const app = defineClassComponent(
     ]);
     public darkMode: Ref<Boolean> = this.ref(false);
     public collapse: Ref<Boolean> = this.ref(false);
+
+    public filtersSidebarItem = this.computed(() => {
+      if (this.authStore.user.role.includes(AppConst.ROLE.admin)) {
+        return this.adminItems.value;
+      } else {
+        return this.organizationItems.value;
+      }
+    });
 
     public constructor() {
       super();

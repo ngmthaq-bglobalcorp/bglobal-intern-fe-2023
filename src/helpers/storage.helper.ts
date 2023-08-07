@@ -37,6 +37,21 @@ export class StorageHelper {
     localStorage.removeItem(key);
   }
 
+  public static setSessionStorage<T>(key: string, value: T): void {
+    let data: any = value;
+    if (typeof value === "boolean") data = value === true ? 1 : 0;
+    sessionStorage.setItem(key, JSON.stringify(data));
+  }
+
+  public static getSessionStorage<T>(key: string): T | null {
+    const value = sessionStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
+  }
+
+  public static removeSessionStorage(key: string): void {
+    sessionStorage.removeItem(key);
+  }
+
   public static setCookies<T>(key: string, value: T, day: number = 0, options: Cookies.CookieAttributes = {}): void {
     let data: any = value;
     if (typeof value === "boolean") data = value === true ? 1 : 0;

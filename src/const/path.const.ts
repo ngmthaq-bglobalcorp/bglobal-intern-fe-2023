@@ -13,6 +13,7 @@ import AddJobViewVue from "@/views/AdminViews/AddJob/AddJobView.vue";
 import UserProfileViewVue from "@/views/AdminViews/UserProfile/UserProfileView.vue";
 import UpdateProfileViewVue from "@/views/AdminViews/UpdateProfile/UpdateProfileView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
+import { AppConst } from "./app.const";
 
 export class PathConst {
   public static adminSignup: Route = {
@@ -21,6 +22,7 @@ export class PathConst {
     component: SignupViewVue,
     meta: {
       title: "title.admin.signup",
+      auth: AppConst.ROLE.guest,
     },
   };
 
@@ -30,6 +32,7 @@ export class PathConst {
     component: SigninViewVue,
     meta: {
       title: "title.admin.signin",
+      auth: AppConst.ROLE.guest,
     },
   };
 
@@ -39,6 +42,7 @@ export class PathConst {
     component: ForgotPasswordViewVue,
     meta: {
       title: "title.admin.forgotPassword",
+      auth: AppConst.ROLE.guest,
     },
   };
 
@@ -48,6 +52,7 @@ export class PathConst {
     component: DashboardViewVue,
     meta: {
       title: "title.admin.dashboard",
+      auth: AppConst.ROLE.all,
     },
   };
 
@@ -57,6 +62,7 @@ export class PathConst {
     component: SeekersViewVue,
     meta: {
       title: "title.admin.seekers",
+      auth: AppConst.ROLE.admin,
     },
   };
 
@@ -66,6 +72,7 @@ export class PathConst {
     component: HiringOrganizationViewVue,
     meta: {
       title: "title.admin.hiringOrganization",
+      auth: AppConst.ROLE.admin,
     },
   };
 
@@ -75,6 +82,7 @@ export class PathConst {
     component: NewsViewVue,
     meta: {
       title: "title.admin.news",
+      auth: AppConst.ROLE.admin,
     },
   };
 
@@ -84,6 +92,7 @@ export class PathConst {
     component: AddNewsViewVue,
     meta: {
       title: "title.admin.addNews",
+      auth: AppConst.ROLE.admin,
     },
   };
 
@@ -93,6 +102,7 @@ export class PathConst {
     component: JobsViewVue,
     meta: {
       title: "title.admin.jobs",
+      auth: AppConst.ROLE.organization,
     },
   };
 
@@ -102,6 +112,7 @@ export class PathConst {
     component: JobDetailViewVue,
     meta: {
       title: "title.admin.jobs",
+      auth: AppConst.ROLE.organization,
     },
   };
 
@@ -111,6 +122,7 @@ export class PathConst {
     component: AddJobViewVue,
     meta: {
       title: "title.admin.addJob",
+      auth: AppConst.ROLE.organization,
     },
   };
 
@@ -120,6 +132,7 @@ export class PathConst {
     component: UserProfileViewVue,
     meta: {
       title: "title.admin.userProfile",
+      auth: AppConst.ROLE.all,
     },
   };
 
@@ -129,6 +142,7 @@ export class PathConst {
     component: UpdateProfileViewVue,
     meta: {
       title: "title.admin.updateProfile",
+      auth: AppConst.ROLE.all,
     },
   };
 
@@ -138,6 +152,7 @@ export class PathConst {
     component: HomeViewVue,
     meta: {
       title: "title.user.home",
+      auth: AppConst.ROLE.seeker,
     },
   };
 }

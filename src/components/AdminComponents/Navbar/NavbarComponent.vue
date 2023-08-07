@@ -51,11 +51,11 @@
                 </div>
               </router-link>
               <div class="dropdown-divider"></div>
-              <router-link to="" class="link">
+              <div class="link" @click="app.onToggleSignOut">
                 <div class="dropdown-item">
                   {{ app.t(`app.signout`) }}
                 </div>
-              </router-link>
+              </div>
             </div>
           </li>
         </ul>
@@ -68,10 +68,12 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
+import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public authStore = useAuthStore();
     public isMenuOpen: Ref<Boolean> = this.ref(false);
 
     public constructor() {
@@ -84,6 +86,10 @@ const app = defineClassComponent(
 
     public onToggleCloseMenu = () => {
       this.isMenuOpen.value = false;
+    };
+
+    public onToggleSignOut = async () => {
+      await this.authStore.fetchSignOut();
     };
   },
 );
@@ -216,9 +222,9 @@ const app = defineClassComponent(
             width: 16rem;
             right: 0;
             left: auto;
-            animation-duration: 300ms;
             box-shadow: 0 10px 40px 10px rgba(140, 152, 164, 0.175);
             margin-top: 0.5rem;
+            animation-duration: 0.3s;
 
             & .dropdown-item-header {
               display: flex;
@@ -267,6 +273,7 @@ const app = defineClassComponent(
 
             & .link {
               color: $dark !important;
+              cursor: pointer;
 
               & .dropdown-item {
                 display: block;
