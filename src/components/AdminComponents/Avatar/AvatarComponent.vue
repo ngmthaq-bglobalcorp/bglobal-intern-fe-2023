@@ -1,8 +1,8 @@
 <template>
   <div class="avatar-container">
     <div class="avatar-wrapper">
-      <img :src="app.data.value.image" alt="Avatar" class="avatar-img image" v-if="app.data.value.image" />
-      <span class="avatar-initials" v-else>{{ app.data.value.name[0] }}</span>
+      <img :src="props.avatarImage" :alt="props.avatarAlt" class="avatar-img image" v-if="props.avatarImage" />
+      <span class="avatar-initials" v-else>{{ props.avatarInit }}</span>
     </div>
   </div>
 </template>
@@ -10,14 +10,11 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import type { AvatarProps } from "./AvatarComponent";
-import type { Ref } from "vue";
 
 const props = defineProps<AvatarProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public data: Ref<any> = this.ref(props.data);
-
     public constructor() {
       super();
     }

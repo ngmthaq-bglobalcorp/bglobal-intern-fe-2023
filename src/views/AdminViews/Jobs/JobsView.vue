@@ -43,6 +43,7 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import JobCard from "@/components/AdminComponents/JobCard/JobCardComponent.vue";
 import { AppConst } from "@/const/app.const";
+import { PathConst } from "@/const/path.const";
 import type { Ref } from "vue";
 import type { JobModel } from "@/models/job.model";
 
@@ -56,7 +57,7 @@ const app = defineClassComponent(
     }
 
     public onToggleButton = () => {
-      console.log("add");
+      this.router.push(PathConst.adminAddJob);
     };
 
     public onToggleColumnView = () => {

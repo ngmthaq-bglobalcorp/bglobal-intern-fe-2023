@@ -1,3 +1,5 @@
 export type AvatarProps = {
-  data: any;
+  avatarImage: string;
+  avatarAlt: string;
+  avatarInit: string;
 };

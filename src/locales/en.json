@@ -16,6 +16,7 @@
       "news": "News",
       "addNews": "Add news",
       "jobs": "Jobs",
+      "addJob": "Add job",
       "userProfile": "Profile",
       "updateProfile": "Update Profile"
     }
@@ -85,6 +86,7 @@
     "hiringOrganization": "Hiring Organization",
     "news": "News",
     "jobs": "Jobs",
+    "job": "Job",
     "add": "Add {value}",
     "selected": "Selected",
     "delete": "Delete",
@@ -150,6 +152,23 @@
     "overview": "Overview",
     "activity": "Activity",
     "myProfile": "My profile",
-    "back": "Back"
+    "back": "Back",
+    "mainImage": "Main image",
+    "jobTitleCatchPhrase": "Job title catch phrase",
+    "salary": "Salary",
+    "workingHour": "Working hour",
+    "searchLabels": "Search labels",
+    "webApplication": "Web application",
+    "catchText": "Catch text",
+    "leadText": "Lead text",
+    "subImages": "Sub images",
+    "properties": "Properties",
+    "postScripts": "Post scripts",
+    "companySurvey": "Company survey",
+    "barometer": "barometer",
+    "photoGallery": "Photo gallery",
+    "interview": "Interview",
+    "propertyTitle": "Property title",
+    "propertyBody": "Property body"
   }
 }

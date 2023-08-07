@@ -11,11 +11,11 @@ export class JobModel extends BaseModel implements IJob {
   public workingHour: Array<any>;
   public searchLabels: Array<string>;
   public webApplication: string;
-  public postScripts: Array<any>;
   public catchText: string;
   public leadText: string;
   public subImages: Array<any>;
   public properties: Array<any>;
+  public postScripts: Array<any>;
   public companySurvey: Array<string>;
   public barometer: Array<string>;
   public photoGallery: Array<any>;
@@ -38,11 +38,11 @@ export class JobModel extends BaseModel implements IJob {
     this.workingHour = data.workingHour || [];
     this.searchLabels = data.searchLabels || [];
     this.webApplication = data.webApplication || "";
-    this.postScripts = data.postScripts || [];
     this.catchText = data.catchText || "";
     this.leadText = data.leadText || "";
     this.subImages = data.subImages || [];
     this.properties = data.properties || [];
+    this.postScripts = data.postScripts || [];
     this.companySurvey = data.companySurvey || [];
     this.barometer = data.barometer || [];
     this.photoGallery = data.photoGallery || [];
@@ -66,11 +66,11 @@ export interface IJob {
   workingHour: Array<any>;
   searchLabels: Array<string>;
   webApplication: string;
-  postScripts: Array<any>;
   catchText: string;
   leadText: string;
   subImages: Array<any>;
   properties: Array<any>;
+  postScripts: Array<any>;
   companySurvey: Array<string>;
   barometer: Array<string>;
   photoGallery: Array<any>;

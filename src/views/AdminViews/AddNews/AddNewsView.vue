@@ -7,7 +7,11 @@
       @on-toggle-button="app.onToggleButton"
     />
     <div class="add-news-form">
-      <FormData :input="app.newsInputs.value" @on-submit-form="app.onSubmitForm" />
+      <FormData
+        :target="app.t(`app.add`, { value: app.t(`app.news`) })"
+        :input="app.newsInputs.value"
+        @on-submit-form="app.onSubmitForm"
+      />
     </div>
   </AdminLayout>
 </template>
@@ -17,6 +21,7 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import FormData from "@/components/AdminComponents/FormData/FormDataComponent.vue";
+import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
 import type { Ref } from "vue";
 
@@ -25,31 +30,40 @@ const app = defineClassComponent(
     public newsInputs: Ref<any> = this.ref([
       {
         id: 1,
-        type: "radio-select",
-        name: "category",
-        label: this.t(`app.category`),
-        model: 1,
+        type: "group",
         children: [
           {
             id: 1,
-            value: 1,
-            text: this.t(`app.seminar`),
-            image: "/src/assets/img/info-icon-seminar.svg",
-            alt: this.t(`app.seminar`),
-          },
-          {
-            id: 2,
-            value: 2,
-            text: this.t(`app.corporateRecruitingSession`),
-            image: "/src/assets/img/info-icon-briefing.svg",
-            alt: this.t(`app.corporateRecruitingSession`),
-          },
-          {
-            id: 3,
-            value: 3,
-            text: this.t(`app.generalInformation`),
-            image: "/src/assets/img/info-icon-other.svg",
-            alt: this.t(`app.generalInformation`),
+            name: "category",
+            type: "radio",
+            label: this.t(`app.category`),
+            placeholder: this.t(`app.category`),
+            required: true,
+            model: AppConst.NEWS_CATEGORY.other,
+            error: "",
+            children: [
+              {
+                id: 1,
+                value: AppConst.NEWS_CATEGORY.seminar,
+                text: this.t(`app.seminar`),
+                image: "/src/assets/img/info-icon-seminar.svg",
+                alt: this.t(`app.seminar`),
+              },
+              {
+                id: 2,
+                value: AppConst.NEWS_CATEGORY.briefing,
+                text: this.t(`app.corporateRecruitingSession`),
+                image: "/src/assets/img/info-icon-briefing.svg",
+                alt: this.t(`app.corporateRecruitingSession`),
+              },
+              {
+                id: 3,
+                value: AppConst.NEWS_CATEGORY.other,
+                text: this.t(`app.generalInformation`),
+                image: "/src/assets/img/info-icon-other.svg",
+                alt: this.t(`app.generalInformation`),
+              },
+            ],
           },
         ],
       },
@@ -60,8 +74,8 @@ const app = defineClassComponent(
           {
             id: 1,
             name: "opensAt",
-            label: this.t(`app.opensAt`),
             type: "date",
+            label: this.t(`app.opensAt`),
             placeholder: this.t(`app.opensAt`),
             required: true,
             model: "",
@@ -70,8 +84,8 @@ const app = defineClassComponent(
           {
             id: 2,
             name: "expiresAt",
-            label: this.t(`app.expiresAt`),
             type: "date",
+            label: this.t(`app.expiresAt`),
             placeholder: this.t(`app.expiresAt`),
             required: true,
             model: "",
@@ -86,8 +100,8 @@ const app = defineClassComponent(
           {
             id: 1,
             name: "title",
-            label: this.t(`app.title`),
             type: "text",
+            label: this.t(`app.title`),
             placeholder: this.t(`app.title`),
             required: true,
             model: "",
@@ -102,8 +116,8 @@ const app = defineClassComponent(
           {
             id: 1,
             name: "subtitle",
-            label: this.t(`app.subtitle`),
             type: "text",
+            label: this.t(`app.subtitle`),
             placeholder: this.t(`app.subtitle`),
             required: false,
             model: "",
@@ -118,8 +132,8 @@ const app = defineClassComponent(
           {
             id: 1,
             name: "body",
-            label: this.t(`app.body`),
             type: "textarea",
+            label: this.t(`app.body`),
             placeholder: this.t(`app.body`),
             required: false,
             model: "",
@@ -134,8 +148,8 @@ const app = defineClassComponent(
           {
             id: 1,
             name: "eventPageUrl",
-            label: this.t(`app.eventPageUrl`),
             type: "text",
+            label: this.t(`app.eventPageUrl`),
             placeholder: this.t(`app.eventPageUrl`),
             required: false,
             model: "",
@@ -150,8 +164,8 @@ const app = defineClassComponent(
           {
             id: 1,
             name: "eventStartAt",
-            label: this.t(`app.eventStartAt`),
             type: "date",
+            label: this.t(`app.eventStartAt`),
             placeholder: this.t(`app.eventStartAt`),
             required: false,
             model: "",
@@ -160,8 +174,8 @@ const app = defineClassComponent(
           {
             id: 2,
             name: "eventEndAt",
-            label: this.t(`app.eventEndAt`),
             type: "date",
+            label: this.t(`app.eventEndAt`),
             placeholder: this.t(`app.eventEndAt`),
             required: false,
             model: "",

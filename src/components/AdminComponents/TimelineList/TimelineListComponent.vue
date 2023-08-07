@@ -7,7 +7,24 @@
         </div>
         <div class="content-wrapper">
           <div class="content-avatar">
-            <img src="@/assets/img/info-icon-other.svg" alt="Category" class="content-avatar image" />
+            <img
+              src="@/assets/img/info-icon-seminar.svg"
+              alt="Category"
+              class="content-avatar image"
+              v-if="data.category === AppConst.NEWS_CATEGORY.seminar"
+            />
+            <img
+              src="@/assets/img/info-icon-briefing.svg"
+              alt="Category"
+              class="content-avatar image"
+              v-else-if="data.category === AppConst.NEWS_CATEGORY.briefing"
+            />
+            <img
+              src="@/assets/img/info-icon-other.svg"
+              alt="Category"
+              class="content-avatar image"
+              v-else-if="data.category === AppConst.NEWS_CATEGORY.other"
+            />
           </div>
           <div class="content-desc">
             <button class="edit-btn icon-btn" @click.prevent="">
@@ -52,6 +69,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { AppConst } from "@/const/app.const";
 import type { TimelineListProps } from "./TimelineListComponent";
 import type { Ref } from "vue";
 
