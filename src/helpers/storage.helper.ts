@@ -22,6 +22,21 @@ export class StorageHelper {
     }
   }
 
+  public static setLocalStorage<T>(key: string, value: T): void {
+    let data: any = value;
+    if (typeof value === "boolean") data = value === true ? 1 : 0;
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  public static getLocalStorage<T>(key: string): T | null {
+    const value = localStorage.getItem(key);
+    return value ? JSON.parse(value) : null;
+  }
+
+  public static removeLocalStorage(key: string): void {
+    localStorage.removeItem(key);
+  }
+
   public static setCookies<T>(key: string, value: T, day: number = 0, options: Cookies.CookieAttributes = {}): void {
     let data: any = value;
     if (typeof value === "boolean") data = value === true ? 1 : 0;

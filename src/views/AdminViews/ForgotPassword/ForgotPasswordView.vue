@@ -68,10 +68,12 @@ import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public authStore = useAuthStore();
     public organizationEmail: Ref<string> = this.ref("");
     public emailOtp: Ref<string> = this.ref("");
     public isValidEmail: Ref<Boolean> = this.ref(false);
