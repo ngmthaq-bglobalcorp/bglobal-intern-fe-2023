@@ -22,12 +22,12 @@ export class NewsModel extends BaseModel implements INews {
     this.category = data.category || "";
     this.body = data.body || "";
     this.eventPageUrl = data.eventPageUrl || "";
-    this.eventStartAt = data.eventStartAt || Date.now();
-    this.eventEndAt = data.eventEndAt || Date.now();
-    this.opensAt = data.opensAt || Date.now();
-    this.expiresAt = data.expiresAt || Date.now();
-    this.updatedAt = data.updatedAt || Date.now();
-    this.createdAt = data.createdAt || Date.now();
+    this.eventStartAt = data.eventStartAt || new Date();
+    this.eventEndAt = data.eventEndAt || new Date();
+    this.opensAt = data.opensAt || new Date();
+    this.expiresAt = data.expiresAt || new Date();
+    this.updatedAt = data.updatedAt || new Date();
+    this.createdAt = data.createdAt || new Date();
   }
 }
 

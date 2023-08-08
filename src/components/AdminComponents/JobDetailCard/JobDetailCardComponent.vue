@@ -3,7 +3,7 @@
   <div class="job-detail-card-container custom-card">
     <!-- Infomation -->
     <div class="job-wrapper">
-      <div class="job-header">
+      <div class="job-header" v-if="app.job.value.mainImageUrl">
         <img :src="app.job.value.mainImageUrl" :alt="app.job.value.mainImageDesc" class="main-img" />
       </div>
       <div class="job-body">
@@ -12,33 +12,33 @@
             {{ PrimitiveHelper.getPostPeriod(app.job.value.opensAt, app.job.value.expiresAt) }}
           </span>
         </div>
-        <div class="job-title">
+        <div class="job-title" v-if="app.job.value.title">
           <h2 class="title">{{ app.job.value.title }}</h2>
         </div>
         <ul class="job-info list">
-          <li class="info-detail">
+          <li class="info-detail" v-if="app.job.value.location">
             <i class="bi bi-geo-alt icon"></i>
             {{ app.job.value.location }}
           </li>
-          <li class="info-detail">
+          <li class="info-detail" v-if="app.job.value.salary > 0">
             <i class="bi bi-cash icon"></i>
             {{ PrimitiveHelper.getSalary(app.job.value.salary) }}
           </li>
-          <li class="info-detail">
+          <li class="info-detail" v-if="app.job.value.workingHours.length > 0">
             <i class="bi bi-clock icon"></i>
             {{ PrimitiveHelper.getWorkingHours(app.job.value.workingHours) }}
           </li>
         </ul>
-        <div class="job-label">
+        <div class="job-label" v-if="app.job.value.searchLabels.length > 0">
           <ul class="search-label list">
             <li class="search-item" v-for="label in app.job.value.searchLabels" :key="label">{{ label }}</li>
           </ul>
         </div>
         <div class="job-text">
-          <span class="catch-text">{{ app.job.value.catchText }}</span>
-          <span class="lead-text">{{ app.job.value.leadText }}</span>
+          <span class="catch-text" v-if="app.job.value.catchText">{{ app.job.value.catchText }}</span>
+          <span class="lead-text" v-if="app.job.value.leadText">{{ app.job.value.leadText }}</span>
         </div>
-        <div class="job-subimage">
+        <div class="job-subimage" v-if="app.job.value.subImages.length > 0">
           <ul class="subimages-list list">
             <li class="subimage-item" v-for="subImage in app.job.value.subImages" :key="subImage.id">
               <img :src="subImage.url" alt="Sub Image" class="sub-img" />
@@ -46,21 +46,24 @@
             </li>
           </ul>
         </div>
-        <ul class="job-properties list">
-          <li class="properties-item" v-for="property in app.job.value.properties" :key="property.id">
-            <template v-if="property.isDisplayed">
-              <span class="title">[{{ property.title }}]</span>
-              <span class="body">{{ property.body }}</span>
-            </template>
+        <ul class="job-properties list" v-if="app.job.value.properties.length > 0">
+          <li
+            class="properties-item"
+            v-for="property in app.job.value.properties"
+            :key="property.id"
+            v-show="property.is_displayed"
+          >
+            <span class="title">[{{ property.title }}]</span>
+            <span class="body">{{ property.body }}</span>
           </li>
         </ul>
-        <ul class="job-post-scripts list">
+        <ul class="job-post-scripts list" v-if="app.job.value.postScripts.length > 0">
           <li class="post-scripts-item" v-for="post in app.job.value.postScripts" :key="post.id">
             <i class="bi bi-star icon"></i>
             <span class="body">{{ post.body }}</span>
           </li>
         </ul>
-        <div class="job-photo-gallery">
+        <div class="job-photo-gallery" v-if="app.job.value.photoGallery.length > 0">
           <ul class="photo-gallery-list list">
             <li class="photo-gallery-item" v-for="photo in app.job.value.photoGallery" :key="photo.id">
               <img :src="photo.url" alt="Photo gallery" class="gallery-img" />
@@ -92,7 +95,7 @@ const props = defineProps<JobDetailCardProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public job: Ref<JobModel> = this.ref(props.data);
+    public job: Ref<JobModel> = this.computed(() => props.data);
 
     public constructor() {
       super();

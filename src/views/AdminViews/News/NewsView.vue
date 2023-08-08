@@ -48,7 +48,7 @@ const app = defineClassComponent(
     };
 
     public onToggleDeleteButton = (id: number) => {
-      this.adminStore.fetchDeleteNews(id);
+      this.adminStore.fetchDeleteNews(id.toString());
     };
   },
 );

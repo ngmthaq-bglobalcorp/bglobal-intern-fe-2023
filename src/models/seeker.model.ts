@@ -40,8 +40,8 @@ export class SeekerModel extends BaseModel implements ISeeker {
     this.achievements = data.achievements || "";
     this.otherDetails = data.otherDetails || "";
     this.status = data.status || AppConst.STATUS.disabled;
-    this.createdAt = data.createdAt || Date.now();
-    this.updatedAt = data.updatedAt || Date.now();
+    this.createdAt = data.createdAt || new Date();
+    this.updatedAt = data.updatedAt || new Date();
     this.isSelected = data.isSelected || false;
   }
 }

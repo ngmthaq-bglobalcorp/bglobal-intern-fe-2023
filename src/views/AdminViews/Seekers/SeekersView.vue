@@ -46,16 +46,16 @@ const app = defineClassComponent(
 
     public onDeleteSelected = (selectedArray: Array<number>) => {
       selectedArray.forEach((value: number) => {
-        this.adminStore.fetchDeleteSeekers(value);
+        this.adminStore.fetchDeleteSeekers(value.toString());
       });
     };
 
     public onLockSelected = (id: number) => {
-      this.adminStore.fetchChangeUserStatus(id, AppConst.STATUS.disabled);
+      this.adminStore.fetchChangeUserStatus(id.toString(), AppConst.STATUS.disabled);
     };
 
     public onUnlockSelected = (id: number) => {
-      this.adminStore.fetchChangeUserStatus(id, AppConst.STATUS.active);
+      this.adminStore.fetchChangeUserStatus(id.toString(), AppConst.STATUS.active);
     };
   },
 );

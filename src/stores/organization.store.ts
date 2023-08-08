@@ -71,9 +71,9 @@ export const useOrganizationStore = defineClassStore(
       }
     };
 
-    public fetchFindJobById = async (id: number) => {
+    public fetchFindJobById = async (id: string) => {
       try {
-        const res = await api.get(ApiConst.commonEndpoints.findJobById.replace("{id}", id.toString()));
+        const res = await api.get(ApiConst.commonEndpoints.findJobById.replace("{id}", id));
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
           console.log(data);
@@ -95,7 +95,7 @@ export const useOrganizationStore = defineClassStore(
             postScripts: data.postScripts,
             companySurvey: data.displayed && data.companySurvey.contents,
             barometer: data.displayed && data.barometer.contents,
-            photoGallery: data.displayed && data.photoGallery.contents,
+            photoGallery: data.photoGallery.contents,
             interview: data.displayed && data.interview.contents,
             productCode: data.productCode,
             opensAt: new Date(data.opensAt),
@@ -124,10 +124,10 @@ export const useOrganizationStore = defineClassStore(
       }
     };
 
-    public fetchUpdateJob = async (id: number, job: JobModel) => {
+    public fetchUpdateJob = async (id: string, job: JobModel) => {
       try {
         const res = await api.put(
-          ApiConst.organizationsEndpoints.createOrganizationJobs.replace("{id}", id.toString()),
+          ApiConst.organizationsEndpoints.createOrganizationJobs.replace("{id}", id),
           JSON.stringify(job),
         );
         if (res.status === ApiConst.status.ok) {
@@ -140,11 +140,9 @@ export const useOrganizationStore = defineClassStore(
       }
     };
 
-    public fetchDeleteJob = async (id: number) => {
+    public fetchDeleteJob = async (id: string) => {
       try {
-        const res = await api.delete(
-          ApiConst.organizationsEndpoints.deleteOrganizationJobs.replace("{id}", id.toString()),
-        );
+        const res = await api.delete(ApiConst.organizationsEndpoints.deleteOrganizationJobs.replace("{id}", id));
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
           console.log(data);

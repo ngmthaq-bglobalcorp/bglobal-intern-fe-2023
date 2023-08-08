@@ -12,7 +12,7 @@ export class ApiConst {
 
   public static commonEndpoints = {
     getAllNews: "/news",
-    findJobById: "/jobs/{jobsId}",
+    findJobById: "/jobs/{id}",
     uploadImage: "/image/upload",
     uploadMultipleImages: "/image/uploads",
     getAllSearchLabel: "/tag-search",
@@ -53,7 +53,7 @@ export class ApiConst {
   public static organizationsEndpoints = {
     getAllOrganizationJobs: "/organizations/jobs",
     updateOrganizationJobs: "/organizations/jobs/{id}/update",
-    deleteOrganizationJobs: "/organizations/jobs/{jobId}/delete",
+    deleteOrganizationJobs: "/organizations/jobs/{id}/delete",
     createOrganizationJobs: "/organizations/jobs/create",
     getOrganizationProfile: "/organizations/profile",
     updateOrganizationProfile: "/organizations/profile/update",

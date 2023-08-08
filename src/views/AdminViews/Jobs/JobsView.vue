@@ -72,7 +72,7 @@ const app = defineClassComponent(
     };
 
     public onToggleDeleteButton = (id: number) => {
-      this.organizationStore.fetchDeleteJob(id);
+      this.organizationStore.fetchDeleteJob(id.toString());
     };
 
     public onToggleColumnView = () => {

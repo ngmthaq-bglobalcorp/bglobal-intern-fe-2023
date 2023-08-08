@@ -5,11 +5,11 @@
       <div class="page-header">
         <!-- Avatar -->
         <div class="header-avatar">
-          <img :src="app.data.value.mainImageUrl" :alt="app.data.value.mainImageDesc" class="avatar-img" />
+          <img :src="app.job.value.mainImageUrl" :alt="app.job.value.mainImageDesc" class="avatar-img" />
         </div>
         <!-- End Avatar -->
         <div class="header-info">
-          <div class="info-title">{{ app.data.value.title }}</div>
+          <div class="info-title">{{ app.job.value.title }}</div>
           <ul class="info-list list">
             <li class="info-item" v-for="item in app.infoList.value" :key="item.id">
               <span class="first">{{ item.title }}:</span>
@@ -41,6 +41,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
 import type { DetailPageHeaderProps } from "./DetailPageHeaderComponent";
 import type { Ref } from "vue";
 import type { JobModel } from "@/models/job.model";
@@ -49,24 +50,6 @@ const props = defineProps<DetailPageHeaderProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public data: Ref<JobModel> = this.ref(props.data);
-    public infoList: Ref<Array<any>> = this.ref([
-      {
-        id: 1,
-        title: this.t(`app.location`),
-        desc: this.data.value.location,
-      },
-      {
-        id: 2,
-        title: this.t(`app.opensAt`),
-        desc: this.i18n.d(this.data.value.opensAt),
-      },
-      {
-        id: 3,
-        title: this.t(`app.expiresAt`),
-        desc: this.i18n.d(this.data.value.expiresAt),
-      },
-    ]);
     public navList: Ref<Array<any>> = this.ref([
       {
         link: PathConst.adminJobDetail.path,
@@ -85,6 +68,25 @@ const app = defineClassComponent(
         name: this.t(`app.settings`),
         text: this.t(`app.settings`),
         disabled: true,
+      },
+    ]);
+
+    public job: Ref<JobModel> = this.computed(() => props.data);
+    public infoList: Ref<Array<any>> = this.computed(() => [
+      {
+        id: 1,
+        title: this.t(`app.location`),
+        desc: this.job.value.location,
+      },
+      {
+        id: 2,
+        title: this.t(`app.opensAt`),
+        desc: DatetimeHelper.getShortDate(this.job.value.opensAt),
+      },
+      {
+        id: 3,
+        title: this.t(`app.expiresAt`),
+        desc: DatetimeHelper.getShortDate(this.job.value.expiresAt),
       },
     ]);
 

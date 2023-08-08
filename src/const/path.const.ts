@@ -121,6 +121,7 @@ export class PathConst {
     path: "/admin/jobs/:jobId",
     name: "adminJobDetail",
     component: JobDetailViewVue,
+    props: true,
     meta: {
       title: "title.admin.jobs",
       auth: AppConst.ROLE.organization,
