@@ -27,7 +27,7 @@ export const useSeekersStore = defineClassStore(
       }
     };
 
-    public fetchAllNews = async () => {
+    public fetchAllJobs = async () => {
       try {
         const res = await api.get(ApiConst.seekersEndpoints.getAllSeekerJobs);
         if (res.status === ApiConst.status.ok) {

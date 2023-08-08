@@ -1,4 +1,5 @@
 import humps from "humps";
+import { DatetimeHelper } from "./datetime.helper";
 
 export class PrimitiveHelper {
   public static convertSnakeToCamel(data: string) {
@@ -47,5 +48,33 @@ export class PrimitiveHelper {
     const expression: RegExp = /^(0[2-9]|84[2-9]|\+84[2-9])(\d{8}|\d{9})$/;
     const result: boolean = expression.test(phone);
     return result;
+  };
+
+  public static getSalary = (salary: number) => {
+    let text = "";
+    text += "Salary: " + salary;
+    return text;
+  };
+
+  public static getWorkingHours = (workingHours: any[]) => {
+    let text = "";
+    workingHours.forEach((value, index) => {
+      text += `${DatetimeHelper.getHourAndMinute(value.startTime)}~${DatetimeHelper.getHourAndMinute(value.endTime)}`;
+      if (value.isFullTime) {
+        text += `(fulltime)`;
+      } else {
+        text += `(${value.countHours} hours)`;
+      }
+      if (index < workingHours.length - 1) {
+        text += `, `;
+      }
+    });
+    return text;
+  };
+
+  public static getPostPeriod = (opensAt: Date, expiresAt: Date) => {
+    let text = "";
+    text += "Post period: " + DatetimeHelper.getLongDate(opensAt) + " ~ " + DatetimeHelper.getLongDate(expiresAt);
+    return text;
   };
 }

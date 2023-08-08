@@ -9,7 +9,7 @@
       <div class="job-body">
         <div class="job-opens-expires">
           <span>
-            {{ `Post period: ${app.job.value.opensAt.toDateString()} ~ ${app.job.value.expiresAt.toDateString()}` }}
+            {{ PrimitiveHelper.getPostPeriod(app.job.value.opensAt, app.job.value.expiresAt) }}
           </span>
         </div>
         <div class="job-title">
@@ -22,11 +22,11 @@
           </li>
           <li class="info-detail">
             <i class="bi bi-cash icon"></i>
-            {{ app.getSalary() }}
+            {{ PrimitiveHelper.getSalary(app.job.value.salary) }}
           </li>
           <li class="info-detail">
             <i class="bi bi-clock icon"></i>
-            {{ app.getWorkingHour() }}
+            {{ PrimitiveHelper.getWorkingHours(app.job.value.workingHours) }}
           </li>
         </ul>
         <div class="job-label">
@@ -83,7 +83,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { Ref } from "vue";
 import type { JobDetailCardProps } from "./JobDetailCardComponent";
 import type { JobModel } from "@/models/job.model";
@@ -97,28 +97,6 @@ const app = defineClassComponent(
     public constructor() {
       super();
     }
-
-    public getSalary = () => {
-      let text = "";
-      text += "Salary: " + this.job.value.salary;
-      return text;
-    };
-
-    public getWorkingHour = () => {
-      let text = "";
-      this.job.value.workingHour.forEach((value, index) => {
-        text += `${DatetimeHelper.getHourAndMinute(value.start)}~${DatetimeHelper.getHourAndMinute(value.end)}`;
-        if (value.isFullTime) {
-          text += `(fulltime)`;
-        } else {
-          text += `(${value.hours} hours)`;
-        }
-        if (index < this.job.value.workingHour.length - 1) {
-          text += `, `;
-        }
-      });
-      return text;
-    };
   },
 );
 </script>

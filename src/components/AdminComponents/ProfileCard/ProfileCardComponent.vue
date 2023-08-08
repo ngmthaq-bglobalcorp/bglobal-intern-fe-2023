@@ -88,7 +88,7 @@ const props = defineProps<ProfileCardProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public profile: Ref<any> = this.ref(props.profile);
+    public profile: Ref<any> = this.computed(() => props.profile);
     public profilePercent: Ref<number> = this.computed(() => {
       let percent = 0;
       if (this.profile.value.name) {

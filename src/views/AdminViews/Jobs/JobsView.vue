@@ -8,7 +8,7 @@
     />
     <div class="jobs-header">
       <span class="jobs-total">
-        {{ `${app.jobs.value.length} ${app.t(`app.jobs`)}` }}
+        {{ `${app.filtersJobs.value.length} ${app.t(`app.jobs`)}` }}
       </span>
       <ul class="nav-segment list">
         <li class="nav-item">
@@ -30,8 +30,8 @@
       </ul>
     </div>
     <ul class="jobs-list list">
-      <li class="jobs-item" v-for="item in app.jobs.value" :key="item.id">
-        <JobCard :job="item" />
+      <li class="jobs-item" v-for="item in app.filtersJobs.value" :key="item.id">
+        <JobCard :job="item" @on-click-card="app.onClickCard" @on-toggle-delete-button="app.onToggleDeleteButton" />
       </li>
     </ul>
   </AdminLayout>
@@ -44,20 +44,35 @@ import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderCompon
 import JobCard from "@/components/AdminComponents/JobCard/JobCardComponent.vue";
 import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
+import { useOrganizationStore } from "@/stores/organization.store";
 import type { Ref } from "vue";
 import type { JobModel } from "@/models/job.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public jobs: Ref<Array<JobModel>> = this.ref([]);
+    public organizationStore = useOrganizationStore();
     public view: Ref<string> = this.ref(AppConst.VIEW.columnView);
+
+    public filtersJobs: Ref<Array<JobModel>> = this.computed(() => this.organizationStore.jobs);
 
     public constructor() {
       super();
+
+      this.onBeforeMount(() => {
+        this.organizationStore.fetchAllJobs();
+      });
     }
 
     public onToggleButton = () => {
       this.router.push(PathConst.adminAddJob);
+    };
+
+    public onClickCard = (id: number) => {
+      this.router.push({ ...PathConst.adminJobDetail, params: { jobId: id } });
+    };
+
+    public onToggleDeleteButton = (id: number) => {
+      this.organizationStore.fetchDeleteJob(id);
     };
 
     public onToggleColumnView = () => {

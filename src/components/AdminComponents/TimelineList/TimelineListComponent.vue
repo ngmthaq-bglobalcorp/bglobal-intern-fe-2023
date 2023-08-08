@@ -27,9 +27,14 @@
             />
           </div>
           <div class="content-desc">
-            <button class="edit-btn icon-btn" @click.prevent="">
-              <i class="bi bi-pencil-square"></i>
-            </button>
+            <div class="event-button">
+              <button class="edit-btn icon-btn" @click.prevent="app.onToggleEditButton(data.id)">
+                <i class="bi bi-pencil-square"></i>
+              </button>
+              <button class="delete-btn icon-btn" @click.prevent="app.onToggleDeleteButton(data.id)">
+                <i class="bi bi-trash3-fill"></i>
+              </button>
+            </div>
             <span class="event-category">{{ data.category }}</span>
             <router-link to="" class="event-link link-default">
               <h2 class="event-title">{{ data.title }}</h2>
@@ -70,10 +75,11 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { AppConst } from "@/const/app.const";
-import type { TimelineListProps } from "./TimelineListComponent";
+import type { TimelineListEmits, TimelineListProps } from "./TimelineListComponent";
 import type { Ref } from "vue";
 
 const props = defineProps<TimelineListProps>();
+const emit = defineEmits<TimelineListEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -89,6 +95,14 @@ const app = defineClassComponent(
     public constructor() {
       super();
     }
+
+    public onToggleEditButton = (id: number) => {
+      emit("onToggleEditButton", id);
+    };
+
+    public onToggleDeleteButton = (id: number) => {
+      emit("onToggleDeleteButton", id);
+    };
 
     public onToggleMoreData = () => {
       if (this.limit.value < props.data.length) {
@@ -170,18 +184,14 @@ const app = defineClassComponent(
           width: 100%;
 
           &:hover {
-            & .edit-btn {
+            & .event-button {
               display: block;
               opacity: 0.7;
               visibility: visible;
-
-              &:hover {
-                opacity: 1;
-              }
             }
           }
 
-          & .edit-btn {
+          & .event-button {
             position: absolute;
             top: 0;
             right: 0;
@@ -189,6 +199,13 @@ const app = defineClassComponent(
             display: none;
             opacity: 0;
             visibility: hidden;
+
+            & .edit-btn,
+            & .delete-btn {
+              &:hover {
+                opacity: 1;
+              }
+            }
           }
 
           & .event-category {

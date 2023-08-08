@@ -13,12 +13,14 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import DetailPageHeader from "@/components/AdminComponents/DetailPageHeader/DetailPageHeaderComponent.vue";
 import JobDetailCard from "@/components/AdminComponents/JobDetailCard/JobDetailCardComponent.vue";
 import UserList from "@/components/AdminComponents/UserList/UserListComponent.vue";
+import { useOrganizationStore } from "@/stores/organization.store";
 import type { Ref } from "vue";
 import type { JobModel } from "@/models/job.model";
 import type { SeekerModel } from "@/models/seeker.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public organizationStore = useOrganizationStore();
     public job: Ref<JobModel> = this.ref({
       id: 3,
       mainImageUrl:
@@ -29,7 +31,7 @@ const app = defineClassComponent(
       jobTitleCatchPhrase: "Rất catchy",
       location: "Thừa Thiên Huế",
       salary: 10,
-      workingHour: [
+      workingHours: [
         {
           id: 17,
           hours: 8,
@@ -138,176 +140,7 @@ const app = defineClassComponent(
       { field: "name", headerName: "name" },
       { field: "like", headerName: "like" },
     ]);
-    public seekers: Ref<Array<SeekerModel>> = this.ref([
-      {
-        id: 1,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 2,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 3,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 4,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 5,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 6,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 7,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 8,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "lock",
-        isSelected: false,
-      },
-      {
-        id: 9,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 10,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 11,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 12,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 13,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 14,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 15,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 16,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 17,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 18,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "lock",
-        isSelected: false,
-      },
-      {
-        id: 19,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 20,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-      {
-        id: 21,
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phone: "0912345678",
-        status: "active",
-        isSelected: false,
-      },
-    ]);
+    public seekers: Ref<Array<SeekerModel>> = this.ref([]);
 
     public constructor() {
       super();

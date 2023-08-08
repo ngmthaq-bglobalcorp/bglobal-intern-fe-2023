@@ -140,10 +140,10 @@ const app = defineClassComponent(
         children: [
           {
             id: 1,
-            name: "workingHour",
+            name: "workingHours",
             type: "text",
-            label: this.t(`app.workingHour`),
-            placeholder: this.t(`app.workingHour`),
+            label: this.t(`app.workingHours`),
+            placeholder: this.t(`app.workingHours`),
             required: true,
             multiple: false,
             model: "",

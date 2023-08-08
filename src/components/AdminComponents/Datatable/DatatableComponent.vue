@@ -72,7 +72,7 @@
               </div>
             </td>
             <td class="sorting-1" v-for="column in props.columns" :key="column.field">
-              <template v-if="column.field === 'name'">
+              <template v-if="column.field === 'username'">
                 <router-link to="" class="item-name link-default">
                   <span>{{ data[column.field] }}</span>
                 </router-link>
@@ -87,6 +87,11 @@
                     ]"
                   ></span>
                   {{ data[column.field] }}
+                </div>
+              </template>
+              <template v-else-if="column.field === 'birthday'">
+                <div>
+                  {{ DatetimeHelper.getShortDate(data[column.field]) }}
                 </div>
               </template>
               <template v-else>
@@ -170,8 +175,9 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { AppConst } from "@/const/app.const";
-import type { Ref } from "vue";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
 import type { DatatableEmits, DatatableProps } from "./DatatableComponent";
+import type { Ref } from "vue";
 
 const props = defineProps<DatatableProps>();
 const emit = defineEmits<DatatableEmits>();
@@ -198,9 +204,6 @@ const app = defineClassComponent(
           index < this.pageNumber.value * this.pageSize.value
         );
       });
-      if (pageFilter.length === 0) {
-        this.pageNumber.value--;
-      }
       return pageFilter;
     });
 

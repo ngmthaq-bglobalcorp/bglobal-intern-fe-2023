@@ -48,7 +48,7 @@
 
       <!-- Content -->
       <div class="profile-content">
-        <ProfileHeader :isUpdate="true" :editable="true" />
+        <ProfileHeader :profile="app.profile.value" :isUpdate="true" :editable="true" />
         <ProfileUpdate :profile="app.profile.value" />
       </div>
       <!-- End Content -->
@@ -64,27 +64,30 @@ import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHea
 import ProfileUpdate from "@/components/AdminComponents/ProfileUpdate/ProfileUpdateComponent.vue";
 import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
-import type { OrganizationModel } from "@/models/organization.model";
+import { OrganizationModel } from "@/models/organization.model";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public profile: Ref<OrganizationModel> = this.ref({
-      id: 1,
-      username: "minhduc",
-      name: "Minh Duc",
-      email: "minhduc.mll@gmail.com",
-      phone_number: "0912345678",
-      webside: "",
-      adress: "Ha Noi",
-      introduction:
-        "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
-      organizationType: AppConst.ORGANIZATION_TYPE.typeB,
-      status: AppConst.STATUS.active,
-      createdAt: new Date("2023-07-01"),
-      updatedAt: new Date("2023-07-01"),
-      isSelected: false,
-    });
+    public profile: Ref<OrganizationModel> = this.ref(
+      new OrganizationModel({
+        id: 1,
+        username: "minhduc",
+        name: "Minh Duc",
+        email: "minhduc.mll@gmail.com",
+        phoneNumber: "0912345678",
+        avatar: "",
+        webside: "",
+        address: "Ha Noi",
+        introduction:
+          "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
+        organizationType: AppConst.ORGANIZATION_TYPE.typeB,
+        status: AppConst.STATUS.active,
+        createdAt: new Date("2023-07-01"),
+        updatedAt: new Date("2023-07-01"),
+        isSelected: false,
+      }),
+    );
 
     public constructor() {
       super();

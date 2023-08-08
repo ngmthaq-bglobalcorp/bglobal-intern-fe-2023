@@ -1,7 +1,12 @@
 <template>
   <AdminLayout>
     <div class="user-profile-container">
-      <ProfileHeader :isUpdate="false" :editable="true" @on-toggle-update-profile="app.onToggleUpdateProfile" />
+      <ProfileHeader
+        :profile="app.profile"
+        :isUpdate="false"
+        :editable="true"
+        @on-toggle-update-profile="app.onToggleUpdateProfile"
+      />
       <ProfileCard :profile="app.profile" />
     </div>
   </AdminLayout>
@@ -14,26 +19,30 @@ import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHea
 import ProfileCard from "@/components/AdminComponents/ProfileCard/ProfileCardComponent.vue";
 import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
-import type { OrganizationModel } from "@/models/organization.model";
+import { OrganizationModel } from "@/models/organization.model";
+import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public profile: OrganizationModel = {
-      id: 1,
-      username: "minhduc",
-      name: "Minh Duc",
-      email: "minhduc.mll@gmail.com",
-      phone_number: "0912345678",
-      webside: "",
-      adress: "Ha Noi",
-      introduction:
-        "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
-      organizationType: AppConst.ORGANIZATION_TYPE.typeB,
-      status: AppConst.STATUS.active,
-      createdAt: new Date("2023-07-01"),
-      updatedAt: new Date("2023-07-01"),
-      isSelected: false,
-    };
+    public profile: Ref<OrganizationModel> = this.ref(
+      new OrganizationModel({
+        id: 1,
+        username: "minhduc",
+        name: "Minh Duc",
+        email: "minhduc.mll@gmail.com",
+        phoneNumber: "0912345678",
+        avatar: "",
+        webside: "",
+        address: "Ha Noi",
+        introduction:
+          "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
+        organizationType: AppConst.ORGANIZATION_TYPE.typeB,
+        status: AppConst.STATUS.active,
+        createdAt: new Date("2023-07-01"),
+        updatedAt: new Date("2023-07-01"),
+        isSelected: false,
+      }),
+    );
 
     public constructor() {
       super();

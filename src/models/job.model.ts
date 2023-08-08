@@ -8,7 +8,7 @@ export class JobModel extends BaseModel implements IJob {
   public jobTitleCatchPhrase: string;
   public location: string;
   public salary: number;
-  public workingHour: Array<any>;
+  public workingHours: Array<any>;
   public searchLabels: Array<string>;
   public webApplication: string;
   public catchText: string;
@@ -35,7 +35,7 @@ export class JobModel extends BaseModel implements IJob {
     this.jobTitleCatchPhrase = data.jobTitleCatchPhrase || "";
     this.location = data.location || "";
     this.salary = data.salary || 0;
-    this.workingHour = data.workingHour || [];
+    this.workingHours = data.workingHours || [];
     this.searchLabels = data.searchLabels || [];
     this.webApplication = data.webApplication || "";
     this.catchText = data.catchText || "";
@@ -63,7 +63,7 @@ export interface IJob {
   jobTitleCatchPhrase: string;
   location: string;
   salary: number;
-  workingHour: Array<any>;
+  workingHours: Array<any>;
   searchLabels: Array<string>;
   webApplication: string;
   catchText: string;
