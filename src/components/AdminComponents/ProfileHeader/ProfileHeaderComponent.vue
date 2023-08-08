@@ -6,7 +6,7 @@
         <img class="cover-img" src="@/assets/img/default-cover.jpg" alt="Cover" />
 
         <!-- Custom File Cover -->
-        <label class="cover-uploader-label" for="coverUploader" v-if="app.isEditCover && props.editable">
+        <label class="cover-uploader-label" for="coverUploader" v-if="app.isEditCover.value && props.editable">
           <input type="file" class="cover-uploader-input" id="coverUploader" />
 
           <div class="cover-uploader-button small-btn">
@@ -24,7 +24,11 @@
       <div class="profile-avatar-wrapper">
         <!-- Custom File Avatar -->
         <label class="avatar-uploader-label" for="avatarUploader">
-          <img class="avatar-img" :src="app.profile.value.avatar" alt="Avatar" />
+          <AvatarComponent
+            :avatarImage="app.profile.value.avatar"
+            avatarAlt="Avatar"
+            :avatarInit="app.profile.value.name || app.profile.value.username"
+          />
 
           <template v-if="props.editable">
             <input type="file" class="avatar-uploader-input" id="avatarUploader" />
@@ -45,12 +49,12 @@
 
       <!-- List -->
       <ul class="list-header list">
-        <li class="list-header-item">
+        <li class="list-header-item" v-if="app.profile.value.email">
           <i class="bi bi-envelope icon"></i>
           <span>{{ app.profile.value.email }}</span>
         </li>
 
-        <li class="list-header-item">
+        <li class="list-header-item" v-if="app.profile.value.phoneNumber">
           <i class="bi bi-phone icon"></i>
           <span>{{ app.profile.value.phoneNumber }}</span>
         </li>
@@ -85,6 +89,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import AvatarComponent from "../Avatar/AvatarComponent.vue";
 import { PathConst } from "@/const/path.const";
 import type { ProfileHeaderEmits, ProfileHeaderProps } from "./ProfileHeaderComponent";
 import type { Ref } from "vue";
@@ -94,7 +99,6 @@ const emit = defineEmits<ProfileHeaderEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public profile: Ref<any> = this.computed(() => props.profile);
     public isEditCover: Ref<boolean> = this.ref(false);
     public navList: Ref<Array<any>> = this.ref([
       {
@@ -110,6 +114,7 @@ const app = defineClassComponent(
         disabled: true,
       },
     ]);
+    public profile: Ref<any> = this.computed(() => props.profile);
 
     public constructor() {
       super();
@@ -140,6 +145,8 @@ const app = defineClassComponent(
 
     & .profile-cover-wrapper {
       position: absolute;
+      width: 100%;
+      height: 10rem;
       top: 0;
       right: 0;
       left: 0;
@@ -209,6 +216,7 @@ const app = defineClassComponent(
 
       & .avatar-uploader-label {
         position: absolute;
+        width: 100%;
         top: 0;
         left: 0;
         bottom: 0;

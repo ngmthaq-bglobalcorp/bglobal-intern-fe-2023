@@ -49,7 +49,14 @@
       <!-- Content -->
       <div class="profile-content">
         <ProfileHeader :profile="app.profile.value" :isUpdate="true" :editable="true" />
-        <ProfileUpdate :profile="app.profile.value" />
+        <ProfileUpdate
+          :profile="app.profile.value"
+          @on-update-infomation="app.onUpdateInfomation"
+          @on-update-email="app.onUpdateEmail"
+          @on-update-password="app.onUpdatePassword"
+          @on-update-language="app.onUpdateLanguage"
+          @on-toggle-delete-account="app.onToggleDeleteAccount"
+        />
       </div>
       <!-- End Content -->
     </div>
@@ -62,39 +69,49 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHeaderComponent.vue";
 import ProfileUpdate from "@/components/AdminComponents/ProfileUpdate/ProfileUpdateComponent.vue";
-import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
-import { OrganizationModel } from "@/models/organization.model";
+import { useOrganizationStore } from "@/stores/organization.store";
 import type { Ref } from "vue";
+import type { OrganizationModel } from "@/models/organization.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public profile: Ref<OrganizationModel> = this.ref(
-      new OrganizationModel({
-        id: 1,
-        username: "minhduc",
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phoneNumber: "0912345678",
-        avatar: "",
-        webside: "",
-        address: "Ha Noi",
-        introduction:
-          "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
-        organizationType: AppConst.ORGANIZATION_TYPE.typeB,
-        status: AppConst.STATUS.active,
-        createdAt: new Date("2023-07-01"),
-        updatedAt: new Date("2023-07-01"),
-        isSelected: false,
-      }),
-    );
+    public organizationStore = useOrganizationStore();
+    public profile: Ref<OrganizationModel> = this.computed(() => this.organizationStore.profile);
 
     public constructor() {
       super();
+
+      this.onBeforeMount(() => {
+        this.organizationStore.fetchProfile();
+      });
     }
 
     public onToggleButton = () => {
       this.router.push(PathConst.adminUserProfile);
+    };
+
+    public onUpdateInfomation = (data: any) => {
+      console.log(data);
+      this.organizationStore.fetchUpdateProfile(data);
+    };
+
+    public onUpdateEmail = (email: string) => {
+      console.log(email);
+      this.organizationStore.fetchUpdateEmail(email);
+    };
+
+    public onUpdatePassword = (data: any) => {
+      console.log(data);
+      this.organizationStore.fetchUpdatePassword(data);
+    };
+
+    public onUpdateLanguage = (language: string) => {
+      this.i18n.locale.value = language;
+    };
+
+    public onToggleDeleteAccount = () => {
+      console.log("delete");
     };
   },
 );

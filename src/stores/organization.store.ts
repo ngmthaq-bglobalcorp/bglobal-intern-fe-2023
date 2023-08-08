@@ -20,9 +20,62 @@ export const useOrganizationStore = defineClassStore(
       try {
         const res = await api.get(ApiConst.organizationsEndpoints.getOrganizationProfile);
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          this.profile.value = data;
-          console.log(this.profile.value);
+          const data: any = await res.json();
+          console.log(data);
+          if (data) {
+            const profile = {
+              id: data.id,
+              userId: data.user.id,
+              username: data.user.username,
+              name: data.name,
+              email: data.email,
+              phoneNumber: data.phoneNumber,
+              avatar: data.photo,
+              webside: data.webside,
+              address: data.address,
+              introduction: data.introduction,
+              organizationType: data.organizationType,
+              status: data.user.status,
+            };
+            this.profile.value = new OrganizationModel(profile);
+            console.log(this.profile.value);
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    public fetchUpdateProfile = async (profile: any) => {
+      try {
+        const res = await api.put(ApiConst.organizationsEndpoints.updateOrganizationProfile, JSON.stringify(profile));
+        if (res.status === ApiConst.status.ok) {
+          const data: any = await res.json();
+          console.log(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    public fetchUpdateEmail = async (email: string) => {
+      try {
+        const res = await api.put(ApiConst.authEndpoints.changeEmail, JSON.stringify(email));
+        if (res.status === ApiConst.status.ok) {
+          const data: any = await res.json();
+          console.log(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    public fetchUpdatePassword = async (password: any) => {
+      try {
+        const res = await api.post(ApiConst.authEndpoints.changePassword, JSON.stringify(password));
+        if (res.status === ApiConst.status.ok) {
+          const data: any = await res.json();
+          console.log(data);
         }
       } catch (error) {
         console.log(error);
@@ -78,34 +131,36 @@ export const useOrganizationStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
           console.log(data);
-          const job = {
-            id: data.id,
-            mainImageUrl: data.mainImage.url,
-            mainImageDesc: data.mainImage.description,
-            title: data.title,
-            jobTitleCatchPhrase: data.jobTitleCatchPhrase,
-            location: data.location.city,
-            salary: data.salary.monthly,
-            workingHours: data.workingHours,
-            searchLabels: data.searchLabels.map((value: any) => value.name),
-            webApplication: data.webApplication.url,
-            catchText: data.catchText,
-            leadText: data.leadText,
-            subImages: data.subImages,
-            properties: data.properties,
-            postScripts: data.postScripts,
-            companySurvey: data.displayed && data.companySurvey.contents,
-            barometer: data.displayed && data.barometer.contents,
-            photoGallery: data.photoGallery.contents,
-            interview: data.displayed && data.interview.contents,
-            productCode: data.productCode,
-            opensAt: new Date(data.opensAt),
-            expiresAt: new Date(data.expiresAt),
-            updatedAt: new Date(data.updatedAt),
-            createdAt: new Date(data.createdAt),
-          };
-          this.job.value = new JobModel(job);
-          console.log(this.job.value);
+          if (data) {
+            const job = {
+              id: data.id,
+              mainImageUrl: data.mainImage.url,
+              mainImageDesc: data.mainImage.description,
+              title: data.title,
+              jobTitleCatchPhrase: data.jobTitleCatchPhrase,
+              location: data.location.city,
+              salary: data.salary.monthly,
+              workingHours: data.workingHours,
+              searchLabels: data.searchLabels.map((value: any) => value.name),
+              webApplication: data.webApplication.url,
+              catchText: data.catchText,
+              leadText: data.leadText,
+              subImages: data.subImages,
+              properties: data.properties,
+              postScripts: data.postScripts,
+              companySurvey: data.displayed && data.companySurvey.contents,
+              barometer: data.displayed && data.barometer.contents,
+              photoGallery: data.photoGallery.contents,
+              interview: data.displayed && data.interview.contents,
+              productCode: data.productCode,
+              opensAt: new Date(data.opensAt),
+              expiresAt: new Date(data.expiresAt),
+              updatedAt: new Date(data.updatedAt),
+              createdAt: new Date(data.createdAt),
+            };
+            this.job.value = new JobModel(job);
+            console.log(this.job.value);
+          }
         }
       } catch (error) {
         console.log(error);

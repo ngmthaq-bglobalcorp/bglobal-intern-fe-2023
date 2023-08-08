@@ -1,10 +1,10 @@
 <template>
-  <div class="job-card-container" @click="app.onClickCard(app.job.value.id)">
+  <div class="job-card-container">
     <button class="delete-btn icon-btn" @click="app.onToggleDeleteButton(app.job.value.id)">
       <i class="bi bi-trash icon"></i>
     </button>
     <!-- Card -->
-    <div class="job-wrapper">
+    <div class="job-wrapper" @click="app.onClickCard(app.job.value.id)">
       <div class="job-header">
         <img :src="app.job.value.mainImageUrl" :alt="app.job.value.mainImageDesc" class="main-img" />
         <h2 class="job-title">{{ app.job.value.title }}</h2>

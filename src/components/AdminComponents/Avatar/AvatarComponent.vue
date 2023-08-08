@@ -27,14 +27,16 @@ const app = defineClassComponent(
 @import "@/assets/scss/admin";
 
 .avatar-container {
+  width: 100%;
+  height: 100%;
   -ms-flex-negative: 0 !important;
   flex-shrink: 0 !important;
 
   & .avatar-wrapper {
     position: relative;
     display: inline-flex;
-    width: 2.625rem;
-    height: 2.625rem;
+    width: 100%;
+    height: 100%;
     background-color: $light;
     border-radius: 50%;
 

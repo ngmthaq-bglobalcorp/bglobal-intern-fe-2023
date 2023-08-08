@@ -24,7 +24,7 @@
                 name="name"
                 id="organizationName"
                 :placeholder="app.t(`app.organizationName`)"
-                v-model="app.organizationName.value"
+                v-model="app.name.value"
                 @focus="app.focusName"
               />
 
@@ -47,7 +47,7 @@
                 name="name"
                 id="organizationEmail"
                 placeholder="Email@organization.com"
-                v-model="app.organizationEmail.value"
+                v-model="app.email.value"
                 readonly
               />
 
@@ -182,7 +182,7 @@
       <!-- Body -->
       <div class="custom-body">
         <div class="card-text">
-          {{ app.t(`app.currentEmail`) }}<span class="font-weight-bold">{{ app.organizationEmail.value }}</span>
+          {{ app.t(`app.currentEmail`) }}<span class="font-weight-bold">{{ app.email.value }}</span>
         </div>
 
         <!-- Form -->
@@ -410,25 +410,19 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import { AppConst } from "@/const/app.const";
 import { LangConst } from "@/const/lang.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
-import type { ProfileUpdateProps } from "./ProfileUpdateComponent";
+import type { ProfileUpdateEmits, ProfileUpdateProps } from "./ProfileUpdateComponent";
 import type { Ref } from "vue";
 import type { OrganizationModel } from "@/models/organization.model";
 
 const props = defineProps<ProfileUpdateProps>();
+const emits = defineEmits<ProfileUpdateEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public profile: Ref<OrganizationModel> = this.computed(() => props.profile);
     public addressArray = AppConst.CITY;
     public typeArray: Ref<Array<string>> = this.ref(Object.values(AppConst.ORGANIZATION_TYPE));
     public requirementsIndexArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.requirements`)));
-    public profile: Ref<OrganizationModel> = this.ref(props.profile);
-    public organizationName: Ref<string> = this.ref(this.profile.value.name);
-    public organizationEmail: Ref<string> = this.ref(this.profile.value.email);
-    public phoneNumber: Ref<string> = this.ref(this.profile.value.phoneNumber);
-    public webside: Ref<string> = this.ref(this.profile.value.webside);
-    public address: Ref<string> = this.ref(this.profile.value.address);
-    public introduction: Ref<string> = this.ref(this.profile.value.introduction);
-    public organizationType: Ref<string> = this.ref(this.profile.value.organizationType);
     public newEmail: Ref<string> = this.ref("");
     public currentPassword: Ref<string> = this.ref("");
     public newPassword: Ref<string> = this.ref("");
@@ -442,9 +436,29 @@ const app = defineClassComponent(
     public errorConfirmNewPassword: Ref<string> = this.ref("");
     public language: Ref<string> = this.ref(this.i18n.locale.value);
     public isConfirmDelete: Ref<boolean> = this.ref(false);
+    public name: Ref<string> = this.ref(this.profile.value.name);
+    public email: Ref<string> = this.ref(this.profile.value.email);
+    public phoneNumber: Ref<string> = this.ref(this.profile.value.phoneNumber);
+    public webside: Ref<string> = this.ref(this.profile.value.webside);
+    public address: Ref<string> = this.ref(this.profile.value.address);
+    public introduction: Ref<string> = this.ref(this.profile.value.introduction);
+    public organizationType: Ref<string> = this.ref(this.profile.value.organizationType);
 
     public constructor() {
       super();
+
+      this.watch(
+        () => this.profile.value,
+        (profile) => {
+          this.name.value = profile.name;
+          this.email.value = profile.email;
+          this.phoneNumber.value = profile.phoneNumber;
+          this.webside.value = profile.webside;
+          this.address.value = profile.address;
+          this.introduction.value = profile.introduction;
+          this.organizationType.value = profile.organizationType;
+        },
+      );
     }
 
     public onSelectAccountType = (accountType: string) => {
@@ -452,12 +466,12 @@ const app = defineClassComponent(
     };
 
     public onUpdateInfomation = () => {
-      if (!this.organizationName.value) {
+      if (!this.name.value) {
         this.errorName.value = this.t(`message.errorName`);
       } else {
         this.errorName.value = "";
       }
-      if (!this.organizationEmail.value || !PrimitiveHelper.isValidEmail(this.organizationEmail.value)) {
+      if (!this.email.value || !PrimitiveHelper.isValidEmail(this.email.value)) {
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorEmail.value = "";
@@ -467,13 +481,16 @@ const app = defineClassComponent(
       } else {
         this.errorPhoneNumber.value = "";
       }
-      console.log(this.organizationName.value);
-      console.log(this.organizationEmail.value);
-      console.log(this.phoneNumber.value);
-      console.log(this.webside.value);
-      console.log(this.address.value);
-      console.log(this.introduction.value);
-      console.log(this.organizationType.value);
+      const data = {
+        name: this.name.value,
+        email: this.email.value,
+        phoneNumber: this.phoneNumber.value,
+        webside: this.webside.value,
+        address: this.address.value,
+        introduction: this.introduction.value,
+        organizationType: this.organizationType.value,
+      };
+      emits("onUpdateInfomation", data);
     };
 
     public onUpdateEmail = () => {
@@ -482,7 +499,7 @@ const app = defineClassComponent(
       } else {
         this.errorNewEmail.value = "";
       }
-      console.log(this.newEmail.value);
+      emits("onUpdateEmail", this.newEmail.value);
     };
 
     public onUpdatePassword = () => {
@@ -503,31 +520,34 @@ const app = defineClassComponent(
       } else {
         this.errorConfirmNewPassword.value = "";
       }
-      console.log(this.currentPassword.value);
-      console.log(this.newPassword.value);
-      console.log(this.confirmNewPassword.value);
+      const data = {
+        currentPassword: this.currentPassword.value,
+        newPassword: this.newPassword.value,
+      };
+      emits("onUpdatePassword", data);
     };
 
     public onUpdateLanguage = () => {
-      this.i18n.locale.value = this.language.value;
-      console.log(this.t(`lang`));
+      emits("onUpdateLanguage", this.language.value);
     };
 
     public onToggleDeleteAccount = () => {
-      console.log(this.isConfirmDelete.value);
+      if (this.isConfirmDelete.value) {
+        emits("onToggleDeleteAccount");
+      }
     };
 
     public focusName = () => {
       if (this.errorName.value) {
         this.errorName.value = "";
-        this.organizationName.value = "";
+        this.name.value = "";
       }
     };
 
     public focusEmail = () => {
       if (this.errorEmail.value) {
         this.errorEmail.value = "";
-        this.organizationEmail.value = "";
+        this.email.value = "";
       }
     };
 

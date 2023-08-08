@@ -45,7 +45,7 @@ export class PrimitiveHelper {
   };
 
   public static isValidPhoneNumber = (phone: string) => {
-    const expression: RegExp = /^(0[2-9]|84[2-9]|\+84[2-9])(\d{8}|\d{9})$/;
+    const expression: RegExp = /^((0[2-9]|84[2-9]|\+84[2-9])(\d{8}|\d{9})|1[8-9]00\d{4})$/;
     const result: boolean = expression.test(phone);
     return result;
   };

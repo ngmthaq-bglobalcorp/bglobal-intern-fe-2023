@@ -4,8 +4,8 @@ import { BaseModel } from "./base.model";
 export class SeekerModel extends BaseModel implements ISeeker {
   public id: number;
   public userId: number;
-  public name: string;
   public username: string;
+  public name: string;
   public email: string;
   public phoneNumber: string;
   public avatar: string;
@@ -26,8 +26,8 @@ export class SeekerModel extends BaseModel implements ISeeker {
     super();
     this.id = data.id || -1;
     this.userId = data.userId || -1;
-    this.name = data.name || "";
     this.username = data.username || "";
+    this.name = data.name || "";
     this.email = data.email || "";
     this.phoneNumber = data.phoneNumber || "";
     this.avatar = data.avatar || "";
