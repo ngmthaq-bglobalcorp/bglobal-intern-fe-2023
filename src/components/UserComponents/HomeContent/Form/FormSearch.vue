@@ -150,7 +150,9 @@
         type="submit"
         form="homepage_search_form_id"
       >
-        {{ app.t("jobsApp.form.applicable.result") }}
+        <RouterLink to="/user/joblist" class="item-link">
+          {{ app.t("jobsApp.form.applicable.result") }}
+        </RouterLink>
       </button>
     </div>
   </form>
@@ -362,6 +364,10 @@ const app = defineClassComponent(
       box-shadow: 0px 4px 8px rgba(157, 6, 95, 0.3);
       border-radius: 30px;
       border: none;
+      & .item-link {
+        text-decoration: none;
+        color: #fff;
+      }
     }
     & .view-result:disabled {
       color: #666666;

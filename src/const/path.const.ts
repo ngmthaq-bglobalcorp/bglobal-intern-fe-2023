@@ -11,6 +11,7 @@ import UpdateProfileViewVue from "@/views/AdminViews/UpdateProfile/UpdateProfile
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
 import SignUp from "@/views/UserViews/Signup/SignUp.vue";
 import JobList from "@/views/UserViews/JobList/JobList.vue";
+import HistoryViewVue from "@/views/UserViews/History/HistoryView.vue";
 
 export class PathConst {
   public static adminSignup: Route = {
@@ -110,12 +111,20 @@ export class PathConst {
       title: "title.user.signup",
     },
   };
-  public static jobList: Route = {
+  public static userJobList: Route = {
     path: "/user/joblist",
     name: "JobList",
     component: JobList,
     meta: {
       title: "title.user.joblist",
+    },
+  };
+  public static userHistory: Route = {
+    path: "/user/history",
+    name: "History",
+    component: HistoryViewVue,
+    meta: {
+      title: "title.user.history",
     },
   };
 }

@@ -6,7 +6,8 @@
     "user": {
       "home": "Homepage",
       "signup": "Sign Up",
-      "joblist": "Job list"
+      "joblist": "Job list",
+      "history": "History"
     },
     "admin": {
       "signup": "Sign Up",
