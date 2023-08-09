@@ -9,7 +9,7 @@
     <div class="custom-body">
       <!-- Form -->
       <form action="">
-        <template v-for="group in props.input" :key="group.id">
+        <template v-for="group in app.input.value" :key="group.id">
           <!-- Form Group -->
           <div class="form-group-wrapper" v-if="group.type === 'group'">
             <div class="form-group" v-for="input in group.children" :key="input.id">
@@ -234,12 +234,15 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import type { FormDataEmits, FormDataProps } from "./FormDataComponent";
+import type { Ref } from "vue";
 
 const props = defineProps<FormDataProps>();
 const emit = defineEmits<FormDataEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public input: Ref<any> = this.ref(props.input);
+
     public constructor() {
       super();
     }
@@ -299,7 +302,7 @@ const app = defineClassComponent(
     public onSubmitForm = () => {
       let data: any = {};
       let isValidInput = true;
-      props.input.map((input: any) => {
+      app.input.value.map((input: any) => {
         input.children.map((value: any) => {
           if (value.required && !value.model) {
             value.error = this.t(`app.notBlank`, { value: value.label });
