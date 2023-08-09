@@ -90,12 +90,12 @@
                   <!-- Custom Select -->
                   <select :class="['input-form', { 'is-invalid': input.error }]" :id="input.name" v-model="input.model">
                     <option
-                      :value="option.value"
-                      :selected="option.value === input.model"
+                      :value="option.id"
+                      :selected="option.id === input.model"
                       v-for="option in input.children"
                       :key="option.id"
                     >
-                      {{ option.text }}
+                      {{ option.name }}
                     </option>
                   </select>
 
@@ -115,14 +115,15 @@
                 <div class="custom-input-group">
                   <!-- Custom Select Multiple -->
                   <ul class="input-multiple list">
-                    <li
-                      :class="['input-item', { active: input.model.includes(child.value) }]"
-                      v-for="child in input.children"
-                      :key="child.id"
-                      @click.prevent="app.onToggleSelectMultiple(input, child.value)"
-                    >
-                      {{ child.text }}
-                    </li>
+                    <template v-for="child in input.children" :key="child.id">
+                      <li
+                        :class="['input-item', { active: input.model.includes(child.id) }]"
+                        v-if="child.isEnabled"
+                        @click.prevent="app.onToggleSelectMultiple(input, child.id)"
+                      >
+                        {{ child.name }}
+                      </li>
+                    </template>
                   </ul>
                   <!-- End Custom Select Multiple -->
                 </div>
@@ -165,6 +166,8 @@
                     <i class="bi bi-plus icon"></i>
                     {{ app.t(`app.add`, { value: `` }) }}
                   </button>
+
+                  <div class="invalid-feedback" v-if="input.error">{{ input.error }}</div>
                   <!-- End Custom Input -->
                 </div>
 
@@ -245,6 +248,13 @@ const app = defineClassComponent(
 
     public constructor() {
       super();
+
+      this.watch(
+        () => props.input,
+        (newInput) => {
+          this.input.value = newInput;
+        },
+      );
     }
 
     public onChangeImages = (e: any, input: any) => {

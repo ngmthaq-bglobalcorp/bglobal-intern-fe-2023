@@ -97,7 +97,7 @@ export class PathConst {
   };
 
   public static adminUpdateNews: Route = {
-    path: "/admin/news/:newsId",
+    path: "/admin/news/update/:newsId",
     name: "adminUpdateNews",
     component: AddNewsViewVue,
     props: true,
@@ -134,6 +134,17 @@ export class PathConst {
     component: AddJobViewVue,
     meta: {
       title: "title.admin.addJob",
+      auth: AppConst.ROLE.organization,
+    },
+  };
+
+  public static adminUpdateJob: Route = {
+    path: "/admin/jobs/update/:jobId",
+    name: "adminUpdateJob",
+    component: AddJobViewVue,
+    props: true,
+    meta: {
+      title: "title.admin.updateJob",
       auth: AppConst.ROLE.organization,
     },
   };

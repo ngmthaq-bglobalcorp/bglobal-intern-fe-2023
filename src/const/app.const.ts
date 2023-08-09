@@ -35,18 +35,4 @@ export class AppConst {
   };
 
   public static CITY = ["Ha Noi", "Ho Chi Minh", "Hai Phong"];
-
-  public static SEARCH_LABEL = [
-    "facilisi",
-    "sed",
-    "viverra",
-    "ipsum",
-    "nunc",
-    "aliquet",
-    "bibendum",
-    "enim",
-    "facilisis",
-    "gravida",
-    "neque",
-  ];
 }

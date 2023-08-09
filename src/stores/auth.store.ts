@@ -44,7 +44,7 @@ export const useAuthStore = defineClassStore(
       }
     };
 
-    public fetchSignOut = async () => {
+    public fetchAdminSignOut = async () => {
       try {
         const res = await api.post(ApiConst.authEndpoints.logout);
         if (res.status === ApiConst.status.ok) {

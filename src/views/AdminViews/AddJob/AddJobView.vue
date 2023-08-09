@@ -22,34 +22,19 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import FormData from "@/components/AdminComponents/FormData/FormDataComponent.vue";
 import { PathConst } from "@/const/path.const";
-import { AppConst } from "@/const/app.const";
+import { useCommonStore } from "@/stores/common.store";
 import { useOrganizationStore } from "@/stores/organization.store";
+import type { AddJobProps } from "./AddJobView";
 import type { Ref } from "vue";
 
-const getLocation = () => {
-  return AppConst.CITY.map((value, index) => {
-    return {
-      id: index,
-      value: value,
-      text: value,
-    };
-  });
-};
-
-const getSearchLabel = () => {
-  return AppConst.SEARCH_LABEL.map((value, index) => {
-    return {
-      id: index,
-      value: value,
-      text: value,
-    };
-  });
-};
+const props = defineProps<AddJobProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public commonStore = useCommonStore();
     public organizationStore = useOrganizationStore();
-    public jobInputs: Ref<any> = this.ref([
+    public isUpdate: Ref<boolean> = this.computed(() => (props.jobId ? true : false));
+    public jobInputs: Ref<any> = this.computed(() => [
       {
         id: 1,
         type: "group",
@@ -113,9 +98,9 @@ const app = defineClassComponent(
             placeholder: this.t(`app.location`),
             required: true,
             multiple: false,
-            model: AppConst.CITY[0],
+            model: this.commonStore.locations[0]?.id,
             error: "",
-            children: getLocation(),
+            children: this.commonStore.locations,
           },
         ],
       },
@@ -143,13 +128,59 @@ const app = defineClassComponent(
           {
             id: 1,
             name: "workingHours",
-            type: "text",
+            type: "inputMultiple",
             label: this.t(`app.workingHours`),
             placeholder: this.t(`app.workingHours`),
             required: true,
             multiple: false,
             model: "",
             error: "",
+            children: [
+              {
+                id: 1,
+                name: "startTime",
+                type: "text",
+                label: this.t(`app.startTime`),
+                placeholder: this.t(`app.startTime`),
+                required: true,
+                multiple: false,
+                model: "",
+                error: "",
+              },
+              {
+                id: 2,
+                name: "endTime",
+                type: "text",
+                label: this.t(`app.endTime`),
+                placeholder: this.t(`app.endTime`),
+                required: true,
+                multiple: false,
+                model: "",
+                error: "",
+              },
+              {
+                id: 3,
+                name: "isFullTime",
+                type: "checkbox",
+                label: this.t(`app.isFullTime`),
+                placeholder: this.t(`app.isFullTime`),
+                required: false,
+                multiple: false,
+                model: "",
+                error: "",
+              },
+              {
+                id: 4,
+                name: "countHours",
+                type: "number",
+                label: this.t(`app.countHours`),
+                placeholder: this.t(`app.countHours`),
+                required: false,
+                multiple: false,
+                model: "",
+                error: "",
+              },
+            ],
           },
         ],
       },
@@ -167,7 +198,7 @@ const app = defineClassComponent(
             multiple: false,
             model: [],
             error: "",
-            children: getSearchLabel(),
+            children: this.commonStore.searchLabels,
           },
         ],
       },
@@ -342,6 +373,14 @@ const app = defineClassComponent(
 
     public constructor() {
       super();
+
+      this.onBeforeMount(async () => {
+        await this.commonStore.fetchAllLocations();
+        await this.commonStore.fetchAllSearchLabels();
+        if (this.isUpdate.value) {
+          this.organizationStore.fetchFindJobById(props.jobId);
+        }
+      });
     }
 
     public onToggleButton = () => {
@@ -350,9 +389,16 @@ const app = defineClassComponent(
 
     public onSubmitForm = async (job: any) => {
       console.log(job);
-      const isSuccess = await this.organizationStore.fetchCreateJob(job);
-      if (isSuccess) {
-        this.router.push(PathConst.adminJobsList);
+      if (this.isUpdate.value) {
+        const isSuccess = await this.organizationStore.fetchUpdateJob(props.jobId, job);
+        if (isSuccess) {
+          this.router.push(PathConst.adminJobsList);
+        }
+      } else {
+        const isSuccess = await this.organizationStore.fetchCreateJob(job);
+        if (isSuccess) {
+          this.router.push(PathConst.adminJobsList);
+        }
       }
     };
   },

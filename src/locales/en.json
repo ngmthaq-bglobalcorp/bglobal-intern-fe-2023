@@ -173,6 +173,10 @@
     "photoGallery": "Photo gallery",
     "interview": "Interview",
     "propertyTitle": "Property title",
-    "propertyBody": "Property body"
+    "propertyBody": "Property body",
+    "startTime": "Start time",
+    "endTime": "End time",
+    "isFullTime": "Is full time",
+    "countHours": "Count hours"
   }
 }

@@ -16,7 +16,7 @@ export class ApiConst {
     uploadImage: "/image/upload",
     uploadMultipleImages: "/image/uploads",
     getAllSearchLabel: "/tag-search",
-    getAllLocations: "/locations",
+    getAllLocations: "/Locations",
   };
 
   public static adminEndpoints = {
