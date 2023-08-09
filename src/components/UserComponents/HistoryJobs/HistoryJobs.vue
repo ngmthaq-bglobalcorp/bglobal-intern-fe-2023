@@ -1,4 +1,6 @@
-<template></template>
+<template>
+  <div>History</div>
+</template>
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
