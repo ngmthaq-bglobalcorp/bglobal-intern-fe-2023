@@ -91,19 +91,25 @@ const app = defineClassComponent(
       this.router.push(PathConst.adminUserProfile);
     };
 
-    public onUpdateInfomation = (data: any) => {
-      console.log(data);
-      this.organizationStore.fetchUpdateProfile(data);
+    public onUpdateInfomation = async (data: any) => {
+      const isSuccess = await this.organizationStore.fetchUpdateProfile(data);
+      if (isSuccess) {
+        console.log("Update profile");
+      }
     };
 
-    public onUpdateEmail = (email: string) => {
-      console.log(email);
-      this.organizationStore.fetchUpdateEmail(email);
+    public onUpdateEmail = async (email: string) => {
+      const isSuccess = await this.organizationStore.fetchUpdateEmail(email);
+      if (isSuccess) {
+        this.organizationStore.profile.email = email;
+      }
     };
 
-    public onUpdatePassword = (data: any) => {
-      console.log(data);
-      this.organizationStore.fetchUpdatePassword(data);
+    public onUpdatePassword = async (data: any) => {
+      const isSuccess = await this.organizationStore.fetchUpdatePassword(data);
+      if (isSuccess) {
+        console.log("Update profile");
+      }
     };
 
     public onUpdateLanguage = (language: string) => {

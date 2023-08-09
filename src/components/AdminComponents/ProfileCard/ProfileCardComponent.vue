@@ -55,9 +55,9 @@
             <i class="bi bi-phone icon"></i>
             {{ app.profile.value.phoneNumber }}
           </li>
-          <li class="card-item" v-if="app.profile.value.webside">
+          <li class="card-item" v-if="app.profile.value.website">
             <i class="bi bi-globe icon"></i>
-            {{ app.profile.value.webside }}
+            {{ app.profile.value.website }}
           </li>
           <li class="card-item" v-if="app.profile.value.address">
             <i class="bi bi-buildings icon"></i>

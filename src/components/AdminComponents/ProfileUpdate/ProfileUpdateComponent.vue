@@ -60,7 +60,6 @@
           <div class="form-group">
             <label class="input-label" for="organizationPhone">
               {{ app.t(`app.phoneNumber`) }}
-              <span class="input-label-secondary">*</span>
             </label>
 
             <div class="custom-input-group">
@@ -73,24 +72,22 @@
                 v-model="app.phoneNumber.value"
                 @focus="app.focusPhoneNumber"
               />
-
-              <div class="invalid-feedback" v-if="app.errorPhoneNumber.value">{{ app.errorPhoneNumber.value }}</div>
             </div>
           </div>
           <!-- End Form Group -->
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationWebside">{{ app.t(`app.webside`) }}</label>
+            <label class="input-label" for="organizationWebsite">{{ app.t(`app.website`) }}</label>
 
             <div class="custom-input-group">
               <input
                 type="text"
                 class="input-form"
-                name="webside"
-                id="organizationWebside"
-                :placeholder="app.t(`app.webside`)"
-                v-model="app.webside.value"
+                name="website"
+                id="organizationWebsite"
+                :placeholder="app.t(`app.website`)"
+                v-model="app.website.value"
               />
             </div>
           </div>
@@ -101,18 +98,14 @@
             <label class="input-label" for="organizationAddress">{{ app.t(`app.address`) }}</label>
 
             <div class="custom-input-group">
-              <!-- Select Address -->
-              <select class="input-form" id="organizationAddress" v-model="app.address.value">
-                <option
-                  :value="address"
-                  :selected="address === app.address.value"
-                  v-for="address in app.addressArray"
-                  :key="address"
-                >
-                  {{ address }}
-                </option>
-              </select>
-              <!-- End Select Address -->
+              <input
+                type="text"
+                class="input-form"
+                name="address"
+                id="organizationAddress"
+                :placeholder="app.t(`app.address`)"
+                v-model="app.address.value"
+              />
             </div>
           </div>
           <!-- End Form Group -->
@@ -193,7 +186,7 @@
 
             <div class="custom-input-group">
               <input
-                type="email"
+                type="text"
                 :class="['input-form', { 'is-invalid': app.errorNewEmail.value }]"
                 name="newEmail"
                 id="newOrganizationEmail"
@@ -420,7 +413,6 @@ const emits = defineEmits<ProfileUpdateEmits>();
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public profile: Ref<OrganizationModel> = this.computed(() => props.profile);
-    public addressArray = AppConst.CITY;
     public typeArray: Ref<Array<string>> = this.ref(Object.values(AppConst.ORGANIZATION_TYPE));
     public requirementsIndexArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.requirements`)));
     public newEmail: Ref<string> = this.ref("");
@@ -439,7 +431,7 @@ const app = defineClassComponent(
     public name: Ref<string> = this.ref(this.profile.value.name);
     public email: Ref<string> = this.ref(this.profile.value.email);
     public phoneNumber: Ref<string> = this.ref(this.profile.value.phoneNumber);
-    public webside: Ref<string> = this.ref(this.profile.value.webside);
+    public website: Ref<string> = this.ref(this.profile.value.website);
     public address: Ref<string> = this.ref(this.profile.value.address);
     public introduction: Ref<string> = this.ref(this.profile.value.introduction);
     public organizationType: Ref<string> = this.ref(this.profile.value.organizationType);
@@ -447,18 +439,15 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.watch(
-        () => this.profile.value,
-        (profile) => {
-          this.name.value = profile.name;
-          this.email.value = profile.email;
-          this.phoneNumber.value = profile.phoneNumber;
-          this.webside.value = profile.webside;
-          this.address.value = profile.address;
-          this.introduction.value = profile.introduction;
-          this.organizationType.value = profile.organizationType;
-        },
-      );
+      this.watch([() => this.profile.value, () => this.profile.value.email], ([profile, email]) => {
+        this.name.value = profile.name;
+        this.email.value = email;
+        this.phoneNumber.value = profile.phoneNumber;
+        this.website.value = profile.website;
+        this.address.value = profile.address;
+        this.introduction.value = profile.introduction;
+        this.organizationType.value = profile.organizationType;
+      });
     }
 
     public onSelectAccountType = (accountType: string) => {
@@ -466,65 +455,82 @@ const app = defineClassComponent(
     };
 
     public onUpdateInfomation = () => {
+      let isValidInput = true;
       if (!this.name.value) {
         this.errorName.value = this.t(`message.errorName`);
+        isValidInput = false;
       } else {
         this.errorName.value = "";
       }
       if (!this.email.value || !PrimitiveHelper.isValidEmail(this.email.value)) {
+        isValidInput = false;
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorEmail.value = "";
       }
-      if (!this.phoneNumber.value || !PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
+      if (!PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
+        isValidInput = false;
         this.errorPhoneNumber.value = this.t(`message.errorPhoneNumber`);
       } else {
         this.errorPhoneNumber.value = "";
       }
-      const data = {
-        name: this.name.value,
-        email: this.email.value,
-        phoneNumber: this.phoneNumber.value,
-        webside: this.webside.value,
-        address: this.address.value,
-        introduction: this.introduction.value,
-        organizationType: this.organizationType.value,
-      };
-      emits("onUpdateInfomation", data);
+      if (isValidInput) {
+        const data = {
+          name: this.name.value,
+          email: this.email.value,
+          phoneNumber: this.phoneNumber.value,
+          website: this.website.value,
+          address: this.address.value,
+          introduction: this.introduction.value,
+          organizationType: this.organizationType.value,
+        };
+        emits("onUpdateInfomation", data);
+      }
     };
 
     public onUpdateEmail = () => {
+      let isValidInput = true;
       if (!this.newEmail.value || !PrimitiveHelper.isValidEmail(this.newEmail.value)) {
+        isValidInput = false;
         this.errorNewEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorNewEmail.value = "";
       }
-      emits("onUpdateEmail", this.newEmail.value);
+      if (isValidInput) {
+        emits("onUpdateEmail", this.newEmail.value);
+      }
     };
 
     public onUpdatePassword = () => {
+      let isValidInput = true;
       if (!this.currentPassword.value || !PrimitiveHelper.isValidPassword(this.currentPassword.value)) {
+        isValidInput = false;
         this.errorCurrentPassword.value = this.t(`message.errorPassword`);
       } else {
         this.errorCurrentPassword.value = "";
       }
       if (!this.newPassword.value || !PrimitiveHelper.isValidPassword(this.newPassword.value)) {
+        isValidInput = false;
         this.errorNewPassword.value = this.t(`message.errorPassword`);
       } else {
         this.errorNewPassword.value = "";
       }
       if (!this.confirmNewPassword.value || !PrimitiveHelper.isValidPassword(this.confirmNewPassword.value)) {
+        isValidInput = false;
         this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
       } else if (this.confirmNewPassword.value !== this.newPassword.value) {
+        isValidInput = false;
         this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
       } else {
         this.errorConfirmNewPassword.value = "";
       }
-      const data = {
-        currentPassword: this.currentPassword.value,
-        newPassword: this.newPassword.value,
-      };
-      emits("onUpdatePassword", data);
+      if (isValidInput) {
+        const data = {
+          currentPassword: this.currentPassword.value,
+          newPassword: this.newPassword.value,
+        };
+        emits("onUpdatePassword", data);
+      }
     };
 
     public onUpdateLanguage = () => {

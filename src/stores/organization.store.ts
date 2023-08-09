@@ -5,6 +5,7 @@ import { ApiConst } from "@/const/api.const";
 import { OrganizationModel } from "@/models/organization.model";
 import { JobModel } from "@/models/job.model";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { AppConst } from "@/const/app.const";
 
 export const api = new Api();
 
@@ -31,7 +32,7 @@ export const useOrganizationStore = defineClassStore(
               email: data.email,
               phoneNumber: data.phoneNumber,
               avatar: data.photo,
-              webside: data.webside,
+              website: data.website,
               address: data.address,
               introduction: data.introduction,
               organizationType: data.organizationType,
@@ -46,12 +47,23 @@ export const useOrganizationStore = defineClassStore(
       }
     };
 
-    public fetchUpdateProfile = async (profile: any) => {
+    public fetchUpdateProfile = async (data: any) => {
       try {
+        const profile = {
+          name: data.name || "",
+          phone_number: data.phoneNumber || "",
+          avatar: data.photo || "",
+          website: data.website || "",
+          address: data.address || 1,
+          introduction: data.introduction || "",
+          organizationType: data.organizationType || AppConst.ORGANIZATION_TYPE.typeB,
+        };
+        console.log(profile);
         const res = await api.put(ApiConst.organizationsEndpoints.updateOrganizationProfile, JSON.stringify(profile));
         if (res.status === ApiConst.status.ok) {
-          const data: any = await res.json();
-          console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -60,10 +72,11 @@ export const useOrganizationStore = defineClassStore(
 
     public fetchUpdateEmail = async (email: string) => {
       try {
-        const res = await api.put(ApiConst.authEndpoints.changeEmail, JSON.stringify(email));
+        const res = await api.put(ApiConst.authEndpoints.changeEmail, email);
         if (res.status === ApiConst.status.ok) {
-          const data: any = await res.json();
-          console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -74,8 +87,9 @@ export const useOrganizationStore = defineClassStore(
       try {
         const res = await api.post(ApiConst.authEndpoints.changePassword, JSON.stringify(password));
         if (res.status === ApiConst.status.ok) {
-          const data: any = await res.json();
-          console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
