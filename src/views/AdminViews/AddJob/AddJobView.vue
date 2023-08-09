@@ -23,6 +23,7 @@ import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderCompon
 import FormData from "@/components/AdminComponents/FormData/FormDataComponent.vue";
 import { PathConst } from "@/const/path.const";
 import { AppConst } from "@/const/app.const";
+import { useOrganizationStore } from "@/stores/organization.store";
 import type { Ref } from "vue";
 
 const getLocation = () => {
@@ -47,6 +48,7 @@ const getSearchLabel = () => {
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public organizationStore = useOrganizationStore();
     public jobInputs: Ref<any> = this.ref([
       {
         id: 1,
@@ -314,23 +316,6 @@ const app = defineClassComponent(
         children: [
           {
             id: 1,
-            name: "photoGallery",
-            type: "image",
-            label: this.t(`app.photoGallery`),
-            placeholder: this.t(`app.photoGallery`),
-            required: false,
-            multiple: true,
-            model: [],
-            error: "",
-          },
-        ],
-      },
-      {
-        id: 15,
-        type: "group",
-        children: [
-          {
-            id: 1,
             name: "opensAt",
             type: "date",
             label: this.t(`app.opensAt`),
@@ -363,8 +348,12 @@ const app = defineClassComponent(
       this.router.push(PathConst.adminJobsList);
     };
 
-    public onSubmitForm = (job: any) => {
+    public onSubmitForm = async (job: any) => {
       console.log(job);
+      const isSuccess = await this.organizationStore.fetchCreateJob(job);
+      if (isSuccess) {
+        this.router.push(PathConst.adminJobsList);
+      }
     };
   },
 );

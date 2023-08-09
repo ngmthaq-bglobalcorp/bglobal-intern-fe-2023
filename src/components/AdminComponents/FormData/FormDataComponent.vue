@@ -297,20 +297,31 @@ const app = defineClassComponent(
     };
 
     public onSubmitForm = () => {
-      let job = {};
+      let data: any = {};
+      let isValidInput = true;
       props.input.map((input: any) => {
         input.children.map((value: any) => {
           if (value.required && !value.model) {
             value.error = this.t(`app.notBlank`, { value: value.label });
+            isValidInput = false;
           } else {
-            job = {
-              ...job,
-              [value.name]: value.model,
-            };
+            if (value.type === "date") {
+              data = {
+                ...data,
+                [value.name]: new Date(value.model),
+              };
+            } else {
+              data = {
+                ...data,
+                [value.name]: value.model,
+              };
+            }
           }
         });
       });
-      emit("onSubmitForm", job);
+      if (isValidInput) {
+        emit("onSubmitForm", data);
+      }
     };
   },
 );

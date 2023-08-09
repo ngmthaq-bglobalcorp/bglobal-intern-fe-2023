@@ -58,8 +58,8 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.organizationStore.fetchAllJobs();
+      this.onBeforeMount(async () => {
+        await this.organizationStore.fetchAllJobs();
       });
     }
 
@@ -71,8 +71,11 @@ const app = defineClassComponent(
       this.router.push({ ...PathConst.adminJobDetail, params: { jobId: id } });
     };
 
-    public onToggleDeleteButton = (id: number) => {
-      this.organizationStore.fetchDeleteJob(id.toString());
+    public onToggleDeleteButton = async (id: number) => {
+      const isSuccess = await this.organizationStore.fetchDeleteJob(id.toString());
+      if (isSuccess) {
+        console.log("delete", id);
+      }
     };
 
     public onToggleColumnView = () => {

@@ -136,7 +136,9 @@ const app = defineClassComponent(
         this.errorPassword.value = "";
       }
       const isSuccess = await this.authStore.fetchAdminSignIn(this.username.value, this.password.value);
-      if (!isSuccess) {
+      if (isSuccess) {
+        this.router.push(PathConst.adminDashboard);
+      } else {
         this.errorUsernameOrPassword.value = this.t(`message.errorUsernameOrPassword`);
       }
     };

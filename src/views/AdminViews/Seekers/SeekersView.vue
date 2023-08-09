@@ -39,23 +39,44 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.adminStore.fetchAllSeekers();
+      this.onBeforeMount(async () => {
+        await this.adminStore.fetchAllSeekers();
       });
     }
 
     public onDeleteSelected = (selectedArray: Array<number>) => {
-      selectedArray.forEach((value: number) => {
-        this.adminStore.fetchDeleteSeekers(value.toString());
+      selectedArray.forEach(async (value: number) => {
+        const isSuccess = await this.adminStore.fetchDeleteSeekers(value.toString());
+        if (isSuccess) {
+          this.adminStore.seekers = this.adminStore.seekers.filter((seeker) => seeker.id != value);
+        }
       });
     };
 
-    public onLockSelected = (id: number) => {
-      this.adminStore.fetchChangeUserStatus(id.toString(), AppConst.STATUS.disabled);
+    public onLockSelected = async (id: number) => {
+      const isSuccess = await this.adminStore.fetchChangeUserStatus(
+        id.toString(),
+        AppConst.STATUS.disabled.toLowerCase(),
+      );
+      if (isSuccess) {
+        const seeker = this.adminStore.seekers.find((seeker) => seeker.userId === id);
+        if (seeker) {
+          seeker.status = AppConst.STATUS.disabled;
+        }
+      }
     };
 
-    public onUnlockSelected = (id: number) => {
-      this.adminStore.fetchChangeUserStatus(id.toString(), AppConst.STATUS.active);
+    public onUnlockSelected = async (id: number) => {
+      const isSuccess = await this.adminStore.fetchChangeUserStatus(
+        id.toString(),
+        AppConst.STATUS.active.toLowerCase(),
+      );
+      if (isSuccess) {
+        const seeker = this.adminStore.seekers.find((seeker) => seeker.userId === id);
+        if (seeker) {
+          seeker.status = AppConst.STATUS.active;
+        }
+      }
     };
   },
 );

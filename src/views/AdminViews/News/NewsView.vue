@@ -29,13 +29,13 @@ import type { NewsModel } from "@/models/news.model";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public adminStore = useAdminStore();
-    public news: Ref<Array<NewsModel>> = this.computed(() => this.adminStore.news);
+    public news: Ref<Array<NewsModel>> = this.computed(() => this.adminStore.newsList);
 
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.adminStore.fetchAllNews();
+      this.onBeforeMount(async () => {
+        await this.adminStore.fetchAllNews();
       });
     }
 
@@ -47,8 +47,11 @@ const app = defineClassComponent(
       this.router.push({ ...PathConst.adminUpdateNews, params: { newsId: id } });
     };
 
-    public onToggleDeleteButton = (id: number) => {
-      this.adminStore.fetchDeleteNews(id.toString());
+    public onToggleDeleteButton = async (id: number) => {
+      const isSuccess = await this.adminStore.fetchDeleteNews(id.toString());
+      if (isSuccess) {
+        this.adminStore.newsList = this.adminStore.newsList.filter((news) => news.id != id);
+      }
     };
   },
 );

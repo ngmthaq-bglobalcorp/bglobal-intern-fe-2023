@@ -4,6 +4,7 @@ import { Api } from "@/plugins/api.plugin";
 import { ApiConst } from "@/const/api.const";
 import { OrganizationModel } from "@/models/organization.model";
 import { JobModel } from "@/models/job.model";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
 
 export const api = new Api();
 
@@ -111,13 +112,56 @@ export const useOrganizationStore = defineClassStore(
       }
     };
 
-    public fetchCreateJob = async (job: JobModel) => {
+    public fetchCreateJob = async (data: any) => {
       try {
+        const job = {
+          mainImageUrl: data.mainImage[0] || "",
+          mainImageDescription: data.title || "Main image",
+          title: data.title || "",
+          jobTitleCatchPhrase: data.jobTitleCatchPhrase || "",
+          location: data.location || 1,
+          salary: {
+            daily: 0,
+            dailyText: "daily",
+            hourly: 0,
+            hourlyText: "hourly",
+            monthly: data.salary || 0,
+            monthlyText: "monthly",
+            type: 0,
+          },
+          workingHours: data.workingHours,
+          searchLabels: data.searchLabels || [],
+          webApplicationUrl: data.webApplication || "",
+          catchText: data.catchText || "",
+          leadText: data.leadText || "",
+          subImageUrl: data.subImages || [],
+          subImageDescriptions: "",
+          properties: data.properties || [],
+          postScripts: data.postScripts || [],
+          companySurvey: {
+            contents: [],
+            displayed: true,
+          },
+          barometer: {
+            contents: [],
+            displayed: true,
+            stats: [],
+          },
+          galleryUrl: [],
+          galleryDescription: [],
+          interview: {
+            contents: [],
+            displayed: true,
+          },
+          opensAt: DatetimeHelper.getDate(data.opensAt) || DatetimeHelper.getDate(new Date()),
+          expiresAt: DatetimeHelper.getDate(data.expiresAt) || DatetimeHelper.getDate(new Date()),
+        };
+        console.log(job);
         const res = await api.post(ApiConst.organizationsEndpoints.createOrganizationJobs, JSON.stringify(job));
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          this.job.value = data;
-          console.log(this.job.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -134,6 +178,9 @@ export const useOrganizationStore = defineClassStore(
           const data = await res.json();
           this.job.value = data;
           console.log(this.job.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -144,8 +191,9 @@ export const useOrganizationStore = defineClassStore(
       try {
         const res = await api.delete(ApiConst.organizationsEndpoints.deleteOrganizationJobs.replace("{id}", id));
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);

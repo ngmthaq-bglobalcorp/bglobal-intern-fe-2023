@@ -14,12 +14,15 @@ export class Api extends Fetch {
   }
 
   public async onFailure(response: Response): Promise<Response> {
+    if (response.status === ApiConst.status.badRequest) {
+      console.log(response);
+    }
     if (response.status === ApiConst.status.unauthorized) {
-      console.log("unauthorized");
+      console.log(response);
       // window.location.replace("/admin/signin");
     }
     if (response.status === ApiConst.status.forbidden) {
-      console.log("forbidden");
+      console.log(response);
       window.location.assign("/admin");
     }
     return response;

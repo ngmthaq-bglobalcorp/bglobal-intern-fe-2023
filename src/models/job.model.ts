@@ -48,10 +48,10 @@ export class JobModel extends BaseModel implements IJob {
     this.photoGallery = data.photoGallery || [];
     this.interview = data.interview || [];
     this.productCode = data.productCode || "";
-    this.opensAt = data.opensAt || new Date();
-    this.expiresAt = data.expiresAt || new Date();
-    this.updatedAt = data.updatedAt || new Date();
-    this.createdAt = data.createdAt || new Date();
+    this.opensAt = new Date(data.opensAt) || new Date();
+    this.expiresAt = new Date(data.expiresAt) || new Date();
+    this.updatedAt = new Date(data.updatedAt) || new Date();
+    this.createdAt = new Date(data.createdAt) || new Date();
   }
 }
 

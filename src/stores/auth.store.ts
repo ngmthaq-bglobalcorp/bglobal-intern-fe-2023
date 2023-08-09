@@ -14,7 +14,7 @@ export const useAuthStore = defineClassStore(
 
     public user: Ref<any> = this.ref();
 
-    public fetchAdminUser = () => {
+    public getAdminUser = () => {
       const data: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
       if (data) {
         this.user.value = data;
@@ -35,7 +35,6 @@ export const useAuthStore = defineClassStore(
           } else {
             StorageHelper.setSessionStorage(KeyConst.keys.currentUser, data);
           }
-          window.location.assign(PathConst.adminDashboard.path);
           return true;
         } else {
           return false;
@@ -51,7 +50,9 @@ export const useAuthStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           this.user.value = null;
           StorageHelper.removeLocalStorage(KeyConst.keys.currentUser);
-          window.location.replace(PathConst.adminSignin.path);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);

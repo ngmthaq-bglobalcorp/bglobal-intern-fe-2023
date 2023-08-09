@@ -34,8 +34,8 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.organizationStore.fetchFindJobById(props.jobId);
+      this.onBeforeMount(async () => {
+        await this.organizationStore.fetchFindJobById(props.jobId);
       });
     }
   },

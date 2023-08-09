@@ -57,7 +57,8 @@ export abstract class BaseComponent extends Vue {
           if (user.role.includes(AppConst.ROLE.seeker) && !user.role.includes(to.meta.auth)) {
             this.router.push(PathConst.home);
           } else if (!user.role.includes(to.meta.auth)) {
-            this.router.push(PathConst.adminDashboard);
+            // this.router.push(PathConst.adminDashboard);
+            next;
           } else {
             next;
           }

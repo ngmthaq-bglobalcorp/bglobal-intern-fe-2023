@@ -3,7 +3,7 @@
     <ul class="timeline-list list">
       <li class="timeline-item" v-for="data in app.filtersData.value" :key="data.id">
         <div class="datetime-wrapper">
-          <span class="datetime-divider">{{ data.updatedAt.toDateString() }}</span>
+          <span class="datetime-divider">{{ DatetimeHelper.getFullDate(data.updatedAt) }}</span>
         </div>
         <div class="content-wrapper">
           <div class="content-avatar">
@@ -32,10 +32,20 @@
                 <i class="bi bi-pencil-square"></i>
               </button>
               <button class="delete-btn icon-btn" @click.prevent="app.onToggleDeleteButton(data.id)">
-                <i class="bi bi-trash3-fill"></i>
+                <i class="bi bi-trash3"></i>
               </button>
             </div>
-            <span class="event-category">{{ data.category }}</span>
+            <span class="event-category">
+              <span v-if="data.category === AppConst.NEWS_CATEGORY.seminar">
+                {{ app.t(`app.seminar`) }}
+              </span>
+              <span v-else-if="data.category === AppConst.NEWS_CATEGORY.briefing">
+                {{ app.t(`app.corporateRecruitingSession`) }}
+              </span>
+              <span v-else-if="data.category === AppConst.NEWS_CATEGORY.other">
+                {{ app.t(`app.generalInformation`) }}
+              </span>
+            </span>
             <router-link to="" class="event-link link-default">
               <h2 class="event-title">{{ data.title }}</h2>
             </router-link>
@@ -45,17 +55,26 @@
                 <span class="event-body">{{ data.body }}</span>
               </li>
               <li v-if="data.eventPageUrl">
-                <a :href="data.eventPageUrl" class="event-page-url">{{ data.eventPageUrl }}</a>
+                <a
+                  :href="data.eventPageUrl.includes('http') ? data.eventPageUrl : 'https://' + data.eventPageUrl"
+                  target="_blank"
+                  class="event-page-url"
+                  >{{ data.eventPageUrl }}</a
+                >
               </li>
               <li v-if="data.eventStartAt && data.eventEndAt">
                 <div class="event-start-end">
-                  {{ `Event start at ${data.eventStartAt.toUTCString()} and end at ${data.eventEndAt.toUTCString()}` }}
+                  {{
+                    `Event start at ${DatetimeHelper.getLongDateTime(
+                      data.eventStartAt,
+                    )} and end at ${DatetimeHelper.getLongDateTime(data.eventEndAt)}`
+                  }}
                 </div>
               </li>
               <li>
                 <div class="event-open-expire">
-                  <span>{{ `Open ${data.opensAt.toDateString()}` }}</span>
-                  <span>{{ `Expire ${data.expiresAt.toDateString()}` }}</span>
+                  <span>{{ `Open ${DatetimeHelper.getLongDate(data.opensAt)}` }}</span>
+                  <span>{{ `Expire ${DatetimeHelper.getLongDate(data.expiresAt)}` }}</span>
                 </div>
               </li>
             </ul>
@@ -75,6 +94,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { AppConst } from "@/const/app.const";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
 import type { TimelineListEmits, TimelineListProps } from "./TimelineListComponent";
 import type { Ref } from "vue";
 

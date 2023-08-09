@@ -5,6 +5,7 @@ import { ApiConst } from "@/const/api.const";
 import { SeekerModel } from "@/models/seeker.model";
 import { OrganizationModel } from "@/models/organization.model";
 import { NewsModel } from "@/models/news.model";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
 
 export const api = new Api();
 
@@ -12,7 +13,8 @@ export const useAdminStore = defineClassStore(
   class Store extends BaseStore {
     public name: string = "admin";
 
-    public news: Ref<Array<NewsModel>> = this.ref([]);
+    public newsList: Ref<Array<NewsModel>> = this.ref([]);
+    public news: Ref<NewsModel> = this.ref(new NewsModel({}));
     public seekers: Ref<Array<SeekerModel>> = this.ref([]);
     public organizations: Ref<Array<OrganizationModel>> = this.ref([]);
 
@@ -55,8 +57,9 @@ export const useAdminStore = defineClassStore(
       try {
         const res = await api.delete(ApiConst.adminEndpoints.deleteSeeker.replace("{id}", id));
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -98,8 +101,9 @@ export const useAdminStore = defineClassStore(
       try {
         const res = await api.delete(ApiConst.adminEndpoints.deleteOrganization.replace("{id}", id));
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -108,13 +112,11 @@ export const useAdminStore = defineClassStore(
 
     public fetchChangeUserStatus = async (id: string, status: string) => {
       try {
-        const res = await api.post(
-          ApiConst.adminEndpoints.changeUserStatus.replace("{id}", id),
-          JSON.stringify({ status: status }),
-        );
+        const res = await api.post(ApiConst.adminEndpoints.changeUserStatus.replace("{id}", id), status);
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -131,7 +133,7 @@ export const useAdminStore = defineClassStore(
             const news = {
               id: data.id,
               title: data.title,
-              subTitle: data.user.subTitle,
+              subtitle: data.subTitle,
               category: data.category,
               body: data.body,
               eventPageUrl: data.eventPageUrl,
@@ -144,8 +146,8 @@ export const useAdminStore = defineClassStore(
             };
             return new NewsModel(news);
           });
-          this.news.value = news;
-          console.log(this.news.value);
+          this.newsList.value = news;
+          console.log(this.newsList.value);
         }
       } catch (error) {
         console.log(error);
@@ -156,13 +158,13 @@ export const useAdminStore = defineClassStore(
       try {
         const res = await api.get(ApiConst.adminEndpoints.findNewsById.replace("{id}", id));
         if (res.status === ApiConst.status.ok) {
-          const data: any[] = await res.json();
+          const data: any = await res.json();
           console.log(data);
-          const news = data.map((data) => {
+          if (data) {
             const news = {
               id: data.id,
               title: data.title,
-              subTitle: data.user.subTitle,
+              subtitle: data.subTitle,
               category: data.category,
               body: data.body,
               eventPageUrl: data.eventPageUrl,
@@ -173,34 +175,58 @@ export const useAdminStore = defineClassStore(
               updatedAt: data.updatedAt,
               createdAt: data.createdAt,
             };
-            return new NewsModel(news);
-          });
-          this.news.value = news;
-          console.log(this.news.value);
+            this.news.value = new NewsModel(news);
+            console.log(this.news.value);
+          }
         }
       } catch (error) {
         console.log(error);
       }
     };
 
-    public fetchCreateNews = async (news: NewsModel) => {
+    public fetchCreateNews = async (data: any) => {
       try {
+        const news = {
+          title: data.title || "",
+          subTitle: data.subtitle || "",
+          category: data.category || "",
+          body: data.body || "",
+          eventPageUrl: data.eventPageUrl || "",
+          eventStartAt: DatetimeHelper.getDateTime(data.eventStartAt) || DatetimeHelper.getDateTime(new Date()),
+          eventEndAt: DatetimeHelper.getDateTime(data.eventEndAt) || DatetimeHelper.getDateTime(new Date()),
+          opensAt: DatetimeHelper.getDateTime(data.opensAt) || DatetimeHelper.getDateTime(new Date()),
+          expiresAt: DatetimeHelper.getDateTime(data.expiresAt) || DatetimeHelper.getDateTime(new Date()),
+        };
+        console.log(news);
         const res = await api.post(ApiConst.adminEndpoints.createNews, JSON.stringify(news));
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
       }
     };
 
-    public fetchUpdateNews = async (id: string, news: NewsModel) => {
+    public fetchUpdateNews = async (id: string, data: any) => {
       try {
+        const news = {
+          title: data.title || "",
+          subTitle: data.subtitle || "",
+          category: data.category || "",
+          body: data.body || "",
+          eventPageUrl: data.eventPageUrl || "",
+          eventStartAt: DatetimeHelper.getDateTime(data.eventStartAt) || DatetimeHelper.getDateTime(new Date()),
+          eventEndAt: DatetimeHelper.getDateTime(data.eventEndAt) || DatetimeHelper.getDateTime(new Date()),
+          opensAt: DatetimeHelper.getDateTime(data.opensAt) || DatetimeHelper.getDateTime(new Date()),
+          expiresAt: DatetimeHelper.getDateTime(data.expiresAt) || DatetimeHelper.getDateTime(new Date()),
+        };
         const res = await api.put(ApiConst.adminEndpoints.deleteNews.replace("{id}", id), JSON.stringify(news));
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -211,8 +237,9 @@ export const useAdminStore = defineClassStore(
       try {
         const res = await api.delete(ApiConst.adminEndpoints.deleteNews.replace("{id}", id));
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);

@@ -89,7 +89,10 @@ const app = defineClassComponent(
     };
 
     public onToggleSignOut = async () => {
-      await this.authStore.fetchSignOut();
+      const isSuccess = await this.authStore.fetchSignOut();
+      if (isSuccess) {
+        this.router.push(PathConst.adminSignin);
+      }
     };
   },
 );

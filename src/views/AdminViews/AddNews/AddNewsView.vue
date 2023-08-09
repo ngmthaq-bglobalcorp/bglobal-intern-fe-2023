@@ -1,14 +1,14 @@
 <template>
   <AdminLayout>
     <PageHeader
-      :target="app.t(`app.add`, { value: app.t(`app.news`) })"
+      :target="app.t(`app.${app.isUpdate.value ? 'update' : 'add'}`, { value: app.t(`app.news`) })"
       :button="app.t(`app.back`)"
       icon="bi-caret-left-fill"
       @on-toggle-button="app.onToggleButton"
     />
     <div class="add-news-form">
       <FormData
-        :target="app.t(`app.add`, { value: app.t(`app.news`) })"
+        :target="app.t(`app.${app.isUpdate.value ? 'update' : 'add'}`, { value: app.t(`app.news`) })"
         :input="app.newsInputs.value"
         @on-submit-form="app.onSubmitForm"
       />
@@ -23,11 +23,26 @@ import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderCompon
 import FormData from "@/components/AdminComponents/FormData/FormDataComponent.vue";
 import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
+import { useAdminStore } from "@/stores/admin.store";
+import type { AddNewsProps } from "./AddNewsView";
 import type { Ref } from "vue";
+import { NewsModel } from "@/models/news.model";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
+
+const props = defineProps<AddNewsProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public newsInputs: Ref<any> = this.ref([
+    public adminStore = useAdminStore();
+    public isUpdate: Ref<boolean> = this.computed(() => (props.newsId ? true : false));
+    public news: Ref<NewsModel> = this.computed(() => {
+      if (this.isUpdate.value) {
+        return this.adminStore.news;
+      } else {
+        return new NewsModel({});
+      }
+    });
+    public newsInputs: Ref<any> = this.computed(() => [
       {
         id: 1,
         type: "group",
@@ -39,7 +54,7 @@ const app = defineClassComponent(
             label: this.t(`app.category`),
             placeholder: this.t(`app.category`),
             required: true,
-            model: AppConst.NEWS_CATEGORY.other,
+            model: this.news.value.category || AppConst.NEWS_CATEGORY.other,
             error: "",
             children: [
               {
@@ -78,7 +93,7 @@ const app = defineClassComponent(
             label: this.t(`app.opensAt`),
             placeholder: this.t(`app.opensAt`),
             required: true,
-            model: "",
+            model: DatetimeHelper.getDate(this.news.value.opensAt) || "",
             error: "",
           },
           {
@@ -88,7 +103,7 @@ const app = defineClassComponent(
             label: this.t(`app.expiresAt`),
             placeholder: this.t(`app.expiresAt`),
             required: true,
-            model: "",
+            model: DatetimeHelper.getDate(this.news.value.expiresAt) || "",
             error: "",
           },
         ],
@@ -104,7 +119,7 @@ const app = defineClassComponent(
             label: this.t(`app.title`),
             placeholder: this.t(`app.title`),
             required: true,
-            model: "",
+            model: this.news.value.title || "",
             error: "",
           },
         ],
@@ -120,7 +135,7 @@ const app = defineClassComponent(
             label: this.t(`app.subtitle`),
             placeholder: this.t(`app.subtitle`),
             required: false,
-            model: "",
+            model: this.news.value.subtitle || "",
             error: "",
           },
         ],
@@ -135,8 +150,8 @@ const app = defineClassComponent(
             type: "textarea",
             label: this.t(`app.body`),
             placeholder: this.t(`app.body`),
-            required: false,
-            model: "",
+            required: true,
+            model: this.news.value.body || "",
             error: "",
           },
         ],
@@ -151,8 +166,8 @@ const app = defineClassComponent(
             type: "text",
             label: this.t(`app.eventPageUrl`),
             placeholder: this.t(`app.eventPageUrl`),
-            required: false,
-            model: "",
+            required: true,
+            model: this.news.value.eventPageUrl || "",
             error: "",
           },
         ],
@@ -167,8 +182,8 @@ const app = defineClassComponent(
             type: "date",
             label: this.t(`app.eventStartAt`),
             placeholder: this.t(`app.eventStartAt`),
-            required: false,
-            model: "",
+            required: true,
+            model: DatetimeHelper.getDate(this.news.value.eventStartAt) || "",
             error: "",
           },
           {
@@ -177,8 +192,8 @@ const app = defineClassComponent(
             type: "date",
             label: this.t(`app.eventEndAt`),
             placeholder: this.t(`app.eventEndAt`),
-            required: false,
-            model: "",
+            required: true,
+            model: DatetimeHelper.getDate(this.news.value.eventEndAt) || "",
             error: "",
           },
         ],
@@ -187,38 +202,30 @@ const app = defineClassComponent(
 
     public constructor() {
       super();
+
+      this.onBeforeMount(() => {
+        if (this.isUpdate.value) {
+          this.adminStore.fetchFindNewsById(props.newsId);
+        }
+      });
     }
 
     public onToggleButton = () => {
       this.router.push(PathConst.adminNews);
     };
 
-    public onSubmitForm = () => {
-      let news = {};
-      this.newsInputs.value.map((input: any) => {
-        if (input.type === "group") {
-          input.children.map((value: any) => {
-            if (value.required && !value.model) {
-              value.error = this.t(`app.notBlank`, { value: value.label });
-            } else {
-              news = {
-                ...news,
-                [value.name]: value.model,
-              };
-            }
-          });
-        } else {
-          if (input.required && !input.model) {
-            input.error = this.t(`app.notBlank`, { value: input.label });
-          } else {
-            news = {
-              ...news,
-              [input.name]: input.model,
-            };
-          }
+    public onSubmitForm = async (news: any) => {
+      if (this.isUpdate.value) {
+        const isSuccess = await this.adminStore.fetchUpdateNews(props.newsId, news);
+        if (isSuccess) {
+          this.router.push(PathConst.adminNews);
         }
-      });
-      console.log(news);
+      } else {
+        const isSuccess = await this.adminStore.fetchCreateNews(news);
+        if (isSuccess) {
+          this.router.push(PathConst.adminNews);
+        }
+      }
     };
   },
 );

@@ -100,16 +100,20 @@
             </td>
             <td>
               <button
+                class="lock-btn small-btn"
+                @click.prevent="app.onToggleLock(data.userId)"
+                v-if="data.status === AppConst.STATUS.active"
+              >
+                <i class="bi bi-lock me-1"></i>
+                <span>{{ app.t(`app.lock`) }}</span>
+              </button>
+              <button
                 class="lock-btn small-btn unlock-btn"
-                @click.prevent="app.onToggleUnlock(data.id)"
-                v-if="data.status === 'lock'"
+                @click.prevent="app.onToggleUnlock(data.userId)"
+                v-else-if="data.status === AppConst.STATUS.disabled"
               >
                 <i class="bi bi-unlock me-1"></i>
                 <span>{{ app.t(`app.unlock`) }}</span>
-              </button>
-              <button class="lock-btn small-btn" @click.prevent="app.onToggleLock(data.id)" v-else>
-                <i class="bi bi-lock me-1"></i>
-                <span>{{ app.t(`app.lock`) }}</span>
               </button>
             </td>
           </tr>

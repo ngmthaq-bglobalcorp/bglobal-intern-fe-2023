@@ -3,6 +3,7 @@ import { BaseModel } from "./base.model";
 
 export class OrganizationModel extends BaseModel implements IOrganization {
   public id: number;
+  public userId: number;
   public username: string;
   public name: string;
   public email: string;
@@ -20,6 +21,7 @@ export class OrganizationModel extends BaseModel implements IOrganization {
   public constructor(data: any) {
     super();
     this.id = data.id || -1;
+    this.userId = data.userId || -1;
     this.username = data.username || "";
     this.name = data.name || "";
     this.email = data.email || "";
@@ -30,14 +32,15 @@ export class OrganizationModel extends BaseModel implements IOrganization {
     this.introduction = data.introduction || "";
     this.organizationType = data.organizationType || AppConst.ORGANIZATION_TYPE.typeB;
     this.status = data.status || AppConst.STATUS.disabled;
-    this.createdAt = data.createdAt || new Date();
-    this.updatedAt = data.updatedAt || new Date();
+    this.createdAt = new Date(data.createdAt) || new Date();
+    this.updatedAt = new Date(data.updatedAt) || new Date();
     this.isSelected = data.isSelected || false;
   }
 }
 
 export interface IOrganization {
   id: number;
+  userId: number;
   username: string;
   name: string;
   email: string;
