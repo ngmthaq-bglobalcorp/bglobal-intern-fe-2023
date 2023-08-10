@@ -27,7 +27,7 @@
           <AvatarComponent
             :avatarImage="app.profile.value.avatar"
             avatarAlt="Avatar"
-            :avatarInit="app.profile.value.name || app.profile.value.username"
+            :avatarInit="app.profile.value.name.split(' ')[0] || app.profile.value.username"
           />
 
           <template v-if="props.editable">
@@ -89,7 +89,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import AvatarComponent from "../Avatar/AvatarComponent.vue";
+import AvatarComponent from "@/components/AdminComponents/Avatar/AvatarComponent.vue";
 import { PathConst } from "@/const/path.const";
 import type { ProfileHeaderEmits, ProfileHeaderProps } from "./ProfileHeaderComponent";
 import type { Ref } from "vue";

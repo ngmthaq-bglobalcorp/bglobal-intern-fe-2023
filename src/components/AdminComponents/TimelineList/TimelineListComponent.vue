@@ -6,6 +6,14 @@
           <span class="datetime-divider">{{ DatetimeHelper.getFullDate(data.updatedAt) }}</span>
         </div>
         <div class="content-wrapper">
+          <div class="event-button">
+            <button class="edit-btn icon-btn" @click.prevent="app.onToggleEditButton(data.id)">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button class="delete-btn icon-btn" @click.prevent="app.onToggleDeleteButton(data.id)">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
           <div class="content-avatar">
             <img
               src="@/assets/img/info-icon-seminar.svg"
@@ -27,14 +35,6 @@
             />
           </div>
           <div class="content-desc">
-            <div class="event-button">
-              <button class="edit-btn icon-btn" @click.prevent="app.onToggleEditButton(data.id)">
-                <i class="bi bi-pencil-square"></i>
-              </button>
-              <button class="delete-btn icon-btn" @click.prevent="app.onToggleDeleteButton(data.id)">
-                <i class="bi bi-trash3"></i>
-              </button>
-            </div>
             <span class="event-category">
               <span v-if="data.category === AppConst.NEWS_CATEGORY.seminar">
                 {{ app.t(`app.seminar`) }}
@@ -184,6 +184,40 @@ const app = defineClassComponent(
         width: 100%;
         margin-bottom: 2.25rem;
 
+        &:hover {
+          & .event-button {
+            display: block;
+            opacity: 0.7;
+            visibility: visible;
+          }
+        }
+
+        & .event-button {
+          position: absolute;
+          top: 0;
+          right: 0;
+          transform: translate(100%, 0);
+          display: none;
+          opacity: 0;
+          visibility: hidden;
+
+          & .edit-btn {
+            &:hover {
+              opacity: 1;
+              color: $blue;
+              background-color: rgba($blue, 0.1);
+            }
+          }
+
+          & .delete-btn {
+            &:hover {
+              opacity: 1;
+              color: $danger;
+              background-color: rgba($danger, 0.1);
+            }
+          }
+        }
+
         & .content-avatar {
           width: 3rem;
           height: 3rem;
@@ -202,31 +236,6 @@ const app = defineClassComponent(
 
         & .content-desc {
           width: 100%;
-
-          &:hover {
-            & .event-button {
-              display: block;
-              opacity: 0.7;
-              visibility: visible;
-            }
-          }
-
-          & .event-button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform: translate(100%, 0);
-            display: none;
-            opacity: 0;
-            visibility: hidden;
-
-            & .edit-btn,
-            & .delete-btn {
-              &:hover {
-                opacity: 1;
-              }
-            }
-          }
 
           & .event-category {
             font-size: 0.8125rem;

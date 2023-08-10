@@ -74,6 +74,13 @@
             <td class="sorting-1" v-for="column in props.columns" :key="column.field">
               <template v-if="column.field === 'username'">
                 <router-link to="" class="item-name link-default">
+                  <div class="avatar">
+                    <AvatarComponent
+                      :avatarImage="data.avatar || ''"
+                      avatarAlt="Avatar"
+                      :avatarInit="data[column.field][0]"
+                    />
+                  </div>
                   <span>{{ data[column.field] }}</span>
                 </router-link>
               </template>
@@ -178,6 +185,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import AvatarComponent from "../Avatar/AvatarComponent.vue";
 import { AppConst } from "@/const/app.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
 import type { DatatableEmits, DatatableProps } from "./DatatableComponent";
@@ -498,8 +506,19 @@ const app = defineClassComponent(
       }
 
       & .item-name {
+        display: flex;
+        align-items: center;
         color: #000;
         font-weight: 600;
+
+        & .avatar {
+          position: relative;
+          background-color: $white;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
 
         &:hover {
           color: $blue !important;

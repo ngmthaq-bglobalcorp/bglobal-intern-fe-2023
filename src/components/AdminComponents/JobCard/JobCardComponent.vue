@@ -102,6 +102,10 @@ const app = defineClassComponent(
 
 .job-card-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   background-color: $white;
   border: 0.0625rem solid rgba($border, 0.7);
   border-radius: 0.75rem;

@@ -31,7 +31,7 @@ export const useOrganizationStore = defineClassStore(
               userId: data.user.id,
               username: data.user.username,
               name: data.name,
-              email: data.email,
+              email: data.user.email,
               phoneNumber: data.phoneNumber,
               avatar: data.photo,
               website: data.website,

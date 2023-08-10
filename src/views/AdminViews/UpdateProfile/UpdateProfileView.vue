@@ -8,9 +8,9 @@
     />
     <div class="update-profile-container">
       <!-- Navbar -->
-      <div class="profile-nav custom-card">
+      <div class="profile-nav">
         <!-- Navbar Nav -->
-        <ul class="nav-list list">
+        <ul class="nav-list list custom-card">
           <li class="nav-item">
             <a class="nav-link active" href="#content">
               <i class="bi bi-person icon"></i>
@@ -142,6 +142,10 @@ const app = defineClassComponent(
       flex-direction: column;
       width: 100%;
       padding: 1rem;
+
+      &.nav-fixed {
+        position: fixed;
+      }
 
       & .nav-link {
         padding: 0.5rem 1.5rem;
