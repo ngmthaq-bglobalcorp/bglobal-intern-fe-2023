@@ -70,9 +70,9 @@ import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderCompon
 import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHeaderComponent.vue";
 import ProfileUpdate from "@/components/AdminComponents/ProfileUpdate/ProfileUpdateComponent.vue";
 import { PathConst } from "@/const/path.const";
+import { OrganizationModel } from "@/models/organization.model";
 import { useOrganizationStore } from "@/stores/organization.store";
 import type { Ref } from "vue";
-import type { OrganizationModel } from "@/models/organization.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -92,7 +92,8 @@ const app = defineClassComponent(
     };
 
     public onUpdateInfomation = async (data: any) => {
-      const isSuccess = await this.organizationStore.fetchUpdateProfile(data);
+      const organization = new OrganizationModel(data);
+      const isSuccess = await this.organizationStore.fetchUpdateProfile(organization);
       if (isSuccess) {
         console.log("Update profile");
       }

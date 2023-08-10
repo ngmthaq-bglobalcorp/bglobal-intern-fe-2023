@@ -31,7 +31,7 @@ export class SeekerModel extends BaseModel implements ISeeker {
     this.email = data.email || "";
     this.phoneNumber = data.phoneNumber || "";
     this.avatar = data.avatar || "";
-    this.birthday = data.birthday || new Date("2000-01-01");
+    this.birthday = data.birthday || "";
     this.address = data.address || "";
     this.website = data.website || "";
     this.education = data.education || "";
@@ -40,8 +40,8 @@ export class SeekerModel extends BaseModel implements ISeeker {
     this.achievements = data.achievements || "";
     this.otherDetails = data.otherDetails || "";
     this.status = data.status || AppConst.STATUS.disabled;
-    this.createdAt = new Date(data.createdAt) || new Date();
-    this.updatedAt = new Date(data.updatedAt) || new Date();
+    this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
+    this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
     this.isSelected = data.isSelected || false;
   }
 }

@@ -4,7 +4,7 @@
       :target="app.t(`app.${app.isUpdate.value ? 'update' : 'add'}`, { value: app.t(`app.news`) })"
       :button="app.t(`app.back`)"
       icon="bi-caret-left-fill"
-      @on-toggle-button="app.onToggleButton"
+      @on-toggle-button="app.onToggleBackButton"
     />
     <div class="add-news-form">
       <FormData
@@ -23,11 +23,11 @@ import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderCompon
 import FormData from "@/components/AdminComponents/FormData/FormDataComponent.vue";
 import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { NewsModel } from "@/models/news.model";
 import { useAdminStore } from "@/stores/admin.store";
 import type { AddNewsProps } from "./AddNewsView";
 import type { Ref } from "vue";
-import { NewsModel } from "@/models/news.model";
-import { DatetimeHelper } from "@/helpers/datetime.helper";
 
 const props = defineProps<AddNewsProps>();
 
@@ -210,11 +210,12 @@ const app = defineClassComponent(
       });
     }
 
-    public onToggleButton = () => {
-      this.router.push(PathConst.adminNews);
+    public onToggleBackButton = () => {
+      this.router.back();
     };
 
-    public onSubmitForm = async (news: any) => {
+    public onSubmitForm = async (data: any) => {
+      const news = new NewsModel(data);
       if (this.isUpdate.value) {
         const isSuccess = await this.adminStore.fetchUpdateNews(props.newsId, news);
         if (isSuccess) {

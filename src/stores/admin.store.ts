@@ -2,10 +2,10 @@ import type { Ref } from "vue";
 import { BaseStore, defineClassStore } from "@/plugins/store.plugin";
 import { Api } from "@/plugins/api.plugin";
 import { ApiConst } from "@/const/api.const";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
 import { SeekerModel } from "@/models/seeker.model";
 import { OrganizationModel } from "@/models/organization.model";
 import { NewsModel } from "@/models/news.model";
-import { DatetimeHelper } from "@/helpers/datetime.helper";
 
 export const api = new Api();
 
@@ -184,7 +184,7 @@ export const useAdminStore = defineClassStore(
       }
     };
 
-    public fetchCreateNews = async (data: any) => {
+    public fetchCreateNews = async (data: NewsModel) => {
       try {
         const news = {
           title: data.title || "",
@@ -192,10 +192,16 @@ export const useAdminStore = defineClassStore(
           category: data.category || "",
           body: data.body || "",
           eventPageUrl: data.eventPageUrl || "",
-          eventStartAt: DatetimeHelper.getDateTime(data.eventStartAt) || DatetimeHelper.getDateTime(new Date()),
-          eventEndAt: DatetimeHelper.getDateTime(data.eventEndAt) || DatetimeHelper.getDateTime(new Date()),
-          opensAt: DatetimeHelper.getDateTime(data.opensAt) || DatetimeHelper.getDateTime(new Date()),
-          expiresAt: DatetimeHelper.getDateTime(data.expiresAt) || DatetimeHelper.getDateTime(new Date()),
+          eventStartAt: data.eventStartAt
+            ? DatetimeHelper.getDateTime(data.eventStartAt)
+            : DatetimeHelper.getDateTime(new Date()),
+          eventEndAt: data.eventEndAt
+            ? DatetimeHelper.getDateTime(data.eventEndAt)
+            : DatetimeHelper.getDateTime(new Date()),
+          opensAt: data.opensAt ? DatetimeHelper.getDateTime(data.opensAt) : DatetimeHelper.getDateTime(new Date()),
+          expiresAt: data.expiresAt
+            ? DatetimeHelper.getDateTime(data.expiresAt)
+            : DatetimeHelper.getDateTime(new Date()),
         };
         console.log(news);
         const res = await api.post(ApiConst.adminEndpoints.createNews, JSON.stringify(news));
@@ -209,7 +215,7 @@ export const useAdminStore = defineClassStore(
       }
     };
 
-    public fetchUpdateNews = async (id: string, data: any) => {
+    public fetchUpdateNews = async (id: string, data: NewsModel) => {
       try {
         const news = {
           title: data.title || "",
@@ -217,10 +223,16 @@ export const useAdminStore = defineClassStore(
           category: data.category || "",
           body: data.body || "",
           eventPageUrl: data.eventPageUrl || "",
-          eventStartAt: DatetimeHelper.getDateTime(data.eventStartAt) || DatetimeHelper.getDateTime(new Date()),
-          eventEndAt: DatetimeHelper.getDateTime(data.eventEndAt) || DatetimeHelper.getDateTime(new Date()),
-          opensAt: DatetimeHelper.getDateTime(data.opensAt) || DatetimeHelper.getDateTime(new Date()),
-          expiresAt: DatetimeHelper.getDateTime(data.expiresAt) || DatetimeHelper.getDateTime(new Date()),
+          eventStartAt: data.eventStartAt
+            ? DatetimeHelper.getDateTime(data.eventStartAt)
+            : DatetimeHelper.getDateTime(new Date()),
+          eventEndAt: data.eventEndAt
+            ? DatetimeHelper.getDateTime(data.eventEndAt)
+            : DatetimeHelper.getDateTime(new Date()),
+          opensAt: data.opensAt ? DatetimeHelper.getDateTime(data.opensAt) : DatetimeHelper.getDateTime(new Date()),
+          expiresAt: data.expiresAt
+            ? DatetimeHelper.getDateTime(data.expiresAt)
+            : DatetimeHelper.getDateTime(new Date()),
         };
         const res = await api.put(ApiConst.adminEndpoints.deleteNews.replace("{id}", id), JSON.stringify(news));
         if (res.status === ApiConst.status.ok) {

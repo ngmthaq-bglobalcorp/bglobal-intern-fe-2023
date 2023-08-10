@@ -1,14 +1,14 @@
 <template>
   <AdminLayout>
     <PageHeader
-      :target="app.t(`app.add`, { value: app.t(`app.jobs`) })"
+      :target="app.t(`app.${app.isUpdate.value ? 'update' : 'add'}`, { value: app.t(`app.job`) })"
       :button="app.t(`app.back`)"
       icon="bi-caret-left-fill"
-      @on-toggle-button="app.onToggleButton"
+      @on-toggle-button="app.onToggleBackButton"
     />
     <div class="add-job-form">
       <FormData
-        :target="app.t(`app.add`, { value: app.t(`app.job`) })"
+        :target="app.t(`app.${app.isUpdate.value ? 'update' : 'add'}`, { value: app.t(`app.job`) })"
         :input="app.jobInputs.value"
         @on-submit-form="app.onSubmitForm"
       />
@@ -22,10 +22,13 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import FormData from "@/components/AdminComponents/FormData/FormDataComponent.vue";
 import { PathConst } from "@/const/path.const";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { JobModel } from "@/models/job.model";
 import { useCommonStore } from "@/stores/common.store";
 import { useOrganizationStore } from "@/stores/organization.store";
 import type { AddJobProps } from "./AddJobView";
 import type { Ref } from "vue";
+import type { SearchLabelModel } from "@/models/searchLabel.model";
 
 const props = defineProps<AddJobProps>();
 
@@ -34,6 +37,13 @@ const app = defineClassComponent(
     public commonStore = useCommonStore();
     public organizationStore = useOrganizationStore();
     public isUpdate: Ref<boolean> = this.computed(() => (props.jobId ? true : false));
+    public job: Ref<JobModel> = this.computed(() => {
+      if (this.isUpdate.value) {
+        return this.organizationStore.job;
+      } else {
+        return new JobModel({});
+      }
+    });
     public jobInputs: Ref<any> = this.computed(() => [
       {
         id: 1,
@@ -47,7 +57,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.mainImage`),
             required: false,
             multiple: false,
-            model: [],
+            model: this.job.value.mainImageUrl ? [this.job.value.mainImageUrl] : [],
             error: "",
           },
         ],
@@ -64,7 +74,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.title`),
             required: true,
             multiple: false,
-            model: "",
+            model: this.job.value.title || "",
             error: "",
           },
         ],
@@ -81,7 +91,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.jobTitleCatchPhrase`),
             required: false,
             multiple: false,
-            model: "",
+            model: this.job.value.jobTitleCatchPhrase || "",
             error: "",
           },
         ],
@@ -98,7 +108,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.location`),
             required: true,
             multiple: false,
-            model: this.commonStore.locations[0]?.id,
+            model: this.job.value.location.id > 0 ? this.job.value.location.id : this.commonStore.locations[0]?.id,
             error: "",
             children: this.commonStore.locations,
           },
@@ -116,7 +126,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.salary`),
             required: true,
             multiple: false,
-            model: "",
+            model: this.job.value.salary || "",
             error: "",
           },
         ],
@@ -128,49 +138,38 @@ const app = defineClassComponent(
           {
             id: 1,
             name: "workingHours",
-            type: "inputMultiple",
+            type: "inputWorkingHours",
             label: this.t(`app.workingHours`),
             placeholder: this.t(`app.workingHours`),
             required: true,
             multiple: false,
-            model: "",
+            model: this.job.value.workingHours || [],
             error: "",
             children: [
               {
                 id: 1,
                 name: "startTime",
-                type: "text",
+                type: "time",
                 label: this.t(`app.startTime`),
                 placeholder: this.t(`app.startTime`),
                 required: true,
                 multiple: false,
-                model: "",
+                model: "00:00",
                 error: "",
               },
               {
                 id: 2,
                 name: "endTime",
-                type: "text",
+                type: "time",
                 label: this.t(`app.endTime`),
                 placeholder: this.t(`app.endTime`),
                 required: true,
                 multiple: false,
-                model: "",
+                model: "00:00",
                 error: "",
               },
               {
                 id: 3,
-                name: "isFullTime",
-                type: "checkbox",
-                label: this.t(`app.isFullTime`),
-                placeholder: this.t(`app.isFullTime`),
-                required: false,
-                multiple: false,
-                model: "",
-                error: "",
-              },
-              {
-                id: 4,
                 name: "countHours",
                 type: "number",
                 label: this.t(`app.countHours`),
@@ -178,6 +177,17 @@ const app = defineClassComponent(
                 required: false,
                 multiple: false,
                 model: "",
+                error: "",
+              },
+              {
+                id: 4,
+                name: "isFullTime",
+                type: "checkbox",
+                label: this.t(`app.isFullTime`),
+                placeholder: this.t(`app.isFullTime`),
+                required: false,
+                multiple: false,
+                model: false,
                 error: "",
               },
             ],
@@ -196,7 +206,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.searchLabels`),
             required: false,
             multiple: false,
-            model: [],
+            model: this.job.value.searchLabels.map((value: SearchLabelModel) => value.id),
             error: "",
             children: this.commonStore.searchLabels,
           },
@@ -214,7 +224,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.webApplication`),
             required: false,
             multiple: false,
-            model: "",
+            model: this.job.value.webApplication || "",
             error: "",
           },
         ],
@@ -231,7 +241,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.catchText`),
             required: true,
             multiple: false,
-            model: "",
+            model: this.job.value.catchText || "",
             error: "",
           },
         ],
@@ -248,7 +258,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.leadText`),
             required: true,
             multiple: false,
-            model: "",
+            model: this.job.value.leadText || "",
             error: "",
           },
         ],
@@ -265,7 +275,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.subImages`),
             required: false,
             multiple: true,
-            model: [],
+            model: this.job.value.subImages.map((value) => value.url),
             error: "",
           },
         ],
@@ -282,7 +292,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.properties`),
             required: false,
             multiple: false,
-            model: [],
+            model: this.job.value.properties || [],
             error: "",
             children: [
               {
@@ -323,7 +333,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.postScripts`),
             required: false,
             multiple: false,
-            model: [],
+            model: this.job.value.postScripts || [],
             error: "",
             children: [
               {
@@ -353,7 +363,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.opensAt`),
             required: false,
             multiple: false,
-            model: "",
+            model: DatetimeHelper.getDate(this.job.value.opensAt) || "",
             error: "",
           },
           {
@@ -364,7 +374,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.expiresAt`),
             required: false,
             multiple: false,
-            model: "",
+            model: DatetimeHelper.getDate(this.job.value.expiresAt) || "",
             error: "",
           },
         ],
@@ -383,16 +393,17 @@ const app = defineClassComponent(
       });
     }
 
-    public onToggleButton = () => {
-      this.router.push(PathConst.adminJobsList);
+    public onToggleBackButton = () => {
+      this.router.back();
     };
 
-    public onSubmitForm = async (job: any) => {
-      console.log(job);
+    public onSubmitForm = async (data: any) => {
+      const job = data;
+      // const job = new JobModel(data);
       if (this.isUpdate.value) {
         const isSuccess = await this.organizationStore.fetchUpdateJob(props.jobId, job);
         if (isSuccess) {
-          this.router.push(PathConst.adminJobsList);
+          this.router.push({ ...PathConst.adminJobDetail, params: { jobId: props.jobId } });
         }
       } else {
         const isSuccess = await this.organizationStore.fetchCreateJob(job);

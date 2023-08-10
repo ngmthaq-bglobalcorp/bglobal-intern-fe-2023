@@ -5,15 +5,26 @@
       <div class="page-header">
         <!-- Avatar -->
         <div class="header-avatar">
-          <img :src="app.job.value.mainImageUrl" :alt="app.job.value.mainImageDesc" class="avatar-img" />
+          <img
+            :src="app.job.value.mainImageUrl"
+            alt="Main image"
+            class="avatar-img"
+            v-if="app.job.value.mainImageUrl"
+          />
+          <img
+            :src="app.job.value.subImages[0].url"
+            alt="Main image"
+            class="avatar-img"
+            v-else-if="app.job.value.subImages.length > 0"
+          />
         </div>
         <!-- End Avatar -->
         <div class="header-info">
           <div class="info-title">{{ app.job.value.title }}</div>
           <ul class="info-list list">
             <li class="info-item" v-for="item in app.infoList.value" :key="item.id">
-              <span class="first">{{ item.title }}:</span>
-              <span>{{ item.desc }}</span>
+              <span class="first" v-if="item.title">{{ item.title }}:</span>
+              <span v-if="item.desc">{{ item.desc }}</span>
             </li>
           </ul>
         </div>
@@ -31,6 +42,17 @@
               {{ item.text }}
             </router-link>
           </li>
+
+          <li class="nav-item ms-auto">
+            <button class="update-btn small-btn" @click="app.onToggleUpdate" v-if="props.editable">
+              <i class="bi bi-person-fill-gear icon"></i>
+              {{ app.t(`app.update`) }}
+            </button>
+            <button class="delete-btn small-btn" @click="app.onToggleDelete" v-if="props.editable">
+              <i class="bi bi-trash3 icon"></i>
+              {{ app.t(`app.delete`) }}
+            </button>
+          </li>
         </ul>
       </div>
       <!-- End Nav -->
@@ -42,11 +64,12 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
-import type { DetailPageHeaderProps } from "./DetailPageHeaderComponent";
+import type { DetailPageHeaderEmits, DetailPageHeaderProps } from "./DetailPageHeaderComponent";
 import type { Ref } from "vue";
 import type { JobModel } from "@/models/job.model";
 
 const props = defineProps<DetailPageHeaderProps>();
+const emits = defineEmits<DetailPageHeaderEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -63,12 +86,6 @@ const app = defineClassComponent(
         text: this.t(`app.activity`),
         disabled: true,
       },
-      {
-        link: "",
-        name: this.t(`app.settings`),
-        text: this.t(`app.settings`),
-        disabled: true,
-      },
     ]);
 
     public job: Ref<JobModel> = this.computed(() => props.data);
@@ -76,7 +93,7 @@ const app = defineClassComponent(
       {
         id: 1,
         title: this.t(`app.location`),
-        desc: this.job.value.location,
+        desc: this.job.value.location.name,
       },
       {
         id: 2,
@@ -93,6 +110,14 @@ const app = defineClassComponent(
     public constructor() {
       super();
     }
+
+    public onToggleUpdate = () => {
+      emits("onToggleUpdateButton");
+    };
+
+    public onToggleDelete = () => {
+      emits("onToggleDeleteButton");
+    };
   },
 );
 </script>
@@ -117,6 +142,7 @@ const app = defineClassComponent(
           position: relative;
           background-color: $white;
           width: 4.5rem;
+          max-width: 4.5rem;
           height: auto;
           border-radius: 0.5rem;
           object-fit: cover;
@@ -195,20 +221,32 @@ const app = defineClassComponent(
             }
           }
 
-          & .update-btn {
+          & .update-btn,
+          & .delete-btn {
             font-size: 0.8125rem;
             color: $dark-variant;
             background-color: $white;
             border-color: $border;
 
+            & .icon {
+              font-size: 0.875rem;
+              margin-right: 0.5rem;
+            }
+          }
+
+          & .update-btn {
+            margin-right: 0.5rem;
+
             &:hover {
               color: $blue;
               box-shadow: 0 3px 6px -2px rgba(140, 152, 164, 0.25);
             }
+          }
 
-            & .icon {
-              font-size: 0.875rem;
-              margin-right: 0.5rem;
+          & .delete-btn {
+            &:hover {
+              color: $danger;
+              box-shadow: 0 3px 6px -2px rgba(140, 152, 164, 0.25);
             }
           }
         }

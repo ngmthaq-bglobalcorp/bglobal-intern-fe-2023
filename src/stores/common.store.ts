@@ -54,5 +54,29 @@ export const useCommonStore = defineClassStore(
         console.log(error);
       }
     };
+
+    public fetchUploadImage = async (image: any) => {
+      try {
+        const res = await api.post(ApiConst.commonEndpoints.uploadImage, image);
+        if (res.status === ApiConst.status.ok) {
+          const data: any = await res.json();
+          console.log(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    public fetchUploadMultipleImages = async (images: any) => {
+      try {
+        const res = await api.post(ApiConst.commonEndpoints.uploadMultipleImages, images);
+        if (res.status === ApiConst.status.ok) {
+          const data: any = await res.json();
+          console.log(data);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
   },
 );

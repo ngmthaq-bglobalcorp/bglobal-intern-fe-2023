@@ -1,6 +1,11 @@
 <template>
   <AdminLayout>
-    <DetailPageHeader :data="app.job.value" />
+    <DetailPageHeader
+      :data="app.job.value"
+      :editable="true"
+      @on-toggle-update-button="app.onToggleUpdateButton"
+      @on-toggle-delete-button="app.onToggleDeleteButton"
+    />
     <JobDetailCard :data="app.job.value">
       <UserList :columns="app.columns.value" :data="app.seekers.value" />
     </JobDetailCard>
@@ -13,6 +18,7 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import DetailPageHeader from "@/components/AdminComponents/DetailPageHeader/DetailPageHeaderComponent.vue";
 import JobDetailCard from "@/components/AdminComponents/JobDetailCard/JobDetailCardComponent.vue";
 import UserList from "@/components/AdminComponents/UserList/UserListComponent.vue";
+import { PathConst } from "@/const/path.const";
 import { useOrganizationStore } from "@/stores/organization.store";
 import type { JobDetailProps } from "./JobDetailView";
 import type { Ref } from "vue";
@@ -38,6 +44,18 @@ const app = defineClassComponent(
         await this.organizationStore.fetchFindJobById(props.jobId);
       });
     }
+
+    public onToggleUpdateButton = () => {
+      this.router.push({ ...PathConst.adminUpdateJob, params: { jobId: props.jobId } });
+    };
+
+    public onToggleDeleteButton = async () => {
+      const isSuccess = await this.organizationStore.fetchDeleteJob(props.jobId);
+      if (isSuccess) {
+        this.organizationStore.jobs = this.organizationStore.jobs.filter((job) => job.id != parseInt(props.jobId));
+        this.router.push(PathConst.adminJobsList);
+      }
+    };
   },
 );
 </script>

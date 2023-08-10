@@ -15,10 +15,10 @@
         <div class="job-title" v-if="app.job.value.title">
           <h2 class="title">{{ app.job.value.title }}</h2>
         </div>
-        <ul class="job-info list">
-          <li class="info-detail" v-if="app.job.value.location">
+        <ul class="job-info job-flex list">
+          <li class="info-detail" v-if="app.job.value.location.name">
             <i class="bi bi-geo-alt icon"></i>
-            {{ app.job.value.location }}
+            {{ app.job.value.location.name }}
           </li>
           <li class="info-detail" v-if="app.job.value.salary > 0">
             <i class="bi bi-cash icon"></i>
@@ -29,24 +29,24 @@
             {{ PrimitiveHelper.getWorkingHours(app.job.value.workingHours) }}
           </li>
         </ul>
-        <div class="job-label" v-if="app.job.value.searchLabels.length > 0">
+        <div class="job-label job-flex job-center" v-if="app.job.value.searchLabels.length > 0">
           <ul class="search-label list">
-            <li class="search-item" v-for="label in app.job.value.searchLabels" :key="label">{{ label }}</li>
+            <li class="search-item" v-for="label in app.job.value.searchLabels" :key="label.id">{{ label.name }}</li>
           </ul>
         </div>
-        <div class="job-text">
+        <div class="job-text job-flex job-border-bottom">
           <span class="catch-text" v-if="app.job.value.catchText">{{ app.job.value.catchText }}</span>
           <span class="lead-text" v-if="app.job.value.leadText">{{ app.job.value.leadText }}</span>
         </div>
-        <div class="job-subimage" v-if="app.job.value.subImages.length > 0">
-          <ul class="subimages-list list">
-            <li class="subimage-item" v-for="subImage in app.job.value.subImages" :key="subImage.id">
-              <img :src="subImage.url" alt="Sub Image" class="sub-img" />
+        <div class="job-photo-wrapper job-flex job-center job-border-bottom" v-if="app.job.value.subImages.length > 0">
+          <ul class="photo-list list">
+            <li class="photo-item" v-for="subImage in app.job.value.subImages" :key="subImage.id">
+              <img :src="subImage.url" alt="Sub Image" class="photo" />
               <span class="desc">{{ subImage.description }}</span>
             </li>
           </ul>
         </div>
-        <ul class="job-properties list" v-if="app.job.value.properties.length > 0">
+        <ul class="job-properties job-flex job-border-bottom list" v-if="app.job.value.properties.length > 0">
           <li
             class="properties-item"
             v-for="property in app.job.value.properties"
@@ -57,16 +57,19 @@
             <span class="body">{{ property.body }}</span>
           </li>
         </ul>
-        <ul class="job-post-scripts list" v-if="app.job.value.postScripts.length > 0">
+        <ul class="job-post-scripts job-flex job-border-bottom list" v-if="app.job.value.postScripts.length > 0">
           <li class="post-scripts-item" v-for="post in app.job.value.postScripts" :key="post.id">
             <i class="bi bi-star icon"></i>
             <span class="body">{{ post.body }}</span>
           </li>
         </ul>
-        <div class="job-photo-gallery" v-if="app.job.value.photoGallery.length > 0">
-          <ul class="photo-gallery-list list">
-            <li class="photo-gallery-item" v-for="photo in app.job.value.photoGallery" :key="photo.id">
-              <img :src="photo.url" alt="Photo gallery" class="gallery-img" />
+        <div
+          class="job-photo-wrapper job-flex job-center job-border-bottom"
+          v-if="app.job.value.photoGallery.length > 0"
+        >
+          <ul class="photo-list list">
+            <li class="photo-item" v-for="photo in app.job.value.photoGallery" :key="photo.id">
+              <img :src="photo.url" alt="Photo gallery" class="photo" />
               <span class="desc">{{ photo.description }}</span>
             </li>
           </ul>
@@ -129,6 +132,21 @@ const app = defineClassComponent(
     }
 
     & .job-body {
+      & .job-flex {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: wrap;
+        margin-bottom: 1.5rem;
+      }
+
+      & .job-center {
+        align-items: center;
+      }
+
+      & .job-border-bottom {
+        border-bottom: 0.0625rem solid rgba($border, 0.7);
+      }
+
       & .job-opens-expires {
         font-size: 0.875rem;
       }
@@ -141,22 +159,12 @@ const app = defineClassComponent(
         margin-bottom: 1.5rem;
       }
 
-      & .job-info,
-      & .job-text,
-      & .job-properties,
-      & .job-post-scripts {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: wrap;
-        margin-bottom: 1.5rem;
-      }
-
       & .job-info {
         & .info-detail {
           display: flex;
           align-items: center;
           justify-content: flex-start;
-          font-weight: 600;
+          color: $black;
           margin-bottom: 0.25rem;
 
           & .icon {
@@ -164,15 +172,6 @@ const app = defineClassComponent(
             margin-right: 0.5rem;
           }
         }
-      }
-
-      & .job-label,
-      & .job-subimage,
-      & .job-photo-gallery {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        margin-bottom: 1.5rem;
       }
 
       & .job-label {
@@ -196,30 +195,28 @@ const app = defineClassComponent(
           font-weight: 600;
           margin-bottom: 0.5rem;
         }
+
+        & .lead-text {
+          margin-bottom: 0.5rem;
+        }
       }
 
-      & .job-subimage,
-      & .job-photo-gallery {
-        border: 0.0625rem solid rgba($border, 0.7);
-        border-left: 0;
-        border-right: 0;
+      & .job-photo-wrapper {
+        border-bottom: 0.0625rem solid rgba($border, 0.7);
         padding: 1.5rem 0;
 
-        & .subimages-list,
-        & .photo-gallery-list {
+        & .photo-list {
           display: grid;
           grid-template-columns: auto auto auto;
           gap: 1rem;
 
-          & .subimage-item,
-          & .photo-gallery-item {
+          & .photo-item {
             width: auto;
             max-width: 15rem;
             display: flex;
             flex-direction: column;
 
-            & .sub-img,
-            & .gallery-img {
+            & .photo {
               width: 100%;
               height: 100%;
               object-fit: cover;

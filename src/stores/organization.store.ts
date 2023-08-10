@@ -2,10 +2,12 @@ import type { Ref } from "vue";
 import { BaseStore, defineClassStore } from "@/plugins/store.plugin";
 import { Api } from "@/plugins/api.plugin";
 import { ApiConst } from "@/const/api.const";
+import { AppConst } from "@/const/app.const";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
 import { OrganizationModel } from "@/models/organization.model";
 import { JobModel } from "@/models/job.model";
-import { DatetimeHelper } from "@/helpers/datetime.helper";
-import { AppConst } from "@/const/app.const";
+import { LocationModel } from "@/models/location.model";
+import { SearchLabelModel } from "@/models/searchLabel.model";
 
 export const api = new Api();
 
@@ -47,12 +49,11 @@ export const useOrganizationStore = defineClassStore(
       }
     };
 
-    public fetchUpdateProfile = async (data: any) => {
+    public fetchUpdateProfile = async (data: OrganizationModel) => {
       try {
         const profile = {
           name: data.name || "",
           phone_number: data.phoneNumber || "",
-          avatar: data.photo || "",
           website: data.website || "",
           address: data.address || 1,
           introduction: data.introduction || "",
@@ -109,10 +110,21 @@ export const useOrganizationStore = defineClassStore(
               mainImageDesc: data.mainImage.description,
               title: data.title,
               jobTitleCatchPhrase: data.jobTitleCatchPhrase,
-              location: data.location.city,
+              location: new LocationModel({
+                id: data.location.id,
+                name: data.location.city,
+              }),
               salary: data.salary.monthly,
               workingHours: data.workingHours,
-              searchLabels: data.searchLabels.map((value: any) => value.name),
+              searchLabels: data.searchLabels
+                ? data.searchLabels.map((value: any) => {
+                    return new SearchLabelModel({
+                      id: value.id,
+                      name: value.name,
+                      isEnabled: value.isEnabled,
+                    });
+                  })
+                : [],
               webApplication: data.webApplication.url,
               catchText: data.catchText,
               leadText: data.leadText,
@@ -124,10 +136,10 @@ export const useOrganizationStore = defineClassStore(
               photoGallery: data.photoGallery.contents,
               interview: data.interview.displayed && data.interview.contents,
               productCode: data.productCode,
-              opensAt: new Date(data.opensAt),
-              expiresAt: new Date(data.expiresAt),
-              updatedAt: new Date(data.updatedAt),
-              createdAt: new Date(data.createdAt),
+              opensAt: data.opensAt,
+              expiresAt: data.expiresAt,
+              updatedAt: data.updatedAt,
+              createdAt: data.createdAt,
             };
             return new JobModel(job);
           });
@@ -152,10 +164,21 @@ export const useOrganizationStore = defineClassStore(
               mainImageDesc: data.mainImage.description,
               title: data.title,
               jobTitleCatchPhrase: data.jobTitleCatchPhrase,
-              location: data.location.city,
+              location: new LocationModel({
+                id: data.location.id,
+                name: data.location.city,
+              }),
               salary: data.salary.monthly,
               workingHours: data.workingHours,
-              searchLabels: data.searchLabels.map((value: any) => value.name),
+              searchLabels: data.searchLabels
+                ? data.searchLabels.map((value: any) => {
+                    return new SearchLabelModel({
+                      id: value.id,
+                      name: value.name,
+                      isEnabled: value.isEnabled,
+                    });
+                  })
+                : [],
               webApplication: data.webApplication.url,
               catchText: data.catchText,
               leadText: data.leadText,
@@ -167,10 +190,10 @@ export const useOrganizationStore = defineClassStore(
               photoGallery: data.photoGallery.contents,
               interview: data.displayed && data.interview.contents,
               productCode: data.productCode,
-              opensAt: new Date(data.opensAt),
-              expiresAt: new Date(data.expiresAt),
-              updatedAt: new Date(data.updatedAt),
-              createdAt: new Date(data.createdAt),
+              opensAt: data.opensAt,
+              expiresAt: data.expiresAt,
+              updatedAt: data.updatedAt,
+              createdAt: data.createdAt,
             };
             this.job.value = new JobModel(job);
             console.log(this.job.value);
@@ -181,14 +204,14 @@ export const useOrganizationStore = defineClassStore(
       }
     };
 
-    public fetchCreateJob = async (data: any) => {
+    public fetchCreateJob = async (data: JobModel) => {
       try {
         const job = {
-          mainImageUrl: data.mainImage[0] || "",
+          mainImageUrl: data.mainImageUrl || "",
           mainImageDescription: data.title || "Main image",
           title: data.title || "",
           jobTitleCatchPhrase: data.jobTitleCatchPhrase || "",
-          location: data.location || 1,
+          locationId: data.location.id || 1,
           salary: {
             daily: 0,
             dailyText: "daily",
@@ -198,15 +221,41 @@ export const useOrganizationStore = defineClassStore(
             monthlyText: "monthly",
             type: 0,
           },
-          workingHours: data.workingHours,
-          searchLabels: data.searchLabels || [],
+          workingHours: data.workingHours
+            ? data.workingHours.map((value: any) => {
+                return {
+                  start_time: value.startTime,
+                  end_time: value.endTime,
+                  hours: value.countHours,
+                  is_full_time: value.isFullTime,
+                };
+              })
+            : [],
+          searchLabelIds: data.searchLabels
+            ? data.searchLabels.map((value: SearchLabelModel) => {
+                return value.id;
+              })
+            : [],
           webApplicationUrl: data.webApplication || "",
           catchText: data.catchText || "",
           leadText: data.leadText || "",
           subImageUrl: data.subImages || [],
-          subImageDescriptions: "",
-          properties: data.properties || [],
-          postScripts: data.postScripts || [],
+          subImageDescriptions: [],
+          properties: data.properties
+            ? data.properties.map((value: any) => {
+                return {
+                  title: value.title,
+                  body: value.body,
+                  is_displayed: true,
+                  sort_order: 0,
+                };
+              })
+            : [],
+          postScripts: data.postScripts
+            ? data.postScripts.map((value: any) => {
+                return value.body;
+              })
+            : [],
           companySurvey: {
             contents: [],
             displayed: true,
@@ -222,8 +271,11 @@ export const useOrganizationStore = defineClassStore(
             contents: [],
             displayed: true,
           },
-          opensAt: DatetimeHelper.getDate(data.opensAt) || DatetimeHelper.getDate(new Date()),
-          expiresAt: DatetimeHelper.getDate(data.expiresAt) || DatetimeHelper.getDate(new Date()),
+          opensAt: data.opensAt ? DatetimeHelper.getDate(data.opensAt) : DatetimeHelper.getDate(new Date()),
+          expiresAt: data.expiresAt
+            ? DatetimeHelper.getDate(data.expiresAt)
+            : DatetimeHelper.getDate(new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)),
+          productCode: "",
         };
         console.log(job);
         const res = await api.post(ApiConst.organizationsEndpoints.createOrganizationJobs, JSON.stringify(job));
@@ -237,16 +289,85 @@ export const useOrganizationStore = defineClassStore(
       }
     };
 
-    public fetchUpdateJob = async (id: string, job: JobModel) => {
+    public fetchUpdateJob = async (id: string, data: JobModel) => {
       try {
+        const job = {
+          mainImageUrl: data.mainImageUrl || "",
+          mainImageDescription: data.title || "Main image",
+          title: data.title || "",
+          jobTitleCatchPhrase: data.jobTitleCatchPhrase || "",
+          locationId: data.location.id || 1,
+          salary: {
+            daily: 0,
+            dailyText: "daily",
+            hourly: 0,
+            hourlyText: "hourly",
+            monthly: data.salary || 0,
+            monthlyText: "monthly",
+            type: 0,
+          },
+          workingHours: data.workingHours
+            ? data.workingHours.map((value: any) => {
+                return {
+                  start_time: value.startTime,
+                  end_time: value.endTime,
+                  hours: value.countHours,
+                  is_full_time: value.isFullTime,
+                };
+              })
+            : [],
+          searchLabelIds: data.searchLabels
+            ? data.searchLabels.map((value: SearchLabelModel) => {
+                return value.id;
+              })
+            : [],
+          webApplicationUrl: data.webApplication || "",
+          catchText: data.catchText || "",
+          leadText: data.leadText || "",
+          subImageUrl: data.subImages || [],
+          subImageDescriptions: [],
+          properties: data.properties
+            ? data.properties.map((value: any) => {
+                return {
+                  title: value.title,
+                  body: value.body,
+                  is_displayed: true,
+                  sort_order: 0,
+                };
+              })
+            : [],
+          postScripts: data.postScripts
+            ? data.postScripts.map((value: any) => {
+                return value.body;
+              })
+            : [],
+          companySurvey: {
+            contents: [],
+            displayed: true,
+          },
+          barometer: {
+            contents: [],
+            displayed: true,
+            stats: [],
+          },
+          galleryUrl: [],
+          galleryDescription: [],
+          interview: {
+            contents: [],
+            displayed: true,
+          },
+          opensAt: data.opensAt ? DatetimeHelper.getDate(data.opensAt) : DatetimeHelper.getDate(new Date()),
+          expiresAt: data.expiresAt
+            ? DatetimeHelper.getDate(data.expiresAt)
+            : DatetimeHelper.getDate(new Date(new Date().getTime() + 7 * 24 * 60 * 60 * 1000)),
+          productCode: "",
+        };
+        console.log(job);
         const res = await api.put(
-          ApiConst.organizationsEndpoints.createOrganizationJobs.replace("{id}", id),
+          ApiConst.organizationsEndpoints.updateOrganizationJobs.replace("{id}", id),
           JSON.stringify(job),
         );
         if (res.status === ApiConst.status.ok) {
-          const data = await res.json();
-          this.job.value = data;
-          console.log(this.job.value);
           return true;
         } else {
           return false;

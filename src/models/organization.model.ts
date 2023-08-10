@@ -32,8 +32,8 @@ export class OrganizationModel extends BaseModel implements IOrganization {
     this.introduction = data.introduction || "";
     this.organizationType = data.organizationType || AppConst.ORGANIZATION_TYPE.typeB;
     this.status = data.status || AppConst.STATUS.disabled;
-    this.createdAt = new Date(data.createdAt) || new Date();
-    this.updatedAt = new Date(data.updatedAt) || new Date();
+    this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
+    this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
     this.isSelected = data.isSelected || false;
   }
 }

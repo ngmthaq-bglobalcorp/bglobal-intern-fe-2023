@@ -31,7 +31,12 @@
     </div>
     <ul class="jobs-list list">
       <li class="jobs-item" v-for="item in app.filtersJobs.value" :key="item.id">
-        <JobCard :job="item" @on-click-card="app.onClickCard" @on-toggle-delete-button="app.onToggleDeleteButton" />
+        <JobCard
+          :data="item"
+          @on-click-card="app.onClickCard"
+          @on-toggle-update-button="app.onToggleUpdateButton"
+          @on-toggle-delete-button="app.onToggleDeleteButton"
+        />
       </li>
     </ul>
   </AdminLayout>
@@ -71,10 +76,14 @@ const app = defineClassComponent(
       this.router.push({ ...PathConst.adminJobDetail, params: { jobId: id } });
     };
 
+    public onToggleUpdateButton = (id: number) => {
+      this.router.push({ ...PathConst.adminUpdateJob, params: { jobId: id } });
+    };
+
     public onToggleDeleteButton = async (id: number) => {
       const isSuccess = await this.organizationStore.fetchDeleteJob(id.toString());
       if (isSuccess) {
-        console.log("delete", id);
+        this.organizationStore.jobs = this.organizationStore.jobs.filter((job) => job.id != id);
       }
     };
 

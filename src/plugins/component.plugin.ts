@@ -9,7 +9,6 @@ import { useCommonStore } from "@/stores/common.store";
 import { Vue } from "./vue.plugin";
 import { GlobalEvent } from "./event.plugin";
 import { SearchParams } from "./params.plugin";
-import { pathNotFound } from "./router.plugin";
 
 export abstract class BaseComponent extends Vue {
   public readonly router = useRouter();

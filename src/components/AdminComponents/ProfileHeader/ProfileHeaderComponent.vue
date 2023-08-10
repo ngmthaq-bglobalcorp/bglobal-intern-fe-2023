@@ -95,7 +95,7 @@ import type { ProfileHeaderEmits, ProfileHeaderProps } from "./ProfileHeaderComp
 import type { Ref } from "vue";
 
 const props = defineProps<ProfileHeaderProps>();
-const emit = defineEmits<ProfileHeaderEmits>();
+const emits = defineEmits<ProfileHeaderEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -121,7 +121,7 @@ const app = defineClassComponent(
     }
 
     public onToggleUpdate = () => {
-      emit("onToggleUpdateProfile");
+      emits("onToggleUpdateProfile");
     };
   },
 );
