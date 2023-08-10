@@ -4,7 +4,7 @@
       <ProfileHeader
         :profile="app.profile.value"
         :isUpdate="false"
-        :editable="true"
+        :editable="props.username == app.profile.value.username"
         @on-toggle-update-profile="app.onToggleUpdateProfile"
       />
       <ProfileCard :profile="app.profile.value" />
@@ -19,8 +19,11 @@ import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHea
 import ProfileCard from "@/components/AdminComponents/ProfileCard/ProfileCardComponent.vue";
 import { PathConst } from "@/const/path.const";
 import { useOrganizationStore } from "@/stores/organization.store";
+import type { UserProfileProps } from "./UserProfileView";
 import type { Ref } from "vue";
 import type { OrganizationModel } from "@/models/organization.model";
+
+const props = defineProps<UserProfileProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {

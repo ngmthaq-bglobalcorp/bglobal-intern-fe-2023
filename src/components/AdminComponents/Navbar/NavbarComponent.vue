@@ -49,17 +49,21 @@
                 </div>
               </div>
               <div class="dropdown-divider"></div>
-              <router-link :to="PathConst.adminUserProfile" class="link">
+              <router-link
+                :to="{ ...PathConst.adminUserProfile, params: { username: app.profile.value.username } }"
+                class="link"
+                v-if="!app.isAdmin.value"
+              >
                 <div class="dropdown-item">
                   {{ app.t(`app.profile`) }}
                 </div>
               </router-link>
-              <router-link :to="PathConst.adminUpdateProfile" class="link">
+              <router-link :to="PathConst.adminUpdateProfile" class="link" v-if="!app.isAdmin.value">
                 <div class="dropdown-item">
                   {{ app.t(`app.settings`) }}
                 </div>
               </router-link>
-              <div class="dropdown-divider"></div>
+              <div class="dropdown-divider" v-if="!app.isAdmin.value"></div>
               <div class="link" @click="app.onToggleSignOut">
                 <div class="dropdown-item">
                   {{ app.t(`app.signout`) }}
@@ -88,15 +92,18 @@ const app = defineClassComponent(
     public authStore = useAuthStore();
     public organizationStore = useOrganizationStore();
     public isMenuOpen: Ref<Boolean> = this.ref(false);
+    public isAdmin: Ref<Boolean> = this.ref(true);
     public profile: Ref<any> = this.computed(() => {
       if (this.authStore.user.role.includes(AppConst.ROLE.organization)) {
+        this.isAdmin.value = false;
         return this.organizationStore.profile;
       } else {
+        this.isAdmin.value = true;
         return {
           userId: this.authStore.user.id,
-          name: this.authStore.user.username,
+          name: "Admin",
           username: this.authStore.user.username,
-          email: "",
+          email: "Admin",
           avatar: "",
         };
       }

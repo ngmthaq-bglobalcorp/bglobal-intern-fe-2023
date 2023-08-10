@@ -88,7 +88,7 @@ const app = defineClassComponent(
     }
 
     public onToggleButton = () => {
-      this.router.push(PathConst.adminUserProfile);
+      this.router.push({ ...PathConst.adminUserProfile, params: { username: this.profile.value.username } });
     };
 
     public onUpdateInfomation = async (data: any) => {

@@ -3,7 +3,7 @@
     <ul class="users-list list">
       <li class="users-item" v-for="item in app.filterData.value" :key="item.id">
         <template v-for="column in app.columns.value" :key="column.field">
-          <router-link :to="PathConst.adminUserProfile" class="item-name link-default" v-if="column.field === 'name'">
+          <router-link to="" class="item-name link-default" v-if="column.field === 'name'">
             <AvatarComponent :avatarImage="item.image" avatarAlt="Avatar" :avatarInit="item.name[0]" />
             <span class="name">{{ item.name }}</span>
           </router-link>

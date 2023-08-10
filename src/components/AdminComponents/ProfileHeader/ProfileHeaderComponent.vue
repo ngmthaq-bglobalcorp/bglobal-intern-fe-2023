@@ -99,10 +99,11 @@ const emits = defineEmits<ProfileHeaderEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public profile: Ref<any> = this.computed(() => props.profile);
     public isEditCover: Ref<boolean> = this.ref(false);
     public navList: Ref<Array<any>> = this.ref([
       {
-        link: PathConst.adminUserProfile.path,
+        link: { ...PathConst.adminUserProfile, params: { username: this.profile.value.username } },
         name: PathConst.adminUserProfile.name,
         text: this.t(`app.profile`),
         disabled: true,
@@ -114,7 +115,6 @@ const app = defineClassComponent(
         disabled: true,
       },
     ]);
-    public profile: Ref<any> = this.computed(() => props.profile);
 
     public constructor() {
       super();
