@@ -7,7 +7,8 @@
       "home": "Homepage",
       "signup": "Sign Up",
       "joblist": "Job list",
-      "history": "History"
+      "history": "History",
+      "jobDetails": "Job details"
     },
     "admin": {
       "signup": "Sign Up",
