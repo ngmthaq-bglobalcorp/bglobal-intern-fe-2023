@@ -1,6 +1,6 @@
 import { BaseModel } from "./base.model";
 import { LocationModel } from "./location.model";
-import { SearchLabelModel } from "./searchLabel.model";
+import type { SearchLabelModel } from "./searchLabel.model";
 
 export class JobModel extends BaseModel implements IJob {
   public id: number;
@@ -35,14 +35,10 @@ export class JobModel extends BaseModel implements IJob {
     this.mainImageDesc = data.mainImageDesc || "";
     this.title = data.title || "";
     this.jobTitleCatchPhrase = data.jobTitleCatchPhrase || "";
-    this.location = data.location ? new LocationModel(data.location) : new LocationModel({});
+    this.location = data.location || new LocationModel({});
     this.salary = data.salary || 0;
     this.workingHours = data.workingHours || [];
-    this.searchLabels = data.searchLabels
-      ? data.searchLabels.map((value: any) => {
-          return new SearchLabelModel({ id: value.id, name: value.name, isEnabled: value.isEnabled });
-        })
-      : [];
+    this.searchLabels = data.searchLabels || [];
     this.webApplication = data.webApplication || "";
     this.catchText = data.catchText || "";
     this.leadText = data.leadText || "";

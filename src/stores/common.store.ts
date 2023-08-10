@@ -34,6 +34,10 @@ export const useCommonStore = defineClassStore(
       }
     };
 
+    public getLocationById = (id: number) => {
+      return this.locations.value.find((value) => value.id === id);
+    };
+
     public fetchAllSearchLabels = async () => {
       try {
         const res = await api.get(ApiConst.commonEndpoints.getAllSearchLabel);
@@ -53,6 +57,10 @@ export const useCommonStore = defineClassStore(
       } catch (error) {
         console.log(error);
       }
+    };
+
+    public getSearchLabelById = (id: number) => {
+      return this.searchLabels.value.find((value) => value.id === id);
     };
 
     public fetchUploadImage = async (image: any) => {

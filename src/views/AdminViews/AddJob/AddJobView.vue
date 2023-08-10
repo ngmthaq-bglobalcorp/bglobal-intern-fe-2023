@@ -206,7 +206,7 @@ const app = defineClassComponent(
             placeholder: this.t(`app.searchLabels`),
             required: false,
             multiple: false,
-            model: this.job.value.searchLabels.map((value: SearchLabelModel) => value.id),
+            model: this.job.value.searchLabels.map((value) => value.id),
             error: "",
             children: this.commonStore.searchLabels,
           },
@@ -398,8 +398,11 @@ const app = defineClassComponent(
     };
 
     public onSubmitForm = async (data: any) => {
-      const job = data;
-      // const job = new JobModel(data);
+      data.location = this.commonStore.getLocationById(data.location);
+      data.searchLabels = data.searchLabels.map((value: any) => {
+        return this.commonStore.getLocationById(value);
+      });
+      const job = new JobModel(data);
       if (this.isUpdate.value) {
         const isSuccess = await this.organizationStore.fetchUpdateJob(props.jobId, job);
         if (isSuccess) {

@@ -344,6 +344,7 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import { useCommonStore } from "@/stores/common.store";
 import type { FormDataEmits, FormDataProps } from "./FormDataComponent";
 import type { Ref } from "vue";
+import type { SearchLabelModel } from "@/models/searchLabel.model";
 
 const props = defineProps<FormDataProps>();
 const emit = defineEmits<FormDataEmits>();
@@ -393,9 +394,9 @@ const app = defineClassComponent(
       input.model = input.model.filter((value: any) => value != item);
     };
 
-    public onToggleSelectMultiple = (input: any, label: string) => {
+    public onToggleSelectMultiple = (input: any, label: SearchLabelModel) => {
       if (input.model.includes(label)) {
-        input.model = input.model.filter((value: string) => value != label);
+        input.model = input.model.filter((value: SearchLabelModel) => value != label);
       } else {
         input.model.push(label);
       }
@@ -573,15 +574,14 @@ const app = defineClassComponent(
             width: 6rem;
             height: 6rem;
             background-color: transparent;
+            border: 0.0625rem solid rgba($border, 0.3);
+            border-radius: 0.5rem;
+            overflow: hidden;
 
             &:hover {
               & .delete-btn {
                 display: block;
               }
-            }
-
-            & .image {
-              border: 0.0625rem solid rgba($border, 0.3);
             }
 
             & .delete-btn {
@@ -651,6 +651,7 @@ const app = defineClassComponent(
           & .custom-check {
             display: flex;
             align-items: center;
+            width: 100%;
 
             & .custom-check-input {
               width: 0.75rem;
@@ -697,7 +698,7 @@ const app = defineClassComponent(
           }
 
           & .input-time {
-            flex: 1 1 30%;
+            flex: 1;
             display: flex;
             align-items: center;
             flex-wrap: wrap;
