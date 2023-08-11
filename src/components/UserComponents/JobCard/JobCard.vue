@@ -73,7 +73,7 @@
       <img src="@/assets/img/img_btn_keep.60a6f70f06cd69caba08.png" class="" />
     </button>
     <button class="swiper_action_button dislike_button" style="transform: scale(1); display: block">
-      <img src="@/assets/img/img_btn_ng.964ca4ad01758b786dd4 (1).png" class="" />
+      <img src="@/assets/img/img_btn_ng.964ca4ad01758b786dd4.png" class="" />
     </button>
     <button class="swiper_action_button skip_button" style="transform: translateX(-50%) scale(1); display: block">
       <img src="@/assets/img/img_btn_pass.4480813519e2965312ad.png" class="" />
