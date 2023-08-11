@@ -15,7 +15,7 @@
     </div>
     <div class="license">
       <a target="_blank" href="https://official.haj.co.jp/">{{ app.t("jobsApp.footer.license.company") }}</a>
-      <p>{{ app.t("jobsApp.footer.license.tittle") }}</p>
+      <p>{{ app.t("jobsApp.footer.license.title") }}</p>
       <span>v1.0.7</span>
     </div>
   </div>

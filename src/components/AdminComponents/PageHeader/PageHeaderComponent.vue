@@ -4,13 +4,13 @@
       <div class="header-nav">
         <router-link :to="PathConst.adminDashboard" class="link">{{ app.t(`app.dashboard`) }}</router-link>
         <span>/</span>
-        <router-link to="" class="link active">{{ app.t(`app.${props.route}`) }}</router-link>
+        <router-link to="" class="link active">{{ app.target.value }}</router-link>
       </div>
       <div class="header-title">
-        <h1>{{ app.t(`app.${props.route}`) }}</h1>
+        <h1>{{ app.target.value }}</h1>
         <button class="add-btn small-btn primary-btn">
           <i class="bi bi-person-plus-fill"></i>
-          {{ app.t(`app.add`, { value: app.t(`app.${props.route}`) }) }}
+          {{ app.t(`app.add`, { value: app.target.value }) }}
         </button>
       </div>
     </div>
@@ -21,11 +21,14 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
 import type { PageHeaderProps } from "./PageHeaderComponent";
+import type { Ref } from "vue";
 
 const props = defineProps<PageHeaderProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public target: Ref<string> = this.ref(props.target);
+
     public constructor() {
       super();
     }

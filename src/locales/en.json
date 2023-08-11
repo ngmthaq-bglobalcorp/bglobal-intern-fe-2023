@@ -130,7 +130,8 @@
     "timezone": "Time zone",
     "yourTimezone": "Your time zone",
     "deleteNotice": "When you delete your account, you lose access to account services, and we permanently delete your personal data.",
-    "confirmDelete": "Confirm that I want to delete my account."
+    "confirmDelete": "Confirm that I want to delete my account.",
+    "loadMore": "Load more {value}"
   },
   "jobsApp": {
     "header": {
