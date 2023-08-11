@@ -12,6 +12,7 @@ import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
 import SignUp from "@/views/UserViews/Signup/SignUp.vue";
 import JobList from "@/views/UserViews/JobList/JobList.vue";
 import HistoryViewVue from "@/views/UserViews/History/HistoryView.vue";
+import JobDetailsViewVue from "@/views/UserViews/JobDetails/JobDetailsView.vue";
 
 export class PathConst {
   public static adminSignup: Route = {
@@ -125,6 +126,14 @@ export class PathConst {
     component: HistoryViewVue,
     meta: {
       title: "title.user.history",
+    },
+  };
+  public static userJobDetails: Route = {
+    path: "/user/job-details",
+    name: "JobDetails",
+    component: JobDetailsViewVue,
+    meta: {
+      title: "title.user.jobDetails",
     },
   };
 }
