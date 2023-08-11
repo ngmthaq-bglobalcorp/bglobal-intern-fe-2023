@@ -49,7 +49,7 @@
             <router-link to="" class="event-link link-default">
               <h2 class="event-title">{{ data.title }}</h2>
             </router-link>
-            <h3 class="event-subtitle" v-if="data.subTitle">{{ data.subTitle }}</h3>
+            <h3 class="event-subtitle" v-if="data.subtitle">{{ data.subtitle }}</h3>
             <ul class="event-list-group list">
               <li v-if="data.body">
                 <span class="event-body">{{ data.body }}</span>
@@ -97,6 +97,7 @@ import { AppConst } from "@/const/app.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
 import type { TimelineListEmits, TimelineListProps } from "./TimelineListComponent";
 import type { Ref } from "vue";
+import type { NewsModel } from "@/models/news.model";
 
 const props = defineProps<TimelineListProps>();
 const emit = defineEmits<TimelineListEmits>();
@@ -106,7 +107,7 @@ const app = defineClassComponent(
     public target: Ref<string> = this.ref(props.target);
     public limit: Ref<number> = this.ref(props.limit);
 
-    public filtersData = this.computed(() => {
+    public filtersData: Ref<Array<NewsModel>> = this.computed(() => {
       return props.data.filter((_, index) => {
         return index < this.limit.value;
       });

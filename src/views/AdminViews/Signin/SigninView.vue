@@ -123,23 +123,26 @@ const app = defineClassComponent(
     }
 
     public submitForm = async () => {
+      let isValidInput = true;
       if (!this.username.value) {
         this.errorUsername.value = this.t(`message.errorUsername`);
-        return false;
+        isValidInput = false;
       } else {
         this.errorUsername.value = "";
       }
       if (!this.password.value || !PrimitiveHelper.isValidPassword(this.password.value)) {
         this.errorPassword.value = this.t(`message.errorPassword`);
-        return false;
+        isValidInput = false;
       } else {
         this.errorPassword.value = "";
       }
-      const isSuccess = await this.authStore.fetchAdminSignIn(this.username.value, this.password.value);
-      if (isSuccess) {
-        this.router.push(PathConst.adminDashboard);
-      } else {
-        this.errorUsernameOrPassword.value = this.t(`message.errorUsernameOrPassword`);
+      if (isValidInput) {
+        const isSuccess = await this.authStore.fetchAdminSignIn(this.username.value, this.password.value);
+        if (isSuccess) {
+          window.location.replace(PathConst.adminDashboard.path);
+        } else {
+          this.errorUsernameOrPassword.value = this.t(`message.errorUsernameOrPassword`);
+        }
       }
     };
 
@@ -148,11 +151,18 @@ const app = defineClassComponent(
         this.errorUsername.value = "";
         this.username.value = "";
       }
+      if (this.errorUsernameOrPassword.value) {
+        this.errorUsernameOrPassword.value = "";
+      }
     };
 
     public focusPassword = () => {
       if (this.errorPassword.value) {
         this.errorPassword.value = "";
+        this.password.value = "";
+      }
+      if (this.errorUsernameOrPassword.value) {
+        this.errorUsernameOrPassword.value = "";
         this.password.value = "";
       }
     };

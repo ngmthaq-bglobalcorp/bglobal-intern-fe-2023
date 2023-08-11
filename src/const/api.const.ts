@@ -52,9 +52,11 @@ export class ApiConst {
 
   public static organizationsEndpoints = {
     getAllOrganizationJobs: "/organizations/jobs",
+    findOrganizationJobsById: "/organizations//jobs/{id}",
     updateOrganizationJobs: "/organizations/jobs/{id}/update",
     deleteOrganizationJobs: "/organizations/jobs/{id}/delete",
     createOrganizationJobs: "/organizations/jobs/create",
+    getAllSeekerLikeJob: "/organizations/jobs/{id}/seeker",
     getOrganizationProfile: "/organizations/profile",
     updateOrganizationProfile: "/organizations/profile/update",
   };

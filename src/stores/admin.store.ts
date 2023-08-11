@@ -47,6 +47,9 @@ export const useAdminStore = defineClassStore(
           });
           this.seekers.value = seekers;
           console.log(this.seekers.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -91,6 +94,9 @@ export const useAdminStore = defineClassStore(
           });
           this.organizations.value = organizations;
           console.log(this.organizations.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -148,6 +154,9 @@ export const useAdminStore = defineClassStore(
           });
           this.newsList.value = news;
           console.log(this.newsList.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -160,24 +169,25 @@ export const useAdminStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
           console.log(data);
-          if (data) {
-            const news = {
-              id: data.id,
-              title: data.title,
-              subtitle: data.subTitle,
-              category: data.category,
-              body: data.body,
-              eventPageUrl: data.eventPageUrl,
-              eventStartAt: data.eventStartAt,
-              eventEndAt: data.eventEndAt,
-              opensAt: data.opensAt,
-              expiresAt: data.expiresAt,
-              updatedAt: data.updatedAt,
-              createdAt: data.createdAt,
-            };
-            this.news.value = new NewsModel(news);
-            console.log(this.news.value);
-          }
+          const news = {
+            id: data.id,
+            title: data.title,
+            subtitle: data.subTitle,
+            category: data.category,
+            body: data.body,
+            eventPageUrl: data.eventPageUrl,
+            eventStartAt: data.eventStartAt,
+            eventEndAt: data.eventEndAt,
+            opensAt: data.opensAt,
+            expiresAt: data.expiresAt,
+            updatedAt: data.updatedAt,
+            createdAt: data.createdAt,
+          };
+          this.news.value = new NewsModel(news);
+          console.log(this.news.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);

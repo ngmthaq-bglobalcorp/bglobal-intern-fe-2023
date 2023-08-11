@@ -1,10 +1,11 @@
+import { AppConst } from "@/const/app.const";
 import { BaseModel } from "./base.model";
 
 export class NewsModel extends BaseModel implements INews {
   public id: number;
   public title: string;
   public subtitle: string;
-  public category: string;
+  public category: number;
   public body: string;
   public eventPageUrl: string;
   public eventStartAt: Date;
@@ -19,7 +20,7 @@ export class NewsModel extends BaseModel implements INews {
     this.id = data.id || -1;
     this.title = data.title || "";
     this.subtitle = data.subtitle || "";
-    this.category = data.category || "";
+    this.category = data.category || AppConst.NEWS_CATEGORY.other;
     this.body = data.body || "";
     this.eventPageUrl = data.eventPageUrl || "";
     this.eventStartAt = data.eventStartAt ? new Date(data.eventStartAt) : new Date();
@@ -35,7 +36,7 @@ export interface INews {
   id: number;
   title: string;
   subtitle: string;
-  category: string;
+  category: number;
   body: string;
   eventPageUrl: string;
   eventStartAt: Date;

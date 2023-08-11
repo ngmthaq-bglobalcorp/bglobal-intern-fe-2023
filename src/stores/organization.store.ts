@@ -6,6 +6,7 @@ import { AppConst } from "@/const/app.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
 import { OrganizationModel } from "@/models/organization.model";
 import { JobModel } from "@/models/job.model";
+import { SeekerModel } from "@/models/seeker.model";
 import { LocationModel } from "@/models/location.model";
 import { SearchLabelModel } from "@/models/searchLabel.model";
 
@@ -18,6 +19,7 @@ export const useOrganizationStore = defineClassStore(
     public profile: Ref<OrganizationModel> = this.ref(new OrganizationModel({}));
     public jobs: Ref<Array<JobModel>> = this.ref([]);
     public job: Ref<JobModel> = this.ref(new JobModel({}));
+    public actionSeekers: Ref<Array<SeekerModel>> = this.ref([]);
 
     public fetchProfile = async () => {
       try {
@@ -25,24 +27,25 @@ export const useOrganizationStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
           console.log(data);
-          if (data) {
-            const profile = {
-              id: data.id,
-              userId: data.user.id,
-              username: data.user.username,
-              name: data.name,
-              email: data.user.email,
-              phoneNumber: data.phoneNumber,
-              avatar: data.photo,
-              website: data.website,
-              address: data.address,
-              introduction: data.introduction,
-              organizationType: data.organizationType,
-              status: data.user.status,
-            };
-            this.profile.value = new OrganizationModel(profile);
-            console.log(this.profile.value);
-          }
+          const profile = {
+            id: data.id,
+            userId: data.user.id,
+            username: data.user.username,
+            name: data.name,
+            email: data.user.email,
+            phoneNumber: data.phoneNumber,
+            avatar: data.photo,
+            website: data.website,
+            address: data.address,
+            introduction: data.introduction,
+            organizationType: data.organizationType,
+            status: data.user.status,
+          };
+          this.profile.value = new OrganizationModel(profile);
+          console.log(this.profile.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -145,6 +148,9 @@ export const useOrganizationStore = defineClassStore(
           });
           this.jobs.value = jobs;
           console.log(this.jobs.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -153,51 +159,52 @@ export const useOrganizationStore = defineClassStore(
 
     public fetchFindJobById = async (id: string) => {
       try {
-        const res = await api.get(ApiConst.commonEndpoints.findJobById.replace("{id}", id));
+        const res = await api.get(ApiConst.organizationsEndpoints.findOrganizationJobsById.replace("{id}", id));
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
           console.log(data);
-          if (data) {
-            const job = {
-              id: data.id,
-              mainImageUrl: data.mainImage.url,
-              mainImageDesc: data.mainImage.description,
-              title: data.title,
-              jobTitleCatchPhrase: data.jobTitleCatchPhrase,
-              location: new LocationModel({
-                id: data.location.id,
-                name: data.location.city,
-              }),
-              salary: data.salary.monthly,
-              workingHours: data.workingHours,
-              searchLabels: data.searchLabels
-                ? data.searchLabels.map((value: any) => {
-                    return new SearchLabelModel({
-                      id: value.id,
-                      name: value.name,
-                      isEnabled: value.isEnabled,
-                    });
-                  })
-                : [],
-              webApplication: data.webApplication.url,
-              catchText: data.catchText,
-              leadText: data.leadText,
-              subImages: data.subImages,
-              properties: data.properties,
-              postScripts: data.postScripts,
-              companySurvey: data.displayed && data.companySurvey.contents,
-              barometer: data.displayed && data.barometer.contents,
-              photoGallery: data.photoGallery.contents,
-              interview: data.displayed && data.interview.contents,
-              productCode: data.productCode,
-              opensAt: data.opensAt,
-              expiresAt: data.expiresAt,
-              updatedAt: data.updatedAt,
-              createdAt: data.createdAt,
-            };
-            this.job.value = new JobModel(job);
-            console.log(this.job.value);
-          }
+          const job = {
+            id: data.id,
+            mainImageUrl: data.mainImage.url,
+            mainImageDesc: data.mainImage.description,
+            title: data.title,
+            jobTitleCatchPhrase: data.jobTitleCatchPhrase,
+            location: new LocationModel({
+              id: data.location.id,
+              name: data.location.city,
+            }),
+            salary: data.salary.monthly,
+            workingHours: data.workingHours,
+            searchLabels: data.searchLabels
+              ? data.searchLabels.map((value: any) => {
+                  return new SearchLabelModel({
+                    id: value.id,
+                    name: value.name,
+                    isEnabled: value.isEnabled,
+                  });
+                })
+              : [],
+            webApplication: data.webApplication.url,
+            catchText: data.catchText,
+            leadText: data.leadText,
+            subImages: data.subImages,
+            properties: data.properties,
+            postScripts: data.postScripts,
+            companySurvey: data.displayed && data.companySurvey.contents,
+            barometer: data.displayed && data.barometer.contents,
+            photoGallery: data.photoGallery.contents,
+            interview: data.displayed && data.interview.contents,
+            productCode: data.productCode,
+            opensAt: data.opensAt,
+            expiresAt: data.expiresAt,
+            updatedAt: data.updatedAt,
+            createdAt: data.createdAt,
+          };
+          this.job.value = new JobModel(job);
+          console.log(this.job.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -381,6 +388,44 @@ export const useOrganizationStore = defineClassStore(
       try {
         const res = await api.delete(ApiConst.organizationsEndpoints.deleteOrganizationJobs.replace("{id}", id));
         if (res.status === ApiConst.status.ok) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    public fetchAllSeekerLikeJob = async (id: string) => {
+      try {
+        const res = await api.delete(ApiConst.organizationsEndpoints.getAllSeekerLikeJob.replace("{id}", id));
+        if (res.status === ApiConst.status.ok) {
+          const data: any[] = await res.json();
+          console.log(data);
+          const seekers = data.map((data) => {
+            const seeker = {
+              id: data.id,
+              userId: data.user.id,
+              username: data.user.username,
+              name: data.name,
+              email: data.email,
+              phoneNumber: data.phoneNumber,
+              avatar: data.photo,
+              birthday: data.dob,
+              address: data.address,
+              website: data.website,
+              education: data.education,
+              experience: data.experience,
+              skills: data.skills,
+              achievements: data.achievements,
+              otherDetails: data.other_details,
+              status: data.user.status,
+            };
+            return new SeekerModel(seeker);
+          });
+          this.actionSeekers.value = seekers;
+          console.log(this.actionSeekers.value);
           return true;
         } else {
           return false;

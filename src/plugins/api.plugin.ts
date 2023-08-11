@@ -5,9 +5,9 @@ import { StorageHelper } from "@/helpers/storage.helper";
 
 export class Api extends Fetch {
   public onBeforeSend(configs: HttpRequestInit): HttpRequestInit {
-    const user: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
-    if (user) {
-      configs.headers.append("Authorization", `Bearer ${user.token}`);
+    const data: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
+    if (data) {
+      configs.headers.append("Authorization", `Bearer ${data.token}`);
     }
     configs.headers.append("Content-Type", "application/json");
     return configs;
@@ -19,11 +19,14 @@ export class Api extends Fetch {
     }
     if (response.status === ApiConst.status.unauthorized) {
       console.log(response);
-      // window.location.replace("/admin/signin");
+      if (!window.location.href.includes("/signin")) {
+        // StorageHelper.removeLocalStorage(KeyConst.keys.currentUser);
+        // window.location.replace("/admin/signin");
+      }
     }
     if (response.status === ApiConst.status.forbidden) {
       console.log(response);
-      window.location.assign("/admin");
+      // window.location.assign("/admin");
     }
     return response;
   }

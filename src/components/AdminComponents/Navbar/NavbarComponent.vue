@@ -84,39 +84,23 @@ import AvatarComponent from "@/components/AdminComponents/Avatar/AvatarComponent
 import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
 import { useAuthStore } from "@/stores/auth.store";
-import { useOrganizationStore } from "@/stores/organization.store";
 import type { Ref } from "vue";
+import type { UserModel } from "@/models/user.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
-    public organizationStore = useOrganizationStore();
     public isMenuOpen: Ref<Boolean> = this.ref(false);
-    public isAdmin: Ref<Boolean> = this.ref(true);
-    public profile: Ref<any> = this.computed(() => {
-      if (this.authStore.user.role.includes(AppConst.ROLE.organization)) {
-        this.isAdmin.value = false;
-        return this.organizationStore.profile;
-      } else {
-        this.isAdmin.value = true;
-        return {
-          userId: this.authStore.user.id,
-          name: "Admin",
-          username: this.authStore.user.username,
-          email: "Admin",
-          avatar: "",
-        };
-      }
-    });
+    public isAdmin: Ref<Boolean> = this.computed(() =>
+      this.authStore.user.role === AppConst.ROLE.organization ? false : true,
+    );
+    public profile: Ref<UserModel> = this.computed(() => this.authStore.user);
 
     public constructor() {
       super();
 
       this.onBeforeMount(() => {
         this.authStore.getAdminUser();
-        if (this.authStore.user.role.includes(AppConst.ROLE.organization)) {
-          this.organizationStore.fetchProfile();
-        }
       });
     }
 
@@ -132,6 +116,7 @@ const app = defineClassComponent(
       const isSuccess = await this.authStore.fetchAdminSignOut();
       if (isSuccess) {
         this.router.push(PathConst.adminSignin);
+        // window.location.replace(PathConst.adminSignin.path);
       }
     };
   },

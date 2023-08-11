@@ -27,7 +27,9 @@ export const useCommonStore = defineClassStore(
             return new LocationModel(location);
           });
           this.locations.value = locations;
-          console.log(this.locations.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -52,7 +54,9 @@ export const useCommonStore = defineClassStore(
             return new SearchLabelModel(label);
           });
           this.searchLabels.value = searchLabels;
-          console.log(this.searchLabels.value);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -69,6 +73,9 @@ export const useCommonStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
           console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);
@@ -81,6 +88,9 @@ export const useCommonStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
           console.log(data);
+          return true;
+        } else {
+          return false;
         }
       } catch (error) {
         console.log(error);

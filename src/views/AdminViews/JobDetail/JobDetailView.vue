@@ -34,14 +34,15 @@ const app = defineClassComponent(
       { field: "name", headerName: "name" },
       { field: "like", headerName: "like" },
     ]);
-    public seekers: Ref<Array<SeekerModel>> = this.ref([]);
     public job: Ref<JobModel> = this.computed(() => this.organizationStore.job);
+    public seekers: Ref<Array<SeekerModel>> = this.computed(() => this.organizationStore.actionSeekers);
 
     public constructor() {
       super();
 
       this.onBeforeMount(async () => {
         await this.organizationStore.fetchFindJobById(props.jobId);
+        await this.organizationStore.fetchAllSeekerLikeJob(props.jobId);
       });
     }
 
