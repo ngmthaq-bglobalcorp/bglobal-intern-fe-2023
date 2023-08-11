@@ -88,8 +88,8 @@ const app = defineClassComponent(
       user-select: none;
       vertical-align: middle;
       appearance: none;
-      transition: all 2s ease-in-out 0ms;
-      color: rgb(230, 80, 120);
+      transition: all 500ms ease-in-out 0ms;
+      color: #9f085f;
 
       &:first-child {
         margin-right: 2px;
