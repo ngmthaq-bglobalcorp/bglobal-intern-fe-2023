@@ -4,7 +4,9 @@
     "notFound": "Not Found",
     "internalError": "Error",
     "user": {
-      "home": "Homepage"
+      "home": "Homepage",
+      "signup": "Sign Up",
+      "joblist": "Job list"
     },
     "admin": {
       "signup": "Sign Up",
@@ -170,5 +172,61 @@
     "interview": "Interview",
     "propertyTitle": "Property title",
     "propertyBody": "Property body"
+  },
+  "jobsApp": {
+    "header": {
+      "home": "Home",
+      "history": "History",
+
+      "secondHeader": [
+        {
+          "title": "Sudden rest"
+        },
+        {
+          "title": "Workplace tour"
+        },
+        {
+          "title": "No overtime principle"
+        }
+      ],
+      "caption": "Carefully selected only the work!"
+    },
+    "form": {
+      "location": "Location",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "conditions": {
+        "title": "Conditions",
+        "holiday": "Holiday",
+        "rest": "3 days/week",
+        "allowance": "The allowance for dependents",
+        "station": "Around JR/subway stations",
+        "commuting": "Commuting by car"
+      },
+      "applicable": {
+        "title": "Applicable job",
+        "result": "View search results",
+        "searchCondition": "Search condition"
+      }
+    },
+    "news": {
+      "title": "News"
+    },
+    "companyDescribe": {
+      "describe": "Job search support center consultation reservation",
+      "weWillHelp": "We will help and support you with your concerns. It doesn't matter if you're having trouble finding a job, worrying about it, or even something trivial. You can consult either face-to-face interview, web remote interview, or both.",
+      "link": "Consultation application form"
+    },
+    "footer": {
+      "termOfService": "Term of service",
+      "privacyPolicy": "Privacy policy",
+      "socialMediaPolicy": "Social media policy",
+      "inquiry": "Inquiry",
+      "postingOnShufukita": "Posting on Shufukita",
+      "license": {
+        "company": "HAJ Co., Ltd. Hokkaido part-time job information company",
+        "title": "(c) Hokkaido Arbeit Johosha co.,ltd. All Rights Reserved."
+      }
+    }
   }
 }
