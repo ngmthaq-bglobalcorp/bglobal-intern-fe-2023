@@ -365,7 +365,7 @@ const app = defineClassComponent(
       );
     }
 
-    public onChangeImages = (e: any, input: any) => {
+    public onChangeImages = async (e: any, input: any) => {
       const files = e.target.files;
       if (files.length) {
         if (input.multiple) {
@@ -375,9 +375,13 @@ const app = defineClassComponent(
           }
         } else {
           const file = files[0];
-          this.commonStore.fetchUploadImage(file);
           input.model = [];
           input.model.push(URL.createObjectURL(file));
+          const image = await this.commonStore.fetchUploadImage(file);
+          if (image) {
+            input.model = [];
+            input.model.push(image);
+          }
         }
       }
     };

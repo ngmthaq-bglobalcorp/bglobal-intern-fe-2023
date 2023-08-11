@@ -3,7 +3,6 @@ import { BaseStore, defineClassStore } from "@/plugins/store.plugin";
 import { Api } from "@/plugins/api.plugin";
 import { ApiConst } from "@/const/api.const";
 import { KeyConst } from "@/const/key.const";
-import { PathConst } from "@/const/path.const";
 import { StorageHelper } from "@/helpers/storage.helper";
 import { UserModel } from "@/models/user.model";
 
@@ -26,9 +25,12 @@ export const useAuthStore = defineClassStore(
 
     public fetchAdminSignIn = async (username: string, password: string, remember: boolean = true) => {
       try {
+        const headers = new Headers();
+        headers.append("Content-Type", " application/json");
         const res = await api.post(
           ApiConst.authEndpoints.login,
           JSON.stringify({ username: username, password: password }),
+          { headers: headers },
         );
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();

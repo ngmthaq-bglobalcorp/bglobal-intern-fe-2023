@@ -69,13 +69,15 @@ export const useCommonStore = defineClassStore(
 
     public fetchUploadImage = async (image: any) => {
       try {
-        const res = await api.post(ApiConst.commonEndpoints.uploadImage, image);
+        const formData = new FormData();
+        formData.append("image", image);
+        const res = await api.post(ApiConst.commonEndpoints.uploadImage, formData);
         if (res.status === ApiConst.status.ok) {
-          const data: any = await res.json();
+          const data: string = await res.text();
           console.log(data);
-          return true;
+          return data;
         } else {
-          return false;
+          return null;
         }
       } catch (error) {
         console.log(error);

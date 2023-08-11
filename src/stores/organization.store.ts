@@ -399,7 +399,7 @@ export const useOrganizationStore = defineClassStore(
 
     public fetchAllSeekerLikeJob = async (id: string) => {
       try {
-        const res = await api.delete(ApiConst.organizationsEndpoints.getAllSeekerLikeJob.replace("{id}", id));
+        const res = await api.get(ApiConst.organizationsEndpoints.getAllSeekerLikeJob.replace("{id}", id));
         if (res.status === ApiConst.status.ok) {
           const data: any[] = await res.json();
           console.log(data);

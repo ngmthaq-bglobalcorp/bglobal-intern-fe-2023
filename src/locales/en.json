@@ -178,6 +178,7 @@
     "startTime": "Start time",
     "endTime": "End time",
     "isFullTime": "Is full time",
-    "countHours": "Count hours"
+    "countHours": "Count hours",
+    "userLikeJob": "User like job"
   }
 }

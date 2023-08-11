@@ -1,11 +1,21 @@
 <template>
   <div class="user-list-container">
+    <span class="total-user">
+      {{ `${app.filterData.value.length} ${app.t(`app.userLikeJob`)}` }}
+    </span>
     <ul class="users-list list">
       <li class="users-item" v-for="item in app.filterData.value" :key="item.id">
         <template v-for="column in app.columns.value" :key="column.field">
           <router-link to="" class="item-name link-default" v-if="column.field === 'name'">
-            <AvatarComponent :avatarImage="item.avatar" avatarAlt="Avatar" :avatarInit="item.name[0]" />
-            <span class="name">{{ item.name }}</span>
+            <div class="avatar">
+              <AvatarComponent
+                :avatarImage="item.avatar"
+                avatarAlt="Avatar"
+                :avatarInit="item.name[0] || item.username[0]"
+              />
+            </div>
+            <span class="name" v-if="item.name">{{ item.name }}</span>
+            <span class="name" v-else>{{ item.username }}</span>
           </router-link>
           <div class="item-like" v-else-if="column.field === 'like'">
             <i class="bi bi-heart-fill icon"></i>
@@ -79,6 +89,13 @@ const app = defineClassComponent(
 @import "@/assets/scss/admin";
 
 .user-list-container {
+  & .total-user {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: $dark;
+  }
+
   & .users-list {
     display: flex;
     flex-direction: column;
@@ -98,7 +115,7 @@ const app = defineClassComponent(
         display: flex;
         align-items: center;
 
-        & .avatar-img {
+        & .avatar {
           width: 2.5rem;
           height: 2.5rem;
         }
