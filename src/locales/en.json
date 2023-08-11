@@ -16,6 +16,7 @@
       "seekers": "Seekers",
       "hiringOrganization": "Hiring Organization",
       "news": "News",
+      "addNews": "Add news",
       "userProfile": "Profile",
       "updateProfile": "Update Profile"
     }
@@ -131,7 +132,22 @@
     "yourTimezone": "Your time zone",
     "deleteNotice": "When you delete your account, you lose access to account services, and we permanently delete your personal data.",
     "confirmDelete": "Confirm that I want to delete my account.",
-    "loadMore": "Load more {value}"
+    "loadMore": "Load more {value}",
+    "category": "Category",
+    "seminar": "Seminar",
+    "corporateRecruitingSession": "Corporate recruiting session",
+    "generalInformation": "General information",
+    "opensAt": "Opens at",
+    "expiresAt": "Expires at",
+    "title": "Title",
+    "subtitle": "Subtitle",
+    "body": "Body",
+    "eventPageUrl": "Event page url",
+    "eventStartAt": "Event start at",
+    "eventEndAt": "Event end at",
+    "notBlank": "{value} cannot be blank",
+    "myProfile": "My profile",
+    "back": "Back"
   },
   "jobsApp": {
     "header": {
