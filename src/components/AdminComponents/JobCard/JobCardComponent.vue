@@ -1,6 +1,8 @@
 <template>
-  <div class="job-card-container">
-    <button class="delete-btn icon-btn"><i class="bi bi-trash icon"></i></button>
+  <div class="job-card-container" @click="app.onClickCard">
+    <button class="delete-btn icon-btn">
+      <i class="bi bi-trash icon"></i>
+    </button>
     <!-- Card -->
     <div class="job-wrapper">
       <div class="job-header">
@@ -43,6 +45,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
 import type { Ref } from "vue";
 import type { JobCardProps } from "./JobCardComponent";
@@ -58,6 +61,10 @@ const app = defineClassComponent(
       super();
     }
 
+    public onClickCard = () => {
+      this.router.push(`${PathConst.adminJobsList.path}/${app.job.value.id}`);
+    };
+
     public getSalary = () => {
       let text = "";
       text += "Salary: " + this.job.value.salary;
@@ -68,7 +75,7 @@ const app = defineClassComponent(
       let text = "";
       this.job.value.workingHour.forEach((value, index) => {
         text += `${DatetimeHelper.getHourAndMinute(value.start)}~${DatetimeHelper.getHourAndMinute(value.end)}`;
-        if (value.is_full_time) {
+        if (value.isFullTime) {
           text += `(fulltime)`;
         } else {
           text += `(${value.hours} hours)`;
@@ -150,6 +157,7 @@ const app = defineClassComponent(
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
+        font-weight: 600;
         margin-bottom: 1rem;
 
         & .info-detail {

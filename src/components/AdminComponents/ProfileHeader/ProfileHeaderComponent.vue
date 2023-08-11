@@ -62,13 +62,13 @@
     <!-- Nav -->
     <div class="profile-nav" v-if="!props.isUpdate">
       <ul class="nav-list list">
-        <li class="nav-item">
-          <router-link :to="PathConst.adminUserProfile" class="nav-link link active disabled">
-            {{ app.t(`app.profile`) }}
+        <li class="nav-item" v-for="item in app.navList.value" :key="item.name">
+          <router-link
+            :to="item.link"
+            :class="['nav-link link', { active: item.name === app.route.name, disabled: item.disabled }]"
+          >
+            {{ item.text }}
           </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="" class="nav-link link disabled">{{ app.t(`app.jobsList`) }}</router-link>
         </li>
 
         <li class="nav-item ms-auto">
@@ -87,12 +87,28 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
 import type { ProfileHeaderEmits, ProfileHeaderProps } from "./ProfileHeaderComponent";
+import type { Ref } from "vue";
 
 const props = defineProps<ProfileHeaderProps>();
 const emit = defineEmits<ProfileHeaderEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public navList: Ref<Array<any>> = this.ref([
+      {
+        link: PathConst.adminUserProfile.path,
+        name: PathConst.adminUserProfile.name,
+        text: this.t(`app.profile`),
+        disabled: true,
+      },
+      {
+        link: PathConst.adminJobsList.path,
+        name: PathConst.adminJobsList.name,
+        text: this.t(`app.jobsList`),
+        disabled: true,
+      },
+    ]);
+
     public constructor() {
       super();
     }
@@ -284,10 +300,16 @@ const app = defineClassComponent(
         white-space: nowrap;
 
         & .nav-link {
+          color: $dark-variant !important;
           font-size: 0.875rem;
           padding: 1.25rem 1rem;
           border-bottom: 0.1875rem solid transparent;
           margin-bottom: -0.125rem;
+
+          &:hover {
+            color: $blue-light !important;
+            border-color: $border;
+          }
 
           &.disabled {
             color: $disabled-color !important;
