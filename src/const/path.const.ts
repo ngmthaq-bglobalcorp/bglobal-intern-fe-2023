@@ -9,6 +9,8 @@ import NewsViewVue from "@/views/AdminViews/News/NewsView.vue";
 import UserProfileViewVue from "@/views/AdminViews/UserProfile/UserProfileView.vue";
 import UpdateProfileViewVue from "@/views/AdminViews/UpdateProfile/UpdateProfileView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
+import SignUp from "@/views/UserViews/Signup/SignUp.vue";
+import JobList from "@/views/UserViews/JobList/JobList.vue";
 
 export class PathConst {
   public static adminSignup: Route = {
@@ -98,6 +100,22 @@ export class PathConst {
     component: HomeViewVue,
     meta: {
       title: "title.user.home",
+    },
+  };
+  public static userSignup: Route = {
+    path: "/signup",
+    name: "Signup",
+    component: SignUp,
+    meta: {
+      title: "title.user.signup",
+    },
+  };
+  public static jobList: Route = {
+    path: "/joblist",
+    name: "JobList",
+    component: JobList,
+    meta: {
+      title: "title.user.joblist",
     },
   };
 }

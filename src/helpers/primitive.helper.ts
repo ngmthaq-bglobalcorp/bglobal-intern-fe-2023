@@ -29,6 +29,21 @@ export class PrimitiveHelper {
     throw new Error("Cannot convert hex to rgb");
   };
 
+  public static time = (start: number = 0, end: number = 23, step: number = 30) => {
+    const arrayHours: Array<string> = [];
+    for (let i = start; i <= end; i++) {
+      if (i <= 9) {
+        arrayHours.push("0" + i + ":00");
+        arrayHours.push("0" + i + ":" + step);
+      } else {
+        arrayHours.push(String(i) + ":00");
+        arrayHours.push(String(i) + ":" + String(step));
+      }
+    }
+
+    return arrayHours;
+  };
+
   public static isValidEmail = (email: string) => {
     const expression: RegExp =
       /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
