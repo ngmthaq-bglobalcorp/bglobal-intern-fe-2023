@@ -12,7 +12,11 @@ import JobDetailAdminViewVue from "@/views/AdminViews/JobDetail/JobDetailView.vu
 import AddJobAdminViewVue from "@/views/AdminViews/AddJob/AddJobView.vue";
 import UserProfileAdminViewVue from "@/views/AdminViews/UserProfile/UserProfileView.vue";
 import UpdateProfileAdminViewVue from "@/views/AdminViews/UpdateProfile/UpdateProfileView.vue";
+import SignupViewVue from "@/views/UserViews/Signup/SignupView.vue";
+import SigninViewVue from "@/views/UserViews/Signin/SigninView.vue";
+import ForgotPasswordViewVue from "@/views/UserViews/ForgotPassword/ForgotPasswordView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
+import JobsListViewVue from "@/views/UserViews/JobsList/JobsListView.vue";
 import { AppConst } from "./app.const";
 
 export class PathConst {
@@ -170,32 +174,32 @@ export class PathConst {
     },
   };
 
-  public static signup: Route = {
+  public static userSignup: Route = {
     path: "/signup",
-    name: "signup",
-    component: SignupAdminViewVue,
+    name: "userSignup",
+    component: SignupViewVue,
     meta: {
-      title: "title.admin.signup",
+      title: "title.user.signup",
       auth: AppConst.ROLE.auth,
     },
   };
 
-  public static signin: Route = {
+  public static userSignin: Route = {
     path: "/signin",
-    name: "signin",
-    component: SigninAdminViewVue,
+    name: "userSignin",
+    component: SigninViewVue,
     meta: {
-      title: "title.admin.signin",
+      title: "title.user.signin",
       auth: AppConst.ROLE.auth,
     },
   };
 
-  public static forgotPassword: Route = {
+  public static userForgot: Route = {
     path: "/password/forgot",
-    name: "forgotPassword",
-    component: ForgotPasswordAdminViewVue,
+    name: "userForgot",
+    component: ForgotPasswordViewVue,
     meta: {
-      title: "title.admin.forgotPassword",
+      title: "title.user.forgotPassword",
       auth: AppConst.ROLE.auth,
     },
   };
@@ -206,6 +210,16 @@ export class PathConst {
     component: HomeViewVue,
     meta: {
       title: "title.user.home",
+      auth: AppConst.ROLE.seeker,
+    },
+  };
+
+  public static userJobsList: Route = {
+    path: "/jobs",
+    name: "userJobsList",
+    component: JobsListViewVue,
+    meta: {
+      title: "title.user.jobslist",
       auth: AppConst.ROLE.seeker,
     },
   };
