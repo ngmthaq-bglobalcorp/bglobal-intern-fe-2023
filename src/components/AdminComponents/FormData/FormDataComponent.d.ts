@@ -1,7 +1,8 @@
 export type FormDataProps = {
+  target: string;
   input: Array<any>;
 };
 
 export type FormDataEmits = {
-  (e: "onSubmitForm"): void;
+  (e: "onSubmitForm", job: any): void;
 };
