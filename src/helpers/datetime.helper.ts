@@ -1,7 +1,12 @@
-import Luxon from "luxon";
+import { DateTime } from "luxon";
 
 export class DatetimeHelper {
   public static getCurrentUTCMilliseconds() {
-    return Luxon.DateTime.now().toUTC().toMillis();
+    return DateTime.now().toUTC().toMillis();
   }
+
+  public static getHourAndMinute = (time: string) => {
+    const timeArray = time.split(":");
+    return timeArray[0] + ":" + timeArray[1];
+  };
 }

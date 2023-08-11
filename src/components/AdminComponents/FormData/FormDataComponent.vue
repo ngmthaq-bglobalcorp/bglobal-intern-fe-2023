@@ -113,7 +113,6 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import type { Ref } from "vue";
 import type { FormDataEmits, FormDataProps } from "./FormDataComponent";
 
 const props = defineProps<FormDataProps>();
