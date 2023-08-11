@@ -366,21 +366,32 @@ const app = defineClassComponent(
     }
 
     public onChangeImages = async (e: any, input: any) => {
-      const files = e.target.files;
-      if (files.length) {
+      const files: File[] = e.target.files;
+      const numberImages = files.length;
+      if (numberImages) {
         if (input.multiple) {
-          for (let file of files) {
-            this.commonStore.fetchUploadMultipleImages(file);
+          for (const file of files) {
             input.model.push(URL.createObjectURL(file));
+          }
+          const images = [];
+          for (const file of files) {
+            const url = await this.commonStore.fetchUploadImage(file);
+            if (url) {
+              images.push(url);
+            }
+          }
+          if (images) {
+            input.model.splice(input.model.length - numberImages, numberImages);
+            input.model.push(...images);
           }
         } else {
           const file = files[0];
           input.model = [];
           input.model.push(URL.createObjectURL(file));
-          const image = await this.commonStore.fetchUploadImage(file);
-          if (image) {
+          const url = await this.commonStore.fetchUploadImage(file);
+          if (url) {
             input.model = [];
-            input.model.push(image);
+            input.model.push(url);
           }
         }
       }
