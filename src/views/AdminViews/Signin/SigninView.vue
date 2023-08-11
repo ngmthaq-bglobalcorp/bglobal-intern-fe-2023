@@ -12,7 +12,7 @@
             </span>
           </div>
 
-          <div class="signin-google">
+          <div class="signin-google" v-if="app.isSigninGoogle.value">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
                 <img src="@\assets\img\google.svg" alt="Google" class="image avatar" />
@@ -21,25 +21,29 @@
             </button>
           </div>
 
-          <div class="content-or">
+          <div class="content-or" v-if="app.isSigninGoogle.value">
             <span class="divider text-muted">{{ app.t(`app.or`) }}</span>
+          </div>
+
+          <div class="invalid-input" v-if="app.errorUsernameOrPassword.value">
+            {{ app.errorUsernameOrPassword.value }}
           </div>
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationEmail">{{ app.t(`app.organizationEmail`) }}</label>
+            <label class="input-label" for="username">{{ app.t(`app.username`) }}</label>
 
             <input
-              type="email"
-              :class="['input-form', { 'is-invalid': app.errorEmail.value }]"
-              name="email"
-              id="organizationEmail"
-              placeholder="Email@organization.com"
-              v-model="app.organizationEmail.value"
-              @focus="app.focusEmail"
+              type="text"
+              :class="['input-form', { 'is-invalid': app.errorUsername.value }]"
+              name="username"
+              id="username"
+              :placeholder="app.t(`app.username`)"
+              v-model="app.username.value"
+              @focus="app.focusUsername"
             />
 
-            <div class="invalid-feedback" v-if="app.errorEmail.value">{{ app.errorEmail.value }}</div>
+            <div class="invalid-feedback" v-if="app.errorUsername.value">{{ app.errorUsername.value }}</div>
           </div>
           <!-- End Form Group -->
 
@@ -69,7 +73,7 @@
           <!-- End Form Group -->
 
           <!-- Checkbox -->
-          <div class="form-group">
+          <div class="form-group" v-if="app.isRemember.value">
             <div class="input-group">
               <input
                 type="checkbox"
@@ -99,37 +103,48 @@ import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public organizationEmail: Ref<string> = this.ref("");
+    public authStore = useAuthStore();
+    public isSigninGoogle: Ref<boolean> = this.ref(false);
+    public isRemember: Ref<boolean> = this.ref(false);
+    public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");
-    public remember: Ref<Boolean> = this.ref(false);
-    public errorEmail: Ref<string> = this.ref("");
+    public remember: Ref<boolean> = this.ref(false);
+    public errorUsernameOrPassword: Ref<string> = this.ref("");
+    public errorUsername: Ref<string> = this.ref("");
     public errorPassword: Ref<string> = this.ref("");
 
     public constructor() {
       super();
     }
 
-    public submitForm = () => {
-      if (!this.organizationEmail.value || !PrimitiveHelper.isValidEmail(this.organizationEmail.value)) {
-        this.errorEmail.value = this.t(`message.errorEmail`);
+    public submitForm = async () => {
+      if (!this.username.value) {
+        this.errorUsername.value = this.t(`message.errorUsername`);
+        return false;
       } else {
-        this.errorEmail.value = "";
+        this.errorUsername.value = "";
       }
       if (!this.password.value || !PrimitiveHelper.isValidPassword(this.password.value)) {
         this.errorPassword.value = this.t(`message.errorPassword`);
+        return false;
       } else {
         this.errorPassword.value = "";
       }
+      const isSuccess = await this.authStore.fetchAdminSignIn(this.username.value, this.password.value);
+      if (!isSuccess) {
+        this.errorUsernameOrPassword.value = this.t(`message.errorUsernameOrPassword`);
+      }
     };
 
-    public focusEmail = () => {
-      if (this.errorEmail.value) {
-        this.errorEmail.value = "";
-        this.organizationEmail.value = "";
+    public focusUsername = () => {
+      if (this.errorUsername.value) {
+        this.errorUsername.value = "";
+        this.username.value = "";
       }
     };
 
@@ -231,6 +246,15 @@ const app = defineClassComponent(
       }
     }
 
+    & .invalid-input {
+      width: 100%;
+      display: block;
+      text-align: center;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      color: $danger;
+    }
+
     & .form-group {
       margin-bottom: 1.5rem;
 
@@ -302,7 +326,7 @@ const app = defineClassComponent(
         display: block;
         width: 100%;
         margin-top: 0.25rem;
-        font-size: 80%;
+        font-size: 0.8125rem;
         color: $danger;
       }
 

@@ -3,6 +3,14 @@ export class AppConst {
     internalError: "internalError",
   };
 
+  public static ROLE = {
+    all: "ALL",
+    guest: "GUEST",
+    admin: "ROLE_ADMIN",
+    organization: "ROLE_HR",
+    seeker: "ROLE_SEEKER",
+  };
+
   public static STATUS = {
     active: "active",
     disabled: "disabled",

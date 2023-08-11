@@ -22,8 +22,8 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import FormData from "@/components/AdminComponents/FormData/FormDataComponent.vue";
 import { PathConst } from "@/const/path.const";
-import type { Ref } from "vue";
 import { AppConst } from "@/const/app.const";
+import type { Ref } from "vue";
 
 const getLocation = () => {
   return AppConst.CITY.map((value, index) => {

@@ -26,6 +26,8 @@
   "message": {
     "errorName": "Please enter your Organization name.",
     "errorEmail": "Please enter a valid email address.",
+    "errorUsernameOrPassword": "Please enter a valid username or password.",
+    "errorUsername": "Please enter a valid username.",
     "errorPassword": "Your password is invalid. Please try again.",
     "errorConfirmPassword": "Password does not match the confirm password.",
     "errorTerms": "Please accept our Terms and Conditions.",
@@ -59,6 +61,7 @@
     "or": "OR",
     "organizationName": "Organization name",
     "organizationEmail": "Organization email",
+    "username": "Username",
     "password": "Password",
     "confirmPassword": "Confirm password",
     "forgotPassword": "Forgot Password?",
