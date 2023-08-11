@@ -24,7 +24,7 @@ export class PathConst {
     component: SignupViewVue,
     meta: {
       title: "title.admin.signup",
-      auth: AppConst.ROLE.guest,
+      auth: AppConst.ROLE.auth,
     },
   };
 
@@ -34,7 +34,7 @@ export class PathConst {
     component: SigninViewVue,
     meta: {
       title: "title.admin.signin",
-      auth: AppConst.ROLE.guest,
+      auth: AppConst.ROLE.auth,
     },
   };
 
@@ -44,7 +44,7 @@ export class PathConst {
     component: ForgotPasswordViewVue,
     meta: {
       title: "title.admin.forgotPassword",
-      auth: AppConst.ROLE.guest,
+      auth: AppConst.ROLE.auth,
     },
   };
 
@@ -98,6 +98,17 @@ export class PathConst {
     },
   };
 
+  public static adminUpdateNews: Route = {
+    path: "/admin/news/:newsId",
+    name: "adminUpdateNews",
+    component: AddNewsViewVue,
+    props: true,
+    meta: {
+      title: "title.admin.updateNews",
+      auth: AppConst.ROLE.admin,
+    },
+  };
+
   public static adminJobsList: Route = {
     path: "/admin/jobs",
     name: "adminJobsList",
@@ -145,6 +156,36 @@ export class PathConst {
     meta: {
       title: "title.admin.updateProfile",
       auth: AppConst.ROLE.all,
+    },
+  };
+
+  public static signup: Route = {
+    path: "/signup",
+    name: "signup",
+    component: SignupViewVue,
+    meta: {
+      title: "title.admin.signup",
+      auth: AppConst.ROLE.auth,
+    },
+  };
+
+  public static signin: Route = {
+    path: "/signin",
+    name: "signin",
+    component: SigninViewVue,
+    meta: {
+      title: "title.admin.signin",
+      auth: AppConst.ROLE.auth,
+    },
+  };
+
+  public static forgotPassword: Route = {
+    path: "/password/forgot",
+    name: "forgotPassword",
+    component: ForgotPasswordViewVue,
+    meta: {
+      title: "title.admin.forgotPassword",
+      auth: AppConst.ROLE.auth,
     },
   };
 

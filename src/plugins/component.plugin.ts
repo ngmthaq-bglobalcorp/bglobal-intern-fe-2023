@@ -4,11 +4,12 @@ import { useI18n } from "vue-i18n";
 import { AppConst } from "@/const/app.const";
 import { KeyConst } from "@/const/key.const";
 import { PathConst } from "@/const/path.const";
+import { StorageHelper } from "@/helpers/storage.helper";
 import { useCommonStore } from "@/stores/common.store";
 import { Vue } from "./vue.plugin";
 import { GlobalEvent } from "./event.plugin";
 import { SearchParams } from "./params.plugin";
-import { StorageHelper } from "@/helpers/storage.helper";
+import { pathNotFound } from "./router.plugin";
 
 export abstract class BaseComponent extends Vue {
   public readonly router = useRouter();
@@ -39,21 +40,27 @@ export abstract class BaseComponent extends Vue {
 
     this.router.beforeEach((to, next) => {
       const user: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
-      if (to.meta.auth === AppConst.ROLE.guest) {
-        if (window.location.href.includes("/admin") && user) {
-          this.router.push(PathConst.adminDashboard);
-        } else if (user) {
-          window.location.assign("/");
+      if (!user) {
+        if (to.meta.auth != AppConst.ROLE.auth && window.location.href.includes("/admin")) {
+          this.router.push(PathConst.adminSignin);
+        } else if (to.meta.auth != AppConst.ROLE.auth) {
+          this.router.push(PathConst.signin);
         } else {
           next;
         }
       } else {
-        if (window.location.href.includes("/admin") && !user) {
-          this.router.push(PathConst.adminSignin);
-        } else if (!user) {
-          window.location.replace("/signin");
-        } else if (!user.role.includes(to.meta.auth) && to.meta.auth != AppConst.ROLE.all) {
-          console.log("Don't have permission");
+        if (to.meta.auth === AppConst.ROLE.auth && window.location.href.includes("/admin")) {
+          this.router.push(PathConst.adminDashboard);
+        } else if (to.meta.auth === AppConst.ROLE.auth) {
+          this.router.push(PathConst.home);
+        } else if (to.meta.auth != AppConst.ROLE.all) {
+          if (user.role.includes(AppConst.ROLE.seeker) && !user.role.includes(to.meta.auth)) {
+            this.router.push(PathConst.home);
+          } else if (!user.role.includes(to.meta.auth)) {
+            this.router.push(PathConst.adminDashboard);
+          } else {
+            next;
+          }
         } else {
           next;
         }

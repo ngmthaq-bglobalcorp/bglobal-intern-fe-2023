@@ -6,9 +6,10 @@ export class OrganizationModel extends BaseModel implements IOrganization {
   public username: string;
   public name: string;
   public email: string;
-  public phone_number: string;
+  public phoneNumber: string;
+  public avatar: string;
   public webside: string;
-  public adress: string;
+  public address: string;
   public introduction: string;
   public organizationType: string;
   public status: string;
@@ -22,9 +23,10 @@ export class OrganizationModel extends BaseModel implements IOrganization {
     this.username = data.username || "";
     this.name = data.name || "";
     this.email = data.email || "";
-    this.phone_number = data.phone_number || "";
+    this.phoneNumber = data.phoneNumber || "";
+    this.avatar = data.avatar || "";
     this.webside = data.webside || "";
-    this.adress = data.adress || "";
+    this.address = data.address || "";
     this.introduction = data.introduction || "";
     this.organizationType = data.organizationType || AppConst.ORGANIZATION_TYPE.typeB;
     this.status = data.status || AppConst.STATUS.disabled;
@@ -39,9 +41,10 @@ export interface IOrganization {
   username: string;
   name: string;
   email: string;
-  phone_number: string;
+  phoneNumber: string;
+  avatar: string;
   webside: string;
-  adress: string;
+  address: string;
   introduction: string;
   organizationType: string;
   status: string;

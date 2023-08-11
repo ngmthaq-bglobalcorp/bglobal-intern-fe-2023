@@ -4,6 +4,7 @@ export class AppConst {
   };
 
   public static ROLE = {
+    auth: "AUTH",
     all: "ALL",
     guest: "GUEST",
     admin: "ROLE_ADMIN",
@@ -12,8 +13,8 @@ export class AppConst {
   };
 
   public static STATUS = {
-    active: "active",
-    disabled: "disabled",
+    active: "ACTIVE",
+    disabled: "DISABLE",
   };
 
   public static ORGANIZATION_TYPE = {

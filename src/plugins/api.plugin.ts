@@ -18,6 +18,10 @@ export class Api extends Fetch {
       console.log("unauthorized");
       // window.location.replace("/admin/signin");
     }
+    if (response.status === ApiConst.status.forbidden) {
+      console.log("forbidden");
+      window.location.assign("/admin");
+    }
     return response;
   }
 }

@@ -1,6 +1,6 @@
 <template>
-  <div class="job-card-container" @click="app.onClickCard">
-    <button class="delete-btn icon-btn">
+  <div class="job-card-container" @click="app.onClickCard(app.job.value.id)">
+    <button class="delete-btn icon-btn" @click="app.onToggleDeleteButton(app.job.value.id)">
       <i class="bi bi-trash icon"></i>
     </button>
     <!-- Card -->
@@ -17,11 +17,11 @@
           </li>
           <li class="info-detail">
             <i class="bi bi-cash icon"></i>
-            {{ app.getSalary() }}
+            {{ PrimitiveHelper.getSalary(app.job.value.salary) }}
           </li>
           <li class="info-detail">
             <i class="bi bi-clock icon"></i>
-            {{ app.getWorkingHour() }}
+            {{ PrimitiveHelper.getWorkingHours(app.job.value.workingHours) }}
           </li>
         </ul>
         <div class="body-desc">
@@ -34,7 +34,7 @@
         </ul>
         <div class="opens-expires">
           <span>
-            {{ `Post period: ${app.job.value.opensAt.toDateString()} ~ ${app.job.value.expiresAt.toDateString()}` }}
+            {{ PrimitiveHelper.getPostPeriod(app.job.value.opensAt, app.job.value.expiresAt) }}
           </span>
         </div>
       </div>
@@ -45,46 +45,28 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import { PathConst } from "@/const/path.const";
-import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import type { JobCardEmits, JobCardProps } from "./JobCardComponent";
 import type { Ref } from "vue";
-import type { JobCardProps } from "./JobCardComponent";
 import type { JobModel } from "@/models/job.model";
 
 const props = defineProps<JobCardProps>();
+const emits = defineEmits<JobCardEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public job: Ref<JobModel> = this.ref(props.job);
+    public job: Ref<JobModel> = this.computed(() => props.job);
 
     public constructor() {
       super();
     }
 
-    public onClickCard = () => {
-      this.router.push(`${PathConst.adminJobsList.path}/${app.job.value.id}`);
+    public onClickCard = (id: number) => {
+      emits("onClickCard", id);
     };
 
-    public getSalary = () => {
-      let text = "";
-      text += "Salary: " + this.job.value.salary;
-      return text;
-    };
-
-    public getWorkingHour = () => {
-      let text = "";
-      this.job.value.workingHour.forEach((value, index) => {
-        text += `${DatetimeHelper.getHourAndMinute(value.start)}~${DatetimeHelper.getHourAndMinute(value.end)}`;
-        if (value.isFullTime) {
-          text += `(fulltime)`;
-        } else {
-          text += `(${value.hours} hours)`;
-        }
-        if (index < this.job.value.workingHour.length - 1) {
-          text += `, `;
-        }
-      });
-      return text;
+    public onToggleDeleteButton = (id: number) => {
+      emits("onToggleDeleteButton", id);
     };
   },
 );
@@ -157,7 +139,6 @@ const app = defineClassComponent(
         display: flex;
         flex-direction: column;
         flex-wrap: wrap;
-        font-weight: 600;
         margin-bottom: 1rem;
 
         & .info-detail {
