@@ -103,7 +103,7 @@ const app = defineClassComponent(
     public isEditCover: Ref<boolean> = this.ref(false);
     public navList: Ref<Array<any>> = this.ref([
       {
-        link: { ...PathConst.adminUserProfile, params: { username: this.profile.value.username } },
+        link: PathConst.adminUserProfile.path,
         name: PathConst.adminUserProfile.name,
         text: this.t(`app.profile`),
         disabled: true,

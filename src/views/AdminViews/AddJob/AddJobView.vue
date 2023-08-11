@@ -28,7 +28,6 @@ import { useCommonStore } from "@/stores/common.store";
 import { useOrganizationStore } from "@/stores/organization.store";
 import type { AddJobProps } from "./AddJobView";
 import type { Ref } from "vue";
-import type { SearchLabelModel } from "@/models/searchLabel.model";
 
 const props = defineProps<AddJobProps>();
 

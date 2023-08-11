@@ -1,17 +1,17 @@
 import type { RouteRecordRaw } from "vue-router";
-import SignupViewVue from "@/views/AdminViews/Signup/SignupView.vue";
-import SigninViewVue from "@/views/AdminViews/Signin/SigninView.vue";
-import ForgotPasswordViewVue from "@/views/AdminViews/ForgotPassword/ForgotPasswordView.vue";
-import DashboardViewVue from "@/views/AdminViews/Dashboard/DashboardView.vue";
-import SeekersViewVue from "@/views/AdminViews/Seekers/SeekersView.vue";
-import HiringOrganizationViewVue from "@/views/AdminViews/HiringOrganization/HiringOrganizationView.vue";
-import NewsViewVue from "@/views/AdminViews/News/NewsView.vue";
-import AddNewsViewVue from "@/views/AdminViews/AddNews/AddNewsView.vue";
-import JobsViewVue from "@/views/AdminViews/Jobs/JobsView.vue";
-import JobDetailViewVue from "@/views/AdminViews/JobDetail/JobDetailView.vue";
-import AddJobViewVue from "@/views/AdminViews/AddJob/AddJobView.vue";
-import UserProfileViewVue from "@/views/AdminViews/UserProfile/UserProfileView.vue";
-import UpdateProfileViewVue from "@/views/AdminViews/UpdateProfile/UpdateProfileView.vue";
+import SignupAdminViewVue from "@/views/AdminViews/Signup/SignupView.vue";
+import SigninAdminViewVue from "@/views/AdminViews/Signin/SigninView.vue";
+import ForgotPasswordAdminViewVue from "@/views/AdminViews/ForgotPassword/ForgotPasswordView.vue";
+import DashboardAdminViewVue from "@/views/AdminViews/Dashboard/DashboardView.vue";
+import SeekersAdminViewVue from "@/views/AdminViews/Seekers/SeekersView.vue";
+import HiringOrganizationAdminViewVue from "@/views/AdminViews/HiringOrganization/HiringOrganizationView.vue";
+import NewsAdminViewVue from "@/views/AdminViews/News/NewsView.vue";
+import AddNewsAdminViewVue from "@/views/AdminViews/AddNews/AddNewsView.vue";
+import JobsAdminViewVue from "@/views/AdminViews/Jobs/JobsView.vue";
+import JobDetailAdminViewVue from "@/views/AdminViews/JobDetail/JobDetailView.vue";
+import AddJobAdminViewVue from "@/views/AdminViews/AddJob/AddJobView.vue";
+import UserProfileAdminViewVue from "@/views/AdminViews/UserProfile/UserProfileView.vue";
+import UpdateProfileAdminViewVue from "@/views/AdminViews/UpdateProfile/UpdateProfileView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
 import { AppConst } from "./app.const";
 
@@ -19,7 +19,7 @@ export class PathConst {
   public static adminSignup: Route = {
     path: "/admin/signup",
     name: "adminSignup",
-    component: SignupViewVue,
+    component: SignupAdminViewVue,
     meta: {
       title: "title.admin.signup",
       auth: AppConst.ROLE.auth,
@@ -29,7 +29,7 @@ export class PathConst {
   public static adminSignin: Route = {
     path: "/admin/signin",
     name: "adminSignin",
-    component: SigninViewVue,
+    component: SigninAdminViewVue,
     meta: {
       title: "title.admin.signin",
       auth: AppConst.ROLE.auth,
@@ -39,7 +39,7 @@ export class PathConst {
   public static adminForgot: Route = {
     path: "/admin/password/forgot",
     name: "adminForgot",
-    component: ForgotPasswordViewVue,
+    component: ForgotPasswordAdminViewVue,
     meta: {
       title: "title.admin.forgotPassword",
       auth: AppConst.ROLE.auth,
@@ -49,7 +49,7 @@ export class PathConst {
   public static adminDashboard: Route = {
     path: "/admin",
     name: "adminDashboard",
-    component: DashboardViewVue,
+    component: DashboardAdminViewVue,
     meta: {
       title: "title.admin.dashboard",
       auth: AppConst.ROLE.all,
@@ -59,7 +59,7 @@ export class PathConst {
   public static adminSeekers: Route = {
     path: "/admin/seekers",
     name: "adminSeekers",
-    component: SeekersViewVue,
+    component: SeekersAdminViewVue,
     meta: {
       title: "title.admin.seekers",
       auth: AppConst.ROLE.admin,
@@ -69,7 +69,7 @@ export class PathConst {
   public static adminOrganization: Route = {
     path: "/admin/organization",
     name: "adminOrganization",
-    component: HiringOrganizationViewVue,
+    component: HiringOrganizationAdminViewVue,
     meta: {
       title: "title.admin.hiringOrganization",
       auth: AppConst.ROLE.admin,
@@ -79,7 +79,7 @@ export class PathConst {
   public static adminNews: Route = {
     path: "/admin/news",
     name: "adminNews",
-    component: NewsViewVue,
+    component: NewsAdminViewVue,
     meta: {
       title: "title.admin.news",
       auth: AppConst.ROLE.admin,
@@ -89,7 +89,7 @@ export class PathConst {
   public static adminAddNews: Route = {
     path: "/admin/news/add",
     name: "adminAddNews",
-    component: AddNewsViewVue,
+    component: AddNewsAdminViewVue,
     meta: {
       title: "title.admin.addNews",
       auth: AppConst.ROLE.admin,
@@ -99,7 +99,7 @@ export class PathConst {
   public static adminUpdateNews: Route = {
     path: "/admin/news/:newsId/update",
     name: "adminUpdateNews",
-    component: AddNewsViewVue,
+    component: AddNewsAdminViewVue,
     props: true,
     meta: {
       title: "title.admin.updateNews",
@@ -110,7 +110,7 @@ export class PathConst {
   public static adminJobsList: Route = {
     path: "/admin/jobs",
     name: "adminJobsList",
-    component: JobsViewVue,
+    component: JobsAdminViewVue,
     meta: {
       title: "title.admin.jobs",
       auth: AppConst.ROLE.organization,
@@ -120,7 +120,7 @@ export class PathConst {
   public static adminJobDetail: Route = {
     path: "/admin/jobs/:jobId",
     name: "adminJobDetail",
-    component: JobDetailViewVue,
+    component: JobDetailAdminViewVue,
     props: true,
     meta: {
       title: "title.admin.jobs",
@@ -131,7 +131,7 @@ export class PathConst {
   public static adminAddJob: Route = {
     path: "/admin/jobs/add",
     name: "adminAddJob",
-    component: AddJobViewVue,
+    component: AddJobAdminViewVue,
     meta: {
       title: "title.admin.addJob",
       auth: AppConst.ROLE.organization,
@@ -141,7 +141,7 @@ export class PathConst {
   public static adminUpdateJob: Route = {
     path: "/admin/jobs/:jobId/update",
     name: "adminUpdateJob",
-    component: AddJobViewVue,
+    component: AddJobAdminViewVue,
     props: true,
     meta: {
       title: "title.admin.updateJob",
@@ -152,7 +152,7 @@ export class PathConst {
   public static adminUserProfile: Route = {
     path: "/admin/:username",
     name: "adminUserProfile",
-    component: UserProfileViewVue,
+    component: UserProfileAdminViewVue,
     props: true,
     meta: {
       title: "title.admin.userProfile",
@@ -163,7 +163,7 @@ export class PathConst {
   public static adminUpdateProfile: Route = {
     path: "/admin/user/profile/update",
     name: "adminUpdateProfile",
-    component: UpdateProfileViewVue,
+    component: UpdateProfileAdminViewVue,
     meta: {
       title: "title.admin.updateProfile",
       auth: AppConst.ROLE.all,
@@ -173,7 +173,7 @@ export class PathConst {
   public static signup: Route = {
     path: "/signup",
     name: "signup",
-    component: SignupViewVue,
+    component: SignupAdminViewVue,
     meta: {
       title: "title.admin.signup",
       auth: AppConst.ROLE.auth,
@@ -183,7 +183,7 @@ export class PathConst {
   public static signin: Route = {
     path: "/signin",
     name: "signin",
-    component: SigninViewVue,
+    component: SigninAdminViewVue,
     meta: {
       title: "title.admin.signin",
       auth: AppConst.ROLE.auth,
@@ -193,7 +193,7 @@ export class PathConst {
   public static forgotPassword: Route = {
     path: "/password/forgot",
     name: "forgotPassword",
-    component: ForgotPasswordViewVue,
+    component: ForgotPasswordAdminViewVue,
     meta: {
       title: "title.admin.forgotPassword",
       auth: AppConst.ROLE.auth,

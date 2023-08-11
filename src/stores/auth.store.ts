@@ -16,9 +16,11 @@ export const useAuthStore = defineClassStore(
     public user: Ref<UserModel> = this.ref(new UserModel({}));
 
     public getAdminUser = () => {
-      const data: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
-      if (data) {
-        this.user.value = new UserModel(data.user);
+      if (this.user.value.id < 0) {
+        const data: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
+        if (data) {
+          this.user.value = new UserModel(data.user);
+        }
       }
     };
 

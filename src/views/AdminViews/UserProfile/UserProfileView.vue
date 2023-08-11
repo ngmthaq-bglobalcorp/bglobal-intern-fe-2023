@@ -4,7 +4,7 @@
       <ProfileHeader
         :profile="app.profile.value"
         :isUpdate="false"
-        :editable="props.username == app.profile.value.username"
+        :editable="app.editable.value"
         @on-toggle-update-profile="app.onToggleUpdateProfile"
       />
       <ProfileCard :profile="app.profile.value" />
@@ -29,6 +29,7 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public organizationStore = useOrganizationStore();
     public profile: Ref<OrganizationModel> = this.computed(() => this.organizationStore.profile);
+    public editable: Ref<boolean> = this.computed(() => this.profile.value.username === props.username);
 
     public constructor() {
       super();

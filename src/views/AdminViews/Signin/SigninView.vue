@@ -142,6 +142,7 @@ const app = defineClassComponent(
           window.location.replace(PathConst.adminDashboard.path);
         } else {
           this.errorUsernameOrPassword.value = this.t(`message.errorUsernameOrPassword`);
+          this.password.value = "";
         }
       }
     };
@@ -163,7 +164,6 @@ const app = defineClassComponent(
       }
       if (this.errorUsernameOrPassword.value) {
         this.errorUsernameOrPassword.value = "";
-        this.password.value = "";
       }
     };
   },
