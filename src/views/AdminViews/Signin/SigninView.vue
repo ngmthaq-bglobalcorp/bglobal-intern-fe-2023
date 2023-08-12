@@ -99,8 +99,8 @@
 </template>
 
 <script setup lang="ts">
-import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { PathConst } from "@/const/path.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import { useAuthStore } from "@/stores/auth.store";
