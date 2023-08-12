@@ -43,7 +43,7 @@ export abstract class BaseComponent extends Vue {
         if (to.meta.auth != AppConst.ROLE.auth && window.location.href.includes("/admin")) {
           this.router.push(PathConst.adminSignin);
         } else if (to.meta.auth != AppConst.ROLE.auth) {
-          this.router.push(PathConst.signin);
+          this.router.push(PathConst.userSignin);
         } else {
           next;
         }
@@ -57,8 +57,7 @@ export abstract class BaseComponent extends Vue {
           if (user.role === AppConst.ROLE.seeker && user.role != to.meta.auth) {
             this.router.push(PathConst.home);
           } else if (user.role != to.meta.auth) {
-            // this.router.push(PathConst.adminDashboard);
-            next;
+            this.router.push(PathConst.adminDashboard);
           } else {
             next;
           }
