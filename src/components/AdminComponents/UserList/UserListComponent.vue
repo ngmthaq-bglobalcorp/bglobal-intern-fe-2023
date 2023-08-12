@@ -1,18 +1,28 @@
 <template>
   <div class="user-list-container">
+    <span class="total-user">
+      {{ `${app.filterData.value.length} ${app.t(`app.userLikeJob`)}` }}
+    </span>
     <ul class="users-list list">
       <li class="users-item" v-for="item in app.filterData.value" :key="item.id">
         <template v-for="column in app.columns.value" :key="column.field">
-          <router-link :to="PathConst.adminUserProfile" class="item-name link-default" v-if="column.field === 'name'">
-            <AvatarComponent :avatarImage="item.image" avatarAlt="Avatar" :avatarInit="item.name[0]" />
-            <span class="name">{{ item.name }}</span>
+          <router-link to="" class="item-name link-default" v-if="column.field === 'name'">
+            <div class="avatar">
+              <AvatarComponent
+                :avatarImage="item.avatar"
+                avatarAlt="Avatar"
+                :avatarInit="item.name[0] || item.username[0]"
+              />
+            </div>
+            <span class="name" v-if="item.name">{{ item.name }}</span>
+            <span class="name" v-else>{{ item.username }}</span>
           </router-link>
           <div class="item-like" v-else-if="column.field === 'like'">
             <i class="bi bi-heart-fill icon"></i>
           </div>
           <div class="item-other" v-else>
             <span class="title">{{ column.headerName }}</span>
-            <span class="desc">{{ item[column.field] }}</span>
+            <span class="desc">{{ item[column.field as keyof SeekerModel] }}</span>
           </div>
         </template>
       </li>
@@ -23,10 +33,10 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import AvatarComponent from "../Avatar/AvatarComponent.vue";
-import { PathConst } from "@/const/path.const";
 import { AppConst } from "@/const/app.const";
-import type { Ref } from "vue";
 import type { UserListProps } from "./UserListComponent";
+import type { Ref } from "vue";
+import type { SeekerModel } from "@/models/seeker.model";
 
 const props = defineProps<UserListProps>();
 
@@ -40,7 +50,7 @@ const app = defineClassComponent(
       return Math.ceil(this.totalData.value / this.pageSize.value);
     });
 
-    public filterData = this.computed(() => {
+    public filterData: Ref<Array<SeekerModel>> = this.computed(() => {
       const filterArray = props.data.filter((value, index) => {
         return (
           value.status === AppConst.STATUS.active &&
@@ -79,6 +89,13 @@ const app = defineClassComponent(
 @import "@/assets/scss/admin";
 
 .user-list-container {
+  & .total-user {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.2;
+    color: $dark;
+  }
+
   & .users-list {
     display: flex;
     flex-direction: column;
@@ -98,7 +115,7 @@ const app = defineClassComponent(
         display: flex;
         align-items: center;
 
-        & .avatar-img {
+        & .avatar {
           width: 2.5rem;
           height: 2.5rem;
         }

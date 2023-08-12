@@ -3,9 +3,17 @@
     <ul class="timeline-list list">
       <li class="timeline-item" v-for="data in app.filtersData.value" :key="data.id">
         <div class="datetime-wrapper">
-          <span class="datetime-divider">{{ data.updatedAt.toDateString() }}</span>
+          <span class="datetime-divider">{{ DatetimeHelper.getFullDate(data.updatedAt) }}</span>
         </div>
         <div class="content-wrapper">
+          <div class="event-button">
+            <button class="edit-btn icon-btn" @click.prevent="app.onToggleEditButton(data.id)">
+              <i class="bi bi-pencil-square"></i>
+            </button>
+            <button class="delete-btn icon-btn" @click.prevent="app.onToggleDeleteButton(data.id)">
+              <i class="bi bi-trash3"></i>
+            </button>
+          </div>
           <div class="content-avatar">
             <img
               src="@/assets/img/info-icon-seminar.svg"
@@ -27,35 +35,46 @@
             />
           </div>
           <div class="content-desc">
-            <div class="event-button">
-              <button class="edit-btn icon-btn" @click.prevent="app.onToggleEditButton(data.id)">
-                <i class="bi bi-pencil-square"></i>
-              </button>
-              <button class="delete-btn icon-btn" @click.prevent="app.onToggleDeleteButton(data.id)">
-                <i class="bi bi-trash3-fill"></i>
-              </button>
-            </div>
-            <span class="event-category">{{ data.category }}</span>
+            <span class="event-category">
+              <span v-if="data.category === AppConst.NEWS_CATEGORY.seminar">
+                {{ app.t(`app.seminar`) }}
+              </span>
+              <span v-else-if="data.category === AppConst.NEWS_CATEGORY.briefing">
+                {{ app.t(`app.corporateRecruitingSession`) }}
+              </span>
+              <span v-else-if="data.category === AppConst.NEWS_CATEGORY.other">
+                {{ app.t(`app.generalInformation`) }}
+              </span>
+            </span>
             <router-link to="" class="event-link link-default">
               <h2 class="event-title">{{ data.title }}</h2>
             </router-link>
-            <h3 class="event-subtitle" v-if="data.subTitle">{{ data.subTitle }}</h3>
+            <h3 class="event-subtitle" v-if="data.subtitle">{{ data.subtitle }}</h3>
             <ul class="event-list-group list">
               <li v-if="data.body">
                 <span class="event-body">{{ data.body }}</span>
               </li>
               <li v-if="data.eventPageUrl">
-                <a :href="data.eventPageUrl" class="event-page-url">{{ data.eventPageUrl }}</a>
+                <a
+                  :href="data.eventPageUrl.includes('http') ? data.eventPageUrl : 'https://' + data.eventPageUrl"
+                  target="_blank"
+                  class="event-page-url"
+                  >{{ data.eventPageUrl }}</a
+                >
               </li>
               <li v-if="data.eventStartAt && data.eventEndAt">
                 <div class="event-start-end">
-                  {{ `Event start at ${data.eventStartAt.toUTCString()} and end at ${data.eventEndAt.toUTCString()}` }}
+                  {{
+                    `Event start at ${DatetimeHelper.getLongDateTime(
+                      data.eventStartAt,
+                    )} and end at ${DatetimeHelper.getLongDateTime(data.eventEndAt)}`
+                  }}
                 </div>
               </li>
               <li>
                 <div class="event-open-expire">
-                  <span>{{ `Open ${data.opensAt.toDateString()}` }}</span>
-                  <span>{{ `Expire ${data.expiresAt.toDateString()}` }}</span>
+                  <span>{{ `Open ${DatetimeHelper.getLongDate(data.opensAt)}` }}</span>
+                  <span>{{ `Expire ${DatetimeHelper.getLongDate(data.expiresAt)}` }}</span>
                 </div>
               </li>
             </ul>
@@ -75,8 +94,10 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { AppConst } from "@/const/app.const";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
 import type { TimelineListEmits, TimelineListProps } from "./TimelineListComponent";
 import type { Ref } from "vue";
+import type { NewsModel } from "@/models/news.model";
 
 const props = defineProps<TimelineListProps>();
 const emit = defineEmits<TimelineListEmits>();
@@ -86,7 +107,7 @@ const app = defineClassComponent(
     public target: Ref<string> = this.ref(props.target);
     public limit: Ref<number> = this.ref(props.limit);
 
-    public filtersData = this.computed(() => {
+    public filtersData: Ref<Array<NewsModel>> = this.computed(() => {
       return props.data.filter((_, index) => {
         return index < this.limit.value;
       });
@@ -164,6 +185,40 @@ const app = defineClassComponent(
         width: 100%;
         margin-bottom: 2.25rem;
 
+        &:hover {
+          & .event-button {
+            display: block;
+            opacity: 0.7;
+            visibility: visible;
+          }
+        }
+
+        & .event-button {
+          position: absolute;
+          top: 0;
+          right: 0;
+          transform: translate(100%, 0);
+          display: none;
+          opacity: 0;
+          visibility: hidden;
+
+          & .edit-btn {
+            &:hover {
+              opacity: 1;
+              color: $blue;
+              background-color: rgba($blue, 0.1);
+            }
+          }
+
+          & .delete-btn {
+            &:hover {
+              opacity: 1;
+              color: $danger;
+              background-color: rgba($danger, 0.1);
+            }
+          }
+        }
+
         & .content-avatar {
           width: 3rem;
           height: 3rem;
@@ -182,31 +237,6 @@ const app = defineClassComponent(
 
         & .content-desc {
           width: 100%;
-
-          &:hover {
-            & .event-button {
-              display: block;
-              opacity: 0.7;
-              visibility: visible;
-            }
-          }
-
-          & .event-button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            transform: translate(100%, 0);
-            display: none;
-            opacity: 0;
-            visibility: hidden;
-
-            & .edit-btn,
-            & .delete-btn {
-              &:hover {
-                opacity: 1;
-              }
-            }
-          }
 
           & .event-category {
             font-size: 0.8125rem;

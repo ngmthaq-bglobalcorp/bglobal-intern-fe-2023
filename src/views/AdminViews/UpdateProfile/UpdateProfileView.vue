@@ -8,9 +8,9 @@
     />
     <div class="update-profile-container">
       <!-- Navbar -->
-      <div class="profile-nav custom-card">
+      <div class="profile-nav">
         <!-- Navbar Nav -->
-        <ul class="nav-list list">
+        <ul class="nav-list list custom-card">
           <li class="nav-item">
             <a class="nav-link active" href="#content">
               <i class="bi bi-person icon"></i>
@@ -49,7 +49,14 @@
       <!-- Content -->
       <div class="profile-content">
         <ProfileHeader :profile="app.profile.value" :isUpdate="true" :editable="true" />
-        <ProfileUpdate :profile="app.profile.value" />
+        <ProfileUpdate
+          :profile="app.profile.value"
+          @on-update-infomation="app.onUpdateInfomation"
+          @on-update-email="app.onUpdateEmail"
+          @on-update-password="app.onUpdatePassword"
+          @on-update-language="app.onUpdateLanguage"
+          @on-toggle-delete-account="app.onToggleDeleteAccount"
+        />
       </div>
       <!-- End Content -->
     </div>
@@ -62,39 +69,56 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHeaderComponent.vue";
 import ProfileUpdate from "@/components/AdminComponents/ProfileUpdate/ProfileUpdateComponent.vue";
-import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
 import { OrganizationModel } from "@/models/organization.model";
+import { useOrganizationStore } from "@/stores/organization.store";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public profile: Ref<OrganizationModel> = this.ref(
-      new OrganizationModel({
-        id: 1,
-        username: "minhduc",
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phoneNumber: "0912345678",
-        avatar: "",
-        webside: "",
-        address: "Ha Noi",
-        introduction:
-          "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
-        organizationType: AppConst.ORGANIZATION_TYPE.typeB,
-        status: AppConst.STATUS.active,
-        createdAt: new Date("2023-07-01"),
-        updatedAt: new Date("2023-07-01"),
-        isSelected: false,
-      }),
-    );
+    public organizationStore = useOrganizationStore();
+    public profile: Ref<OrganizationModel> = this.computed(() => this.organizationStore.profile);
 
     public constructor() {
       super();
+
+      this.onBeforeMount(() => {
+        this.organizationStore.fetchProfile();
+      });
     }
 
     public onToggleButton = () => {
-      this.router.push(PathConst.adminUserProfile);
+      this.router.push({ ...PathConst.adminUserProfile, params: { username: this.profile.value.username } });
+    };
+
+    public onUpdateInfomation = async (data: any) => {
+      const organization = new OrganizationModel(data);
+      const isSuccess = await this.organizationStore.fetchUpdateProfile(organization);
+      if (isSuccess) {
+        console.log("Update profile");
+      }
+    };
+
+    public onUpdateEmail = async (email: string) => {
+      const isSuccess = await this.organizationStore.fetchUpdateEmail(email);
+      if (isSuccess) {
+        this.organizationStore.profile.email = email;
+      }
+    };
+
+    public onUpdatePassword = async (data: any) => {
+      const isSuccess = await this.organizationStore.fetchUpdatePassword(data);
+      if (isSuccess) {
+        console.log("Update profile");
+      }
+    };
+
+    public onUpdateLanguage = (language: string) => {
+      this.i18n.locale.value = language;
+    };
+
+    public onToggleDeleteAccount = () => {
+      console.log("delete");
     };
   },
 );
@@ -118,6 +142,10 @@ const app = defineClassComponent(
       flex-direction: column;
       width: 100%;
       padding: 1rem;
+
+      &.nav-fixed {
+        position: fixed;
+      }
 
       & .nav-link {
         padding: 0.5rem 1.5rem;

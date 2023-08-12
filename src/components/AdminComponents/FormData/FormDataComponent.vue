@@ -9,7 +9,7 @@
     <div class="custom-body">
       <!-- Form -->
       <form action="">
-        <template v-for="group in props.input" :key="group.id">
+        <template v-for="group in app.input.value" :key="group.id">
           <!-- Form Group -->
           <div class="form-group-wrapper" v-if="group.type === 'group'">
             <div class="form-group" v-for="input in group.children" :key="input.id">
@@ -62,7 +62,7 @@
                       @click="input.model = child.value"
                     >
                       <img :src="child.image" :alt="child.alt" class="input-img image" v-if="child.image" />
-                      <span class="custom-check">
+                      <div class="custom-check">
                         <input
                           type="radio"
                           class="custom-check-input"
@@ -71,7 +71,7 @@
                           :checked="child.value === input.model"
                         />
                         <span class="custom-check-label">{{ child.text }}</span>
-                      </span>
+                      </div>
                     </label>
                     <!-- End Custom Radio -->
                   </div>
@@ -90,12 +90,12 @@
                   <!-- Custom Select -->
                   <select :class="['input-form', { 'is-invalid': input.error }]" :id="input.name" v-model="input.model">
                     <option
-                      :value="option.value"
-                      :selected="option.value === input.model"
+                      :value="option.id"
+                      :selected="option.id === input.model"
                       v-for="option in input.children"
                       :key="option.id"
                     >
-                      {{ option.text }}
+                      {{ option.name }}
                     </option>
                   </select>
 
@@ -115,19 +115,108 @@
                 <div class="custom-input-group">
                   <!-- Custom Select Multiple -->
                   <ul class="input-multiple list">
-                    <li
-                      :class="['input-item', { active: input.model.includes(child.value) }]"
-                      v-for="child in input.children"
-                      :key="child.id"
-                      @click.prevent="app.onToggleSelectMultiple(input, child.value)"
-                    >
-                      {{ child.text }}
-                    </li>
+                    <template v-for="child in input.children" :key="child.id">
+                      <li
+                        :class="['input-item', { active: input.model.includes(child.id) }]"
+                        v-if="child.isEnabled"
+                        @click.prevent="app.onToggleSelectMultiple(input, child.id)"
+                      >
+                        {{ child.name }}
+                      </li>
+                    </template>
                   </ul>
                   <!-- End Custom Select Multiple -->
                 </div>
               </template>
               <!-- End Select Multiple Input -->
+
+              <!-- Working Hours Input -->
+              <template v-else-if="input.type === 'inputWorkingHours'">
+                <label class="input-label" :for="input.name">
+                  {{ input.label }}
+                  <span class="input-label-secondary" v-if="input.required">*</span>
+                </label>
+
+                <div class="custom-input-group">
+                  <!-- Custom Input -->
+                  <template v-for="child in input.children" :key="child.id">
+                    <div class="custom-check" v-if="child.type === 'checkbox'">
+                      <input
+                        :type="child.type"
+                        class="custom-check-input"
+                        :name="input.name + child.name"
+                        :id="input.name + child.name"
+                        v-model="child.model"
+                      />
+                      <label class="custom-check-label" :for="input.name + child.name">
+                        {{ child.label }}
+                      </label>
+                    </div>
+                    <div class="input-time" v-else-if="child.type === 'time'">
+                      <label class="input-label" :for="input.name + child.name">
+                        {{ child.label }}
+                        <span class="input-label-secondary" v-if="child.required">*</span>
+                      </label>
+                      <input
+                        :type="child.type"
+                        :class="['input-form', { 'is-invalid': child.error }]"
+                        :name="input.name + child.name"
+                        :id="input.name + child.name"
+                        :placeholder="child.placeholder"
+                        v-model="child.model"
+                        @focus="app.onFocusInputText(child)"
+                      />
+                      <div class="invalid-feedback" v-if="child.error">{{ child.error }}</div>
+                    </div>
+                    <div class="input-time" v-else>
+                      <label class="input-label" :for="input.name + child.name">
+                        {{ child.label }}
+                        <span class="input-label-secondary" v-if="child.required">*</span>
+                      </label>
+                      <input
+                        :type="child.type"
+                        :class="['input-form', { 'is-invalid': child.error }]"
+                        :name="input.name + child.name"
+                        :id="input.name + child.name"
+                        :placeholder="child.placeholder"
+                        v-model="child.model"
+                        @focus="app.onFocusInputText(child)"
+                      />
+                      <div class="invalid-feedback" v-if="child.error">{{ child.error }}</div>
+                    </div>
+                  </template>
+
+                  <button class="add-btn small-btn" @click.prevent="app.onToggleAddButton(input)">
+                    <i class="bi bi-plus icon"></i>
+                    {{ app.t(`app.add`, { value: `` }) }}
+                  </button>
+
+                  <div class="invalid-feedback" v-if="input.error">{{ input.error }}</div>
+                  <!-- End Custom Input -->
+                </div>
+
+                <ul class="input-text list" v-if="input.model.length > 0">
+                  <li class="input-text-item" v-for="item in input.model" :key="item">
+                    <div class="text-wrapper">
+                      <span class="time" v-if="item.startTime">{{ `Start time: ${item.startTime}` }}</span>
+                      <span class="time" v-if="item.endTime">{{ `End time: ${item.endTime}` }}</span>
+                      <span class="time" v-if="item.countHours">{{ `Hours: ${item.countHours}` }}</span>
+                      <span class="time">
+                        <template v-if="item.isFullTime">
+                          {{ `Fulltime` }}
+                        </template>
+                        <template v-else>
+                          {{ `Parttime` }}
+                        </template>
+                      </span>
+                    </div>
+                    <button class="delete-btn" @click.prevent="app.onToggleDeleteWorkingHour(input, item)">
+                      <i class="bi bi-x-circle icon"></i>
+                    </button>
+                  </li>
+                </ul>
+              </template>
+              <!-- Working Hours Input -->
 
               <!-- Text Multiple Input -->
               <template v-else-if="input.type === 'inputMultiple'">
@@ -139,11 +228,23 @@
                 <div class="custom-input-group">
                   <!-- Custom Input -->
                   <template v-for="child in input.children" :key="child.id">
+                    <div class="custom-check" v-if="child.type === 'checkbox'">
+                      <input
+                        :type="child.type"
+                        class="custom-check-input"
+                        :name="input.name + child.name"
+                        :id="input.name + child.name"
+                        v-model="child.model"
+                      />
+                      <label class="custom-check-label" :for="input.name + child.name">
+                        {{ child.label }}
+                      </label>
+                    </div>
                     <textarea
-                      v-if="child.type === 'textarea'"
+                      v-else-if="child.type === 'textarea'"
                       :class="['input-form', { 'is-invalid': child.error }]"
                       :name="input.name + child.name"
-                      :id="input.name"
+                      :id="input.name + child.name"
                       v-model="child.model"
                       @focus="app.onFocusInputText(child)"
                     ></textarea>
@@ -152,7 +253,7 @@
                       :type="child.type"
                       :class="['input-form', { 'is-invalid': child.error }]"
                       :name="input.name + child.name"
-                      :id="input.name"
+                      :id="input.name + child.name"
                       :placeholder="child.placeholder"
                       v-model="child.model"
                       @focus="app.onFocusInputText(child)"
@@ -165,20 +266,27 @@
                     <i class="bi bi-plus icon"></i>
                     {{ app.t(`app.add`, { value: `` }) }}
                   </button>
+
+                  <div class="invalid-feedback" v-if="input.error">{{ input.error }}</div>
                   <!-- End Custom Input -->
                 </div>
 
                 <ul class="input-text list" v-if="input.model.length > 0">
                   <li class="input-text-item" v-for="item in input.model" :key="item">
-                    <span class="title" v-if="item.title">[{{ item.title }}]</span>
-                    <div class="body" v-if="item.body">
-                      <i class="bi bi-star icon"></i>
-                      {{ item.body }}
+                    <div class="text-wrapper">
+                      <span class="title" v-if="item.title">[{{ item.title }}]</span>
+                      <div class="body" v-if="item.body">
+                        <i class="bi bi-star icon"></i>
+                        {{ item.body }}
+                      </div>
                     </div>
+                    <button class="delete-btn" @click.prevent="app.onToggleDeleteMultipleInput(input, item)">
+                      <i class="bi bi-x-circle icon"></i>
+                    </button>
                   </li>
                 </ul>
               </template>
-              <!-- Text Multiple Input -->
+              <!-- End Text Multiple Input -->
 
               <!-- Text Input -->
               <template v-else>
@@ -212,7 +320,7 @@
                   <!-- End Custom Input -->
                 </div>
               </template>
-              <!-- Text Input -->
+              <!-- End Text Input -->
             </div>
           </div>
           <!-- End Form Group -->
@@ -233,27 +341,58 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { useCommonStore } from "@/stores/common.store";
 import type { FormDataEmits, FormDataProps } from "./FormDataComponent";
+import type { Ref } from "vue";
+import type { SearchLabelModel } from "@/models/searchLabel.model";
 
 const props = defineProps<FormDataProps>();
 const emit = defineEmits<FormDataEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public commonStore = useCommonStore();
+    public input: Ref<any> = this.ref(props.input);
+
     public constructor() {
       super();
+
+      this.watch(
+        () => props.input,
+        (newInput) => {
+          this.input.value = newInput;
+        },
+      );
     }
 
-    public onChangeImages = (e: any, input: any) => {
-      const files = e.target.files;
-      if (files.length) {
+    public onChangeImages = async (e: any, input: any) => {
+      const files: File[] = e.target.files;
+      const numberImages = files.length;
+      if (numberImages) {
         if (input.multiple) {
-          for (let file of files) {
+          for (const file of files) {
             input.model.push(URL.createObjectURL(file));
           }
+          const images = [];
+          for (const file of files) {
+            const url = await this.commonStore.fetchUploadImage(file);
+            if (url) {
+              images.push(url);
+            }
+          }
+          if (images) {
+            input.model.splice(input.model.length - numberImages, numberImages);
+            input.model.push(...images);
+          }
         } else {
+          const file = files[0];
           input.model = [];
-          input.model.push(URL.createObjectURL(files[0]));
+          input.model.push(URL.createObjectURL(file));
+          const url = await this.commonStore.fetchUploadImage(file);
+          if (url) {
+            input.model = [];
+            input.model.push(url);
+          }
         }
       }
     };
@@ -262,9 +401,17 @@ const app = defineClassComponent(
       input.model = input.model.filter((value: string) => value != image);
     };
 
-    public onToggleSelectMultiple = (input: any, label: string) => {
+    public onToggleDeleteWorkingHour = (input: any, item: any) => {
+      input.model = input.model.filter((value: any) => value != item);
+    };
+
+    public onToggleDeleteMultipleInput = (input: any, item: any) => {
+      input.model = input.model.filter((value: any) => value != item);
+    };
+
+    public onToggleSelectMultiple = (input: any, label: SearchLabelModel) => {
       if (input.model.includes(label)) {
-        input.model = input.model.filter((value: string) => value != label);
+        input.model = input.model.filter((value: SearchLabelModel) => value != label);
       } else {
         input.model.push(label);
       }
@@ -287,7 +434,11 @@ const app = defineClassComponent(
       if (isValidInput) {
         input.model.push(inputObj);
         input.children.forEach((value: any) => {
-          value.model = "";
+          if (value.type === "time") {
+            value.model = "00:00";
+          } else {
+            value.model = "";
+          }
         });
       }
     };
@@ -297,20 +448,31 @@ const app = defineClassComponent(
     };
 
     public onSubmitForm = () => {
-      let job = {};
-      props.input.map((input: any) => {
+      let data: any = {};
+      let isValidInput = true;
+      app.input.value.map((input: any) => {
         input.children.map((value: any) => {
-          if (value.required && !value.model) {
+          if (value.required && value.model.length === 0) {
             value.error = this.t(`app.notBlank`, { value: value.label });
+            isValidInput = false;
           } else {
-            job = {
-              ...job,
-              [value.name]: value.model,
-            };
+            if (value.type === "date") {
+              data = {
+                ...data,
+                [value.name]: new Date(value.model),
+              };
+            } else {
+              data = {
+                ...data,
+                [value.name]: value.model,
+              };
+            }
           }
         });
       });
-      emit("onSubmitForm", job);
+      if (isValidInput) {
+        emit("onSubmitForm", data);
+      }
     };
   },
 );
@@ -427,15 +589,14 @@ const app = defineClassComponent(
             width: 6rem;
             height: 6rem;
             background-color: transparent;
+            border: 0.0625rem solid rgba($border, 0.3);
+            border-radius: 0.5rem;
+            overflow: hidden;
 
             &:hover {
               & .delete-btn {
                 display: block;
               }
-            }
-
-            & .image {
-              border: 0.0625rem solid rgba($border, 0.3);
             }
 
             & .delete-btn {
@@ -448,7 +609,7 @@ const app = defineClassComponent(
               background-color: transparent;
 
               &:hover {
-                color: $blue;
+                color: $danger;
               }
             }
           }
@@ -499,28 +660,29 @@ const app = defineClassComponent(
                   justify-content: center;
                 }
               }
+            }
+          }
 
-              & .custom-check {
-                display: flex;
-                align-items: center;
+          & .custom-check {
+            display: flex;
+            align-items: center;
+            width: 100%;
 
-                & .custom-check-input {
-                  width: 0.75rem;
-                  height: 0.75rem;
-                  border: 1px solid rgba($border, 0.7);
-                  margin-right: 0.5rem;
-                  cursor: pointer;
+            & .custom-check-input {
+              width: 0.75rem;
+              height: 0.75rem;
+              border: 1px solid rgba($border, 0.7);
+              margin-right: 0.5rem;
+              cursor: pointer;
 
-                  &:checked {
-                    background-color: $blue;
-                    border-color: $blue;
-                  }
-                }
-
-                & .custom-check-label {
-                  font-size: 0.875rem;
-                }
+              &:checked {
+                background-color: $blue;
+                border-color: $blue;
               }
+            }
+
+            & .custom-check-label {
+              font-size: 0.875rem;
             }
           }
 
@@ -548,6 +710,13 @@ const app = defineClassComponent(
                 background-color: $blue-light;
               }
             }
+          }
+
+          & .input-time {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            flex-wrap: wrap;
           }
 
           & .add-btn {
@@ -580,21 +749,55 @@ const app = defineClassComponent(
 
           & .input-text-item {
             display: flex;
-            flex-direction: column;
+            align-items: center;
+            border: 0.0625rem solid rgba($border, 0.7);
+            border-left: 0;
+            border-right: 0;
+            border-color: transparent;
             margin-bottom: 0.5rem;
+            transition: all 0.3s;
+            cursor: pointer;
 
-            & .title {
-              font-weight: 600;
-              margin-bottom: 0.25rem;
+            &:hover {
+              padding-left: 0.25rem;
+              border-color: rgba($border, 0.7);
+
+              & .delete-btn {
+                display: block;
+              }
             }
 
-            & .body {
+            & .text-wrapper {
               display: flex;
-              align-items: start;
+              flex-direction: column;
+              flex-wrap: wrap;
+              padding: 0.5rem 0;
 
-              & .icon {
-                font-size: 1rem;
-                margin-right: 0.5rem;
+              & .title {
+                font-weight: 600;
+                margin-bottom: 0.25rem;
+              }
+
+              & .body {
+                display: flex;
+                align-items: start;
+
+                & .icon {
+                  font-size: 1rem;
+                  margin-right: 0.5rem;
+                }
+              }
+            }
+
+            & .delete-btn {
+              display: none;
+              background-color: transparent;
+              border: none;
+              outline: none;
+              margin-left: auto;
+
+              &:hover {
+                color: $danger;
               }
             }
           }

@@ -4,5 +4,5 @@ export type FormDataProps = {
 };
 
 export type FormDataEmits = {
-  (e: "onSubmitForm", job: any): void;
+  (e: "onSubmitForm", data: any): void;
 };

@@ -1,4 +1,6 @@
 import { BaseModel } from "./base.model";
+import { LocationModel } from "./location.model";
+import type { SearchLabelModel } from "./searchLabel.model";
 
 export class JobModel extends BaseModel implements IJob {
   public id: number;
@@ -6,10 +8,10 @@ export class JobModel extends BaseModel implements IJob {
   public mainImageDesc: string;
   public title: string;
   public jobTitleCatchPhrase: string;
-  public location: string;
+  public location: LocationModel;
   public salary: number;
   public workingHours: Array<any>;
-  public searchLabels: Array<string>;
+  public searchLabels: Array<SearchLabelModel>;
   public webApplication: string;
   public catchText: string;
   public leadText: string;
@@ -33,7 +35,7 @@ export class JobModel extends BaseModel implements IJob {
     this.mainImageDesc = data.mainImageDesc || "";
     this.title = data.title || "";
     this.jobTitleCatchPhrase = data.jobTitleCatchPhrase || "";
-    this.location = data.location || "";
+    this.location = data.location || new LocationModel({});
     this.salary = data.salary || 0;
     this.workingHours = data.workingHours || [];
     this.searchLabels = data.searchLabels || [];
@@ -48,10 +50,10 @@ export class JobModel extends BaseModel implements IJob {
     this.photoGallery = data.photoGallery || [];
     this.interview = data.interview || [];
     this.productCode = data.productCode || "";
-    this.opensAt = data.opensAt || Date.now();
-    this.expiresAt = data.expiresAt || Date.now();
-    this.updatedAt = data.updatedAt || Date.now();
-    this.createdAt = data.createdAt || Date.now();
+    this.opensAt = data.opensAt ? new Date(data.opensAt) : new Date();
+    this.expiresAt = data.expiresAt ? new Date(data.expiresAt) : new Date();
+    this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
+    this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
   }
 }
 
@@ -61,10 +63,10 @@ export interface IJob {
   mainImageDesc: string;
   title: string;
   jobTitleCatchPhrase: string;
-  location: string;
+  location: LocationModel;
   salary: number;
   workingHours: Array<any>;
-  searchLabels: Array<string>;
+  searchLabels: Array<SearchLabelModel>;
   webApplication: string;
   catchText: string;
   leadText: string;

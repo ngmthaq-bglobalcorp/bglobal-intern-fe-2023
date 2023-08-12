@@ -20,7 +20,7 @@ const app = defineClassComponent(
       super();
 
       this.onBeforeMount(() => {
-        this.authStore.fetchAdminUser();
+        this.authStore.getAdminUser();
       });
 
       this.watch(

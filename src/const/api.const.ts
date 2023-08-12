@@ -4,7 +4,7 @@ export class ApiConst {
     logout: "/auth/logout",
     organizationSignup: "/auth/organization/signup",
     seekerSignup: "/auth/seeker/signup",
-    changeEmail: "/auth/users/{id}",
+    changeEmail: "/auth/users",
     changePassword: "/auth/change-password",
     forgotPassword: "/auth/forgot-password",
     resetPassword: "/auth/reset-password",
@@ -12,11 +12,11 @@ export class ApiConst {
 
   public static commonEndpoints = {
     getAllNews: "/news",
-    findJobById: "/jobs/{jobsId}",
+    findJobById: "/jobs/{id}",
     uploadImage: "/image/upload",
     uploadMultipleImages: "/image/uploads",
     getAllSearchLabel: "/tag-search",
-    getAllLocations: "/locations",
+    getAllLocations: "/Locations",
   };
 
   public static adminEndpoints = {
@@ -52,9 +52,11 @@ export class ApiConst {
 
   public static organizationsEndpoints = {
     getAllOrganizationJobs: "/organizations/jobs",
+    findOrganizationJobsById: "/organizations/jobs/{id}",
     updateOrganizationJobs: "/organizations/jobs/{id}/update",
-    deleteOrganizationJobs: "/organizations/jobs/{jobId}/delete",
+    deleteOrganizationJobs: "/organizations/jobs/{id}/delete",
     createOrganizationJobs: "/organizations/jobs/create",
+    getAllSeekerLikeJob: "/organizations/jobs/{id}/seeker",
     getOrganizationProfile: "/organizations/profile",
     updateOrganizationProfile: "/organizations/profile/update",
   };

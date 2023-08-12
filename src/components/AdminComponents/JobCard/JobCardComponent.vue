@@ -1,38 +1,41 @@
 <template>
-  <div class="job-card-container" @click="app.onClickCard(app.job.value.id)">
-    <button class="delete-btn icon-btn" @click="app.onToggleDeleteButton(app.job.value.id)">
-      <i class="bi bi-trash icon"></i>
-    </button>
+  <div class="job-card-container">
     <!-- Card -->
-    <div class="job-wrapper">
+    <div class="job-wrapper" @click="app.onClickCard(app.job.value.id)">
       <div class="job-header">
-        <img :src="app.job.value.mainImageUrl" :alt="app.job.value.mainImageDesc" class="main-img" />
+        <img :src="app.job.value.mainImageUrl" alt="Main image" class="main-img" v-if="app.job.value.mainImageUrl" />
+        <img
+          :src="app.job.value.subImages[0].url"
+          alt="Main image"
+          class="main-img"
+          v-else-if="app.job.value.subImages.length > 0"
+        />
         <h2 class="job-title">{{ app.job.value.title }}</h2>
       </div>
       <div class="job-body">
         <ul class="body-info list">
-          <li class="info-detail">
+          <li class="info-detail" v-if="app.job.value.location.name">
             <i class="bi bi-geo-alt icon"></i>
-            {{ app.job.value.location }}
+            {{ app.job.value.location.name }}
           </li>
-          <li class="info-detail">
+          <li class="info-detail" v-if="app.job.value.salary">
             <i class="bi bi-cash icon"></i>
             {{ PrimitiveHelper.getSalary(app.job.value.salary) }}
           </li>
-          <li class="info-detail">
+          <li class="info-detail" v-if="app.job.value.workingHours.length > 0">
             <i class="bi bi-clock icon"></i>
             {{ PrimitiveHelper.getWorkingHours(app.job.value.workingHours) }}
           </li>
         </ul>
-        <div class="body-desc">
+        <div class="body-desc" v-if="app.job.value.catchText">
           {{ app.job.value.catchText }}
         </div>
       </div>
       <div class="job-footer">
-        <ul class="footer-label list">
-          <li class="search-label" v-for="label in app.job.value.searchLabels" :key="label">{{ label }}</li>
+        <ul class="footer-label list" v-if="app.job.value.searchLabels.length > 0">
+          <li class="search-label" v-for="label in app.job.value.searchLabels" :key="label.id">{{ label.name }}</li>
         </ul>
-        <div class="opens-expires">
+        <div class="opens-expires" v-if="app.job.value.opensAt && app.job.value.expiresAt">
           <span>
             {{ PrimitiveHelper.getPostPeriod(app.job.value.opensAt, app.job.value.expiresAt) }}
           </span>
@@ -40,6 +43,23 @@
       </div>
     </div>
     <!-- End Card -->
+
+    <!-- Buttons -->
+    <div class="job-button-wrapper">
+      <div class="job-button">
+        <button class="update-btn action-btn g-btn" @click="app.onToggleUpdateButton(app.job.value.id)">
+          <i class="bi bi-person-fill-gear icon"></i>
+          {{ app.t(`app.update`) }}
+        </button>
+      </div>
+      <div class="job-button">
+        <button class="delete-btn action-btn g-btn" @click="app.onToggleDeleteButton(app.job.value.id)">
+          <i class="bi bi-trash icon"></i>
+          {{ app.t(`app.delete`) }}
+        </button>
+      </div>
+    </div>
+    <!-- End Buttons -->
   </div>
 </template>
 
@@ -55,7 +75,7 @@ const emits = defineEmits<JobCardEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public job: Ref<JobModel> = this.computed(() => props.job);
+    public job: Ref<JobModel> = this.computed(() => props.data);
 
     public constructor() {
       super();
@@ -63,6 +83,10 @@ const app = defineClassComponent(
 
     public onClickCard = (id: number) => {
       emits("onClickCard", id);
+    };
+
+    public onToggleUpdateButton = (id: number) => {
+      emits("onToggleUpdateButton", id);
     };
 
     public onToggleDeleteButton = (id: number) => {
@@ -78,6 +102,10 @@ const app = defineClassComponent(
 
 .job-card-container {
   position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 100%;
   background-color: $white;
   border: 0.0625rem solid rgba($border, 0.7);
   border-radius: 0.75rem;
@@ -85,24 +113,8 @@ const app = defineClassComponent(
   transition: 0.3s;
   cursor: pointer;
 
-  & .delete-btn {
-    display: none;
-    position: absolute;
-    top: 0;
-    right: 0;
-
-    &:hover {
-      color: $danger;
-      background-color: $white;
-    }
-  }
-
   &:hover {
     box-shadow: 0 0.1875rem 0.75rem rgba(140, 152, 164, 0.25);
-
-    & .delete-btn {
-      display: block;
-    }
   }
 
   & .job-wrapper {
@@ -180,6 +192,38 @@ const app = defineClassComponent(
 
       & .opens-expires {
         margin-top: 0.5rem;
+      }
+    }
+  }
+
+  & .job-button-wrapper {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    border-top: 0.0625rem solid rgba($border, 0.7);
+
+    & .job-button {
+      flex: 1;
+      border-right: 0.0625rem solid rgba($border, 0.7);
+
+      &:last-child {
+        border-right: 0;
+      }
+
+      & .action-btn {
+        background-color: transparent;
+        border: none;
+        padding: 1rem;
+
+        &:hover {
+          &.update-btn {
+            color: $blue;
+          }
+
+          &.delete-btn {
+            color: $danger;
+          }
+        }
       }
     }
   }

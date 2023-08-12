@@ -4,8 +4,8 @@ import { BaseModel } from "./base.model";
 export class SeekerModel extends BaseModel implements ISeeker {
   public id: number;
   public userId: number;
-  public name: string;
   public username: string;
+  public name: string;
   public email: string;
   public phoneNumber: string;
   public avatar: string;
@@ -26,12 +26,12 @@ export class SeekerModel extends BaseModel implements ISeeker {
     super();
     this.id = data.id || -1;
     this.userId = data.userId || -1;
-    this.name = data.name || "";
     this.username = data.username || "";
+    this.name = data.name || "";
     this.email = data.email || "";
     this.phoneNumber = data.phoneNumber || "";
     this.avatar = data.avatar || "";
-    this.birthday = data.birthday || new Date("2000-01-01");
+    this.birthday = data.birthday || "";
     this.address = data.address || "";
     this.website = data.website || "";
     this.education = data.education || "";
@@ -40,8 +40,8 @@ export class SeekerModel extends BaseModel implements ISeeker {
     this.achievements = data.achievements || "";
     this.otherDetails = data.otherDetails || "";
     this.status = data.status || AppConst.STATUS.disabled;
-    this.createdAt = data.createdAt || Date.now();
-    this.updatedAt = data.updatedAt || Date.now();
+    this.createdAt = data.createdAt ? new Date(data.createdAt) : new Date();
+    this.updatedAt = data.updatedAt ? new Date(data.updatedAt) : new Date();
     this.isSelected = data.isSelected || false;
   }
 }

@@ -9,7 +9,6 @@ import { useCommonStore } from "@/stores/common.store";
 import { Vue } from "./vue.plugin";
 import { GlobalEvent } from "./event.plugin";
 import { SearchParams } from "./params.plugin";
-import { pathNotFound } from "./router.plugin";
 
 export abstract class BaseComponent extends Vue {
   public readonly router = useRouter();
@@ -39,24 +38,25 @@ export abstract class BaseComponent extends Vue {
     });
 
     this.router.beforeEach((to, next) => {
-      const user: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
-      if (!user) {
+      const data: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
+      if (!data) {
         if (to.meta.auth != AppConst.ROLE.auth && window.location.href.includes("/admin")) {
           this.router.push(PathConst.adminSignin);
         } else if (to.meta.auth != AppConst.ROLE.auth) {
-          this.router.push(PathConst.signin);
+          this.router.push(PathConst.userSignin);
         } else {
           next;
         }
       } else {
+        const user = data.user;
         if (to.meta.auth === AppConst.ROLE.auth && window.location.href.includes("/admin")) {
           this.router.push(PathConst.adminDashboard);
         } else if (to.meta.auth === AppConst.ROLE.auth) {
           this.router.push(PathConst.home);
         } else if (to.meta.auth != AppConst.ROLE.all) {
-          if (user.role.includes(AppConst.ROLE.seeker) && !user.role.includes(to.meta.auth)) {
+          if (user.role === AppConst.ROLE.seeker && user.role != to.meta.auth) {
             this.router.push(PathConst.home);
-          } else if (!user.role.includes(to.meta.auth)) {
+          } else if (user.role != to.meta.auth) {
             this.router.push(PathConst.adminDashboard);
           } else {
             next;

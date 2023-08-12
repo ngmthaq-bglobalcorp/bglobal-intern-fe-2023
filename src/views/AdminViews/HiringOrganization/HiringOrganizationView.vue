@@ -37,23 +37,46 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.adminStore.fetchAllOrganizations();
+      this.onBeforeMount(async () => {
+        await this.adminStore.fetchAllOrganizations();
       });
     }
 
     public onDeleteSelected = (selectedArray: Array<number>) => {
-      selectedArray.forEach((value: number) => {
-        this.adminStore.fetchDeleteOrganizations(value);
+      selectedArray.forEach(async (value: number) => {
+        const isSuccess = await this.adminStore.fetchDeleteOrganizations(value.toString());
+        if (isSuccess) {
+          this.adminStore.organizations = this.adminStore.organizations.filter(
+            (organization) => organization.id != value,
+          );
+        }
       });
     };
 
-    public onLockSelected = (id: number) => {
-      this.adminStore.fetchChangeUserStatus(id, AppConst.STATUS.disabled);
+    public onLockSelected = async (id: number) => {
+      const isSuccess = await this.adminStore.fetchChangeUserStatus(
+        id.toString(),
+        AppConst.STATUS.disabled.toLowerCase(),
+      );
+      if (isSuccess) {
+        const organization = this.adminStore.organizations.find((organization) => organization.userId === id);
+        if (organization) {
+          organization.status = AppConst.STATUS.disabled;
+        }
+      }
     };
 
-    public onUnlockSelected = (id: number) => {
-      this.adminStore.fetchChangeUserStatus(id, AppConst.STATUS.active);
+    public onUnlockSelected = async (id: number) => {
+      const isSuccess = await this.adminStore.fetchChangeUserStatus(
+        id.toString(),
+        AppConst.STATUS.active.toLowerCase(),
+      );
+      if (isSuccess) {
+        const organization = this.adminStore.organizations.find((organization) => organization.userId === id);
+        if (organization) {
+          organization.status = AppConst.STATUS.active;
+        }
+      }
     };
   },
 );

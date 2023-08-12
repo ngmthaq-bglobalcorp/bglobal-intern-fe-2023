@@ -7,13 +7,9 @@
       <!-- Progress -->
       <div class="d-flex justify-content-between align-items-center">
         <div class="progress flex-grow-1">
-          <div
-            class="progress-bar bg-primary"
-            role="progressbar"
-            :style="{ width: app.profilePercent.value + '%' }"
-          ></div>
+          <div class="progress-bar bg-primary" role="progressbar" :style="{ width: app.profilePercent.value }"></div>
         </div>
-        <span class="ms-4">{{ app.profilePercent.value }}%</span>
+        <span class="ms-4">{{ app.profilePercent.value }}</span>
       </div>
       <!-- End Progress -->
     </div>
@@ -42,6 +38,10 @@
             <i class="bi bi-person icon"></i>
             {{ app.profile.value.name }}
           </li>
+          <li class="card-item" v-if="app.profile.value.birthday">
+            <i class="bi bi-calendar icon"></i>
+            {{ app.profile.value.birthday }}
+          </li>
 
           <li class="card-item pt-2 pb-0">
             <small class="card-subtitle">{{ app.t(`app.contacts`) }}</small>
@@ -51,17 +51,17 @@
             <i class="bi bi-envelope icon"></i>
             {{ app.profile.value.email }}
           </li>
-          <li class="card-item" v-if="app.profile.value.phone_number">
+          <li class="card-item" v-if="app.profile.value.phoneNumber">
             <i class="bi bi-phone icon"></i>
-            {{ app.profile.value.phone_number }}
+            {{ app.profile.value.phoneNumber }}
           </li>
-          <li class="card-item" v-if="app.profile.value.webside">
+          <li class="card-item" v-if="app.profile.value.website">
             <i class="bi bi-globe icon"></i>
-            {{ app.profile.value.webside }}
+            {{ app.profile.value.website }}
           </li>
-          <li class="card-item" v-if="app.profile.value.adress">
+          <li class="card-item" v-if="app.profile.value.address">
             <i class="bi bi-buildings icon"></i>
-            {{ app.profile.value.adress }}
+            {{ app.profile.value.address }}
           </li>
 
           <li class="card-item pt-2 pb-0">
@@ -70,6 +70,26 @@
           <li class="card-item" v-if="app.profile.value.introduction">
             <i class="bi bi-bookmarks icon"></i>
             {{ app.profile.value.introduction }}
+          </li>
+          <li class="card-item" v-if="app.profile.value.education">
+            <i class="bi bi-book icon"></i>
+            {{ app.profile.value.education }}
+          </li>
+          <li class="card-item" v-if="app.profile.value.experience">
+            <i class="bi bi-person-lines-fill icon"></i>
+            {{ app.profile.value.experience }}
+          </li>
+          <li class="card-item" v-if="app.profile.value.skills">
+            <i class="bi bi-lightbulb icon"></i>
+            {{ app.profile.value.skills }}
+          </li>
+          <li class="card-item" v-if="app.profile.value.achievements">
+            <i class="bi bi-award icon"></i>
+            {{ app.profile.value.achievements }}
+          </li>
+          <li class="card-item" v-if="app.profile.value.otherDetails">
+            <i class="bi bi-info-circle icon"></i>
+            {{ app.profile.value.otherDetails }}
           </li>
         </ul>
       </div>
@@ -89,27 +109,15 @@ const props = defineProps<ProfileCardProps>();
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public profile: Ref<any> = this.computed(() => props.profile);
-    public profilePercent: Ref<number> = this.computed(() => {
-      let percent = 0;
-      if (this.profile.value.name) {
-        percent++;
-      }
-      if (this.profile.value.email) {
-        percent++;
-      }
-      if (this.profile.value.phone_number) {
-        percent++;
-      }
-      if (this.profile.value.webside) {
-        percent++;
-      }
-      if (this.profile.value.adress) {
-        percent++;
-      }
-      if (this.profile.value.introduction) {
-        percent++;
-      }
-      return Math.round((percent / 6) * 100);
+    public profilePercent: Ref<string> = this.computed(() => {
+      let total = Object.values(this.profile.value).length;
+      let percent = Object.values(this.profile.value).reduce((acc: number, cur: any) => {
+        if (cur || cur === false) {
+          acc += 100 / total;
+        }
+        return acc;
+      }, 0);
+      return Math.ceil(percent) + "%";
     });
 
     public constructor() {

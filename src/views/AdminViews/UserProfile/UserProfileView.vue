@@ -2,12 +2,12 @@
   <AdminLayout>
     <div class="user-profile-container">
       <ProfileHeader
-        :profile="app.profile"
+        :profile="app.profile.value"
         :isUpdate="false"
-        :editable="true"
+        :editable="app.editable.value"
         @on-toggle-update-profile="app.onToggleUpdateProfile"
       />
-      <ProfileCard :profile="app.profile" />
+      <ProfileCard :profile="app.profile.value" />
     </div>
   </AdminLayout>
 </template>
@@ -17,39 +17,30 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHeaderComponent.vue";
 import ProfileCard from "@/components/AdminComponents/ProfileCard/ProfileCardComponent.vue";
-import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
-import { OrganizationModel } from "@/models/organization.model";
+import { useOrganizationStore } from "@/stores/organization.store";
+import type { UserProfileProps } from "./UserProfileView";
 import type { Ref } from "vue";
+import type { OrganizationModel } from "@/models/organization.model";
+
+const props = defineProps<UserProfileProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public profile: Ref<OrganizationModel> = this.ref(
-      new OrganizationModel({
-        id: 1,
-        username: "minhduc",
-        name: "Minh Duc",
-        email: "minhduc.mll@gmail.com",
-        phoneNumber: "0912345678",
-        avatar: "",
-        webside: "",
-        address: "Ha Noi",
-        introduction:
-          "............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ............... ...............",
-        organizationType: AppConst.ORGANIZATION_TYPE.typeB,
-        status: AppConst.STATUS.active,
-        createdAt: new Date("2023-07-01"),
-        updatedAt: new Date("2023-07-01"),
-        isSelected: false,
-      }),
-    );
+    public organizationStore = useOrganizationStore();
+    public profile: Ref<OrganizationModel> = this.computed(() => this.organizationStore.profile);
+    public editable: Ref<boolean> = this.computed(() => this.profile.value.username === props.username);
 
     public constructor() {
       super();
+
+      this.onBeforeMount(() => {
+        this.organizationStore.fetchProfile();
+      });
     }
 
     public onToggleUpdateProfile = () => {
-      this.router.push(PathConst.adminUpdateProfile.path);
+      this.router.push(PathConst.adminUpdateProfile);
     };
   },
 );

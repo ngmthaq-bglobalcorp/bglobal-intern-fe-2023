@@ -4,9 +4,11 @@
     "notFound": "Not Found",
     "internalError": "Error",
     "user": {
-      "home": "Homepage",
       "signup": "Sign Up",
-      "joblist": "Job list"
+      "signin": "Sign In",
+      "forgotPassword": "Forgot Password",
+      "home": "Homepage",
+      "jobslist": "Jobs list"
     },
     "admin": {
       "signup": "Sign Up",
@@ -20,6 +22,7 @@
       "updateNews": "Update news",
       "jobs": "Jobs",
       "addJob": "Add job",
+      "updateJob": "Update job",
       "userProfile": "Profile",
       "updateProfile": "Update Profile"
     }
@@ -115,7 +118,7 @@
     "deleteAccount": "Delete account",
     "saveChanges": "Save changes",
     "phoneNumber": "Phone number",
-    "webside": "Webside",
+    "website": "Website",
     "address": "Address",
     "accountType": "Account type",
     "currentEmail": "Your current email address is ",
@@ -175,7 +178,12 @@
     "photoGallery": "Photo gallery",
     "interview": "Interview",
     "propertyTitle": "Property title",
-    "propertyBody": "Property body"
+    "propertyBody": "Property body",
+    "startTime": "Start time",
+    "endTime": "End time",
+    "isFullTime": "Is full time",
+    "countHours": "Count hours",
+    "userLikeJob": "User like job"
   },
   "jobsApp": {
     "header": {

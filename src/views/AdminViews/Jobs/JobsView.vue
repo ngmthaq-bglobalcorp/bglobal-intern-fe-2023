@@ -31,7 +31,12 @@
     </div>
     <ul class="jobs-list list">
       <li class="jobs-item" v-for="item in app.filtersJobs.value" :key="item.id">
-        <JobCard :job="item" @on-click-card="app.onClickCard" @on-toggle-delete-button="app.onToggleDeleteButton" />
+        <JobCard
+          :data="item"
+          @on-click-card="app.onClickCard"
+          @on-toggle-update-button="app.onToggleUpdateButton"
+          @on-toggle-delete-button="app.onToggleDeleteButton"
+        />
       </li>
     </ul>
   </AdminLayout>
@@ -58,8 +63,8 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.organizationStore.fetchAllJobs();
+      this.onBeforeMount(async () => {
+        await this.organizationStore.fetchAllJobs();
       });
     }
 
@@ -71,8 +76,15 @@ const app = defineClassComponent(
       this.router.push({ ...PathConst.adminJobDetail, params: { jobId: id } });
     };
 
-    public onToggleDeleteButton = (id: number) => {
-      this.organizationStore.fetchDeleteJob(id);
+    public onToggleUpdateButton = (id: number) => {
+      this.router.push({ ...PathConst.adminUpdateJob, params: { jobId: id } });
+    };
+
+    public onToggleDeleteButton = async (id: number) => {
+      const isSuccess = await this.organizationStore.fetchDeleteJob(id.toString());
+      if (isSuccess) {
+        this.organizationStore.jobs = this.organizationStore.jobs.filter((job) => job.id != id);
+      }
     };
 
     public onToggleColumnView = () => {
