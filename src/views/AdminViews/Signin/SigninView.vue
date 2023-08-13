@@ -12,7 +12,7 @@
             </span>
           </div>
 
-          <div class="signin-google" v-if="app.isSigninGoogle.value">
+          <div class="signin-google" v-if="app.show.value">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
                 <img src="@\assets\img\google.svg" alt="Google" class="image avatar" />
@@ -21,7 +21,7 @@
             </button>
           </div>
 
-          <div class="content-or" v-if="app.isSigninGoogle.value">
+          <div class="content-or" v-if="app.show.value">
             <span class="divider text-muted">{{ app.t(`app.or`) }}</span>
           </div>
 
@@ -31,7 +31,10 @@
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="username">{{ app.t(`app.username`) }}</label>
+            <label class="input-label" for="username">
+              {{ app.t(`app.username`) }}
+              <span class="input-label-secondary">*</span>
+            </label>
 
             <input
               type="text"
@@ -50,12 +53,8 @@
           <!-- Form Group -->
           <div class="form-group">
             <label class="input-label" for="password">
-              <span class="item">
-                {{ app.t(`app.password`) }}
-                <router-link :to="PathConst.adminForgot" class="link input-label-secondary">
-                  {{ app.t(`app.forgotPassword`) }}
-                </router-link>
-              </span>
+              {{ app.t(`app.password`) }}
+              <span class="input-label-secondary">*</span>
             </label>
 
             <input
@@ -72,8 +71,16 @@
           </div>
           <!-- End Form Group -->
 
+          <!-- Forgot Password -->
+          <div class="form-group" v-if="app.show.value">
+            <router-link :to="PathConst.adminForgot" class="link forgot-password">
+              {{ app.t(`app.forgotPassword`) }}
+            </router-link>
+          </div>
+          <!-- End Forgot Password -->
+
           <!-- Checkbox -->
-          <div class="form-group" v-if="app.isRemember.value">
+          <div class="form-group">
             <div class="input-group">
               <input
                 type="checkbox"
@@ -109,11 +116,10 @@ import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
-    public isSigninGoogle: Ref<boolean> = this.ref(false);
-    public isRemember: Ref<boolean> = this.ref(false);
+    public show: Ref<boolean> = this.ref(false);
     public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");
-    public remember: Ref<boolean> = this.ref(false);
+    public remember: Ref<boolean> = this.ref(true);
     public errorUsernameOrPassword: Ref<string> = this.ref("");
     public errorUsername: Ref<string> = this.ref("");
     public errorPassword: Ref<string> = this.ref("");
@@ -150,7 +156,6 @@ const app = defineClassComponent(
     public focusUsername = () => {
       if (this.errorUsername.value) {
         this.errorUsername.value = "";
-        this.username.value = "";
       }
       if (this.errorUsernameOrPassword.value) {
         this.errorUsernameOrPassword.value = "";
@@ -276,20 +281,8 @@ const app = defineClassComponent(
         font-size: 0.875rem;
         margin-bottom: 0.5rem;
 
-        & .item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-
-          & .input-label-secondary {
-            color: #8c98a4 !important;
-            font-size: 0.8125rem;
-            margin-left: 0.25rem;
-
-            &:hover {
-              color: $blue !important;
-            }
-          }
+        & .input-label-secondary {
+          color: $danger;
         }
       }
 
@@ -400,6 +393,16 @@ const app = defineClassComponent(
 
         & .custom-control-input:checked ~ .custom-control-label::after {
           background-image: url("@/assets/img/check.svg");
+        }
+      }
+
+      & .forgot-password {
+        color: #8c98a4 !important;
+        font-size: 0.8125rem;
+        margin-left: 0.25rem;
+
+        &:hover {
+          color: $blue !important;
         }
       }
     }
