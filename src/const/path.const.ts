@@ -17,6 +17,7 @@ import SigninViewVue from "@/views/UserViews/Signin/SigninView.vue";
 import ForgotPasswordViewVue from "@/views/UserViews/ForgotPassword/ForgotPasswordView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
 import JobsListViewVue from "@/views/UserViews/JobsList/JobsListView.vue";
+import UserProfileViewVue from "@/views/UserViews/UserProfile/UserProfileView.vue";
 import { AppConst } from "./app.const";
 
 export class PathConst {
@@ -220,6 +221,16 @@ export class PathConst {
     component: JobsListViewVue,
     meta: {
       title: "title.user.jobslist",
+      auth: AppConst.ROLE.seeker,
+    },
+  };
+
+  public static userProfile: Route = {
+    path: "/profile",
+    name: "userProfile",
+    component: UserProfileViewVue,
+    meta: {
+      title: "title.user.profile",
       auth: AppConst.ROLE.seeker,
     },
   };
