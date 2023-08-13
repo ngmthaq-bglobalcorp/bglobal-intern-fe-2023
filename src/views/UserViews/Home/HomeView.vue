@@ -6,7 +6,7 @@
         <img class="" src="@/assets/img/ic_search.71514682dc7410fdb320ef5038e30837.svg" />
         <p class="">{{ app.t("jobsApp.form.applicable.searchCondition") }}</p>
       </div>
-      <NewsList />
+      <NewsList :newsArray="app.newsArray.value" />
       <CompanyDescribe />
     </div>
     <FooterComponent />
@@ -20,11 +20,22 @@ import FormSearch from "@/components/UserComponents/HomeContent/Form/FormSearch.
 import NewsList from "@/components/UserComponents/HomeContent/News/NewsList.vue";
 import CompanyDescribe from "@/components/UserComponents/HomeContent/CompanyDescribe/CompanyDescribe.vue";
 import FooterComponent from "@/components/UserComponents/Footer/FooterComponent.vue";
+import { useAdminStore } from "@/stores/admin.store";
+import type { Ref } from "vue";
+import type { NewsModel } from "@/models/news.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public adminStore = useAdminStore();
+
+    public newsArray: Ref<Array<NewsModel>> = this.computed(() => this.adminStore.newsList);
+
     public constructor() {
       super();
+
+      this.onBeforeMount(() => {
+        this.adminStore.fetchAllNews();
+      });
     }
   },
 );
