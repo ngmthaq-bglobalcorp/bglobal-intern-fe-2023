@@ -49,10 +49,10 @@ export abstract class BaseComponent extends Vue {
         }
       } else {
         const user = data.user;
-        if (to.meta.auth === AppConst.ROLE.auth && window.location.href.includes("/admin")) {
-          this.router.push(PathConst.adminDashboard);
-        } else if (to.meta.auth === AppConst.ROLE.auth) {
+        if (to.meta.auth === AppConst.ROLE.auth && user.role === AppConst.ROLE.seeker) {
           this.router.push(PathConst.home);
+        } else if (to.meta.auth === AppConst.ROLE.auth) {
+          this.router.push(PathConst.adminDashboard);
         } else if (to.meta.auth != AppConst.ROLE.all) {
           if (user.role === AppConst.ROLE.seeker && user.role != to.meta.auth) {
             this.router.push(PathConst.home);

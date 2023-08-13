@@ -58,8 +58,9 @@
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationPhone">
+            <label class="input-label" for="phoneNumber">
               {{ app.t(`app.phoneNumber`) }}
+              <span class="input-label-secondary">*</span>
             </label>
 
             <div class="custom-input-group">
@@ -67,7 +68,7 @@
                 type="text"
                 :class="['input-form', { 'is-invalid': app.errorPhoneNumber.value }]"
                 name="phoneNumber"
-                id="organizationPhone"
+                id="phoneNumber"
                 :placeholder="app.t(`app.phoneNumber`)"
                 v-model="app.phoneNumber.value"
                 @focus="app.focusPhoneNumber"
@@ -78,14 +79,14 @@
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationWebsite">{{ app.t(`app.website`) }}</label>
+            <label class="input-label" for="website">{{ app.t(`app.website`) }}</label>
 
             <div class="custom-input-group">
               <input
                 type="text"
                 class="input-form"
                 name="website"
-                id="organizationWebsite"
+                id="website"
                 :placeholder="app.t(`app.website`)"
                 v-model="app.website.value"
               />
@@ -95,16 +96,20 @@
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationAddress">{{ app.t(`app.address`) }}</label>
+            <label class="input-label" for="address">
+              {{ app.t(`app.address`) }}
+              <span class="input-label-secondary">*</span>
+            </label>
 
             <div class="custom-input-group">
               <input
                 type="text"
-                class="input-form"
+                :class="['input-form', { 'is-invalid': app.errorAddress.value }]"
                 name="address"
-                id="organizationAddress"
+                id="address"
                 :placeholder="app.t(`app.address`)"
                 v-model="app.address.value"
+                @focus="app.focusAddress"
               />
             </div>
           </div>
@@ -422,6 +427,7 @@ const app = defineClassComponent(
     public errorName: Ref<string> = this.ref("");
     public errorEmail: Ref<string> = this.ref("");
     public errorPhoneNumber: Ref<string> = this.ref("");
+    public errorAddress: Ref<string> = this.ref("");
     public errorNewEmail: Ref<string> = this.ref("");
     public errorCurrentPassword: Ref<string> = this.ref("");
     public errorNewPassword: Ref<string> = this.ref("");
@@ -468,12 +474,19 @@ const app = defineClassComponent(
       } else {
         this.errorEmail.value = "";
       }
-      if (!PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
+      if (!this.phoneNumber.value || !PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
         isValidInput = false;
         this.errorPhoneNumber.value = this.t(`message.errorPhoneNumber`);
       } else {
         this.errorPhoneNumber.value = "";
       }
+      if (!this.address.value) {
+        this.errorAddress.value = this.t("message.errorAddress");
+        isValidInput = false;
+      } else {
+        this.errorAddress.value = "";
+      }
+
       if (isValidInput) {
         const data = {
           name: this.name.value,
@@ -546,21 +559,24 @@ const app = defineClassComponent(
     public focusName = () => {
       if (this.errorName.value) {
         this.errorName.value = "";
-        this.name.value = "";
       }
     };
 
     public focusEmail = () => {
       if (this.errorEmail.value) {
         this.errorEmail.value = "";
-        this.email.value = "";
       }
     };
 
     public focusPhoneNumber = () => {
       if (this.errorPhoneNumber.value) {
         this.errorPhoneNumber.value = "";
-        this.phoneNumber.value = "";
+      }
+    };
+
+    public focusAddress = () => {
+      if (this.errorAddress.value) {
+        this.errorAddress.value = "";
       }
     };
 

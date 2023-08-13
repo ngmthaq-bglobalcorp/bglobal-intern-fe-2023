@@ -28,15 +28,19 @@
     }
   },
   "message": {
-    "errorName": "Please enter your Organization name.",
-    "errorEmail": "Please enter a valid email address.",
     "errorUsernameOrPassword": "Please enter a valid username or password.",
+    "errorUsernameExists": "This username already exists.",
+    "errorNameExists": "This name has been taken.",
+    "errorEmailExists": "This username already exists.",
     "errorUsername": "Please enter a valid username.",
     "errorPassword": "Your password is invalid. Please try again.",
     "errorConfirmPassword": "Password does not match the confirm password.",
+    "errorName": "Please enter your Organization name.",
+    "errorEmail": "Please enter a valid email address.",
+    "errorPhoneNumber": "Please enter a valid phone number.",
+    "errorAddress": "Please enter address.",
     "errorTerms": "Please accept our Terms and Conditions.",
-    "errorOtp": "Please enter a valid OTP.",
-    "errorPhoneNumber": "Please enter a valid phone number."
+    "errorOtp": "Please enter a valid OTP."
   },
   "app": {
     "coverTitle": "The best part? Everything.",

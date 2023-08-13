@@ -2,6 +2,7 @@ import type { Ref } from "vue";
 import { BaseStore, defineClassStore } from "@/plugins/store.plugin";
 import { Api } from "@/plugins/api.plugin";
 import { ApiConst } from "@/const/api.const";
+import { AppConst } from "@/const/app.const";
 import { KeyConst } from "@/const/key.const";
 import { StorageHelper } from "@/helpers/storage.helper";
 import { UserModel } from "@/models/user.model";
@@ -25,15 +26,20 @@ export const useAuthStore = defineClassStore(
 
     public fetchAdminSignIn = async (username: string, password: string, remember: boolean = true) => {
       try {
-        const headers = new Headers();
-        headers.append("Content-Type", " application/json");
+        // const headers = new Headers();
+        // headers.append("Content-Type", " application/json");
+        // const res = await api.post(
+        //   ApiConst.authEndpoints.login,
+        //   JSON.stringify({ username: username, password: password }),
+        //   { headers: headers },
+        // );
         const res = await api.post(
           ApiConst.authEndpoints.login,
           JSON.stringify({ username: username, password: password }),
-          { headers: headers },
         );
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
+          console.log(data);
           const user = {
             id: data.id,
             name: data.name || data.username,
@@ -76,18 +82,34 @@ export const useAuthStore = defineClassStore(
       }
     };
 
-    public fetchOrganizationSignUp = async (username: string, password: string) => {
+    public fetchOrganizationSignUp = async (data: any) => {
       try {
-        const res = await api.post(
-          ApiConst.authEndpoints.organizationSignup,
-          JSON.stringify({ username: username, password: password }),
-        );
+        const organization = {
+          username: data.username || "",
+          password: data.password || "",
+          name: data.name || "",
+          email: data.email || "",
+          phone_number: data.phoneNumber || "",
+          address: data.address || "",
+          website: data.website || "",
+          introduction: data.introduction || "",
+          organizationType: data.organizationType || AppConst.ORGANIZATION_TYPE.typeB,
+        };
+        const res = await api.post(ApiConst.authEndpoints.organizationSignup, JSON.stringify(organization));
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
-          StorageHelper.setLocalStorage(KeyConst.keys.currentUser, data);
-          return true;
+          console.log(data);
+          const isSuccess = await this.fetchAdminSignIn(organization.username, organization.password);
+          if (isSuccess) {
+            return "success";
+          } else {
+            return "fail";
+          }
+        } else if (res.status === ApiConst.status.badRequest) {
+          const data = await res.text();
+          return data;
         } else {
-          return false;
+          return "fail";
         }
       } catch (error) {
         console.log(error);

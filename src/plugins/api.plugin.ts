@@ -9,6 +9,7 @@ export class Api extends Fetch {
     if (data) {
       configs.headers.append("Authorization", `Bearer ${data.token}`);
     }
+    configs.headers.append("Content-Type", " application/json");
     return configs;
   }
 
