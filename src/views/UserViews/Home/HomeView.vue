@@ -1,15 +1,15 @@
 <template>
   <UserLayout>
     <div class="userlayout">
-      <FormSearch></FormSearch>
+      <FormSearch />
       <div class="search-condition">
         <img class="" src="@/assets/img/ic_search.71514682dc7410fdb320ef5038e30837.svg" />
         <p class="">{{ app.t("jobsApp.form.applicable.searchCondition") }}</p>
       </div>
-      <NewsList></NewsList>
-      <CompanyDescribe></CompanyDescribe>
+      <NewsList />
+      <CompanyDescribe />
     </div>
-    <FooterComponent></FooterComponent>
+    <FooterComponent />
   </UserLayout>
 </template>
 

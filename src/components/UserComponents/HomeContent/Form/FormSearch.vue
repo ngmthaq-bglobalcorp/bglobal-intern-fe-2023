@@ -1,5 +1,5 @@
 <template>
-  <form class="form-search" id="homepage_search_form_id">
+  <form class="form-search" id="homepage_search_form_id" @submit.prevent="app.onSubmitForm">
     <div class="select-1">
       <div class="location-time">
         <p>{{ app.t("jobsApp.form.location") }}</p>
@@ -161,6 +161,7 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { Ref } from "vue";
 import type { FormSearchProps } from "./FormSearch";
+import { PathConst } from "@/const/path.const";
 
 const props = defineProps<FormSearchProps>();
 
@@ -179,6 +180,11 @@ const app = defineClassComponent(
         this.isDisableSearchButton.value = true;
       });
     }
+
+    public onSubmitForm = () => {
+      this.router.push(PathConst.userJobsList);
+      console.log("Jobs list");
+    };
   },
 );
 </script>
