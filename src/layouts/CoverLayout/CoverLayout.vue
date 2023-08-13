@@ -1,6 +1,6 @@
 <template>
   <div id="cover-layout" class="d-flex">
-    <CoverComponent></CoverComponent>
+    <CoverComponent />
     <slot></slot>
   </div>
 </template>

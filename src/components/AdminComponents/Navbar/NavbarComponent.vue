@@ -25,37 +25,50 @@
           <li class="right-item">
             <button class="account-wrapper icon-btn" @click.prevent="app.onToggleOpenMenu">
               <div class="avatar">
-                <img src="@/assets/img/logo.svg" alt="Avatar" class="image avatar-img" />
+                <AvatarComponent
+                  :avatarImage="app.profile.value.avatar || ''"
+                  avatarAlt="Avatar"
+                  :avatarInit="app.profile.value.name[0] || app.profile.value.username[0]"
+                />
                 <span class="status status-available"></span>
               </div>
             </button>
             <div :class="['dropdown-menu', 'menu-hidden', { 'menu-show': app.isMenuOpen.value }]">
               <div class="dropdown-item-header">
                 <div class="avatar">
-                  <img src="@/assets/img/logo.svg" alt="Avatar" class="image avatar-img" />
+                  <AvatarComponent
+                    :avatarImage="app.profile.value.avatar"
+                    avatarAlt="Avatar"
+                    :avatarInit="app.profile.value.name[0] || app.profile.value.username[0]"
+                  />
                 </div>
                 <div class="media-body">
-                  <span class="card-title">Minh Duc</span>
-                  <span class="card-text">minhduc.mll@gmail.com</span>
+                  <span class="card-title" v-if="app.profile.value.name">{{ app.profile.value.name }}</span>
+                  <span class="card-title" v-else>{{ app.profile.value.username }}</span>
+                  <span class="card-text" v-if="app.profile.value.email">{{ app.profile.value.email }}</span>
                 </div>
               </div>
               <div class="dropdown-divider"></div>
-              <router-link :to="PathConst.adminUserProfile" class="link">
+              <router-link
+                :to="{ ...PathConst.adminUserProfile, params: { username: app.profile.value.username } }"
+                class="link"
+                v-if="!app.isAdmin.value"
+              >
                 <div class="dropdown-item">
                   {{ app.t(`app.profile`) }}
                 </div>
               </router-link>
-              <router-link :to="PathConst.adminUpdateProfile" class="link">
+              <router-link :to="PathConst.adminUpdateProfile" class="link" v-if="!app.isAdmin.value">
                 <div class="dropdown-item">
                   {{ app.t(`app.settings`) }}
                 </div>
               </router-link>
-              <div class="dropdown-divider"></div>
-              <router-link to="" class="link">
+              <div class="dropdown-divider" v-if="!app.isAdmin.value"></div>
+              <div class="link" @click="app.onToggleSignOut">
                 <div class="dropdown-item">
                   {{ app.t(`app.signout`) }}
                 </div>
-              </router-link>
+              </div>
             </div>
           </li>
         </ul>
@@ -67,15 +80,28 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import AvatarComponent from "@/components/AdminComponents/Avatar/AvatarComponent.vue";
+import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
+import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
+import type { UserModel } from "@/models/user.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public authStore = useAuthStore();
     public isMenuOpen: Ref<Boolean> = this.ref(false);
+    public isAdmin: Ref<Boolean> = this.computed(() =>
+      this.authStore.user.role === AppConst.ROLE.organization ? false : true,
+    );
+    public profile: Ref<UserModel> = this.computed(() => this.authStore.user);
 
     public constructor() {
       super();
+
+      this.onBeforeMount(() => {
+        this.authStore.getAdminUser();
+      });
     }
 
     public onToggleOpenMenu = () => {
@@ -84,6 +110,14 @@ const app = defineClassComponent(
 
     public onToggleCloseMenu = () => {
       this.isMenuOpen.value = false;
+    };
+
+    public onToggleSignOut = async () => {
+      const isSuccess = await this.authStore.fetchAdminSignOut();
+      if (isSuccess) {
+        this.router.push(PathConst.adminSignin);
+        // window.location.replace(PathConst.adminSignin.path);
+      }
     };
   },
 );
@@ -186,14 +220,6 @@ const app = defineClassComponent(
               height: 32px;
               border-radius: 50%;
 
-              & .avatar-img {
-                display: block;
-                max-width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 50%;
-              }
-
               & .status {
                 position: absolute;
                 bottom: -1.2px;
@@ -216,9 +242,9 @@ const app = defineClassComponent(
             width: 16rem;
             right: 0;
             left: auto;
-            animation-duration: 300ms;
             box-shadow: 0 10px 40px 10px rgba(140, 152, 164, 0.175);
             margin-top: 0.5rem;
+            animation-duration: 0.3s;
 
             & .dropdown-item-header {
               display: flex;
@@ -232,14 +258,6 @@ const app = defineClassComponent(
                 height: 32px;
                 border-radius: 50%;
                 margin-right: 0.5rem;
-
-                & .avatar-img {
-                  display: block;
-                  max-width: 100%;
-                  height: 100%;
-                  object-fit: cover;
-                  border-radius: 50%;
-                }
               }
 
               & .media-body {
@@ -267,6 +285,7 @@ const app = defineClassComponent(
 
             & .link {
               color: $dark !important;
+              cursor: pointer;
 
               & .dropdown-item {
                 display: block;

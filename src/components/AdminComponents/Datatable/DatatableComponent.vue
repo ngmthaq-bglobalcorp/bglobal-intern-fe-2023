@@ -72,8 +72,15 @@
               </div>
             </td>
             <td class="sorting-1" v-for="column in props.columns" :key="column.field">
-              <template v-if="column.field === 'name'">
+              <template v-if="column.field === 'username'">
                 <router-link to="" class="item-name link-default">
+                  <div class="avatar">
+                    <AvatarComponent
+                      :avatarImage="data.avatar || ''"
+                      avatarAlt="Avatar"
+                      :avatarInit="data[column.field][0]"
+                    />
+                  </div>
                   <span>{{ data[column.field] }}</span>
                 </router-link>
               </template>
@@ -89,22 +96,31 @@
                   {{ data[column.field] }}
                 </div>
               </template>
+              <template v-else-if="column.field === 'birthday'">
+                <div>
+                  {{ DatetimeHelper.getShortDate(data[column.field]) }}
+                </div>
+              </template>
               <template v-else>
                 <span>{{ data[column.field] }}</span>
               </template>
             </td>
             <td>
               <button
+                class="lock-btn small-btn"
+                @click.prevent="app.onToggleLock(data.userId)"
+                v-if="data.status === AppConst.STATUS.active"
+              >
+                <i class="bi bi-lock me-1"></i>
+                <span>{{ app.t(`app.lock`) }}</span>
+              </button>
+              <button
                 class="lock-btn small-btn unlock-btn"
-                @click.prevent="app.onToggleUnlock(data.id)"
-                v-if="data.status === 'lock'"
+                @click.prevent="app.onToggleUnlock(data.userId)"
+                v-else-if="data.status === AppConst.STATUS.disabled"
               >
                 <i class="bi bi-unlock me-1"></i>
                 <span>{{ app.t(`app.unlock`) }}</span>
-              </button>
-              <button class="lock-btn small-btn" @click.prevent="app.onToggleLock(data.id)" v-else>
-                <i class="bi bi-lock me-1"></i>
-                <span>{{ app.t(`app.lock`) }}</span>
               </button>
             </td>
           </tr>
@@ -169,9 +185,11 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import AvatarComponent from "../Avatar/AvatarComponent.vue";
 import { AppConst } from "@/const/app.const";
-import type { Ref } from "vue";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
 import type { DatatableEmits, DatatableProps } from "./DatatableComponent";
+import type { Ref } from "vue";
 
 const props = defineProps<DatatableProps>();
 const emit = defineEmits<DatatableEmits>();
@@ -198,9 +216,6 @@ const app = defineClassComponent(
           index < this.pageNumber.value * this.pageSize.value
         );
       });
-      if (pageFilter.length === 0) {
-        this.pageNumber.value--;
-      }
       return pageFilter;
     });
 
@@ -491,8 +506,19 @@ const app = defineClassComponent(
       }
 
       & .item-name {
+        display: flex;
+        align-items: center;
         color: #000;
         font-weight: 600;
+
+        & .avatar {
+          position: relative;
+          background-color: $white;
+          width: 32px;
+          height: 32px;
+          border-radius: 50%;
+          margin-right: 0.5rem;
+        }
 
         &:hover {
           color: $blue !important;
