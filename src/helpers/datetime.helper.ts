@@ -45,6 +45,10 @@ export class DatetimeHelper {
     return DateTime.fromJSDate(date).toFormat("EEEE, MMMM dd, yyyy 'at' hh:mm:ss a");
   };
 
+  public static getDateAndMonth = (date: Date) => {
+    return DateTime.fromJSDate(date).toFormat("dd/MM");
+  };
+
   public static getHourAndMinute = (time: string) => {
     const timeArray = time.split(":");
     return timeArray[0] + ":" + timeArray[1];

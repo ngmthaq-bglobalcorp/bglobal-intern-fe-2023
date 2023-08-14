@@ -1,18 +1,32 @@
 import type { Ref } from "vue";
 import { BaseStore, defineClassStore } from "@/plugins/store.plugin";
 import { Api } from "@/plugins/api.plugin";
+import { EventBus } from "@/plugins/bus.plugin";
 import { ApiConst } from "@/const/api.const";
 import { LocationModel } from "@/models/location.model";
 import { SearchLabelModel } from "@/models/searchLabel.model";
 
 export const api = new Api();
 
+export const eventBus = new EventBus({
+  onError: (error: any) => {
+    console.error("Event Bus got error", error);
+  },
+});
+
 export const useCommonStore = defineClassStore(
   class Store extends BaseStore {
     public name: string = "common";
 
+    public isLoading: Ref<boolean> = this.ref(false);
+    public eventBus: Ref<EventBus> = this.ref(eventBus);
+
     public locations: Ref<Array<LocationModel>> = this.ref([]);
     public searchLabels: Ref<Array<SearchLabelModel>> = this.ref([]);
+
+    public setIsLoading = (bool: boolean) => {
+      this.isLoading.value = bool;
+    };
 
     public fetchAllLocations = async () => {
       try {

@@ -17,6 +17,8 @@ import SigninViewVue from "@/views/UserViews/Signin/SigninView.vue";
 import ForgotPasswordViewVue from "@/views/UserViews/ForgotPassword/ForgotPasswordView.vue";
 import HomeViewVue from "@/views/UserViews/Home/HomeView.vue";
 import JobsListViewVue from "@/views/UserViews/JobsList/JobsListView.vue";
+import JobDetailsViewVue from "@/views/UserViews/JobDetails/JobDetailsView.vue";
+import HistoryViewVue from "@/views/UserViews/History/HistoryView.vue";
 import UserProfileViewVue from "@/views/UserViews/UserProfile/UserProfileView.vue";
 import { AppConst } from "./app.const";
 
@@ -221,6 +223,27 @@ export class PathConst {
     component: JobsListViewVue,
     meta: {
       title: "title.user.jobslist",
+      auth: AppConst.ROLE.seeker,
+    },
+  };
+
+  public static userJobDetails: Route = {
+    path: "/jobs/:jobId",
+    name: "userJobDetails",
+    component: JobDetailsViewVue,
+    props: true,
+    meta: {
+      title: "title.user.jobDetails",
+      auth: AppConst.ROLE.seeker,
+    },
+  };
+
+  public static userHistory: Route = {
+    path: "/user/history",
+    name: "userHistory",
+    component: HistoryViewVue,
+    meta: {
+      title: "title.user.history",
       auth: AppConst.ROLE.seeker,
     },
   };
