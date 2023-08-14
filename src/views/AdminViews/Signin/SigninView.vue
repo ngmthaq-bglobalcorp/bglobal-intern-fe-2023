@@ -12,7 +12,7 @@
             </span>
           </div>
 
-          <div class="signin-google">
+          <div class="signin-google" v-if="app.show.value">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
                 <img src="@\assets\img\google.svg" alt="Google" class="image avatar" />
@@ -21,37 +21,40 @@
             </button>
           </div>
 
-          <div class="content-or">
+          <div class="content-or" v-if="app.show.value">
             <span class="divider text-muted">{{ app.t(`app.or`) }}</span>
+          </div>
+
+          <div class="invalid-input" v-if="app.errorUsernameOrPassword.value">
+            {{ app.errorUsernameOrPassword.value }}
           </div>
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationEmail">{{ app.t(`app.organizationEmail`) }}</label>
+            <label class="input-label" for="username">
+              {{ app.t(`app.username`) }}
+              <span class="input-label-secondary">*</span>
+            </label>
 
             <input
-              type="email"
-              :class="['input-form', { 'is-invalid': app.errorEmail.value }]"
-              name="email"
-              id="organizationEmail"
-              placeholder="Email@organization.com"
-              v-model="app.organizationEmail.value"
-              @focus="app.focusEmail"
+              type="text"
+              :class="['input-form', { 'is-invalid': app.errorUsername.value }]"
+              name="username"
+              id="username"
+              :placeholder="app.t(`app.username`)"
+              v-model="app.username.value"
+              @focus="app.focusUsername"
             />
 
-            <div class="invalid-feedback" v-if="app.errorEmail.value">{{ app.errorEmail.value }}</div>
+            <div class="invalid-feedback" v-if="app.errorUsername.value">{{ app.errorUsername.value }}</div>
           </div>
           <!-- End Form Group -->
 
           <!-- Form Group -->
           <div class="form-group">
             <label class="input-label" for="password">
-              <span class="item">
-                {{ app.t(`app.password`) }}
-                <router-link :to="PathConst.adminForgot" class="link input-label-secondary">
-                  {{ app.t(`app.forgotPassword`) }}
-                </router-link>
-              </span>
+              {{ app.t(`app.password`) }}
+              <span class="input-label-secondary">*</span>
             </label>
 
             <input
@@ -67,6 +70,14 @@
             <div class="invalid-feedback" v-if="app.errorPassword.value">{{ app.errorPassword.value }}</div>
           </div>
           <!-- End Form Group -->
+
+          <!-- Forgot Password -->
+          <div class="form-group" v-if="app.show.value">
+            <router-link :to="PathConst.adminForgot" class="link forgot-password">
+              {{ app.t(`app.forgotPassword`) }}
+            </router-link>
+          </div>
+          <!-- End Forgot Password -->
 
           <!-- Checkbox -->
           <div class="form-group">
@@ -99,37 +110,55 @@ import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public organizationEmail: Ref<string> = this.ref("");
+    public authStore = useAuthStore();
+    public show: Ref<boolean> = this.ref(false);
+    public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");
-    public remember: Ref<Boolean> = this.ref(false);
-    public errorEmail: Ref<string> = this.ref("");
+    public remember: Ref<boolean> = this.ref(true);
+    public errorUsernameOrPassword: Ref<string> = this.ref("");
+    public errorUsername: Ref<string> = this.ref("");
     public errorPassword: Ref<string> = this.ref("");
 
     public constructor() {
       super();
     }
 
-    public submitForm = () => {
-      if (!this.organizationEmail.value || !PrimitiveHelper.isValidEmail(this.organizationEmail.value)) {
-        this.errorEmail.value = this.t(`message.errorEmail`);
+    public submitForm = async () => {
+      let isValidInput = true;
+      if (!this.username.value) {
+        this.errorUsername.value = this.t(`message.errorUsername`);
+        isValidInput = false;
       } else {
-        this.errorEmail.value = "";
+        this.errorUsername.value = "";
       }
       if (!this.password.value || !PrimitiveHelper.isValidPassword(this.password.value)) {
         this.errorPassword.value = this.t(`message.errorPassword`);
+        isValidInput = false;
       } else {
         this.errorPassword.value = "";
       }
+      if (isValidInput) {
+        const isSuccess = await this.authStore.fetchAdminSignIn(this.username.value, this.password.value);
+        if (isSuccess) {
+          window.location.replace(PathConst.adminDashboard.path);
+        } else {
+          this.errorUsernameOrPassword.value = this.t(`message.errorUsernameOrPassword`);
+          this.password.value = "";
+        }
+      }
     };
 
-    public focusEmail = () => {
-      if (this.errorEmail.value) {
-        this.errorEmail.value = "";
-        this.organizationEmail.value = "";
+    public focusUsername = () => {
+      if (this.errorUsername.value) {
+        this.errorUsername.value = "";
+      }
+      if (this.errorUsernameOrPassword.value) {
+        this.errorUsernameOrPassword.value = "";
       }
     };
 
@@ -137,6 +166,9 @@ const app = defineClassComponent(
       if (this.errorPassword.value) {
         this.errorPassword.value = "";
         this.password.value = "";
+      }
+      if (this.errorUsernameOrPassword.value) {
+        this.errorUsernameOrPassword.value = "";
       }
     };
   },
@@ -231,6 +263,15 @@ const app = defineClassComponent(
       }
     }
 
+    & .invalid-input {
+      width: 100%;
+      display: block;
+      text-align: center;
+      margin-top: 0.5rem;
+      margin-bottom: 1.5rem;
+      color: $danger;
+    }
+
     & .form-group {
       margin-bottom: 1.5rem;
 
@@ -240,20 +281,8 @@ const app = defineClassComponent(
         font-size: 0.875rem;
         margin-bottom: 0.5rem;
 
-        & .item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-
-          & .input-label-secondary {
-            color: #8c98a4 !important;
-            font-size: 0.8125rem;
-            margin-left: 0.25rem;
-
-            &:hover {
-              color: $blue !important;
-            }
-          }
+        & .input-label-secondary {
+          color: $danger;
         }
       }
 
@@ -302,7 +331,7 @@ const app = defineClassComponent(
         display: block;
         width: 100%;
         margin-top: 0.25rem;
-        font-size: 80%;
+        font-size: 0.8125rem;
         color: $danger;
       }
 
@@ -364,6 +393,16 @@ const app = defineClassComponent(
 
         & .custom-control-input:checked ~ .custom-control-label::after {
           background-image: url("@/assets/img/check.svg");
+        }
+      }
+
+      & .forgot-password {
+        color: #8c98a4 !important;
+        font-size: 0.8125rem;
+        margin-left: 0.25rem;
+
+        &:hover {
+          color: $blue !important;
         }
       }
     }

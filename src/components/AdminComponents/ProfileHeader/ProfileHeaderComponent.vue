@@ -6,7 +6,7 @@
         <img class="cover-img" src="@/assets/img/default-cover.jpg" alt="Cover" />
 
         <!-- Custom File Cover -->
-        <label class="cover-uploader-label" for="coverUploader" v-if="props.editable">
+        <label class="cover-uploader-label" for="coverUploader" v-if="app.isEditCover.value && props.editable">
           <input type="file" class="cover-uploader-input" id="coverUploader" />
 
           <div class="cover-uploader-button small-btn">
@@ -24,7 +24,11 @@
       <div class="profile-avatar-wrapper">
         <!-- Custom File Avatar -->
         <label class="avatar-uploader-label" for="avatarUploader">
-          <img class="avatar-img" src="@/assets/img/logo.svg" alt="Avatar" />
+          <AvatarComponent
+            :avatarImage="app.profile.value.avatar"
+            avatarAlt="Avatar"
+            :avatarInit="app.profile.value.name.split(' ')[0] || app.profile.value.username"
+          />
 
           <template v-if="props.editable">
             <input type="file" class="avatar-uploader-input" id="avatarUploader" />
@@ -41,18 +45,18 @@
 
     <!-- Profile Header -->
     <div class="profile-header" v-if="!props.isUpdate">
-      <h1 class="page-header-title">Minh Duc</h1>
+      <h1 class="page-header-title">{{ app.profile.value.name || app.profile.value.username }}</h1>
 
       <!-- List -->
       <ul class="list-header list">
-        <li class="list-header-item">
+        <li class="list-header-item" v-if="app.profile.value.email">
           <i class="bi bi-envelope icon"></i>
-          <span>minhduc.mll@gmail.com</span>
+          <span>{{ app.profile.value.email }}</span>
         </li>
 
-        <li class="list-header-item">
+        <li class="list-header-item" v-if="app.profile.value.phoneNumber">
           <i class="bi bi-phone icon"></i>
-          <span>0912345678</span>
+          <span>{{ app.profile.value.phoneNumber }}</span>
         </li>
       </ul>
       <!-- End List -->
@@ -62,13 +66,13 @@
     <!-- Nav -->
     <div class="profile-nav" v-if="!props.isUpdate">
       <ul class="nav-list list">
-        <li class="nav-item">
-          <router-link :to="PathConst.adminUserProfile" class="nav-link link active disabled">
-            {{ app.t(`app.profile`) }}
+        <li class="nav-item" v-for="item in app.navList.value" :key="item.name">
+          <router-link
+            :to="item.link"
+            :class="['nav-link link', { active: item.name === app.route.name, disabled: item.disabled }]"
+          >
+            {{ item.text }}
           </router-link>
-        </li>
-        <li class="nav-item">
-          <router-link to="" class="nav-link link disabled">{{ app.t(`app.jobsList`) }}</router-link>
         </li>
 
         <li class="nav-item ms-auto">
@@ -85,20 +89,39 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import AvatarComponent from "@/components/AdminComponents/Avatar/AvatarComponent.vue";
 import { PathConst } from "@/const/path.const";
 import type { ProfileHeaderEmits, ProfileHeaderProps } from "./ProfileHeaderComponent";
+import type { Ref } from "vue";
 
 const props = defineProps<ProfileHeaderProps>();
-const emit = defineEmits<ProfileHeaderEmits>();
+const emits = defineEmits<ProfileHeaderEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public profile: Ref<any> = this.computed(() => props.profile);
+    public isEditCover: Ref<boolean> = this.ref(false);
+    public navList: Ref<Array<any>> = this.ref([
+      {
+        link: PathConst.adminUserProfile.path,
+        name: PathConst.adminUserProfile.name,
+        text: this.t(`app.profile`),
+        disabled: true,
+      },
+      {
+        link: PathConst.adminJobsList.path,
+        name: PathConst.adminJobsList.name,
+        text: this.t(`app.jobsList`),
+        disabled: true,
+      },
+    ]);
+
     public constructor() {
       super();
     }
 
     public onToggleUpdate = () => {
-      emit("onToggleUpdateProfile");
+      emits("onToggleUpdateProfile");
     };
   },
 );
@@ -122,6 +145,8 @@ const app = defineClassComponent(
 
     & .profile-cover-wrapper {
       position: absolute;
+      width: 100%;
+      height: 10rem;
       top: 0;
       right: 0;
       left: 0;
@@ -191,6 +216,7 @@ const app = defineClassComponent(
 
       & .avatar-uploader-label {
         position: absolute;
+        width: 100%;
         top: 0;
         left: 0;
         bottom: 0;
@@ -284,10 +310,16 @@ const app = defineClassComponent(
         white-space: nowrap;
 
         & .nav-link {
+          color: $dark-variant !important;
           font-size: 0.875rem;
           padding: 1.25rem 1rem;
           border-bottom: 0.1875rem solid transparent;
           margin-bottom: -0.125rem;
+
+          &:hover {
+            color: $blue-light !important;
+            border-color: $border;
+          }
 
           &.disabled {
             color: $disabled-color !important;

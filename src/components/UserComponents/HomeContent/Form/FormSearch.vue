@@ -1,135 +1,71 @@
 <template>
-  <form class="form-search" id="homepage_search_form_id">
+  <form class="form-search" id="homepage_search_form_id" @submit.prevent="app.onSubmitForm">
     <div class="select-1">
       <div class="location-time">
         <p>{{ app.t("jobsApp.form.location") }}</p>
-        <select class="first_search_row custom_select" style="width: 136px">
-          <option value="_default_selection">{{ app.t("jobsApp.form.location") }}</option>
-          <option value="2,3,4,8,10,5,9,6,11,7">1</option>
-          <option value="2">&nbsp; &nbsp;中央区</option>
-          <option value="3">&nbsp; &nbsp;北区</option>
-          <option value="4">&nbsp; &nbsp;東区</option>
-          <option value="8">&nbsp; &nbsp;西区</option>
-          <option value="10">&nbsp; &nbsp;手稲区</option>
-          <option value="5">&nbsp; &nbsp;白石区</option>
-          <option value="9">&nbsp; &nbsp;厚別区</option>
-          <option value="6">&nbsp; &nbsp;豊平区</option>
-          <option value="11">&nbsp; &nbsp;清田区</option>
-          <option value="7">&nbsp; &nbsp;南区</option>
-          <option value="22">石狩・当別</option>
-          <option value="13">小樽・銭函・余市・倶知安</option>
-          <option value="19">江別・岩見沢</option>
-          <option value="15">苫小牧・室蘭・登別</option>
-          <option value="21">恵庭・千歳・北広島</option>
-          <option value="20">滝川・砂川エリア</option>
-          <option value="14">旭川・道北エリア</option>
-          <option value="12">函館・道南エリア</option>
-          <option value="17">帯広・十勝エリア</option>
-          <option value="16">釧路・道東エリア</option>
-          <option value="18">北見・オホーツクエリア</option>
-          <option value="23">複数エリア</option>
+        <select class="first_search_row custom_select" style="width: 136px" v-model="app.fisrtLocation.value">
+          <option :value="location.id" v-for="location in app.locations.value" :key="location.id">
+            {{ location.name }}
+          </option>
         </select>
       </div>
       <i class="bi bi-x" style="font-size: 1.5rem"></i>
       <div class="location-time">
         <p>{{ app.t("jobsApp.form.startTime") }}</p>
-        <select class="jss86 custom_select">
+        <select class="jss86 custom_select" v-model="app.startTime.value">
           <option value="_default_selection">{{ app.t("jobsApp.form.startTime") }}</option>
-          <option v-for="hour in PrimitiveHelper.time()" :key="hour">{{ hour }}</option>
+          <option :value="hour" v-for="hour in PrimitiveHelper.time()" :key="hour">{{ hour }}</option>
         </select>
       </div>
       <i class="bi bi-x" style="font-size: 1.5rem"></i>
       <div class="location-time">
         <p>{{ app.t("jobsApp.form.endTime") }}</p>
-        <select class="jss86 custom_select">
+        <select class="jss86 custom_select" v-model="app.endTime.value">
           <option value="_default_selection">{{ app.t("jobsApp.form.endTime") }}</option>
-          <option v-for="hour in PrimitiveHelper.time()" :key="hour">{{ hour }}</option>
+          <option :value="hour" v-for="hour in PrimitiveHelper.time()" :key="hour">{{ hour }}</option>
         </select>
       </div>
     </div>
     <div class="select-2">
       <div class="location-sub-2-3">
         <p>Second {{ app.t("jobsApp.form.location") }}</p>
-        <select class="custom_select">
-          <option value="_default_selection">{{ app.t("jobsApp.form.location") }}</option>
-          <option value="2,3,4,8,10,5,9,6,11,7">札幌市</option>
-          <option value="2">&nbsp; &nbsp;中央区</option>
-          <option value="3">&nbsp; &nbsp;北区</option>
-          <option value="4">&nbsp; &nbsp;東区</option>
-          <option value="8">&nbsp; &nbsp;西区</option>
-          <option value="10">&nbsp; &nbsp;手稲区</option>
-          <option value="5">&nbsp; &nbsp;白石区</option>
-          <option value="9">&nbsp; &nbsp;厚別区</option>
-          <option value="6">&nbsp; &nbsp;豊平区</option>
-          <option value="11">&nbsp; &nbsp;清田区</option>
-          <option value="7">&nbsp; &nbsp;南区</option>
-          <option value="22">石狩・当別</option>
-          <option value="13">小樽・銭函・余市・倶知安</option>
-          <option value="19">江別・岩見沢</option>
-          <option value="15">苫小牧・室蘭・登別</option>
-          <option value="21">恵庭・千歳・北広島</option>
-          <option value="20">滝川・砂川エリア</option>
-          <option value="14">旭川・道北エリア</option>
-          <option value="12">函館・道南エリア</option>
-          <option value="17">帯広・十勝エリア</option>
-          <option value="16">釧路・道東エリア</option>
-          <option value="18">北見・オホーツクエリア</option>
-          <option value="23">複数エリア</option>
+        <select class="custom_select" v-model="app.secondLocation.value">
+          <option :value="location.id" v-for="location in app.locations.value" :key="location.id">
+            {{ location.name }}
+          </option>
         </select>
       </div>
       <div class="location-sub-2-3">
         <p>Third {{ app.t("jobsApp.form.location") }}</p>
-        <select class="custom_select">
-          <option value="_default_selection">{{ app.t("jobsApp.form.location") }}</option>
-          <option value="2,3,4,8,10,5,9,6,11,7">札幌市</option>
-          <option value="2">&nbsp; &nbsp;中央区</option>
-          <option value="3">&nbsp; &nbsp;北区</option>
-          <option value="4">&nbsp; &nbsp;東区</option>
-          <option value="8">&nbsp; &nbsp;西区</option>
-          <option value="10">&nbsp; &nbsp;手稲区</option>
-          <option value="5">&nbsp; &nbsp;白石区</option>
-          <option value="9">&nbsp; &nbsp;厚別区</option>
-          <option value="6">&nbsp; &nbsp;豊平区</option>
-          <option value="11">&nbsp; &nbsp;清田区</option>
-          <option value="7">&nbsp; &nbsp;南区</option>
-          <option value="22">石狩・当別</option>
-          <option value="13">小樽・銭函・余市・倶知安</option>
-          <option value="19">江別・岩見沢</option>
-          <option value="15">苫小牧・室蘭・登別</option>
-          <option value="21">恵庭・千歳・北広島</option>
-          <option value="20">滝川・砂川エリア</option>
-          <option value="14">旭川・道北エリア</option>
-          <option value="12">函館・道南エリア</option>
-          <option value="17">帯広・十勝エリア</option>
-          <option value="16">釧路・道東エリア</option>
-          <option value="18">北見・オホーツクエリア</option>
-          <option value="23">複数エリア</option>
+        <select class="custom_select" v-model="app.thirdLocation.value">
+          <option :value="location.id" v-for="location in app.locations.value" :key="location.id">
+            {{ location.name }}
+          </option>
         </select>
       </div>
     </div>
     <div class="condition">
       <p>{{ app.t("jobsApp.form.conditions.title") }}</p>
       <div class="tag">
-        <label for="8264"
-          >{{ app.t("jobsApp.form.conditions.holiday")
-          }}<input class="" id="8264" type="checkbox" name="8264" value="8264"
-        /></label>
-        <label for="8272"
-          >{{ app.t("jobsApp.form.conditions.rest")
-          }}<input class="" id="8272" type="checkbox" name="8272" value="8272"
-        /></label>
-        <label for="8265"
-          >{{ app.t("jobsApp.form.conditions.allowance")
-          }}<input class="" id="8265" type="checkbox" name="8265" value="8265"
-        /></label>
-        <label for="8274"
-          >{{ app.t("jobsApp.form.conditions.station")
-          }}<input class="" id="8274" type="checkbox" name="8274" value="8274"
-        /></label>
-        <label for="8263"
-          >{{ app.t("jobsApp.form.conditions.commuting")
-          }}<input class="" id="8263" type="checkbox" name="8263" value="8263"
-        /></label>
+        <label
+          :for="label.id.toString()"
+          class="tag-search"
+          :class="{ active: app.searchLabelsArray.value.includes(label.id) }"
+          v-for="label in app.searchLabels.value"
+          :key="label.id"
+        >
+          <template v-if="label.isEnabled">
+            {{ label.name }}
+            <input
+              class="search-input"
+              :id="label.id.toString()"
+              type="checkbox"
+              :name="label.name"
+              :value="label.id"
+              @click="app.onToggleClickLabel(label.id)"
+            />
+          </template>
+        </label>
       </div>
     </div>
     <div class="applicable">
@@ -161,17 +97,36 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
-import type { Ref } from "vue";
+import { PathConst } from "@/const/path.const";
+import { useCommonStore } from "@/stores/common.store";
 import type { FormSearchProps } from "./FormSearch";
+import type { Ref } from "vue";
+import type { LocationModel } from "@/models/location.model";
+import type { SearchLabelModel } from "@/models/searchLabel.model";
 
 const props = defineProps<FormSearchProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public commonStore = useCommonStore();
     public isDisableSearchButton: Ref<boolean> = this.ref(Boolean(props.isDisableSearchButton));
+    public fisrtLocation: Ref<number> = this.ref(1);
+    public secondLocation: Ref<number> = this.ref(1);
+    public thirdLocation: Ref<number> = this.ref(1);
+    public startTime: Ref<string> = this.ref("_default_selection");
+    public endTime: Ref<string> = this.ref("_default_selection");
+    public searchLabelsArray: Ref<Array<number>> = this.ref([]);
+
+    public locations: Ref<Array<LocationModel>> = this.computed(() => this.commonStore.locations);
+    public searchLabels: Ref<Array<SearchLabelModel>> = this.computed(() => this.commonStore.searchLabels);
 
     public constructor() {
       super();
+
+      this.onBeforeMount(() => {
+        this.commonStore.fetchAllLocations();
+        this.commonStore.fetchAllSearchLabels();
+      });
 
       this.commonStore.eventBus.on("showFormSearch", () => {
         this.isDisableSearchButton.value = false;
@@ -181,6 +136,18 @@ const app = defineClassComponent(
         this.isDisableSearchButton.value = true;
       });
     }
+
+    public onToggleClickLabel = (labelId: number) => {
+      if (this.searchLabelsArray.value.includes(labelId)) {
+        this.searchLabelsArray.value = this.searchLabelsArray.value.filter((value) => value != labelId);
+      } else {
+        this.searchLabelsArray.value.push(labelId);
+      }
+    };
+
+    public onSubmitForm = () => {
+      this.router.push(PathConst.userJobsList);
+    };
   },
 );
 </script>
@@ -282,7 +249,8 @@ const app = defineClassComponent(
       max-height: 150px;
       justify-content: center;
       overscroll-behavior: contain;
-      & label {
+
+      & .tag-search {
         flex: 0 0 30%;
         color: #378182;
         width: 100%;
@@ -299,16 +267,22 @@ const app = defineClassComponent(
         line-height: 28px;
         border-radius: 24px;
         justify-content: center;
-        background-color: #fff;
+        background-color: $white;
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         display: -webkit-box;
         line-break: anywhere;
         overflow: hidden;
         text-overflow: ellipsis;
-        cursor: pointer;
         margin: 0 5px 10px 5px;
-        & input {
+        cursor: pointer;
+
+        &.active {
+          color: $white;
+          background-color: #378182;
+        }
+
+        & .search-input {
           display: none;
         }
       }

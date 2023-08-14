@@ -1,4 +1,5 @@
 export type ProfileHeaderProps = {
+  profile: any;
   isUpdate: boolean;
   editable: boolean;
 };
