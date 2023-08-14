@@ -29,19 +29,19 @@
         <div class="second_content">
           <div class="card_infor_item">
             <i class="bi bi-geo-alt"></i>
-            <p class="infor_job">Location</p>
+            <span class="infor_job">Location</span>
           </div>
           <div class="card_infor_item">
             <i class="bi bi-bus-front"></i>
-            <p class="infor_job">Station</p>
+            <span class="infor_job">Station</span>
           </div>
           <div class="card_infor_item">
             <i class="bi bi-cash-coin"></i>
-            <p class="infor_job">Salary</p>
+            <span class="infor_job">Salary</span>
           </div>
           <div class="card_infor_item">
             <i class="bi bi-clock"></i>
-            <p class="infor_job">Time</p>
+            <span class="infor_job">Time</span>
           </div>
         </div>
       </div>
