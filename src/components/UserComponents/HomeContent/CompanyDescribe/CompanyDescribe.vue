@@ -11,7 +11,7 @@
       tabindex="0"
       href="https://secure.haj.co.jp/event/saposen-haj/?mediaid=25&amp;application=pwa"
       target="_blank"
-      >C{{ app.t("jobsApp.companyDescribe.link") }}<span class="MuiTouchRipple-root css-w0pj6f"></span
+      >{{ app.t("jobsApp.companyDescribe.link") }}<span class="MuiTouchRipple-root css-w0pj6f"></span
     ></a>
   </div>
 </template>

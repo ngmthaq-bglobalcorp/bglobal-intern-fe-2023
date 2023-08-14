@@ -243,6 +243,11 @@
         "company": "HAJ Co., Ltd. Hokkaido part-time job information company",
         "title": "(c) Hokkaido Arbeit Johosha co.,ltd. All Rights Reserved."
       }
+    },
+    "newsCategory": {
+      "seminar": "Seminar",
+      "corporateRecruitingSession": "Corporate recruiting session",
+      "generalInformation": "General information"
     }
   }
 }
