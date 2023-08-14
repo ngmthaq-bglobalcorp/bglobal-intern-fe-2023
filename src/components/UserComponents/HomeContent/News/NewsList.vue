@@ -1,29 +1,70 @@
 <template>
   <div class="news">
-    <p class="tittle">{{ app.t("jobsApp.news.title") }}</p>
-    <a class="link" target="_blank" href="https://secure.haj.co.jp/event/spsnCF_230728/?mediaid=25&amp;application=pwa"
-      ><div class="image">
-        <img src="@/assets/img/seminar.png" class="icon" />
+    <h1 class="tittle">{{ app.t("jobsApp.news.title") }}</h1>
+    <a class="link" target="_blank" :href="news.eventPageUrl" v-for="news in app.newsArray.value" :key="news.id">
+      <template v-if="news.category === AppConst.NEWS_CATEGORY.seminar">
+        <div class="image">
+          <img src="@/assets/img/info-icon-seminar.svg" class="icon" />
+          <span class="time" style="color: #378182">{{ DatetimeHelper.getDateAndMonth(news.eventStartAt) }}</span>
+        </div>
 
-        <p class="time">7/26</p>
-      </div>
-      <div class="describe">
-        <p class="type">Seminar</p>
-        <p class="topic">【7/26】Job search counseling session for housewives.</p>
-        <p class="fee">
-          【Free】At Takuhoku Himawari Kaikan, we help housewives (husbands) who are busy with housework and
-          child-rearing to find jobs locally.
-        </p>
-      </div></a
-    >
+        <div class="describe">
+          <span class="type" style="color: #378182">
+            {{ app.t(`jobsApp.newsCategory.seminar`) }}
+          </span>
+
+          <span class="topic">{{ news.title }}</span>
+          <span class="fee">{{ news.body }}</span>
+        </div>
+      </template>
+      <template v-else-if="news.category === AppConst.NEWS_CATEGORY.briefing">
+        <div class="image">
+          <img src="@/assets/img/info-icon-briefing.svg" class="icon" />
+          <span class="time" style="color: #6086dd">{{ DatetimeHelper.getDateAndMonth(news.eventStartAt) }}</span>
+        </div>
+
+        <div class="describe">
+          <span class="type" style="color: #6086dd">
+            {{ app.t(`jobsApp.newsCategory.corporateRecruitingSession`) }}
+          </span>
+
+          <span class="topic">{{ news.title }}</span>
+          <span class="fee">{{ news.body }}</span>
+        </div>
+      </template>
+      <template v-else-if="news.category === AppConst.NEWS_CATEGORY.other">
+        <div class="image">
+          <img src="@/assets/img/info-icon-other.svg" class="icon" />
+          <span class="time" style="color: #db616e">{{ DatetimeHelper.getDateAndMonth(news.eventStartAt) }}</span>
+        </div>
+
+        <div class="describe">
+          <span class="type" style="color: #db616e">
+            {{ app.t(`jobsApp.newsCategory.generalInformation`) }}
+          </span>
+
+          <span class="topic">{{ news.title }}</span>
+          <span class="fee">{{ news.body }}</span>
+        </div>
+      </template>
+    </a>
   </div>
 </template>
 
 <script setup lang="ts">
+import { AppConst } from "@/const/app.const";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
+import type { NewsListProps } from "./NewsList";
+import type { NewsModel } from "@/models/news.model";
+import type { Ref } from "vue";
+
+const props = defineProps<NewsListProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public newsArray: Ref<Array<NewsModel>> = this.computed(() => props.newsArray);
+
     public constructor() {
       super();
     }
@@ -33,8 +74,10 @@ const app = defineClassComponent(
 
 <style scoped lang="scss">
 @import "@/assets/scss/modules";
+
 .news {
   margin-top: 30px;
+
   & .tittle {
     color: #000;
     font-size: 18px;
@@ -42,6 +85,7 @@ const app = defineClassComponent(
     line-height: 26px;
     margin-bottom: 6px;
   }
+
   & .link {
     display: flex;
     padding: 15px 15px 15px 0;
@@ -50,12 +94,14 @@ const app = defineClassComponent(
     margin-bottom: 10px;
     text-decoration: none;
     background-color: #fff;
+
     & .image {
       flex: 2;
       display: flex;
       align-items: center;
       flex-direction: column;
       justify-content: center;
+
       & .icon {
         position: relative;
         display: flex;
@@ -84,18 +130,24 @@ const app = defineClassComponent(
     }
     & .describe {
       flex: 8;
+      display: flex;
+      flex-direction: column;
+
       & .type {
-        color: #378182;
         font-size: 12px;
         font-weight: 700;
         line-height: 17px;
+        margin-bottom: 0.5rem;
       }
+
       & .topic {
         color: #000;
         font-size: 14px;
         font-weight: 700;
         line-height: 20px;
+        margin-bottom: 0.5rem;
       }
+
       & .fee {
         color: #000;
         font-size: 11px;
