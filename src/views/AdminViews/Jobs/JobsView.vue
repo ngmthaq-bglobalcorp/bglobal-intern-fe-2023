@@ -64,7 +64,9 @@ const app = defineClassComponent(
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         await this.organizationStore.fetchAllJobs();
+        this.commonStore.setIsLoading(false);
       });
     }
 
@@ -81,10 +83,12 @@ const app = defineClassComponent(
     };
 
     public onToggleDeleteButton = async (id: number) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.organizationStore.fetchDeleteJob(id.toString());
       if (isSuccess) {
         this.organizationStore.jobs = this.organizationStore.jobs.filter((job) => job.id != id);
       }
+      this.commonStore.setIsLoading(false);
     };
 
     public onToggleColumnView = () => {

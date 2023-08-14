@@ -311,6 +311,7 @@ const app = defineClassComponent(
           phoneNumber: this.phoneNumber.value,
           address: this.address.value,
         };
+        this.commonStore.setIsLoading(true);
         const isSuccess = await this.authStore.fetchOrganizationSignUp(data);
         if (isSuccess) {
           if (isSuccess.includes("Username")) {
@@ -328,6 +329,7 @@ const app = defineClassComponent(
         } else {
           this.errorInput.value = this.t(`message.errorUsernameOrPassword`);
         }
+        this.commonStore.setIsLoading(false);
       }
     };
 

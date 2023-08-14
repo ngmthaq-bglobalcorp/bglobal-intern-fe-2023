@@ -40,20 +40,25 @@ const app = defineClassComponent(
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         await this.adminStore.fetchAllSeekers();
+        this.commonStore.setIsLoading(false);
       });
     }
 
     public onDeleteSelected = (selectedArray: Array<number>) => {
+      this.commonStore.setIsLoading(true);
       selectedArray.forEach(async (value: number) => {
         const isSuccess = await this.adminStore.fetchDeleteSeekers(value.toString());
         if (isSuccess) {
           this.adminStore.seekers = this.adminStore.seekers.filter((seeker) => seeker.id != value);
         }
       });
+      this.commonStore.setIsLoading(false);
     };
 
     public onLockSelected = async (id: number) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.adminStore.fetchChangeUserStatus(
         id.toString(),
         AppConst.STATUS.disabled.toLowerCase(),
@@ -64,9 +69,11 @@ const app = defineClassComponent(
           seeker.status = AppConst.STATUS.disabled;
         }
       }
+      this.commonStore.setIsLoading(false);
     };
 
     public onUnlockSelected = async (id: number) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.adminStore.fetchChangeUserStatus(
         id.toString(),
         AppConst.STATUS.active.toLowerCase(),
@@ -77,6 +84,7 @@ const app = defineClassComponent(
           seeker.status = AppConst.STATUS.active;
         }
       }
+      this.commonStore.setIsLoading(false);
     };
   },
 );

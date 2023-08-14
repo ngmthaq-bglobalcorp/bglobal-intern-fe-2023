@@ -84,8 +84,10 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.organizationStore.fetchProfile();
+      this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
+        await this.organizationStore.fetchProfile();
+        this.commonStore.setIsLoading(false);
       });
     }
 
@@ -94,25 +96,31 @@ const app = defineClassComponent(
     };
 
     public onUpdateInfomation = async (data: any) => {
+      this.commonStore.setIsLoading(true);
       const organization = new OrganizationModel(data);
       const isSuccess = await this.organizationStore.fetchUpdateProfile(organization);
       if (isSuccess) {
         console.log("Update profile");
       }
+      this.commonStore.setIsLoading(false);
     };
 
     public onUpdateEmail = async (email: string) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.authStore.fetchUpdateEmail(email);
       if (isSuccess) {
         this.organizationStore.profile.email = email;
       }
+      this.commonStore.setIsLoading(false);
     };
 
     public onUpdatePassword = async (data: any) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.authStore.fetchUpdatePassword(data);
       if (isSuccess) {
         console.log("Update password");
       }
+      this.commonStore.setIsLoading(false);
     };
 
     public onUpdateLanguage = (language: string) => {

@@ -1,5 +1,5 @@
 <template>
-  <UserLayout>
+  <UserLayout :isAuth="true">
     <div class="signup-container">
       <div class="content">
         <!-- Form -->
@@ -191,6 +191,7 @@ const app = defineClassComponent(
           username: this.username.value,
           password: this.password.value,
         };
+        this.commonStore.setIsLoading(true);
         const isSuccess = await this.authStore.fetchSeekerSignUp(data);
         if (isSuccess) {
           if (isSuccess.includes("Username")) {
@@ -202,6 +203,7 @@ const app = defineClassComponent(
         } else {
           this.errorInput.value = this.t(`message.errorUsernameOrPassword`);
         }
+        this.commonStore.setIsLoading(false);
       }
     };
 

@@ -38,11 +38,14 @@ const app = defineClassComponent(
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         await this.adminStore.fetchAllOrganizations();
+        this.commonStore.setIsLoading(false);
       });
     }
 
     public onDeleteSelected = (selectedArray: Array<number>) => {
+      this.commonStore.setIsLoading(true);
       selectedArray.forEach(async (value: number) => {
         const isSuccess = await this.adminStore.fetchDeleteOrganizations(value.toString());
         if (isSuccess) {
@@ -51,9 +54,11 @@ const app = defineClassComponent(
           );
         }
       });
+      this.commonStore.setIsLoading(false);
     };
 
     public onLockSelected = async (id: number) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.adminStore.fetchChangeUserStatus(
         id.toString(),
         AppConst.STATUS.disabled.toLowerCase(),
@@ -64,9 +69,11 @@ const app = defineClassComponent(
           organization.status = AppConst.STATUS.disabled;
         }
       }
+      this.commonStore.setIsLoading(false);
     };
 
     public onUnlockSelected = async (id: number) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.adminStore.fetchChangeUserStatus(
         id.toString(),
         AppConst.STATUS.active.toLowerCase(),
@@ -77,6 +84,7 @@ const app = defineClassComponent(
           organization.status = AppConst.STATUS.active;
         }
       }
+      this.commonStore.setIsLoading(false);
     };
   },
 );

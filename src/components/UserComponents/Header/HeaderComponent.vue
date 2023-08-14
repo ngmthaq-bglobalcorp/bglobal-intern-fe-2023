@@ -1,9 +1,9 @@
 <template>
   <div class="first-header">
-    <RouterLink to="/" class="logo text-header">
+    <RouterLink to="/" class="logo text-header" :class="{ disabled: props.isAuth }">
       <h4 class="logo-title">Job Searchers</h4>
     </RouterLink>
-    <div class="list-items">
+    <div class="list-items" v-if="!props.isAuth">
       <div class="items-detail">
         <RouterLink :to="PathConst.home" class="item-link">
           <img src="@/assets/img/house.svg" alt="Home" class="image" />
@@ -36,6 +36,9 @@
 import { PathConst } from "@/const/path.const";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { useAuthStore } from "@/stores/auth.store";
+import type { HeaderProps } from "./HeaderComponent";
+
+const props = defineProps<HeaderProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -46,9 +49,10 @@ const app = defineClassComponent(
     }
 
     public onToggleSignOut = async () => {
+      this.commonStore.isLoading = true;
       const isSuccess = await this.authStore.fetchAdminSignOut();
+      this.commonStore.isLoading = false;
       if (isSuccess) {
-        // this.router.push(PathConst.userSignin);
         window.location.href = PathConst.userSignin.path;
       }
     };
@@ -74,6 +78,11 @@ const app = defineClassComponent(
     text-decoration: none !important;
     min-width: 96px;
     border-radius: 8px;
+
+    &.disabled {
+      pointer-events: none;
+      cursor: default;
+    }
   }
 
   & .list-items {
@@ -101,7 +110,7 @@ const app = defineClassComponent(
         }
 
         & .icon {
-          font-size: 19px;
+          font-size: 20px;
           line-height: 1;
           padding: 2px;
           margin-bottom: 0.5px;

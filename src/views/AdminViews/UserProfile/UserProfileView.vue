@@ -34,8 +34,10 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.organizationStore.fetchProfile();
+      this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
+        await this.organizationStore.fetchProfile();
+        this.commonStore.setIsLoading(false);
       });
     }
 

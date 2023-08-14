@@ -22,6 +22,7 @@
 
                 <div class="custom-input-group">
                   <div class="input-image" v-for="image of input.model" :key="image">
+                    <LoadingComponent :isLoading="!image.includes('res.cloudinary.com/')" />
                     <img :src="image" :alt="input.label" class="image" v-if="image" />
                     <button class="delete-btn" @click.prevent="app.onToggleDeleteImage(input, image)">
                       <i class="bi bi-x-circle"></i>
@@ -153,20 +154,28 @@
                       </label>
                     </div>
                     <div class="input-time" v-else-if="child.type === 'time'">
+                      <!-- Time Select -->
                       <label class="input-label" :for="input.name + child.name">
                         {{ child.label }}
                         <span class="input-label-secondary" v-if="child.required">*</span>
                       </label>
-                      <input
-                        :type="child.type"
-                        :class="['input-form', { 'is-invalid': child.error }]"
-                        :name="input.name + child.name"
+                      <select
+                        :class="['input-form', { 'is-invalid': input.error }]"
                         :id="input.name + child.name"
-                        :placeholder="child.placeholder"
                         v-model="child.model"
-                        @focus="app.onFocusInputText(child)"
-                      />
+                      >
+                        <option
+                          :value="option"
+                          :selected="option === child.model"
+                          v-for="option in child.children"
+                          :key="option"
+                        >
+                          {{ option }}
+                        </option>
+                      </select>
+
                       <div class="invalid-feedback" v-if="child.error">{{ child.error }}</div>
+                      <!-- End Time Select -->
                     </div>
                     <div class="input-time" v-else>
                       <label class="input-label" :for="input.name + child.name">
@@ -341,7 +350,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import { useCommonStore } from "@/stores/common.store";
+import LoadingComponent from "@/components/AppComponents/LoadingComponent/LoadingComponent.vue";
 import type { FormDataEmits, FormDataProps } from "./FormDataComponent";
 import type { Ref } from "vue";
 import type { SearchLabelModel } from "@/models/searchLabel.model";
@@ -351,7 +360,6 @@ const emit = defineEmits<FormDataEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public commonStore = useCommonStore();
     public input: Ref<any> = this.ref(props.input);
 
     public constructor() {
@@ -642,10 +650,12 @@ const app = defineClassComponent(
 
           & .group-check {
             width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
 
             & label.input-form {
+              height: 100%;
               text-align: center;
               cursor: pointer;
 

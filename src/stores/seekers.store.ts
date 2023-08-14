@@ -67,7 +67,7 @@ export const useSeekersStore = defineClassStore(
           other_details: data.otherDetails || "",
         };
         console.log(profile);
-        const res = await api.put(ApiConst.seekersEndpoints.updateSeekerProfile, JSON.stringify(profile));
+        const res = await api.put(ApiConst.seekersEndpoints.updateSeekerProfile, profile);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {

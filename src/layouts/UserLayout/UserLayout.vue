@@ -1,6 +1,7 @@
 <template>
   <div id="user-layout">
-    <HeaderComponent />
+    <LoadingComponent :isLoading="app.commonStore.isLoading" />
+    <HeaderComponent :isAuth="props.isAuth" />
     <div class="content">
       <slot></slot>
     </div>
@@ -10,6 +11,10 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import HeaderComponent from "@/components/UserComponents/Header/HeaderComponent.vue";
+import LoadingComponent from "@/components/AppComponents/LoadingComponent/LoadingComponent.vue";
+import type { UserLayoutProps } from "./UserLayout";
+
+const props = defineProps<UserLayoutProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {

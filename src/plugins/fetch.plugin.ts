@@ -115,8 +115,10 @@ export abstract class Fetch {
     body: HttpBody | null = null,
     configs: HttpRequestInit = defaultHttpRequestConfigs,
   ): Promise<Response> {
-    configs.headers.delete("Content-Type");
-    if (!(body instanceof FormData)) {
+    if (isBodyInit(body)) {
+      this.configs.headers.delete("Content-Type");
+      configs.headers.delete("Content-Type");
+    } else {
       body = JSON.stringify(body);
       configs.headers.set("Content-Type", "application/json");
     }
@@ -128,8 +130,10 @@ export abstract class Fetch {
     body: HttpBody | null = null,
     configs: HttpRequestInit = defaultHttpRequestConfigs,
   ): Promise<Response> {
-    configs.headers.delete("Content-Type");
-    if (!(body instanceof FormData)) {
+    if (isBodyInit(body)) {
+      this.configs.headers.delete("Content-Type");
+      configs.headers.delete("Content-Type");
+    } else {
       body = JSON.stringify(body);
       configs.headers.set("Content-Type", "application/json");
     }
@@ -141,8 +145,10 @@ export abstract class Fetch {
     body: HttpBody | null = null,
     configs: HttpRequestInit = defaultHttpRequestConfigs,
   ): Promise<Response> {
-    configs.headers.delete("Content-Type");
-    if (!(body instanceof FormData)) {
+    if (isBodyInit(body)) {
+      this.configs.headers.delete("Content-Type");
+      configs.headers.delete("Content-Type");
+    } else {
       body = JSON.stringify(body);
       configs.headers.set("Content-Type", "application/json");
     }
@@ -156,6 +162,17 @@ export abstract class Fetch {
   ): Promise<Response> {
     return this.fetch(uri, "DELETE", null, body, configs);
   }
+}
+
+export function isBodyInit(body: any): body is BodyInit {
+  return (
+    typeof body === "string" ||
+    body instanceof ArrayBuffer ||
+    body instanceof Blob ||
+    body instanceof FormData ||
+    body instanceof URLSearchParams ||
+    body instanceof ReadableStream
+  );
 }
 
 export const defaultHttpRequestConfigs: HttpRequestInit = {

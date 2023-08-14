@@ -85,7 +85,7 @@ export const useAuthStore = defineClassStore(
           introduction: data.introduction || "",
           organizationType: data.organizationType || AppConst.ORGANIZATION_TYPE.typeB,
         };
-        const res = await api.post(ApiConst.authEndpoints.organizationSignup, JSON.stringify(organization));
+        const res = await api.post(ApiConst.authEndpoints.organizationSignup, organization);
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
           console.log(data);
@@ -112,7 +112,7 @@ export const useAuthStore = defineClassStore(
           username: data.username || "",
           password: data.password || "",
         };
-        const res = await api.post(ApiConst.authEndpoints.seekerSignup, JSON.stringify(seeker));
+        const res = await api.post(ApiConst.authEndpoints.seekerSignup, seeker);
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
           console.log(data);
@@ -148,7 +148,7 @@ export const useAuthStore = defineClassStore(
 
     public fetchUpdatePassword = async (password: any) => {
       try {
-        const res = await api.post(ApiConst.authEndpoints.changePassword, JSON.stringify(password));
+        const res = await api.post(ApiConst.authEndpoints.changePassword, password);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {

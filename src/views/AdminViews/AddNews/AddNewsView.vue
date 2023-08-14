@@ -203,10 +203,12 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
+      this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         if (this.isUpdate.value) {
-          this.adminStore.fetchFindNewsById(props.newsId);
+          await this.adminStore.fetchFindNewsById(props.newsId);
         }
+        this.commonStore.setIsLoading(false);
       });
     }
 
@@ -215,6 +217,7 @@ const app = defineClassComponent(
     };
 
     public onSubmitForm = async (data: any) => {
+      this.commonStore.setIsLoading(true);
       const news = new NewsModel(data);
       if (this.isUpdate.value) {
         const isSuccess = await this.adminStore.fetchUpdateNews(props.newsId, news);
@@ -222,11 +225,13 @@ const app = defineClassComponent(
           this.router.push(PathConst.adminNews);
         }
       } else {
+        console.log(news);
         const isSuccess = await this.adminStore.fetchCreateNews(news);
         if (isSuccess) {
           this.router.push(PathConst.adminNews);
         }
       }
+      this.commonStore.setIsLoading(false);
     };
   },
 );

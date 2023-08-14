@@ -1,5 +1,5 @@
 <template>
-  <UserLayout>
+  <UserLayout :isAuth="true">
     <div class="signin-container">
       <div class="content">
         <!-- Form -->
@@ -143,6 +143,7 @@ const app = defineClassComponent(
         this.errorPassword.value = "";
       }
       if (isValidInput) {
+        this.commonStore.setIsLoading(true);
         const isSuccess = await this.authStore.fetchAdminSignIn(this.username.value, this.password.value);
         if (isSuccess) {
           window.location.replace(PathConst.home.path);
@@ -150,6 +151,7 @@ const app = defineClassComponent(
           this.errorUsernameOrPassword.value = this.t(`message.errorUsernameOrPassword`);
           this.password.value = "";
         }
+        this.commonStore.setIsLoading(false);
       }
     };
 

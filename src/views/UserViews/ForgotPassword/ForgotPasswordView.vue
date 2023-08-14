@@ -1,5 +1,5 @@
 <template>
-  <UserLayout>
+  <UserLayout :isAuth="true">
     <div class="forgot-container">
       <div class="content">
         <!-- Form -->

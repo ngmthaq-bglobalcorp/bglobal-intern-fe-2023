@@ -41,8 +41,10 @@ const app = defineClassComponent(
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         await this.organizationStore.fetchFindJobById(props.jobId);
         await this.organizationStore.fetchAllSeekerLikeJob(props.jobId);
+        this.commonStore.setIsLoading(false);
       });
     }
 
@@ -51,11 +53,13 @@ const app = defineClassComponent(
     };
 
     public onToggleDeleteButton = async () => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.organizationStore.fetchDeleteJob(props.jobId);
       if (isSuccess) {
         this.organizationStore.jobs = this.organizationStore.jobs.filter((job) => job.id != parseInt(props.jobId));
         this.router.push(PathConst.adminJobsList);
       }
+      this.commonStore.setIsLoading(true);
     };
   },
 );

@@ -25,21 +25,23 @@ import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHea
 import Profile from "@/components/UserComponents/Profile/ProfileComponent.vue";
 import { PathConst } from "@/const/path.const";
 import { SeekerModel } from "@/models/seeker.model";
-import { useSeekersStore } from "@/stores/seekers.store";
 import { useAuthStore } from "@/stores/auth.store";
+import { useSeekersStore } from "@/stores/seekers.store";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public seekersStore = useSeekersStore();
     public authStore = useAuthStore();
+    public seekersStore = useSeekersStore();
     public profile: Ref<SeekerModel> = this.computed(() => this.seekersStore.profile);
 
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.seekersStore.fetchProfile();
+      this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
+        await this.seekersStore.fetchProfile();
+        this.commonStore.setIsLoading(false);
       });
     }
 
@@ -49,24 +51,30 @@ const app = defineClassComponent(
 
     public onUpdateInfomation = async (data: any) => {
       const seeker = new SeekerModel(data);
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.seekersStore.fetchUpdateProfile(seeker);
+      this.commonStore.setIsLoading(false);
       if (isSuccess) {
         console.log("Update profile");
       }
     };
 
     public onUpdateEmail = async (email: string) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.authStore.fetchUpdateEmail(email);
       if (isSuccess) {
         this.seekersStore.profile.email = email;
       }
+      this.commonStore.setIsLoading(false);
     };
 
     public onUpdatePassword = async (data: any) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.authStore.fetchUpdatePassword(data);
       if (isSuccess) {
         console.log("Update password");
       }
+      this.commonStore.setIsLoading(false);
     };
 
     public onUpdateLanguage = (language: string) => {

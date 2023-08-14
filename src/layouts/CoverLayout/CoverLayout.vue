@@ -1,5 +1,6 @@
 <template>
   <div id="cover-layout" class="d-flex">
+    <WaitingComponent :isWaiting="app.commonStore.isLoading" />
     <CoverComponent />
     <div class="content">
       <slot></slot>
@@ -8,7 +9,17 @@
 </template>
 
 <script setup lang="ts">
+import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import CoverComponent from "@/components/AdminComponents/Cover/CoverComponent.vue";
+import WaitingComponent from "@/components/AppComponents/WaitingComponent/WaitingComponent.vue";
+
+const app = defineClassComponent(
+  class Component extends BaseComponent {
+    public constructor() {
+      super();
+    }
+  },
+);
 </script>
 
 <style scoped lang="scss">

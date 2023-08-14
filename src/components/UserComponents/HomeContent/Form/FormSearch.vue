@@ -14,7 +14,7 @@
         <p>{{ app.t("jobsApp.form.startTime") }}</p>
         <select class="jss86 custom_select" v-model="app.startTime.value">
           <option value="_default_selection">{{ app.t("jobsApp.form.startTime") }}</option>
-          <option :value="hour" v-for="hour in PrimitiveHelper.time()" :key="hour">{{ hour }}</option>
+          <option :value="hour" v-for="hour in PrimitiveHelper.getTime()" :key="hour">{{ hour }}</option>
         </select>
       </div>
       <i class="bi bi-x" style="font-size: 1.5rem"></i>
@@ -22,7 +22,7 @@
         <p>{{ app.t("jobsApp.form.endTime") }}</p>
         <select class="jss86 custom_select" v-model="app.endTime.value">
           <option value="_default_selection">{{ app.t("jobsApp.form.endTime") }}</option>
-          <option :value="hour" v-for="hour in PrimitiveHelper.time()" :key="hour">{{ hour }}</option>
+          <option :value="hour" v-for="hour in PrimitiveHelper.getTime()" :key="hour">{{ hour }}</option>
         </select>
       </div>
     </div>
@@ -98,7 +98,6 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import { PathConst } from "@/const/path.const";
-import { useCommonStore } from "@/stores/common.store";
 import type { FormSearchProps } from "./FormSearch";
 import type { Ref } from "vue";
 import type { LocationModel } from "@/models/location.model";
@@ -108,7 +107,6 @@ const props = defineProps<FormSearchProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public commonStore = useCommonStore();
     public isDisableSearchButton: Ref<boolean> = this.ref(Boolean(props.isDisableSearchButton));
     public fisrtLocation: Ref<number> = this.ref(1);
     public secondLocation: Ref<number> = this.ref(1);

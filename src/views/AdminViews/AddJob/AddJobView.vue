@@ -23,8 +23,8 @@ import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderCompon
 import FormData from "@/components/AdminComponents/FormData/FormDataComponent.vue";
 import { PathConst } from "@/const/path.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import { JobModel } from "@/models/job.model";
-import { useCommonStore } from "@/stores/common.store";
 import { useOrganizationStore } from "@/stores/organization.store";
 import type { AddJobProps } from "./AddJobView";
 import type { Ref } from "vue";
@@ -33,7 +33,6 @@ const props = defineProps<AddJobProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public commonStore = useCommonStore();
     public organizationStore = useOrganizationStore();
     public isUpdate: Ref<boolean> = this.computed(() => (props.jobId ? true : false));
     public job: Ref<JobModel> = this.computed(() => {
@@ -155,6 +154,7 @@ const app = defineClassComponent(
                 multiple: false,
                 model: "00:00",
                 error: "",
+                children: PrimitiveHelper.getTime(),
               },
               {
                 id: 2,
@@ -166,6 +166,7 @@ const app = defineClassComponent(
                 multiple: false,
                 model: "00:00",
                 error: "",
+                children: PrimitiveHelper.getTime(),
               },
               {
                 id: 3,
@@ -384,11 +385,13 @@ const app = defineClassComponent(
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         await this.commonStore.fetchAllLocations();
         await this.commonStore.fetchAllSearchLabels();
         if (this.isUpdate.value) {
           this.organizationStore.fetchFindJobById(props.jobId);
         }
+        this.commonStore.setIsLoading(false);
       });
     }
 
@@ -397,6 +400,8 @@ const app = defineClassComponent(
     };
 
     public onSubmitForm = async (data: any) => {
+      this.commonStore.setIsLoading(true);
+      data.mainImageUrl = data.mainImage[0];
       data.location = this.commonStore.getLocationById(data.location);
       data.searchLabels = data.searchLabels.map((value: any) => {
         return this.commonStore.getLocationById(value);
@@ -413,6 +418,7 @@ const app = defineClassComponent(
           this.router.push(PathConst.adminJobsList);
         }
       }
+      this.commonStore.setIsLoading(false);
     };
   },
 );

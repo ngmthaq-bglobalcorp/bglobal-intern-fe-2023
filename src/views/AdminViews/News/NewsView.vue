@@ -35,7 +35,9 @@ const app = defineClassComponent(
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         await this.adminStore.fetchAllNews();
+        this.commonStore.setIsLoading(false);
       });
     }
 
@@ -48,10 +50,12 @@ const app = defineClassComponent(
     };
 
     public onToggleDeleteButton = async (id: number) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.adminStore.fetchDeleteNews(id.toString());
       if (isSuccess) {
         this.adminStore.newsList = this.adminStore.newsList.filter((news) => news.id != id);
       }
+      this.commonStore.setIsLoading(false);
     };
   },
 );
