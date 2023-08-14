@@ -116,18 +116,27 @@ export const useAuthStore = defineClassStore(
       }
     };
 
-    public fetchSeekerSignUp = async (username: string, password: string) => {
+    public fetchSeekerSignUp = async (data: any) => {
       try {
-        const res = await api.post(
-          ApiConst.authEndpoints.seekerSignup,
-          JSON.stringify({ username: username, password: password }),
-        );
+        const seeker = {
+          username: data.username || "",
+          password: data.password || "",
+        };
+        const res = await api.post(ApiConst.authEndpoints.seekerSignup, JSON.stringify(seeker));
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
-          StorageHelper.setLocalStorage(KeyConst.keys.currentUser, data);
-          return true;
+          console.log(data);
+          const isSuccess = await this.fetchAdminSignIn(seeker.username, seeker.password);
+          if (isSuccess) {
+            return "success";
+          } else {
+            return "fail";
+          }
+        } else if (res.status === ApiConst.status.badRequest) {
+          const data = await res.text();
+          return data;
         } else {
-          return false;
+          return "fail";
         }
       } catch (error) {
         console.log(error);

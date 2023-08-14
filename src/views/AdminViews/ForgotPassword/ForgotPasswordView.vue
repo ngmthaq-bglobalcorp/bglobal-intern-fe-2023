@@ -19,7 +19,7 @@
               name="email"
               id="organizationEmail"
               placeholder="Email@organization.com"
-              v-model="app.organizationEmail.value"
+              v-model="app.email.value"
               @focus="app.focusEmail"
             />
 
@@ -64,8 +64,8 @@
 </template>
 
 <script setup lang="ts">
-import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { PathConst } from "@/const/path.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import { useAuthStore } from "@/stores/auth.store";
@@ -74,7 +74,7 @@ import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
-    public organizationEmail: Ref<string> = this.ref("");
+    public email: Ref<string> = this.ref("");
     public emailOtp: Ref<string> = this.ref("");
     public isValidEmail: Ref<Boolean> = this.ref(false);
     public errorEmail: Ref<string> = this.ref("");
@@ -89,7 +89,7 @@ const app = defineClassComponent(
     };
 
     public submitForm = () => {
-      if (!this.organizationEmail.value || !PrimitiveHelper.isValidEmail(this.organizationEmail.value)) {
+      if (!this.email.value || !PrimitiveHelper.isValidEmail(this.email.value)) {
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorEmail.value = "";
@@ -106,7 +106,7 @@ const app = defineClassComponent(
     public focusEmail = () => {
       if (this.errorEmail.value) {
         this.errorEmail.value = "";
-        this.organizationEmail.value = "";
+        this.email.value = "";
       }
     };
 
