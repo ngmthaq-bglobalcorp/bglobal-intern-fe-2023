@@ -137,8 +137,12 @@ const app = defineClassComponent(
 <style scoped lang="scss">
 @import "@/assets/scss/modules";
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 .body_all {
-  height: calc(100% - 52px);
+  height: 100%;
 
   & #body {
     width: 100%;

@@ -26,17 +26,7 @@ export const useAuthStore = defineClassStore(
 
     public fetchAdminSignIn = async (username: string, password: string, remember: boolean = true) => {
       try {
-        // const headers = new Headers();
-        // headers.append("Content-Type", " application/json");
-        // const res = await api.post(
-        //   ApiConst.authEndpoints.login,
-        //   JSON.stringify({ username: username, password: password }),
-        //   { headers: headers },
-        // );
-        const res = await api.post(
-          ApiConst.authEndpoints.login,
-          JSON.stringify({ username: username, password: password }),
-        );
+        const res = await api.post(ApiConst.authEndpoints.login, { username: username, password: password });
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
           console.log(data);

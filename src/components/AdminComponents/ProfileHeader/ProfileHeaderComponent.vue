@@ -150,7 +150,7 @@ const app = defineClassComponent(
       top: 0;
       right: 0;
       left: 0;
-      background-color: $light;
+      background-color: transparent;
       transition: 0.2s;
 
       & .cover-img {

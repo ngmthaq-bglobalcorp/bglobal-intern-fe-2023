@@ -125,11 +125,9 @@ const app = defineClassComponent(
 @import "@/assets/scss/admin";
 
 .forgot-container {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
 
   & .content {
     width: 100%;

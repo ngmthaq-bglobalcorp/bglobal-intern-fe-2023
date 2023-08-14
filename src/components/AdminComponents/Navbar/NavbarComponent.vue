@@ -115,8 +115,8 @@ const app = defineClassComponent(
     public onToggleSignOut = async () => {
       const isSuccess = await this.authStore.fetchAdminSignOut();
       if (isSuccess) {
-        this.router.push(PathConst.adminSignin);
-        // window.location.replace(PathConst.adminSignin.path);
+        // this.router.push(PathConst.adminSignin);
+        window.location.href = PathConst.adminSignin.path;
       }
     };
   },

@@ -1,7 +1,9 @@
 <template>
   <div id="cover-layout" class="d-flex">
     <CoverComponent />
-    <slot></slot>
+    <div class="content">
+      <slot></slot>
+    </div>
   </div>
 </template>
 
@@ -17,5 +19,10 @@ import CoverComponent from "@/components/AdminComponents/Cover/CoverComponent.vu
   font-family: "Ubuntu", "Open Sans", sans-serif;
   color: $dark-variant;
   background-color: $white;
+
+  & .content {
+    width: 50%;
+    min-height: 100vh;
+  }
 }
 </style>

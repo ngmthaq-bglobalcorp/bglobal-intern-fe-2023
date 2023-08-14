@@ -238,15 +238,10 @@ const app = defineClassComponent(
 @import "@/assets/scss/modules";
 @import "@/assets/scss/user";
 
-::-webkit-scrollbar {
-  display: none;
-}
-
 .signup-container {
   display: flex;
+  align-items: center;
   justify-content: center;
-  height: calc(100vh - 104px - 185px);
-  overflow-y: scroll;
 
   & .content {
     width: 100%;
