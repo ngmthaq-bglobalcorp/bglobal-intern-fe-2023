@@ -24,7 +24,7 @@
                 name="name"
                 id="organizationName"
                 :placeholder="app.t(`app.organizationName`)"
-                v-model="app.organizationName.value"
+                v-model="app.name.value"
                 @focus="app.focusName"
               />
 
@@ -47,7 +47,7 @@
                 name="name"
                 id="organizationEmail"
                 placeholder="Email@organization.com"
-                v-model="app.organizationEmail.value"
+                v-model="app.email.value"
                 readonly
               />
 
@@ -58,7 +58,7 @@
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationPhone">
+            <label class="input-label" for="phoneNumber">
               {{ app.t(`app.phoneNumber`) }}
               <span class="input-label-secondary">*</span>
             </label>
@@ -68,29 +68,27 @@
                 type="text"
                 :class="['input-form', { 'is-invalid': app.errorPhoneNumber.value }]"
                 name="phoneNumber"
-                id="organizationPhone"
+                id="phoneNumber"
                 :placeholder="app.t(`app.phoneNumber`)"
                 v-model="app.phoneNumber.value"
                 @focus="app.focusPhoneNumber"
               />
-
-              <div class="invalid-feedback" v-if="app.errorPhoneNumber.value">{{ app.errorPhoneNumber.value }}</div>
             </div>
           </div>
           <!-- End Form Group -->
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationWebside">{{ app.t(`app.webside`) }}</label>
+            <label class="input-label" for="website">{{ app.t(`app.website`) }}</label>
 
             <div class="custom-input-group">
               <input
                 type="text"
                 class="input-form"
-                name="webside"
-                id="organizationWebside"
-                :placeholder="app.t(`app.webside`)"
-                v-model="app.webside.value"
+                name="website"
+                id="website"
+                :placeholder="app.t(`app.website`)"
+                v-model="app.website.value"
               />
             </div>
           </div>
@@ -98,21 +96,21 @@
 
           <!-- Form Group -->
           <div class="form-group">
-            <label class="input-label" for="organizationAddress">{{ app.t(`app.address`) }}</label>
+            <label class="input-label" for="address">
+              {{ app.t(`app.address`) }}
+              <span class="input-label-secondary">*</span>
+            </label>
 
             <div class="custom-input-group">
-              <!-- Select Address -->
-              <select class="input-form" id="organizationAddress" v-model="app.address.value">
-                <option
-                  :value="address"
-                  :selected="address === app.address.value"
-                  v-for="address in app.addressArray"
-                  :key="address"
-                >
-                  {{ address }}
-                </option>
-              </select>
-              <!-- End Select Address -->
+              <input
+                type="text"
+                :class="['input-form', { 'is-invalid': app.errorAddress.value }]"
+                name="address"
+                id="address"
+                :placeholder="app.t(`app.address`)"
+                v-model="app.address.value"
+                @focus="app.focusAddress"
+              />
             </div>
           </div>
           <!-- End Form Group -->
@@ -182,7 +180,7 @@
       <!-- Body -->
       <div class="custom-body">
         <div class="card-text">
-          {{ app.t(`app.currentEmail`) }}<span class="font-weight-bold">{{ app.organizationEmail.value }}</span>
+          {{ app.t(`app.currentEmail`) }}<span class="font-weight-bold">{{ app.email.value }}</span>
         </div>
 
         <!-- Form -->
@@ -193,7 +191,7 @@
 
             <div class="custom-input-group">
               <input
-                type="email"
+                type="text"
                 :class="['input-form', { 'is-invalid': app.errorNewEmail.value }]"
                 name="newEmail"
                 id="newOrganizationEmail"
@@ -410,25 +408,18 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import { AppConst } from "@/const/app.const";
 import { LangConst } from "@/const/lang.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
-import type { ProfileUpdateProps } from "./ProfileUpdateComponent";
+import type { ProfileUpdateEmits, ProfileUpdateProps } from "./ProfileUpdateComponent";
 import type { Ref } from "vue";
 import type { OrganizationModel } from "@/models/organization.model";
 
 const props = defineProps<ProfileUpdateProps>();
+const emits = defineEmits<ProfileUpdateEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public addressArray = AppConst.CITY;
+    public profile: Ref<OrganizationModel> = this.computed(() => props.profile);
     public typeArray: Ref<Array<string>> = this.ref(Object.values(AppConst.ORGANIZATION_TYPE));
     public requirementsIndexArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.requirements`)));
-    public profile: Ref<OrganizationModel> = this.ref(props.profile);
-    public organizationName: Ref<string> = this.ref(this.profile.value.name);
-    public organizationEmail: Ref<string> = this.ref(this.profile.value.email);
-    public phoneNumber: Ref<string> = this.ref(this.profile.value.phone_number);
-    public webside: Ref<string> = this.ref(this.profile.value.webside);
-    public address: Ref<string> = this.ref(this.profile.value.adress);
-    public introduction: Ref<string> = this.ref(this.profile.value.introduction);
-    public organizationType: Ref<string> = this.ref(this.profile.value.organizationType);
     public newEmail: Ref<string> = this.ref("");
     public currentPassword: Ref<string> = this.ref("");
     public newPassword: Ref<string> = this.ref("");
@@ -436,15 +427,33 @@ const app = defineClassComponent(
     public errorName: Ref<string> = this.ref("");
     public errorEmail: Ref<string> = this.ref("");
     public errorPhoneNumber: Ref<string> = this.ref("");
+    public errorAddress: Ref<string> = this.ref("");
     public errorNewEmail: Ref<string> = this.ref("");
     public errorCurrentPassword: Ref<string> = this.ref("");
     public errorNewPassword: Ref<string> = this.ref("");
     public errorConfirmNewPassword: Ref<string> = this.ref("");
     public language: Ref<string> = this.ref(this.i18n.locale.value);
     public isConfirmDelete: Ref<boolean> = this.ref(false);
+    public name: Ref<string> = this.ref(this.profile.value.name);
+    public email: Ref<string> = this.ref(this.profile.value.email);
+    public phoneNumber: Ref<string> = this.ref(this.profile.value.phoneNumber);
+    public website: Ref<string> = this.ref(this.profile.value.website);
+    public address: Ref<string> = this.ref(this.profile.value.address);
+    public introduction: Ref<string> = this.ref(this.profile.value.introduction);
+    public organizationType: Ref<string> = this.ref(this.profile.value.organizationType);
 
     public constructor() {
       super();
+
+      this.watch([() => this.profile.value, () => this.profile.value.email], ([profile, email]) => {
+        this.name.value = profile.name;
+        this.email.value = email;
+        this.phoneNumber.value = profile.phoneNumber;
+        this.website.value = profile.website;
+        this.address.value = profile.address;
+        this.introduction.value = profile.introduction;
+        this.organizationType.value = profile.organizationType;
+      });
     }
 
     public onSelectAccountType = (accountType: string) => {
@@ -452,89 +461,122 @@ const app = defineClassComponent(
     };
 
     public onUpdateInfomation = () => {
-      if (!this.organizationName.value) {
+      let isValidInput = true;
+      if (!this.name.value) {
         this.errorName.value = this.t(`message.errorName`);
+        isValidInput = false;
       } else {
         this.errorName.value = "";
       }
-      if (!this.organizationEmail.value || !PrimitiveHelper.isValidEmail(this.organizationEmail.value)) {
+      if (!this.email.value || !PrimitiveHelper.isValidEmail(this.email.value)) {
+        isValidInput = false;
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorEmail.value = "";
       }
       if (!this.phoneNumber.value || !PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
+        isValidInput = false;
         this.errorPhoneNumber.value = this.t(`message.errorPhoneNumber`);
       } else {
         this.errorPhoneNumber.value = "";
       }
-      console.log(this.organizationName.value);
-      console.log(this.organizationEmail.value);
-      console.log(this.phoneNumber.value);
-      console.log(this.webside.value);
-      console.log(this.address.value);
-      console.log(this.introduction.value);
-      console.log(this.organizationType.value);
+      if (!this.address.value) {
+        this.errorAddress.value = this.t("message.errorAddress");
+        isValidInput = false;
+      } else {
+        this.errorAddress.value = "";
+      }
+
+      if (isValidInput) {
+        const data = {
+          name: this.name.value,
+          email: this.email.value,
+          phoneNumber: this.phoneNumber.value,
+          website: this.website.value,
+          address: this.address.value,
+          introduction: this.introduction.value,
+          organizationType: this.organizationType.value,
+        };
+        emits("onUpdateInfomation", data);
+      }
     };
 
     public onUpdateEmail = () => {
+      let isValidInput = true;
       if (!this.newEmail.value || !PrimitiveHelper.isValidEmail(this.newEmail.value)) {
+        isValidInput = false;
         this.errorNewEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorNewEmail.value = "";
       }
-      console.log(this.newEmail.value);
+      if (isValidInput) {
+        emits("onUpdateEmail", this.newEmail.value);
+      }
     };
 
     public onUpdatePassword = () => {
+      let isValidInput = true;
       if (!this.currentPassword.value || !PrimitiveHelper.isValidPassword(this.currentPassword.value)) {
+        isValidInput = false;
         this.errorCurrentPassword.value = this.t(`message.errorPassword`);
       } else {
         this.errorCurrentPassword.value = "";
       }
       if (!this.newPassword.value || !PrimitiveHelper.isValidPassword(this.newPassword.value)) {
+        isValidInput = false;
         this.errorNewPassword.value = this.t(`message.errorPassword`);
       } else {
         this.errorNewPassword.value = "";
       }
       if (!this.confirmNewPassword.value || !PrimitiveHelper.isValidPassword(this.confirmNewPassword.value)) {
+        isValidInput = false;
         this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
       } else if (this.confirmNewPassword.value !== this.newPassword.value) {
+        isValidInput = false;
         this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
       } else {
         this.errorConfirmNewPassword.value = "";
       }
-      console.log(this.currentPassword.value);
-      console.log(this.newPassword.value);
-      console.log(this.confirmNewPassword.value);
+      if (isValidInput) {
+        const data = {
+          currentPassword: this.currentPassword.value,
+          newPassword: this.newPassword.value,
+        };
+        emits("onUpdatePassword", data);
+      }
     };
 
     public onUpdateLanguage = () => {
-      this.i18n.locale.value = this.language.value;
-      console.log(this.t(`lang`));
+      emits("onUpdateLanguage", this.language.value);
     };
 
     public onToggleDeleteAccount = () => {
-      console.log(this.isConfirmDelete.value);
+      if (this.isConfirmDelete.value) {
+        emits("onToggleDeleteAccount");
+      }
     };
 
     public focusName = () => {
       if (this.errorName.value) {
         this.errorName.value = "";
-        this.organizationName.value = "";
       }
     };
 
     public focusEmail = () => {
       if (this.errorEmail.value) {
         this.errorEmail.value = "";
-        this.organizationEmail.value = "";
       }
     };
 
     public focusPhoneNumber = () => {
       if (this.errorPhoneNumber.value) {
         this.errorPhoneNumber.value = "";
-        this.phoneNumber.value = "";
+      }
+    };
+
+    public focusAddress = () => {
+      if (this.errorAddress.value) {
+        this.errorAddress.value = "";
       }
     };
 

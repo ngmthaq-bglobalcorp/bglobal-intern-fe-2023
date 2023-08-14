@@ -2,6 +2,9 @@ import { onBeforeMount, onBeforeUnmount, onBeforeUpdate, onMounted, onUpdated, o
 import { useRouter, useRoute, onBeforeRouteLeave, onBeforeRouteUpdate } from "vue-router";
 import { useI18n } from "vue-i18n";
 import { AppConst } from "@/const/app.const";
+import { KeyConst } from "@/const/key.const";
+import { PathConst } from "@/const/path.const";
+import { StorageHelper } from "@/helpers/storage.helper";
 import { useCommonStore } from "@/stores/common.store";
 import { Vue } from "./vue.plugin";
 import { GlobalEvent } from "./event.plugin";
@@ -25,11 +28,42 @@ export abstract class BaseComponent extends Vue {
 
   public constructor() {
     super();
+
     this.router.afterEach((to) => {
       if (to.meta.title) {
         document.title = this.t(to.meta.title as any);
       } else {
         document.title = "";
+      }
+    });
+
+    this.router.beforeEach((to, next) => {
+      const data: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
+      if (!data) {
+        if (to.meta.auth != AppConst.ROLE.auth && window.location.href.includes("/admin")) {
+          this.router.push(PathConst.adminSignin);
+        } else if (to.meta.auth != AppConst.ROLE.auth) {
+          this.router.push(PathConst.userSignin);
+        } else {
+          next;
+        }
+      } else {
+        const user = data.user;
+        if (to.meta.auth === AppConst.ROLE.auth && user.role === AppConst.ROLE.seeker) {
+          this.router.push(PathConst.home);
+        } else if (to.meta.auth === AppConst.ROLE.auth) {
+          this.router.push(PathConst.adminDashboard);
+        } else if (to.meta.auth != AppConst.ROLE.all) {
+          if (user.role === AppConst.ROLE.seeker && user.role != to.meta.auth) {
+            this.router.push(PathConst.home);
+          } else if (user.role != to.meta.auth) {
+            this.router.push(PathConst.adminDashboard);
+          } else {
+            next;
+          }
+        } else {
+          next;
+        }
       }
     });
   }
@@ -40,6 +74,5 @@ export function defineClassComponent<C extends BaseComponent>(component: new () 
 }
 
 export function onError(error: any) {
-  console.error(error);
   GlobalEvent.emit(AppConst.EVENTS.internalError, null);
 }

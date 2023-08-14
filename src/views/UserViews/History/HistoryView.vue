@@ -9,9 +9,9 @@
           tabindex="0"
           @click="app.onChangeLikeList()"
         >
-          <i class="bi bi-arrow-down" v-if="app.likeList.value"></i>
-          <i class="bi bi-arrow-right" v-else></i>
-          <p class="title">Liked jobs</p>
+          <i class="bi bi-arrow-down icon" v-if="app.likeList.value"></i>
+          <i class="bi bi-arrow-right icon" v-else></i>
+          <span class="title">Liked jobs</span>
         </button>
         <button
           type="button"
@@ -20,27 +20,29 @@
           tabindex="0"
           @click="app.onChangeHistoryList()"
         >
-          <i class="bi bi-arrow-down" v-if="!app.likeList.value"></i>
-          <i class="bi bi-arrow-right" v-else></i>
-          <p class="title">All jobs</p>
+          <i class="bi bi-arrow-down icon" v-if="!app.likeList.value"></i>
+          <i class="bi bi-arrow-right icon" v-else></i>
+          <span class="title">All jobs</span>
         </button>
       </div>
-      <HistoryJobs></HistoryJobs>
+      <HistoryJobs />
     </div>
   </UserLayout>
 </template>
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import type { Ref } from "vue";
-import HistoryJobs from "@/components/UserComponents/HistoryJobs/HistoryJobs.vue";
 import UserLayout from "@/layouts/UserLayout/UserLayout.vue";
+import HistoryJobs from "@/components/UserComponents/HistoryJobs/HistoryJobs.vue";
+import type { Ref } from "vue";
+
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public likeList: Ref<boolean> = this.ref(true);
     public constructor() {
       super();
     }
+
     public onChangeLikeList() {
       this.likeList.value = true;
     }
@@ -54,8 +56,9 @@ const app = defineClassComponent(
 
 <style scoped lang="scss">
 @import "@/assets/scss/modules";
+
 .body {
-  height: calc(100% - 52px);
+  height: calc(100vh - 52px);
   padding: 20px 12px;
   position: relative;
 
@@ -93,6 +96,10 @@ const app = defineClassComponent(
 
       &:first-child {
         margin-right: 2px;
+      }
+
+      & .icon {
+        margin-right: 0.5rem;
       }
 
       & .title {
