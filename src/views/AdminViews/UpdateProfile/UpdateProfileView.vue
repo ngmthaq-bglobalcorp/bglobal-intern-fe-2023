@@ -72,11 +72,13 @@ import ProfileUpdate from "@/components/AdminComponents/ProfileUpdate/ProfileUpd
 import { PathConst } from "@/const/path.const";
 import { OrganizationModel } from "@/models/organization.model";
 import { useOrganizationStore } from "@/stores/organization.store";
+import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public organizationStore = useOrganizationStore();
+    public authStore = useAuthStore();
     public profile: Ref<OrganizationModel> = this.computed(() => this.organizationStore.profile);
 
     public constructor() {
@@ -100,16 +102,16 @@ const app = defineClassComponent(
     };
 
     public onUpdateEmail = async (email: string) => {
-      const isSuccess = await this.organizationStore.fetchUpdateEmail(email);
+      const isSuccess = await this.authStore.fetchUpdateEmail(email);
       if (isSuccess) {
         this.organizationStore.profile.email = email;
       }
     };
 
     public onUpdatePassword = async (data: any) => {
-      const isSuccess = await this.organizationStore.fetchUpdatePassword(data);
+      const isSuccess = await this.authStore.fetchUpdatePassword(data);
       if (isSuccess) {
-        console.log("Update profile");
+        console.log("Update password");
       }
     };
 

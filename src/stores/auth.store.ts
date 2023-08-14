@@ -142,5 +142,31 @@ export const useAuthStore = defineClassStore(
         console.log(error);
       }
     };
+
+    public fetchUpdateEmail = async (email: string) => {
+      try {
+        const res = await api.put(ApiConst.authEndpoints.changeEmail, email);
+        if (res.status === ApiConst.status.ok) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    public fetchUpdatePassword = async (password: any) => {
+      try {
+        const res = await api.post(ApiConst.authEndpoints.changePassword, JSON.stringify(password));
+        if (res.status === ApiConst.status.ok) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
   },
 );
