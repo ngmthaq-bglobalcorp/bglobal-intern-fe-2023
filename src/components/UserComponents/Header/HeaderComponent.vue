@@ -22,18 +22,20 @@
         </RouterLink>
       </div>
       <div class="text-header items-history">
-        <svg
-          class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium jss71 css-vubbuv"
-          focusable="false"
-          aria-hidden="true"
-          viewBox="0 0 24 24"
-          data-testid="HistoryIcon"
-        >
-          <path
-            d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"
-          ></path>
-        </svg>
-        <span>{{ app.t("jobsApp.header.history") }}</span>
+        <RouterLink to="user/history" class="item-link">
+          <svg
+            class="MuiSvgIcon-root MuiSvgIcon-fontSizeMedium jss71 css-vubbuv"
+            focusable="false"
+            aria-hidden="true"
+            viewBox="0 0 24 24"
+            data-testid="HistoryIcon"
+          >
+            <path
+              d="M13 3c-4.97 0-9 4.03-9 9H1l3.89 3.89.07.14L9 12H6c0-3.87 3.13-7 7-7s7 3.13 7 7-3.13 7-7 7c-1.93 0-3.68-.79-4.94-2.06l-1.42 1.42C8.27 19.99 10.51 21 13 21c4.97 0 9-4.03 9-9s-4.03-9-9-9zm-1 5v5l4.28 2.54.72-1.21-3.5-2.08V8H12z"
+            ></path>
+          </svg>
+          <span>{{ app.t("jobsApp.header.history") }}</span>
+        </RouterLink>
       </div>
     </div>
   </div>
@@ -118,34 +120,39 @@ const app = defineClassComponent(
     }
 
     & .items-history {
-      align-items: center;
-      margin-left: 30px;
-      flex-direction: column;
-      justify-content: center;
+      & .item-link {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-decoration: none !important;
+        color: #fff !important;
+        margin-left: 30px;
 
-      & .jss71 {
-        color: #fff;
-        width: 1em;
-        height: 1em;
-        font-size: 1.5rem;
-      }
+        & .jss71 {
+          color: #fff;
+          width: 1em;
+          height: 1em;
+          font-size: 1.5rem;
+        }
 
-      & .css-vubbuv {
-        user-select: none;
-        width: 1em;
-        height: 1em;
-        display: inline-block;
-        fill: currentcolor;
-        flex-shrink: 0;
-        transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-        font-size: 1.5rem;
-      }
+        & .css-vubbuv {
+          user-select: none;
+          width: 1em;
+          height: 1em;
+          display: inline-block;
+          fill: currentcolor;
+          flex-shrink: 0;
+          transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
+          font-size: 1.5rem;
+        }
 
-      & span {
-        color: #fff;
-        font-size: 12px;
-        font-weight: 400;
-        line-height: 12px;
+        & span {
+          color: #fff;
+          font-size: 12px;
+          font-weight: 400;
+          line-height: 12px;
+        }
       }
     }
   }
