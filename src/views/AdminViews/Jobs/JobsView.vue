@@ -109,13 +109,6 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeUpdate(() => {
-        console.log(this.totalPages.value);
-      });
-      this.onUpdated(() => {
-        console.log(this.totalPages.value);
-      });
-
       this.onBeforeMount(async () => {
         this.commonStore.setIsLoading(true);
         await this.organizationStore.fetchAllJobs();

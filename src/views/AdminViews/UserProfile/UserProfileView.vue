@@ -23,24 +23,41 @@ import { OrganizationModel } from "@/models/organization.model";
 import { useOrganizationStore } from "@/stores/organization.store";
 import type { UserProfileProps } from "./UserProfileView";
 import type { Ref } from "vue";
+import type { UserModel } from "@/models/user.model";
+import { useAuthStore } from "@/stores/auth.store";
 
 const props = defineProps<UserProfileProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public authStore = useAuthStore();
     public organizationStore = useOrganizationStore();
 
-    public profile: Ref<OrganizationModel> = this.computed(() => this.organizationStore.profile);
+    public user: Ref<UserModel> = this.computed(() => this.authStore.user);
+    public profile: Ref<any> = this.computed(() => this.commonStore.profile);
     public editable: Ref<boolean> = this.computed(() => this.profile.value.username === props.username);
 
     public constructor() {
       super();
 
       this.onBeforeMount(async () => {
-        this.commonStore.setIsLoading(true);
-        await this.organizationStore.fetchProfile();
-        this.commonStore.setIsLoading(false);
+        if (props.username === this.user.value.username) {
+          await this.commonStore.fetchUserProfileById(this.user.value.id.toString());
+        } else {
+          await this.commonStore.fetchUserProfileById(props.username);
+        }
       });
+
+      this.watch(
+        () => props.username,
+        async (id) => {
+          if (id === this.user.value.username) {
+            await this.commonStore.fetchUserProfileById(this.user.value.id.toString());
+          } else {
+            await this.commonStore.fetchUserProfileById(id);
+          }
+        },
+      );
     }
 
     public onUpdateAvatar = async (avatarUrl: string) => {

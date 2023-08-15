@@ -6,7 +6,11 @@
     <ul class="users-list list">
       <li class="users-item" v-for="item in app.filterData.value" :key="item.id">
         <template v-for="column in app.columns.value" :key="column.field">
-          <router-link to="" class="item-name link-default" v-if="column.field === 'name'">
+          <router-link
+            :to="{ ...PathConst.adminUserProfile, params: { username: item.userId } }"
+            class="item-name link-default"
+            v-if="column.field === 'name'"
+          >
             <div class="avatar">
               <AvatarComponent
                 :avatar-image="item.avatar"
@@ -37,6 +41,7 @@ import { AppConst } from "@/const/app.const";
 import type { UserListProps } from "./UserListComponent";
 import type { Ref } from "vue";
 import type { SeekerModel } from "@/models/seeker.model";
+import { PathConst } from "@/const/path.const";
 
 const props = defineProps<UserListProps>();
 

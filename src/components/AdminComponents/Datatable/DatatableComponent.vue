@@ -73,7 +73,10 @@
             </td>
             <td class="sorting-1" v-for="column in props.columns" :key="column.field">
               <template v-if="column.field === 'username'">
-                <router-link to="" class="item-name link-default">
+                <router-link
+                  :to="{ ...PathConst.adminUserProfile, params: { username: data.userId } }"
+                  class="item-name link-default"
+                >
                   <div class="avatar">
                     <AvatarComponent
                       :avatar-image="data.avatar || ''"
@@ -190,6 +193,7 @@ import { AppConst } from "@/const/app.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
 import type { DatatableEmits, DatatableProps } from "./DatatableComponent";
 import type { Ref } from "vue";
+import { PathConst } from "@/const/path.const";
 
 const props = defineProps<DatatableProps>();
 const emits = defineEmits<DatatableEmits>();

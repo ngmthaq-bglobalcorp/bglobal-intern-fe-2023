@@ -27,7 +27,7 @@
           <AvatarComponent
             :avatar-image="app.avatar.value"
             avatar-alt="Avatar"
-            :avatar-init="app.profile.value.name.split(' ')[0] || app.profile.value.username"
+            :avatar-init="app.profile.value.name ? app.profile.value.name.split(' ')[0] : app.profile.value.username"
           />
 
           <template v-if="props.editable">
