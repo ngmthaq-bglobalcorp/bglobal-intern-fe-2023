@@ -683,6 +683,23 @@ const app = defineClassComponent(
     & .custom-body {
       padding: 1.3125rem 1.3125rem;
 
+      & .success-message,
+      & .fail-message {
+        width: 100%;
+        display: block;
+        text-align: center;
+        margin-top: 0.5rem;
+        margin-bottom: 1.5rem;
+      }
+
+      & .success-message {
+        color: $success;
+      }
+
+      & .fail-message {
+        color: $danger;
+      }
+
       & .card-text {
         margin-bottom: 1rem;
         font-size: 0.875rem;

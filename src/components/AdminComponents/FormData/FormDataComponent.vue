@@ -22,7 +22,7 @@
 
                 <div class="custom-input-group">
                   <div class="input-image" v-for="image of input.model" :key="image">
-                    <LoadingComponent :is-loading="!image.includes('res.cloudinary.com/')" />
+                    <LoadingComponent :is-loading="!image.includes('res.cloudinary.com')" />
                     <img :src="image" :alt="input.label" class="image" v-if="image" />
                     <button class="delete-btn" @click.prevent="app.onToggleDeleteImage(input, image)">
                       <i class="bi bi-x-circle"></i>

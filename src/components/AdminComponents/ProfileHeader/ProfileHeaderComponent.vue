@@ -134,6 +134,12 @@ const app = defineClassComponent(
         () => this.profile.value.avatar,
         (avatar) => {
           this.avatar.value = avatar;
+        },
+      );
+
+      this.watch(
+        () => this.avatar.value,
+        (avatar) => {
           this.isUpdateAvatar.value = avatar.length > 0 && !avatar.includes("res.cloudinary.com/");
         },
       );

@@ -5,6 +5,7 @@
         :profile="app.profile.value"
         :is-update="false"
         :editable="app.editable.value"
+        @on-update-avatar="app.onUpdateAvatar"
         @on-toggle-update-profile="app.onToggleUpdateProfile"
       />
       <ProfileCard :profile="app.profile.value" />
@@ -18,10 +19,10 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHeaderComponent.vue";
 import ProfileCard from "@/components/AdminComponents/ProfileCard/ProfileCardComponent.vue";
 import { PathConst } from "@/const/path.const";
+import { OrganizationModel } from "@/models/organization.model";
 import { useOrganizationStore } from "@/stores/organization.store";
 import type { UserProfileProps } from "./UserProfileView";
 import type { Ref } from "vue";
-import type { OrganizationModel } from "@/models/organization.model";
 
 const props = defineProps<UserProfileProps>();
 
@@ -41,6 +42,15 @@ const app = defineClassComponent(
         this.commonStore.setIsLoading(false);
       });
     }
+
+    public onUpdateAvatar = async (avatarUrl: string) => {
+      const organization = new OrganizationModel(this.profile.value);
+      organization.avatar = avatarUrl;
+      const isSuccess = await this.organizationStore.fetchUpdateProfile(organization);
+      if (isSuccess) {
+        this.profile.value.avatar = avatarUrl;
+      }
+    };
 
     public onToggleUpdateProfile = () => {
       this.router.push(PathConst.adminUpdateProfile);

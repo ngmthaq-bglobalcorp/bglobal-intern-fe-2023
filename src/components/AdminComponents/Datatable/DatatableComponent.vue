@@ -611,6 +611,12 @@ const app = defineClassComponent(
             background-color: $blue;
             border-color: $blue;
           }
+
+          &.disabled {
+            color: $disabled-color !important;
+            border-color: $disabled-color !important;
+            pointer-events: none;
+          }
         }
       }
     }
