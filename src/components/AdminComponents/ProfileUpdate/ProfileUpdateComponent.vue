@@ -48,6 +48,7 @@
                 id="organizationEmail"
                 placeholder="Email@organization.com"
                 v-model="app.email.value"
+                @click="app.onToggleEmail"
                 readonly
               />
 
@@ -455,6 +456,16 @@ const app = defineClassComponent(
         this.organizationType.value = profile.organizationType;
       });
     }
+
+    public onToggleEmail = () => {
+      const element = document.getElementById("emailSection");
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    };
 
     public onSelectAccountType = (accountType: string) => {
       this.organizationType.value = accountType;

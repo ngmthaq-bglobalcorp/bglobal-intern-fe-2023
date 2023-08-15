@@ -28,6 +28,7 @@ import { NewsModel } from "@/models/news.model";
 import { useAdminStore } from "@/stores/admin.store";
 import type { AddNewsProps } from "./AddNewsView";
 import type { Ref } from "vue";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 
 const props = defineProps<AddNewsProps>();
 
@@ -179,22 +180,70 @@ const app = defineClassComponent(
           {
             id: 1,
             name: "eventStartAt",
-            type: "date",
+            type: "dateTime",
             label: this.t(`app.eventStartAt`),
             placeholder: this.t(`app.eventStartAt`),
             required: true,
-            model: DatetimeHelper.getDate(this.news.value.eventStartAt) || "",
+            model: "",
             error: "",
+            children: [
+              {
+                id: 1,
+                name: "startTime",
+                type: "time",
+                label: this.t(`app.startTime`),
+                placeholder: this.t(`app.startTime`),
+                required: true,
+                multiple: false,
+                model: "00:00",
+                error: "",
+              },
+              {
+                id: 2,
+                name: "startDate",
+                type: "date",
+                label: this.t(`app.startDate`),
+                placeholder: this.t(`app.startDate`),
+                required: true,
+                multiple: false,
+                model: DatetimeHelper.getDate(this.news.value.eventStartAt) || "",
+                error: "",
+              },
+            ],
           },
           {
             id: 2,
             name: "eventEndAt",
-            type: "date",
+            type: "dateTime",
             label: this.t(`app.eventEndAt`),
             placeholder: this.t(`app.eventEndAt`),
             required: true,
-            model: DatetimeHelper.getDate(this.news.value.eventEndAt) || "",
+            model: "",
             error: "",
+            children: [
+              {
+                id: 1,
+                name: "endTime",
+                type: "time",
+                label: this.t(`app.endTime`),
+                placeholder: this.t(`app.endTime`),
+                required: true,
+                multiple: false,
+                model: "00:00",
+                error: "",
+              },
+              {
+                id: 2,
+                name: "endDate",
+                type: "date",
+                label: this.t(`app.endDate`),
+                placeholder: this.t(`app.endDate`),
+                required: true,
+                multiple: false,
+                model: DatetimeHelper.getDate(this.news.value.eventEndAt) || "",
+                error: "",
+              },
+            ],
           },
         ],
       },

@@ -38,12 +38,15 @@
     "errorUsername": "Please enter a valid username.",
     "errorPassword": "Your password is invalid. Please try again.",
     "errorConfirmPassword": "Password does not match the confirm password.",
-    "errorName": "Please enter your Organization name.",
+    "errorName": "Please enter your name.",
     "errorEmail": "Please enter a valid email address.",
     "errorPhoneNumber": "Please enter a valid phone number.",
     "errorAddress": "Please enter address.",
     "errorTerms": "Please accept our Terms and Conditions.",
-    "errorOtp": "Please enter a valid OTP."
+    "errorOtp": "Please enter a valid OTP.",
+    "errorUrl": "Please enter a valid url.",
+    "errorCountHours": "CountHour must be within the range of 0 to 24.",
+    "notBlank": "{value} cannot be blank"
   },
   "app": {
     "coverTitle": "The best part? Everything.",
@@ -147,10 +150,11 @@
     "passwordRequirements": "Password requirements:",
     "ensureRequirements": "Ensure that these requirements are met:",
     "requirements": [
-      "Minimum 8 characters long - the more, the better",
-      "At least one lowercase character",
-      "At least one uppercase character",
-      "At least one number, symbol, or whitespace character"
+      "Minimum 8 characters long - the more, the better.",
+      "At least one uppercase letter (A-Z).",
+      "At least one digit (0-9).",
+      "At least one special character.",
+      "Any combination of uppercase letters, lowercase letters, digits, and special characters"
     ],
     "language": "Language",
     "timezone": "Time zone",
@@ -170,7 +174,6 @@
     "eventPageUrl": "Event page url",
     "eventStartAt": "Event start at",
     "eventEndAt": "Event end at",
-    "notBlank": "{value} cannot be blank",
     "location": "Location",
     "overview": "Overview",
     "activity": "Activity",
@@ -195,6 +198,8 @@
     "propertyBody": "Property body",
     "startTime": "Start time",
     "endTime": "End time",
+    "startDate": "Start date",
+    "endDate": "End date",
     "isFullTime": "Is full time",
     "countHours": "Count hours",
     "userLikeJob": "User like job"

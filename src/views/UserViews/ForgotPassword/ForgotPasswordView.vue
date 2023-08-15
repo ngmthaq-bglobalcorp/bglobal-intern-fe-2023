@@ -131,7 +131,7 @@ const app = defineClassComponent(
 
   & .content {
     width: 100%;
-    padding: 3rem 0;
+    padding: 3rem 1rem;
     max-width: 25rem;
 
     & .content-title {

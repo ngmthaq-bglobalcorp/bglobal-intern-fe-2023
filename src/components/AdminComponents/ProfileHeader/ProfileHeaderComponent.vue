@@ -3,11 +3,11 @@
     <!-- Profile Cover -->
     <div class="profile-cover">
       <div class="profile-cover-wrapper">
-        <img class="cover-img" src="@/assets/img/default-cover.jpg" alt="Cover" />
+        <img class="cover-img" :src="app.cover.value || 'src/assets/img/default-cover.jpg'" alt="Cover" />
 
         <!-- Custom File Cover -->
         <label class="cover-uploader-label" for="coverUploader" v-if="app.isEditCover.value && props.editable">
-          <input type="file" class="cover-uploader-input" id="coverUploader" />
+          <input type="file" class="cover-uploader-input" id="coverUploader" @change="(e) => app.onChangeCover(e)" />
 
           <div class="cover-uploader-button small-btn">
             <i class="bi bi-camera-fill icon"></i>
@@ -25,19 +25,25 @@
         <!-- Custom File Avatar -->
         <label class="avatar-uploader-label" for="avatarUploader">
           <AvatarComponent
-            :avatarImage="app.profile.value.avatar"
+            :avatarImage="app.avatar.value"
             avatarAlt="Avatar"
             :avatarInit="app.profile.value.name.split(' ')[0] || app.profile.value.username"
           />
 
           <template v-if="props.editable">
-            <input type="file" class="avatar-uploader-input" id="avatarUploader" />
+            <LoadingComponent :isLoading="app.isUpdateAvatar.value" />
 
-            <span class="avatar-uploader-trigger">
-              <i class="bi bi-pencil-fill"></i>
-            </span>
+            <input
+              type="file"
+              class="avatar-uploader-input"
+              id="avatarUploader"
+              @change="(e) => app.onChangeAvatar(e)"
+            />
           </template>
         </label>
+        <span class="avatar-uploader-trigger" v-if="props.editable">
+          <i class="bi bi-pencil-fill"></i>
+        </span>
         <!-- End Custom File Avatar -->
       </div>
     </div>
@@ -90,6 +96,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import AvatarComponent from "@/components/AdminComponents/Avatar/AvatarComponent.vue";
+import LoadingComponent from "@/components/AppComponents/LoadingComponent/LoadingComponent.vue";
 import { PathConst } from "@/const/path.const";
 import type { ProfileHeaderEmits, ProfileHeaderProps } from "./ProfileHeaderComponent";
 import type { Ref } from "vue";
@@ -100,6 +107,11 @@ const emits = defineEmits<ProfileHeaderEmits>();
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public profile: Ref<any> = this.computed(() => props.profile);
+    public avatar: Ref<string> = this.ref("");
+    public cover: Ref<string> = this.ref("");
+    public isUpdateAvatar: Ref<boolean> = this.computed(
+      () => app.avatar.value.length > 0 && !app.avatar.value.includes("res.cloudinary.com/"),
+    );
     public isEditCover: Ref<boolean> = this.ref(false);
     public navList: Ref<Array<any>> = this.ref([
       {
@@ -118,7 +130,36 @@ const app = defineClassComponent(
 
     public constructor() {
       super();
+
+      this.watch(
+        () => this.profile.value.avatar,
+        (avatar) => {
+          this.avatar.value = avatar;
+        },
+      );
     }
+
+    public onChangeCover = async (e: any) => {
+      const file = e.target.files[0];
+      if (file) {
+        this.cover.value = URL.createObjectURL(file);
+        const url = await this.commonStore.fetchUploadImage(file);
+        if (url) {
+          this.cover.value = url;
+        }
+      }
+    };
+
+    public onChangeAvatar = async (e: any) => {
+      const file = e.target.files[0];
+      if (file) {
+        this.avatar.value = URL.createObjectURL(file);
+        const url = await this.commonStore.fetchUploadImage(file);
+        if (url) {
+          this.avatar.value = url;
+        }
+      }
+    };
 
     public onToggleUpdate = () => {
       emits("onToggleUpdateProfile");
@@ -215,22 +256,18 @@ const app = defineClassComponent(
       transition: 0.2s;
 
       & .avatar-uploader-label {
+        display: block;
         position: absolute;
         width: 100%;
         top: 0;
         left: 0;
         bottom: 0;
+        border-radius: 50%;
+        overflow: hidden;
         cursor: pointer;
 
-        & .avatar-img {
-          width: 100%;
-          height: 100%;
-          -o-object-fit: cover;
-          object-fit: cover;
-          border-radius: 50%;
-        }
-
         & .avatar-uploader-input {
+          display: block;
           position: absolute;
           z-index: -1;
           width: 100%;
@@ -238,19 +275,25 @@ const app = defineClassComponent(
           opacity: 0;
         }
 
-        & .avatar-uploader-trigger {
-          position: absolute;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          width: 2.40625rem;
-          height: 2.40625rem;
-          background-color: $white;
-          bottom: 0;
-          right: 0;
-          border-radius: 50%;
-          cursor: pointer;
+        &:hover {
+          ~ .avatar-uploader-trigger {
+            color: $blue;
+          }
         }
+      }
+
+      & .avatar-uploader-trigger {
+        position: absolute;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 2.40625rem;
+        height: 2.40625rem;
+        background-color: $white;
+        bottom: 0;
+        right: 0;
+        border-radius: 50%;
+        cursor: pointer;
 
         &:hover {
           color: $blue;

@@ -57,7 +57,7 @@ export const useSeekersStore = defineClassStore(
         const profile = {
           name: data.name || "",
           phone_number: data.phoneNumber || "",
-          dob: data.birthday ? DatetimeHelper.getDate(data.birthday) : DatetimeHelper.getDate(new Date("2000-01-01")),
+          dob: data.birthday ? DatetimeHelper.getDate(data.birthday) : "",
           address: data.address || "",
           website: data.website || "",
           education: data.education || "",
@@ -67,7 +67,7 @@ export const useSeekersStore = defineClassStore(
           other_details: data.otherDetails || "",
         };
         console.log(profile);
-        const res = await api.put(ApiConst.seekersEndpoints.updateSeekerProfile, profile);
+        const res = await api.post(ApiConst.seekersEndpoints.updateSeekerProfile, profile);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {

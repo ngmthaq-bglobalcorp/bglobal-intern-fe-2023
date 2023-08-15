@@ -48,6 +48,7 @@
                 id="email"
                 placeholder="Email@organization.com"
                 v-model="app.email.value"
+                @click="app.onToggleEmail"
                 readonly
               />
 
@@ -60,7 +61,6 @@
           <div class="form-group">
             <label class="input-label" for="phoneNumber">
               {{ app.t(`app.phoneNumber`) }}
-              <span class="input-label-secondary">*</span>
             </label>
 
             <div class="custom-input-group">
@@ -73,6 +73,8 @@
                 v-model="app.phoneNumber.value"
                 @focus="app.focusPhoneNumber"
               />
+
+              <div class="invalid-feedback" v-if="app.errorPhoneNumber.value">{{ app.errorPhoneNumber.value }}</div>
             </div>
           </div>
           <!-- End Form Group -->
@@ -529,6 +531,17 @@ const app = defineClassComponent(
       });
     }
 
+    public onToggleEmail = () => {
+      const element = document.getElementById("emailSection");
+
+      if (element) {
+        element.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }
+    };
+
     public onUpdateInfomation = () => {
       let isValidInput = true;
       if (!this.name.value) {
@@ -543,7 +556,7 @@ const app = defineClassComponent(
       } else {
         this.errorEmail.value = "";
       }
-      if (!this.phoneNumber.value || !PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
+      if (this.phoneNumber.value && !PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
         isValidInput = false;
         this.errorPhoneNumber.value = this.t(`message.errorPhoneNumber`);
       } else {
@@ -555,7 +568,7 @@ const app = defineClassComponent(
           name: this.name.value,
           email: this.email.value,
           phoneNumber: this.phoneNumber.value,
-          birthday: this.birthday.value,
+          birthday: new Date(this.birthday.value),
           address: this.address.value,
           website: this.website.value,
           education: this.education.value,

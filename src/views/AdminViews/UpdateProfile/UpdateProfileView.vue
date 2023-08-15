@@ -12,31 +12,31 @@
         <!-- Navbar Nav -->
         <ul class="nav-list list custom-card">
           <li class="nav-item">
-            <a class="nav-link active" href="#content">
+            <a class="nav-link active" href="#content" scroll="smooth">
               <i class="bi bi-person icon"></i>
               {{ app.t(`app.basicInformation`) }}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#emailSection">
+            <a class="nav-link" href="#emailSection" scroll="smooth">
               <i class="bi bi-envelope icon"></i>
               {{ app.t(`app.email`) }}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#passwordSection">
+            <a class="nav-link" href="#passwordSection" scroll="smooth">
               <i class="bi bi-key icon"></i>
               {{ app.t(`app.password`) }}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#preferencesSection">
+            <a class="nav-link" href="#preferencesSection" scroll="smooth">
               <i class="bi bi-gear icon"></i>
               {{ app.t(`app.preferences`) }}
             </a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="#deleteAccountSection">
+            <a class="nav-link" href="#deleteAccountSection" scroll="smooth">
               <i class="bi bi-trash icon"></i>
               {{ app.t(`app.deleteAccount`) }}
             </a>

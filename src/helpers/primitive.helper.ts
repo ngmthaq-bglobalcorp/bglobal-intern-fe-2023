@@ -38,16 +38,36 @@ export class PrimitiveHelper {
   };
 
   public static isValidPassword = (password: string) => {
-    if (password.length < 8) {
-      return false;
-    }
-    return true;
+    const expression: RegExp =
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
+    const result: boolean = expression.test(password);
+    return result;
   };
 
   public static isValidPhoneNumber = (phone: string) => {
     const expression: RegExp = /^((0[2-9]|84[2-9]|\+84[2-9])(\d{8}|\d{9})|1[8-9]00\d{4})$/;
     const result: boolean = expression.test(phone);
     return result;
+  };
+
+  public static isValidUrl = (url: string) => {
+    const expression: RegExp = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/;
+    const result: boolean = expression.test(url);
+    return result;
+  };
+
+  public static isValidCountHours = (hour: number) => {
+    if (hour >= 0 && hour <= 24) {
+      return true;
+    }
+    return false;
+  };
+
+  public static getValidUrl = (url: string) => {
+    if (url) {
+      return this.isValidUrl(url) ? url : "https://" + url;
+    }
+    return "";
   };
 
   public static getTime = (start: number = 0, end: number = 23, step: number = 30) => {
@@ -62,6 +82,16 @@ export class PrimitiveHelper {
       }
     }
     return arrayHours;
+  };
+
+  public static getCountHour = (startTime: string, endTime: string) => {
+    const startHour = startTime.split(":")[0];
+    const startMinute = startTime.split(":")[1];
+    const endHour = endTime.split(":")[0];
+    const endMinute = endTime.split(":")[1];
+    const start = parseInt(startHour) + parseInt(startMinute) / 60;
+    const end = parseInt(endHour) + parseInt(endMinute) / 60;
+    return end - start;
   };
 
   public static getSalary = (salary: number) => {

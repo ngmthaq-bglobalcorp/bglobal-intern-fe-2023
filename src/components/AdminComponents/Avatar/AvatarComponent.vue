@@ -27,6 +27,7 @@ const app = defineClassComponent(
 @import "@/assets/scss/admin";
 
 .avatar-container {
+  display: block;
   width: 100%;
   height: 100%;
   -ms-flex-negative: 0 !important;

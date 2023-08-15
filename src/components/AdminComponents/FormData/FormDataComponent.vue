@@ -106,6 +106,35 @@
               </template>
               <!-- Select Input -->
 
+              <!-- Text DateTime Input -->
+              <template v-else-if="input.type === 'dateTime'">
+                <label class="input-label" :for="input.name">
+                  {{ input.label }}
+                  <span class="input-label-secondary" v-if="input.required">*</span>
+                </label>
+
+                <div class="custom-input-group d-flex flex-row">
+                  <!-- Custom Input -->
+                  <template v-for="child in input.children" :key="child.id">
+                    <input
+                      :type="child.type"
+                      :class="['input-form', { 'is-invalid': child.error }]"
+                      :name="input.name + child.name"
+                      :id="input.name + child.name"
+                      :placeholder="child.placeholder"
+                      v-model="child.model"
+                      @focus="app.onFocusInputText(child)"
+                    />
+
+                    <div class="invalid-feedback" v-if="child.error">{{ child.error }}</div>
+                  </template>
+
+                  <div class="invalid-feedback" v-if="input.error">{{ input.error }}</div>
+                  <!-- End Custom Input -->
+                </div>
+              </template>
+              <!-- End DateTime Input -->
+
               <!-- Select Multiple Input -->
               <template v-else-if="input.type === 'selectMultiple'">
                 <label class="input-label" :for="input.name">
@@ -209,7 +238,7 @@
                     <div class="text-wrapper">
                       <span class="time" v-if="item.startTime">{{ `Start time: ${item.startTime}` }}</span>
                       <span class="time" v-if="item.endTime">{{ `End time: ${item.endTime}` }}</span>
-                      <span class="time" v-if="item.countHours">{{ `Hours: ${item.countHours}` }}</span>
+                      <span class="time" v-if="item.countHours.toString()">{{ `Hours: ${item.countHours}` }}</span>
                       <span class="time">
                         <template v-if="item.isFullTime">
                           {{ `Fulltime` }}
@@ -234,7 +263,7 @@
                   <span class="input-label-secondary" v-if="input.required">*</span>
                 </label>
 
-                <div class="custom-input-group">
+                <div class="custom-input-group flex-column">
                   <!-- Custom Input -->
                   <template v-for="child in input.children" :key="child.id">
                     <div class="custom-check" v-if="child.type === 'checkbox'">
@@ -354,6 +383,7 @@ import LoadingComponent from "@/components/AppComponents/LoadingComponent/Loadin
 import type { FormDataEmits, FormDataProps } from "./FormDataComponent";
 import type { Ref } from "vue";
 import type { SearchLabelModel } from "@/models/searchLabel.model";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 
 const props = defineProps<FormDataProps>();
 const emit = defineEmits<FormDataEmits>();
@@ -428,8 +458,11 @@ const app = defineClassComponent(
     public onToggleAddButton = (input: any) => {
       let inputObj = {};
       let isValidInput = input.children.every((value: any) => {
-        if (value.required && !value.model) {
-          value.error = this.t(`app.notBlank`, { value: value.label });
+        if (value.required && !value.model.toString()) {
+          value.error = this.t(`message.notBlank`, { value: value.label });
+          return false;
+        } else if (value.name === "countHours" && !PrimitiveHelper.isValidCountHours(value.model)) {
+          value.error = app.t(`message.errorCountHours`);
           return false;
         } else {
           inputObj = {
@@ -443,7 +476,7 @@ const app = defineClassComponent(
         input.model.push(inputObj);
         input.children.forEach((value: any) => {
           if (value.type === "time") {
-            value.model = "00:00";
+            value.model = PrimitiveHelper.getTime()[0];
           } else {
             value.model = "";
           }
@@ -460,8 +493,14 @@ const app = defineClassComponent(
       let isValidInput = true;
       app.input.value.map((input: any) => {
         input.children.map((value: any) => {
-          if (value.required && value.model.length === 0) {
-            value.error = this.t(`app.notBlank`, { value: value.label });
+          if (value.type === "dateTime") {
+            value.model += value.children[1].model + " " + value.children[0].model;
+            data = {
+              ...data,
+              [value.name]: new Date(value.model),
+            };
+          } else if (value.required && value.model.length === 0) {
+            value.error = this.t(`message.notBlank`, { value: value.label });
             isValidInput = false;
           } else {
             if (value.type === "date") {
@@ -518,6 +557,7 @@ const app = defineClassComponent(
     & .form-group-wrapper {
       width: 100%;
       display: flex;
+      gap: 0.5rem;
       margin-bottom: 1.5rem;
 
       & .form-group {
@@ -540,6 +580,12 @@ const app = defineClassComponent(
           align-items: center;
           flex-wrap: wrap;
           gap: 0.5rem;
+
+          &.flex-row {
+            & .input-form {
+              flex: 1;
+            }
+          }
 
           & .input-form {
             display: block;
@@ -655,6 +701,7 @@ const app = defineClassComponent(
             align-items: center;
 
             & label.input-form {
+              flex: 1;
               height: 100%;
               text-align: center;
               cursor: pointer;
@@ -725,7 +772,7 @@ const app = defineClassComponent(
           & .input-time {
             flex: 1;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             flex-wrap: wrap;
           }
 

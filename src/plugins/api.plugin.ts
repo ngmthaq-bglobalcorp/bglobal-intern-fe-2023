@@ -19,13 +19,13 @@ export class Api extends Fetch {
     if (response.status === ApiConst.status.unauthorized) {
       console.log(response);
       if (!window.location.href.includes("/signin")) {
-        // StorageHelper.removeLocalStorage(KeyConst.keys.currentUser);
-        // window.location.replace("/admin/signin");
+        StorageHelper.removeLocalStorage(KeyConst.keys.currentUser);
+        window.location.replace("/admin/signin");
       }
     }
     if (response.status === ApiConst.status.forbidden) {
       console.log(response);
-      // window.location.assign("/admin");
+      window.location.assign("/admin");
     }
     return response;
   }
