@@ -16,19 +16,25 @@
   </div>
 
   <div id="swiper">
-    <div class="card" style="bottom: calc(0% - 25px); transform: translateX(-50%) scale(0.9375); opacity: 1">
+    <div
+      class="card"
+      style="bottom: calc(0% - 25px); transform: translateX(-50%) scale(0.9375); opacity: 1"
+      v-for="jobs in app.newsArray.value"
+      :key="jobs.id"
+    >
       <div class="card_header">
         <div class="card_header_types_const">
           <div class="card_header_button_const">
-            <button>
+            <button @click="app.onClickCard(app.newsArray.id)">
               <span>View the detail</span>
               <img src="@/assets/img/ic_arrow_forward.d87012f2877663d0aca7d5168712a610.svg" />
             </button>
           </div>
-          <div class="card_header_title">CARD HEADER TITLE</div>
+          <div class="card_header_title">{{ jobs.title }}</div>
         </div>
         <div class="card_header_img_const">
-          <img src="@/assets/img/bglobal.png" />
+          <img :src="jobs.mainImageUrl" alt="Main image" class="main-img" v-if="jobs.mainImageUrl" />
+          <img :src="jobs.subImages[0].url" alt="Main image" class="main-img" v-else-if="jobs.subImages.length > 0" />
           <div class="card_header_hiring_title">
             <div class="card_header_types">
               <div class="card_header_types_item">A</div>
@@ -41,33 +47,26 @@
       <div class="card_infor">
         <div class="card_infor_item">
           <i class="bi bi-geo-alt"></i>
-          <div>Location</div>
-        </div>
-        <div class="card_infor_item">
-          <i class="bi bi-bus-front"></i>
-          <div>Station</div>
+          <div>{{ jobs.location.name }}</div>
         </div>
         <div class="card_infor_item">
           <i class="bi bi-cash-coin"></i>
-          <div>Salary</div>
+          <div>{{ PrimitiveHelper.getSalary(jobs.salary) }}</div>
         </div>
         <div class="card_infor_item">
           <i class="bi bi-clock"></i>
-          <div>Time</div>
+          <div>{{ PrimitiveHelper.getWorkingHours(jobs.workingHours) }}</div>
         </div>
       </div>
-      <div class="card_body">Card body</div>
+      <div class="card_body">{{ jobs.catchText }}</div>
       <div class="card_footer">
-        <div class="card_footer_label">急なお休み･早退・シフト変更OK</div>
-        <div class="card_footer_label">応募前又は面接時職場見学OK</div>
-        <div class="card_footer_label">休憩室有</div>
-        <div class="card_footer_label">残業原則なし</div>
-        <div class="card_footer_label">車通勤OK</div>
-        <div class="card_footer_label">扶養控除内OK</div>
-        <div class="card_footer_label">履歴書不要</div>
-        <div class="card_footer_label">週3日以内の勤務</div>
+        <div class="card_footer_label" v-for="label in app.searchLabels.value" :key="label.id">
+          {{ label.name }}
+        </div>
       </div>
-      <div class="card_period">Posting period: July 3, 2023 04:00 to July 31, 2023 04:00</div>
+      <div class="card_period" v-if="jobs.opensAt && jobs.expiresAt">
+        {{ PrimitiveHelper.getPostPeriod(jobs.opensAt, jobs.expiresAt) }}
+      </div>
     </div>
     <button class="swiper_action_button like_button" style="transform: scale(1); display: block">
       <img src="@/assets/img/img_btn_keep.60a6f70f06cd69caba08.png" class="" />
@@ -140,15 +139,38 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import FormSearch from "../HomeContent/Form/FormSearch.vue";
 import type { Ref } from "vue";
+import type { JobModel } from "@/models/job.model";
+import type { JobsListEmits, JobsListProps } from "./JobCard";
+import { useCommonStore } from "@/stores/common.store";
+import type { LocationModel } from "@/models/location.model";
+import type { SearchLabelModel } from "@/models/searchLabel.model";
+import { PathConst } from "@/const/path.const";
+const props = defineProps<JobsListProps>();
+const emits = defineEmits<JobsListEmits>();
+
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public isShowTutorial: Ref<boolean> = this.ref(false);
     public isShowUserGuild: Ref<boolean> = this.ref(false);
     public isShowFormSearch: Ref<boolean> = this.ref(false);
+    public commonStore = useCommonStore();
+    public newsArray: Ref<Array<JobModel>> = this.computed(() => props.newsArray);
+    public startTime: Ref<string> = this.ref("_default_selection");
+    public endTime: Ref<string> = this.ref("_default_selection");
+    public searchLabelsArray: Ref<Array<number>> = this.ref([]);
+
+    public locations: Ref<Array<LocationModel>> = this.computed(() => this.commonStore.locations);
+    public searchLabels: Ref<Array<SearchLabelModel>> = this.computed(() => this.commonStore.searchLabels);
     public constructor() {
       super();
+
+      this.onBeforeMount(() => {
+        this.commonStore.fetchAllLocations();
+        this.commonStore.fetchAllSearchLabels();
+      });
     }
 
     public onToggleShowTutorial = (isShow: boolean) => {
@@ -167,6 +189,12 @@ const app = defineClassComponent(
         this.commonStore.eventBus.emit("hideFormSearch", null);
       }
       return this.isShowFormSearch.value;
+    };
+
+    public onClickCard = (id: number) => {
+      emits("onClickCard", id);
+      this.router.push({ ...PathConst.userJobDetails, params: { jobId: id } });
+      console.log(id);
     };
   },
 );
@@ -214,7 +242,7 @@ const app = defineClassComponent(
     }
   }
   & .search_bar.hide {
-    top: -250px;
+    top: -200px;
     width: 100%;
     transition: all 0.2s linear 0s;
     position: absolute;
@@ -533,7 +561,7 @@ const app = defineClassComponent(
   bottom: 0;
   z-index: 9000;
   position: absolute;
-  background: white;
+  background-color: rgba(255, 255, 255, 0.7);
 
   & button {
     top: 8px;

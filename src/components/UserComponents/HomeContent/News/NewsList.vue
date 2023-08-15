@@ -1,6 +1,6 @@
 <template>
   <div class="news">
-    <h1 class="tittle">{{ app.t("jobsApp.news.title") }}</h1>
+    <h1 class="title">{{ app.t("jobsApp.news.title") }}</h1>
     <a class="link" target="_blank" :href="news.eventPageUrl" v-for="news in app.newsArray.value" :key="news.id">
       <template v-if="news.category === AppConst.NEWS_CATEGORY.seminar">
         <div class="image">
@@ -78,7 +78,7 @@ const app = defineClassComponent(
 .news {
   margin-top: 30px;
 
-  & .tittle {
+  & .title {
     color: #000;
     font-size: 18px;
     font-weight: 900;
@@ -119,6 +119,7 @@ const app = defineClassComponent(
         width: 42px;
         height: 42px;
       }
+
       & .time {
         color: #378182;
         font-size: 14px;
@@ -128,6 +129,7 @@ const app = defineClassComponent(
         line-height: 16px;
       }
     }
+
     & .describe {
       flex: 8;
       display: flex;

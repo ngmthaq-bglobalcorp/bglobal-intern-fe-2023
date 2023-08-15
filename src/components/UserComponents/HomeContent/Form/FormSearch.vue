@@ -86,7 +86,7 @@
         type="submit"
         form="homepage_search_form_id"
       >
-        <RouterLink to="/user/joblist" class="item-link">
+        <RouterLink :to="PathConst.userJobsList" class="item-link">
           {{ app.t("jobsApp.form.applicable.result") }}
         </RouterLink>
       </button>
