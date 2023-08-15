@@ -98,7 +98,7 @@ import type { Ref } from "vue";
 import type { NewsModel } from "@/models/news.model";
 
 const props = defineProps<TimelineListProps>();
-const emit = defineEmits<TimelineListEmits>();
+const emits = defineEmits<TimelineListEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -117,11 +117,11 @@ const app = defineClassComponent(
     }
 
     public onToggleEditButton = (id: number) => {
-      emit("onToggleEditButton", id);
+      emits("onToggleEditButton", id);
     };
 
     public onToggleDeleteButton = (id: number) => {
-      emit("onToggleDeleteButton", id);
+      emits("onToggleDeleteButton", id);
     };
 
     public onToggleMoreData = () => {

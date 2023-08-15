@@ -158,18 +158,22 @@ const app = defineClassComponent(
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 0 0 15px 15px;
   background-color: #fff;
+
   & .select-1 {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     & .location-time {
       flex: 1;
+
       & p {
         font-size: 14px;
         font-weight: 700;
         line-height: 20px;
         margin: 0px;
       }
+
       & .custom_select {
         color: #000;
         width: 100%;
@@ -203,12 +207,14 @@ const app = defineClassComponent(
       flex-shrink: 1;
       flex-basis: 0%;
       margin-right: 15px;
+
       & p {
         font-size: 14px;
         font-weight: 700;
         line-height: 20px;
         margin: 0px;
       }
+
       & .custom_select {
         color: #000;
         width: 100%;
@@ -230,8 +236,10 @@ const app = defineClassComponent(
       }
     }
   }
+
   & .condition {
     margin-top: 15px;
+
     & p {
       font-size: 14px;
       font-weight: 700;
@@ -239,6 +247,7 @@ const app = defineClassComponent(
       margin: 0px;
       letter-spacing: 0.00938em;
     }
+
     & .tag {
       height: 100%;
       margin: 5px 0;
@@ -290,6 +299,7 @@ const app = defineClassComponent(
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     & .suitable {
       & .tittle {
         color: #000;
@@ -297,10 +307,12 @@ const app = defineClassComponent(
         font-weight: 400;
         line-height: 24px;
       }
+
       & .result {
         display: flex;
         align-items: flex-end;
         justify-content: flex-start;
+
         & .result-match {
           color: #378182;
           font-size: 24px;
@@ -309,6 +321,7 @@ const app = defineClassComponent(
           margin-right: 3px;
           margin: 0px;
         }
+
         & .jobs {
           color: #000;
           font-size: 10px;
@@ -316,6 +329,7 @@ const app = defineClassComponent(
           line-height: 24px;
           margin: 0px;
         }
+
         & .result-sum {
           color: #378182;
           display: flex;
@@ -328,6 +342,7 @@ const app = defineClassComponent(
         }
       }
     }
+
     & .view-result {
       color: #fff;
       width: 180px;
@@ -336,15 +351,17 @@ const app = defineClassComponent(
       box-shadow: 0px 4px 8px rgba(157, 6, 95, 0.3);
       border-radius: 30px;
       border: none;
+
       & .item-link {
         text-decoration: none;
         color: #fff;
       }
-    }
-    & .view-result:disabled {
-      color: #666666;
-      background: rgba(0, 0, 0, 0.1);
-      box-shadow: none;
+
+      &:disabled {
+        color: #666666;
+        background: rgba(0, 0, 0, 0.1);
+        box-shadow: none;
+      }
     }
   }
 }

@@ -9,7 +9,7 @@
     <TimelineList
       :target="app.t(`app.news`)"
       :data="app.news.value"
-      :limit="5"
+      :limit="app.limit.value"
       @on-toggle-edit-button="app.onToggleEditButton"
       @on-toggle-delete-button="app.onToggleDeleteButton"
     />
@@ -29,6 +29,9 @@ import type { NewsModel } from "@/models/news.model";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public adminStore = useAdminStore();
+
+    public limit: Ref<number> = this.ref(5);
+
     public news: Ref<Array<NewsModel>> = this.computed(() => this.adminStore.newsList);
 
     public constructor() {

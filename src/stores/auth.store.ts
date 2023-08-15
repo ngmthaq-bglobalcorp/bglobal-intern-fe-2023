@@ -146,9 +146,14 @@ export const useAuthStore = defineClassStore(
       }
     };
 
-    public fetchUpdatePassword = async (password: any) => {
+    public fetchUpdatePassword = async (data: any) => {
       try {
-        const res = await api.post(ApiConst.authEndpoints.changePassword, password);
+        const passwordObj = {
+          oldPassword: data.currentPassword || "",
+          newPassword: data.newPassword || "",
+        };
+        console.log(passwordObj);
+        const res = await api.post(ApiConst.authEndpoints.changePassword, passwordObj);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {

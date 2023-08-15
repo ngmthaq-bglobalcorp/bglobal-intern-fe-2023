@@ -48,9 +48,20 @@
 
       <!-- Content -->
       <div class="profile-content">
-        <ProfileHeader :profile="app.profile.value" :isUpdate="true" :editable="true" />
+        <ProfileHeader
+          :profile="app.profile.value"
+          :is-update="true"
+          :editable="true"
+          @on-update-avatar="app.onUpdateAvatar"
+        />
         <ProfileUpdate
           :profile="app.profile.value"
+          :message-info-update-success="app.messageInfoUpdateSuccess.value"
+          :message-info-update-failed="app.messageInfoUpdateFailed.value"
+          :message-email-update-success="app.messageEmailUpdateSuccess.value"
+          :message-email-update-failed="app.messageEmailUpdateFailed.value"
+          :message-password-update-success="app.messagePasswordUpdateSuccess.value"
+          :message-password-update-failed="app.messagePasswordUpdateFailed.value"
           @on-update-infomation="app.onUpdateInfomation"
           @on-update-email="app.onUpdateEmail"
           @on-update-password="app.onUpdatePassword"
@@ -71,14 +82,22 @@ import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHea
 import ProfileUpdate from "@/components/AdminComponents/ProfileUpdate/ProfileUpdateComponent.vue";
 import { PathConst } from "@/const/path.const";
 import { OrganizationModel } from "@/models/organization.model";
-import { useOrganizationStore } from "@/stores/organization.store";
 import { useAuthStore } from "@/stores/auth.store";
+import { useOrganizationStore } from "@/stores/organization.store";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public organizationStore = useOrganizationStore();
     public authStore = useAuthStore();
+
+    public messageInfoUpdateSuccess: Ref<string> = this.ref("");
+    public messageInfoUpdateFailed: Ref<string> = this.ref("");
+    public messageEmailUpdateSuccess: Ref<string> = this.ref("");
+    public messageEmailUpdateFailed: Ref<string> = this.ref("");
+    public messagePasswordUpdateSuccess: Ref<string> = this.ref("");
+    public messagePasswordUpdateFailed: Ref<string> = this.ref("");
+
     public profile: Ref<OrganizationModel> = this.computed(() => this.organizationStore.profile);
 
     public constructor() {
@@ -95,30 +114,53 @@ const app = defineClassComponent(
       this.router.push({ ...PathConst.adminUserProfile, params: { username: this.profile.value.username } });
     };
 
+    public onUpdateAvatar = async (avatarUrl: string) => {
+      const organization = new OrganizationModel(this.profile.value);
+      organization.avatar = avatarUrl;
+      const isSuccess = await this.organizationStore.fetchUpdateProfile(organization);
+      if (isSuccess) {
+        this.profile.value.avatar = avatarUrl;
+      }
+    };
+
     public onUpdateInfomation = async (data: any) => {
+      this.messageInfoUpdateSuccess.value = "";
+      this.messageInfoUpdateFailed.value = "";
       this.commonStore.setIsLoading(true);
       const organization = new OrganizationModel(data);
       const isSuccess = await this.organizationStore.fetchUpdateProfile(organization);
       if (isSuccess) {
         console.log("Update profile");
+        this.messageInfoUpdateSuccess.value = this.t(`message.updateSuccess`);
+      } else {
+        this.messageInfoUpdateFailed.value = this.t(`message.updateFailed`);
       }
       this.commonStore.setIsLoading(false);
     };
 
     public onUpdateEmail = async (email: string) => {
+      this.messageEmailUpdateSuccess.value = "";
+      this.messageEmailUpdateFailed.value = "";
       this.commonStore.setIsLoading(true);
       const isSuccess = await this.authStore.fetchUpdateEmail(email);
       if (isSuccess) {
         this.organizationStore.profile.email = email;
+        this.messageEmailUpdateSuccess.value = this.t(`message.updateSuccess`);
+      } else {
+        this.messageEmailUpdateFailed.value = this.t(`message.updateFailed`);
       }
       this.commonStore.setIsLoading(false);
     };
 
     public onUpdatePassword = async (data: any) => {
+      this.messagePasswordUpdateSuccess.value = "";
+      this.messagePasswordUpdateFailed.value = "";
       this.commonStore.setIsLoading(true);
       const isSuccess = await this.authStore.fetchUpdatePassword(data);
       if (isSuccess) {
-        console.log("Update password");
+        this.messagePasswordUpdateSuccess.value = this.t(`message.updateSuccess`);
+      } else {
+        this.messagePasswordUpdateFailed.value = this.t(`message.errorPassword`);
       }
       this.commonStore.setIsLoading(false);
     };

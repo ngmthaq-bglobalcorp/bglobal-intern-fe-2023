@@ -1,5 +1,5 @@
 <template>
-  <UserLayout :isAuth="true">
+  <UserLayout :is-auth="true">
     <div class="forgot-container">
       <div class="content">
         <!-- Form -->
@@ -74,6 +74,7 @@ import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
+
     public email: Ref<string> = this.ref("");
     public emailOtp: Ref<string> = this.ref("");
     public isValidEmail: Ref<Boolean> = this.ref(false);

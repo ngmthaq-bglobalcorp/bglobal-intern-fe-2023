@@ -30,10 +30,12 @@ const props = defineProps<JobDetailProps>();
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public organizationStore = useOrganizationStore();
+
     public columns: Ref<Array<any>> = this.ref([
       { field: "name", headerName: "name" },
       { field: "like", headerName: "like" },
     ]);
+
     public job: Ref<JobModel> = this.computed(() => this.organizationStore.job);
     public seekers: Ref<Array<SeekerModel>> = this.computed(() => this.organizationStore.actionSeekers);
 

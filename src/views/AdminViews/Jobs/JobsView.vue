@@ -56,6 +56,7 @@ import type { JobModel } from "@/models/job.model";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public organizationStore = useOrganizationStore();
+
     public view: Ref<string> = this.ref(AppConst.VIEW.columnView);
 
     public filtersJobs: Ref<Array<JobModel>> = this.computed(() => this.organizationStore.jobs);

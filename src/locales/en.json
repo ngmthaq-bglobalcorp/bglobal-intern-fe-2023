@@ -46,7 +46,9 @@
     "errorOtp": "Please enter a valid OTP.",
     "errorUrl": "Please enter a valid url.",
     "errorCountHours": "CountHour must be within the range of 0 to 24.",
-    "notBlank": "{value} cannot be blank"
+    "notBlank": "{value} cannot be blank",
+    "updateSuccess": "Update successfull",
+    "updateFailed": "Update failed"
   },
   "app": {
     "coverTitle": "The best part? Everything.",

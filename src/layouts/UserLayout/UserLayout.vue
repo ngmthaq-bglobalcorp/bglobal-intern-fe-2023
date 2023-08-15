@@ -1,7 +1,7 @@
 <template>
   <div id="user-layout">
-    <LoadingComponent :isLoading="app.commonStore.isLoading" />
-    <HeaderComponent :isAuth="props.isAuth" />
+    <LoadingComponent :is-loading="app.commonStore.isLoading" />
+    <HeaderComponent :is-auth="props.isAuth" />
     <div class="content">
       <slot></slot>
     </div>

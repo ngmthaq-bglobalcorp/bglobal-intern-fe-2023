@@ -1,6 +1,6 @@
 <template>
   <div id="admin-layout">
-    <WaitingComponent :isWaiting="app.commonStore.isLoading" />
+    <WaitingComponent :is-waiting="app.commonStore.isLoading" />
     <SidebarComponent />
     <div class="layout-content">
       <NavbarComponent />

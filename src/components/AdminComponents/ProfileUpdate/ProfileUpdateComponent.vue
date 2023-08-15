@@ -9,6 +9,12 @@
       <!-- Body -->
       <div class="custom-body">
         <!-- Form -->
+        <div class="success-message" v-if="props.messageInfoUpdateSuccess">
+          {{ props.messageInfoUpdateSuccess }}
+        </div>
+        <div class="fail-message" v-if="props.messageInfoUpdateFailed">
+          {{ props.messageInfoUpdateFailed }}
+        </div>
         <form id="changeInfomationForm" action="" @submit.prevent="app.onUpdateInfomation">
           <!-- Form Group -->
           <div class="form-group">
@@ -185,6 +191,12 @@
         </div>
 
         <!-- Form -->
+        <div class="success-message" v-if="props.messageEmailUpdateSuccess">
+          {{ props.messageEmailUpdateSuccess }}
+        </div>
+        <div class="fail-message" v-if="props.messageEmailUpdateFailed">
+          {{ props.messageEmailUpdateFailed }}
+        </div>
         <form id="changeEmailForm" action="" @submit.prevent="app.onUpdateEmail">
           <!-- Form Group -->
           <div class="form-group">
@@ -225,6 +237,12 @@
       <!-- Body -->
       <div class="custom-body">
         <!-- Form -->
+        <div class="success-message" v-if="props.messagePasswordUpdateSuccess">
+          {{ props.messagePasswordUpdateSuccess }}
+        </div>
+        <div class="fail-message" v-if="props.messagePasswordUpdateFailed">
+          {{ props.messagePasswordUpdateFailed }}
+        </div>
         <form id="changePasswordForm" action="" @submit.prevent="app.onUpdatePassword">
           <!-- Form Group -->
           <div class="form-group">
@@ -419,6 +437,7 @@ const emits = defineEmits<ProfileUpdateEmits>();
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public profile: Ref<OrganizationModel> = this.computed(() => props.profile);
+
     public typeArray: Ref<Array<string>> = this.ref(Object.values(AppConst.ORGANIZATION_TYPE));
     public requirementsIndexArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.requirements`)));
     public newEmail: Ref<string> = this.ref("");
@@ -455,6 +474,23 @@ const app = defineClassComponent(
         this.introduction.value = profile.introduction;
         this.organizationType.value = profile.organizationType;
       });
+
+      this.watch([() => props.messageEmailUpdateSuccess, () => props.messageEmailUpdateFailed], ([success, failed]) => {
+        if (success || failed) {
+          this.newEmail.value = "";
+        }
+      });
+
+      this.watch(
+        [() => props.messagePasswordUpdateSuccess, () => props.messagePasswordUpdateFailed],
+        ([success, failed]) => {
+          if (success || failed) {
+            this.currentPassword.value = "";
+            this.newPassword.value = "";
+            this.confirmNewPassword.value = "";
+          }
+        },
+      );
     }
 
     public onToggleEmail = () => {

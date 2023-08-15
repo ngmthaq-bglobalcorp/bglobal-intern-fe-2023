@@ -116,6 +116,7 @@ import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
+
     public show: Ref<boolean> = this.ref(false);
     public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");

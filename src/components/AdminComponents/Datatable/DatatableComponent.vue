@@ -76,9 +76,9 @@
                 <router-link to="" class="item-name link-default">
                   <div class="avatar">
                     <AvatarComponent
-                      :avatarImage="data.avatar || ''"
-                      avatarAlt="Avatar"
-                      :avatarInit="data[column.field][0]"
+                      :avatar-image="data.avatar || ''"
+                      avatar-alt="Avatar"
+                      :avatar-init="data[column.field][0]"
                     />
                   </div>
                   <span>{{ data[column.field] }}</span>
@@ -192,7 +192,7 @@ import type { DatatableEmits, DatatableProps } from "./DatatableComponent";
 import type { Ref } from "vue";
 
 const props = defineProps<DatatableProps>();
-const emit = defineEmits<DatatableEmits>();
+const emits = defineEmits<DatatableEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -242,15 +242,15 @@ const app = defineClassComponent(
         return acc;
       }, []);
 
-      emit("onDeleteSelected", deletedArray);
+      emits("onDeleteSelected", deletedArray);
     };
 
     public onToggleLock = (id: number) => {
-      emit("onLockSelected", id);
+      emits("onLockSelected", id);
     };
 
     public onToggleUnlock = (id: number) => {
-      emit("onUnlockSelected", id);
+      emits("onUnlockSelected", id);
     };
 
     public onToggleSelectData = (data: any) => {

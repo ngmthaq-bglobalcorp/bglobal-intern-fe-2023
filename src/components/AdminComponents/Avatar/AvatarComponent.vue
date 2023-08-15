@@ -41,6 +41,10 @@ const app = defineClassComponent(
     background-color: $light;
     border-radius: 50%;
 
+    & .avatar-img {
+      border-radius: 50%;
+    }
+
     & .avatar-initials {
       display: flex;
       justify-content: center;

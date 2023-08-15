@@ -9,9 +9,9 @@
           <router-link to="" class="item-name link-default" v-if="column.field === 'name'">
             <div class="avatar">
               <AvatarComponent
-                :avatarImage="item.avatar"
-                avatarAlt="Avatar"
-                :avatarInit="item.name[0] || item.username[0]"
+                :avatar-image="item.avatar"
+                avatar-alt="Avatar"
+                :avatar-init="item.name[0] || item.username[0]"
               />
             </div>
             <span class="name" v-if="item.name">{{ item.name }}</span>
@@ -44,12 +44,12 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public columns: Ref<Array<any>> = this.ref(props.columns);
     public pageNumber: Ref<number> = this.ref(1);
+
     public pageSize: Ref<number> = this.computed(() => props.data.length);
     public totalData: Ref<number> = this.computed(() => props.data.length);
     public totalPages: Ref<number> = this.computed(() => {
       return Math.ceil(this.totalData.value / this.pageSize.value);
     });
-
     public filterData: Ref<Array<SeekerModel>> = this.computed(() => {
       const filterArray = props.data.filter((value, index) => {
         return (

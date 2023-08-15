@@ -28,13 +28,13 @@ import { NewsModel } from "@/models/news.model";
 import { useAdminStore } from "@/stores/admin.store";
 import type { AddNewsProps } from "./AddNewsView";
 import type { Ref } from "vue";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
 
 const props = defineProps<AddNewsProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public adminStore = useAdminStore();
+
     public isUpdate: Ref<boolean> = this.computed(() => (props.newsId ? true : false));
     public news: Ref<NewsModel> = this.computed(() => {
       if (this.isUpdate.value) {

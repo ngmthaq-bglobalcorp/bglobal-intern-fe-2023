@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <PageHeader :target="app.t(`app.hiringOrganization`)" button="" icon="" />
+    <PageHeader :target="app.t(`app.hiringOrganization`)" />
     <Datatable
       :columns="app.columns.value"
       :data="app.filetrsData.value"
@@ -24,6 +24,7 @@ import type { OrganizationModel } from "@/models/organization.model";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public adminStore = useAdminStore();
+
     public columns: Ref<any> = this.ref([
       { field: "id", headerName: "id" },
       { field: "username", headerName: "username" },
@@ -32,6 +33,7 @@ const app = defineClassComponent(
       { field: "phone", headerName: "phone" },
       { field: "status", headerName: "status" },
     ]);
+
     public filetrsData: Ref<Array<OrganizationModel>> = this.computed(() => this.adminStore.organizations);
 
     public constructor() {

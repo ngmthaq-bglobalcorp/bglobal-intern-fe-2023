@@ -33,8 +33,8 @@
 </template>
 
 <script setup lang="ts">
-import { PathConst } from "@/const/path.const";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { PathConst } from "@/const/path.const";
 import { useAuthStore } from "@/stores/auth.store";
 import type { HeaderProps } from "./HeaderComponent";
 
@@ -51,10 +51,10 @@ const app = defineClassComponent(
     public onToggleSignOut = async () => {
       this.commonStore.isLoading = true;
       const isSuccess = await this.authStore.fetchAdminSignOut();
-      this.commonStore.isLoading = false;
       if (isSuccess) {
         window.location.href = PathConst.userSignin.path;
       }
+      this.commonStore.isLoading = false;
     };
   },
 );

@@ -3,7 +3,7 @@
     <!-- Profile Cover -->
     <div class="profile-cover">
       <div class="profile-cover-wrapper">
-        <img class="cover-img" :src="app.cover.value || 'src/assets/img/default-cover.jpg'" alt="Cover" />
+        <img class="cover-img" :src="app.cover.value || '/src/assets/img/default-cover.jpg'" alt="Cover" />
 
         <!-- Custom File Cover -->
         <label class="cover-uploader-label" for="coverUploader" v-if="app.isEditCover.value && props.editable">
@@ -25,13 +25,13 @@
         <!-- Custom File Avatar -->
         <label class="avatar-uploader-label" for="avatarUploader">
           <AvatarComponent
-            :avatarImage="app.avatar.value"
-            avatarAlt="Avatar"
-            :avatarInit="app.profile.value.name.split(' ')[0] || app.profile.value.username"
+            :avatar-image="app.avatar.value"
+            avatar-alt="Avatar"
+            :avatar-init="app.profile.value.name.split(' ')[0] || app.profile.value.username"
           />
 
           <template v-if="props.editable">
-            <LoadingComponent :isLoading="app.isUpdateAvatar.value" />
+            <LoadingComponent :is-loading="app.isUpdateAvatar.value" style="border-radius: 50%" />
 
             <input
               type="file"
@@ -39,11 +39,11 @@
               id="avatarUploader"
               @change="(e) => app.onChangeAvatar(e)"
             />
+            <span class="avatar-uploader-trigger" v-if="props.editable">
+              <i class="bi bi-pencil-fill"></i>
+            </span>
           </template>
         </label>
-        <span class="avatar-uploader-trigger" v-if="props.editable">
-          <i class="bi bi-pencil-fill"></i>
-        </span>
         <!-- End Custom File Avatar -->
       </div>
     </div>
@@ -107,11 +107,10 @@ const emits = defineEmits<ProfileHeaderEmits>();
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public profile: Ref<any> = this.computed(() => props.profile);
+
     public avatar: Ref<string> = this.ref("");
     public cover: Ref<string> = this.ref("");
-    public isUpdateAvatar: Ref<boolean> = this.computed(
-      () => app.avatar.value.length > 0 && !app.avatar.value.includes("res.cloudinary.com/"),
-    );
+    public isUpdateAvatar: Ref<boolean> = this.ref(false);
     public isEditCover: Ref<boolean> = this.ref(false);
     public navList: Ref<Array<any>> = this.ref([
       {
@@ -135,6 +134,7 @@ const app = defineClassComponent(
         () => this.profile.value.avatar,
         (avatar) => {
           this.avatar.value = avatar;
+          this.isUpdateAvatar.value = avatar.length > 0 && !avatar.includes("res.cloudinary.com/");
         },
       );
     }
@@ -156,7 +156,7 @@ const app = defineClassComponent(
         this.avatar.value = URL.createObjectURL(file);
         const url = await this.commonStore.fetchUploadImage(file);
         if (url) {
-          this.avatar.value = url;
+          emits("onUpdateAvatar", url);
         }
       }
     };
@@ -262,8 +262,6 @@ const app = defineClassComponent(
         top: 0;
         left: 0;
         bottom: 0;
-        border-radius: 50%;
-        overflow: hidden;
         cursor: pointer;
 
         & .avatar-uploader-input {
@@ -275,25 +273,19 @@ const app = defineClassComponent(
           opacity: 0;
         }
 
-        &:hover {
-          ~ .avatar-uploader-trigger {
-            color: $blue;
-          }
+        & .avatar-uploader-trigger {
+          position: absolute;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 2.40625rem;
+          height: 2.40625rem;
+          background-color: $white;
+          bottom: 0;
+          right: 0;
+          border-radius: 50%;
+          cursor: pointer;
         }
-      }
-
-      & .avatar-uploader-trigger {
-        position: absolute;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        width: 2.40625rem;
-        height: 2.40625rem;
-        background-color: $white;
-        bottom: 0;
-        right: 0;
-        border-radius: 50%;
-        cursor: pointer;
 
         &:hover {
           color: $blue;

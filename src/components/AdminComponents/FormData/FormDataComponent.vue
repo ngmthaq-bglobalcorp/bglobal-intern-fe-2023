@@ -22,7 +22,7 @@
 
                 <div class="custom-input-group">
                   <div class="input-image" v-for="image of input.model" :key="image">
-                    <LoadingComponent :isLoading="!image.includes('res.cloudinary.com/')" />
+                    <LoadingComponent :is-loading="!image.includes('res.cloudinary.com/')" />
                     <img :src="image" :alt="input.label" class="image" v-if="image" />
                     <button class="delete-btn" @click.prevent="app.onToggleDeleteImage(input, image)">
                       <i class="bi bi-x-circle"></i>
@@ -380,13 +380,13 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import LoadingComponent from "@/components/AppComponents/LoadingComponent/LoadingComponent.vue";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { FormDataEmits, FormDataProps } from "./FormDataComponent";
 import type { Ref } from "vue";
 import type { SearchLabelModel } from "@/models/searchLabel.model";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
 
 const props = defineProps<FormDataProps>();
-const emit = defineEmits<FormDataEmits>();
+const emits = defineEmits<FormDataEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -447,6 +447,10 @@ const app = defineClassComponent(
       input.model = input.model.filter((value: any) => value != item);
     };
 
+    public onFocusInputText = (input: any) => {
+      input.error = "";
+    };
+
     public onToggleSelectMultiple = (input: any, label: SearchLabelModel) => {
       if (input.model.includes(label)) {
         input.model = input.model.filter((value: SearchLabelModel) => value != label);
@@ -484,10 +488,6 @@ const app = defineClassComponent(
       }
     };
 
-    public onFocusInputText = (input: any) => {
-      input.error = "";
-    };
-
     public onSubmitForm = () => {
       let data: any = {};
       let isValidInput = true;
@@ -518,7 +518,7 @@ const app = defineClassComponent(
         });
       });
       if (isValidInput) {
-        emit("onSubmitForm", data);
+        emits("onSubmitForm", data);
       }
     };
   },

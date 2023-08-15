@@ -57,7 +57,8 @@ export const useSeekersStore = defineClassStore(
         const profile = {
           name: data.name || "",
           phone_number: data.phoneNumber || "",
-          dob: data.birthday ? DatetimeHelper.getDate(data.birthday) : "",
+          profileImageUrl: data.avatar || "",
+          dob: data.birthday || "",
           address: data.address || "",
           website: data.website || "",
           education: data.education || "",

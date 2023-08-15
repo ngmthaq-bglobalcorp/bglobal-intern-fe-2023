@@ -39,6 +39,7 @@ import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public likeList: Ref<boolean> = this.ref(true);
+
     public constructor() {
       super();
     }

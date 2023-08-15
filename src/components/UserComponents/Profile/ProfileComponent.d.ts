@@ -1,5 +1,11 @@
 export type ProfileUpdateProps = {
   profile: any;
+  messageInfoUpdateSuccess?: string;
+  messageInfoUpdateFailed?: string;
+  messageEmailUpdateSuccess?: string;
+  messageEmailUpdateFailed?: string;
+  messagePasswordUpdateSuccess?: string;
+  messagePasswordUpdateFailed?: string;
 };
 
 export type ProfileUpdateEmits = {

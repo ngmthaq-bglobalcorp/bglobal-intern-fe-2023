@@ -34,6 +34,7 @@ const props = defineProps<AddJobProps>();
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public organizationStore = useOrganizationStore();
+
     public isUpdate: Ref<boolean> = this.computed(() => (props.jobId ? true : false));
     public job: Ref<JobModel> = this.computed(() => {
       if (this.isUpdate.value) {

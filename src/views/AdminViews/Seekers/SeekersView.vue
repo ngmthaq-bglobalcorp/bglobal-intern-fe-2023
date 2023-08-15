@@ -1,7 +1,7 @@
 <template>
   <AdminLayout>
     <div class="seeker-contaier">
-      <PageHeader :target="app.t(`app.seekers`)" button="" icon="" />
+      <PageHeader :target="app.t(`app.seekers`)" />
       <Datatable
         :columns="app.columns.value"
         :data="app.filetrsData.value"
@@ -26,6 +26,7 @@ import type { SeekerModel } from "@/models/seeker.model";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public adminStore = useAdminStore();
+
     public columns: Ref<any> = this.ref([
       { field: "id", headerName: "id" },
       { field: "username", headerName: "username" },
@@ -34,6 +35,7 @@ const app = defineClassComponent(
       { field: "phone", headerName: "phone" },
       { field: "status", headerName: "status" },
     ]);
+
     public filetrsData: Ref<Array<SeekerModel>> = this.computed(() => this.adminStore.seekers);
 
     public constructor() {

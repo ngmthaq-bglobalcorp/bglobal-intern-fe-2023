@@ -1,5 +1,5 @@
 <template>
-  <UserLayout :isAuth="true">
+  <UserLayout :is-auth="true">
     <div class="signin-container">
       <div class="content">
         <!-- Form -->
@@ -116,6 +116,7 @@ import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
+
     public show: Ref<boolean> = this.ref(false);
     public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");

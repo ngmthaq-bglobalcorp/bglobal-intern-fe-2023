@@ -1,6 +1,6 @@
 <template>
   <div id="cover-layout" class="d-flex">
-    <WaitingComponent :isWaiting="app.commonStore.isLoading" />
+    <WaitingComponent :is-waiting="app.commonStore.isLoading" />
     <CoverComponent />
     <div class="content">
       <slot></slot>

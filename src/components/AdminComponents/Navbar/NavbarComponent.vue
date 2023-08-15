@@ -26,9 +26,9 @@
             <button class="account-wrapper icon-btn" @click.prevent="app.onToggleOpenMenu">
               <div class="avatar">
                 <AvatarComponent
-                  :avatarImage="app.profile.value.avatar || ''"
-                  avatarAlt="Avatar"
-                  :avatarInit="app.profile.value.name[0] || app.profile.value.username[0]"
+                  :avatar-image="app.profile.value.avatar || ''"
+                  avatar-alt="Avatar"
+                  :avatar-init="app.profile.value.name[0] || app.profile.value.username[0]"
                 />
                 <span class="status status-available"></span>
               </div>
@@ -37,9 +37,9 @@
               <div class="dropdown-item-header">
                 <div class="avatar">
                   <AvatarComponent
-                    :avatarImage="app.profile.value.avatar"
-                    avatarAlt="Avatar"
-                    :avatarInit="app.profile.value.name[0] || app.profile.value.username[0]"
+                    :avatar-image="app.profile.value.avatar"
+                    avatar-alt="Avatar"
+                    :avatar-init="app.profile.value.name[0] || app.profile.value.username[0]"
                   />
                 </div>
                 <div class="media-body">
@@ -90,7 +90,9 @@ import type { UserModel } from "@/models/user.model";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
+
     public isMenuOpen: Ref<Boolean> = this.ref(false);
+
     public isAdmin: Ref<Boolean> = this.computed(() =>
       this.authStore.user.role === AppConst.ROLE.organization ? false : true,
     );
@@ -115,7 +117,6 @@ const app = defineClassComponent(
     public onToggleSignOut = async () => {
       const isSuccess = await this.authStore.fetchAdminSignOut();
       if (isSuccess) {
-        // this.router.push(PathConst.adminSignin);
         window.location.href = PathConst.adminSignin.path;
       }
     };

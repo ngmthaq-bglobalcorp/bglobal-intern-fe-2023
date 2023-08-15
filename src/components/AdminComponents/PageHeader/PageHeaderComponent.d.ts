@@ -1,7 +1,7 @@
 export type PageHeaderProps = {
   target: string;
-  button: string;
-  icon: string;
+  button?: string;
+  icon?: string;
 };
 
 export type PageHeaderEmits = {
