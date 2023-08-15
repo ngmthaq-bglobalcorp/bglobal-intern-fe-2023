@@ -23,8 +23,8 @@ import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderCompon
 import FormData from "@/components/AdminComponents/FormData/FormDataComponent.vue";
 import { PathConst } from "@/const/path.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import { JobModel } from "@/models/job.model";
-import { useCommonStore } from "@/stores/common.store";
 import { useOrganizationStore } from "@/stores/organization.store";
 import type { AddJobProps } from "./AddJobView";
 import type { Ref } from "vue";
@@ -33,8 +33,8 @@ const props = defineProps<AddJobProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public commonStore = useCommonStore();
     public organizationStore = useOrganizationStore();
+
     public isUpdate: Ref<boolean> = this.computed(() => (props.jobId ? true : false));
     public job: Ref<JobModel> = this.computed(() => {
       if (this.isUpdate.value) {
@@ -153,8 +153,9 @@ const app = defineClassComponent(
                 placeholder: this.t(`app.startTime`),
                 required: true,
                 multiple: false,
-                model: "00:00",
+                model: PrimitiveHelper.getTime()[0],
                 error: "",
+                children: PrimitiveHelper.getTime(),
               },
               {
                 id: 2,
@@ -164,8 +165,9 @@ const app = defineClassComponent(
                 placeholder: this.t(`app.endTime`),
                 required: true,
                 multiple: false,
-                model: "00:00",
+                model: PrimitiveHelper.getTime()[PrimitiveHelper.getTime().length - 1],
                 error: "",
+                children: PrimitiveHelper.getTime(),
               },
               {
                 id: 3,
@@ -173,7 +175,7 @@ const app = defineClassComponent(
                 type: "number",
                 label: this.t(`app.countHours`),
                 placeholder: this.t(`app.countHours`),
-                required: false,
+                required: true,
                 multiple: false,
                 model: "",
                 error: "",
@@ -238,7 +240,7 @@ const app = defineClassComponent(
             type: "textarea",
             label: this.t(`app.catchText`),
             placeholder: this.t(`app.catchText`),
-            required: true,
+            required: false,
             multiple: false,
             model: this.job.value.catchText || "",
             error: "",
@@ -255,7 +257,7 @@ const app = defineClassComponent(
             type: "textarea",
             label: this.t(`app.leadText`),
             placeholder: this.t(`app.leadText`),
-            required: true,
+            required: false,
             multiple: false,
             model: this.job.value.leadText || "",
             error: "",
@@ -384,11 +386,13 @@ const app = defineClassComponent(
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         await this.commonStore.fetchAllLocations();
         await this.commonStore.fetchAllSearchLabels();
         if (this.isUpdate.value) {
           this.organizationStore.fetchFindJobById(props.jobId);
         }
+        this.commonStore.setIsLoading(false);
       });
     }
 
@@ -397,6 +401,8 @@ const app = defineClassComponent(
     };
 
     public onSubmitForm = async (data: any) => {
+      this.commonStore.setIsLoading(true);
+      data.mainImageUrl = data.mainImage[0];
       data.location = this.commonStore.getLocationById(data.location);
       data.searchLabels = data.searchLabels.map((value: any) => {
         return this.commonStore.getLocationById(value);
@@ -413,6 +419,7 @@ const app = defineClassComponent(
           this.router.push(PathConst.adminJobsList);
         }
       }
+      this.commonStore.setIsLoading(false);
     };
   },
 );

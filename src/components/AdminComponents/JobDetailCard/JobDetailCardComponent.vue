@@ -90,8 +90,8 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
-import type { Ref } from "vue";
 import type { JobDetailCardProps } from "./JobDetailCardComponent";
+import type { Ref } from "vue";
 import type { JobModel } from "@/models/job.model";
 
 const props = defineProps<JobDetailCardProps>();

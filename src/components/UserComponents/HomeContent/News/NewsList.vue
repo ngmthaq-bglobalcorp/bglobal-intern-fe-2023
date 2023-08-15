@@ -1,7 +1,13 @@
 <template>
   <div class="news">
     <h1 class="tittle">{{ app.t("jobsApp.news.title") }}</h1>
-    <a class="link" target="_blank" :href="news.eventPageUrl" v-for="news in app.newsArray.value" :key="news.id">
+    <a
+      class="link"
+      target="_blank"
+      :href="PrimitiveHelper.getValidUrl(news.eventPageUrl)"
+      v-for="news in app.newsArray.value"
+      :key="news.id"
+    >
       <template v-if="news.category === AppConst.NEWS_CATEGORY.seminar">
         <div class="image">
           <img src="@/assets/img/info-icon-seminar.svg" class="icon" />
@@ -52,12 +58,13 @@
 </template>
 
 <script setup lang="ts">
-import { AppConst } from "@/const/app.const";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { AppConst } from "@/const/app.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { NewsListProps } from "./NewsList";
-import type { NewsModel } from "@/models/news.model";
 import type { Ref } from "vue";
+import type { NewsModel } from "@/models/news.model";
 
 const props = defineProps<NewsListProps>();
 
@@ -119,6 +126,7 @@ const app = defineClassComponent(
         width: 42px;
         height: 42px;
       }
+
       & .time {
         color: #378182;
         font-size: 14px;
@@ -128,6 +136,7 @@ const app = defineClassComponent(
         line-height: 16px;
       }
     }
+
     & .describe {
       flex: 8;
       display: flex;

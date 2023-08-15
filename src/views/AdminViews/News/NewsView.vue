@@ -9,7 +9,7 @@
     <TimelineList
       :target="app.t(`app.news`)"
       :data="app.news.value"
-      :limit="5"
+      :limit="app.limit.value"
       @on-toggle-edit-button="app.onToggleEditButton"
       @on-toggle-delete-button="app.onToggleDeleteButton"
     />
@@ -29,13 +29,18 @@ import type { NewsModel } from "@/models/news.model";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public adminStore = useAdminStore();
+
+    public limit: Ref<number> = this.ref(5);
+
     public news: Ref<Array<NewsModel>> = this.computed(() => this.adminStore.newsList);
 
     public constructor() {
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         await this.adminStore.fetchAllNews();
+        this.commonStore.setIsLoading(false);
       });
     }
 
@@ -48,10 +53,12 @@ const app = defineClassComponent(
     };
 
     public onToggleDeleteButton = async (id: number) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.adminStore.fetchDeleteNews(id.toString());
       if (isSuccess) {
         this.adminStore.newsList = this.adminStore.newsList.filter((news) => news.id != id);
       }
+      this.commonStore.setIsLoading(false);
     };
   },
 );

@@ -73,12 +73,15 @@
             </td>
             <td class="sorting-1" v-for="column in props.columns" :key="column.field">
               <template v-if="column.field === 'username'">
-                <router-link to="" class="item-name link-default">
+                <router-link
+                  :to="{ ...PathConst.adminUserProfile, params: { username: data.userId } }"
+                  class="item-name link-default"
+                >
                   <div class="avatar">
                     <AvatarComponent
-                      :avatarImage="data.avatar || ''"
-                      avatarAlt="Avatar"
-                      :avatarInit="data[column.field][0]"
+                      :avatar-image="data.avatar || ''"
+                      avatar-alt="Avatar"
+                      :avatar-init="data[column.field][0]"
                     />
                   </div>
                   <span>{{ data[column.field] }}</span>
@@ -190,9 +193,10 @@ import { AppConst } from "@/const/app.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
 import type { DatatableEmits, DatatableProps } from "./DatatableComponent";
 import type { Ref } from "vue";
+import { PathConst } from "@/const/path.const";
 
 const props = defineProps<DatatableProps>();
-const emit = defineEmits<DatatableEmits>();
+const emits = defineEmits<DatatableEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -242,15 +246,15 @@ const app = defineClassComponent(
         return acc;
       }, []);
 
-      emit("onDeleteSelected", deletedArray);
+      emits("onDeleteSelected", deletedArray);
     };
 
     public onToggleLock = (id: number) => {
-      emit("onLockSelected", id);
+      emits("onLockSelected", id);
     };
 
     public onToggleUnlock = (id: number) => {
-      emit("onUnlockSelected", id);
+      emits("onUnlockSelected", id);
     };
 
     public onToggleSelectData = (data: any) => {
@@ -610,6 +614,12 @@ const app = defineClassComponent(
             color: $white;
             background-color: $blue;
             border-color: $blue;
+          }
+
+          &.disabled {
+            color: $disabled-color !important;
+            border-color: $disabled-color !important;
+            pointer-events: none;
           }
         }
       }

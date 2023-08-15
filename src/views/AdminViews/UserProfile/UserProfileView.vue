@@ -3,8 +3,9 @@
     <div class="user-profile-container">
       <ProfileHeader
         :profile="app.profile.value"
-        :isUpdate="false"
+        :is-update="false"
         :editable="app.editable.value"
+        @on-update-avatar="app.onUpdateAvatar"
         @on-toggle-update-profile="app.onToggleUpdateProfile"
       />
       <ProfileCard :profile="app.profile.value" />
@@ -18,26 +19,55 @@ import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHeaderComponent.vue";
 import ProfileCard from "@/components/AdminComponents/ProfileCard/ProfileCardComponent.vue";
 import { PathConst } from "@/const/path.const";
+import { OrganizationModel } from "@/models/organization.model";
 import { useOrganizationStore } from "@/stores/organization.store";
 import type { UserProfileProps } from "./UserProfileView";
 import type { Ref } from "vue";
-import type { OrganizationModel } from "@/models/organization.model";
+import type { UserModel } from "@/models/user.model";
+import { useAuthStore } from "@/stores/auth.store";
 
 const props = defineProps<UserProfileProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public authStore = useAuthStore();
     public organizationStore = useOrganizationStore();
-    public profile: Ref<OrganizationModel> = this.computed(() => this.organizationStore.profile);
+
+    public user: Ref<UserModel> = this.computed(() => this.authStore.user);
+    public profile: Ref<any> = this.computed(() => this.commonStore.profile);
     public editable: Ref<boolean> = this.computed(() => this.profile.value.username === props.username);
 
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.organizationStore.fetchProfile();
+      this.onBeforeMount(async () => {
+        if (props.username === this.user.value.username) {
+          await this.commonStore.fetchUserProfileById(this.user.value.id.toString());
+        } else {
+          await this.commonStore.fetchUserProfileById(props.username);
+        }
       });
+
+      this.watch(
+        () => props.username,
+        async (id) => {
+          if (id === this.user.value.username) {
+            await this.commonStore.fetchUserProfileById(this.user.value.id.toString());
+          } else {
+            await this.commonStore.fetchUserProfileById(id);
+          }
+        },
+      );
     }
+
+    public onUpdateAvatar = async (avatarUrl: string) => {
+      const organization = new OrganizationModel(this.profile.value);
+      organization.avatar = avatarUrl;
+      const isSuccess = await this.organizationStore.fetchUpdateProfile(organization);
+      if (isSuccess) {
+        this.profile.value.avatar = avatarUrl;
+      }
+    };
 
     public onToggleUpdateProfile = () => {
       this.router.push(PathConst.adminUpdateProfile);

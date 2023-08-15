@@ -1,5 +1,5 @@
 <template>
-  <UserLayout>
+  <UserLayout :is-auth="true">
     <div class="forgot-container">
       <div class="content">
         <!-- Form -->
@@ -74,6 +74,7 @@ import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
+
     public email: Ref<string> = this.ref("");
     public emailOtp: Ref<string> = this.ref("");
     public isValidEmail: Ref<Boolean> = this.ref(false);
@@ -125,15 +126,13 @@ const app = defineClassComponent(
 @import "@/assets/scss/admin";
 
 .forgot-container {
-  flex: 1;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
 
   & .content {
     width: 100%;
-    padding: 3rem 0;
+    padding: 3rem 1rem;
     max-width: 25rem;
 
     & .content-title {

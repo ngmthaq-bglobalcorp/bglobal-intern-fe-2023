@@ -142,11 +142,13 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import FormSearch from "../HomeContent/Form/FormSearch.vue";
 import type { Ref } from "vue";
+
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public isShowTutorial: Ref<boolean> = this.ref(false);
     public isShowUserGuild: Ref<boolean> = this.ref(false);
     public isShowFormSearch: Ref<boolean> = this.ref(false);
+
     public constructor() {
       super();
     }
@@ -154,16 +156,16 @@ const app = defineClassComponent(
     public onToggleShowTutorial = (isShow: boolean) => {
       this.isShowTutorial.value = isShow;
     };
+
     public onToggleShowUserGuide = (isShow: boolean) => {
       this.isShowUserGuild.value = isShow;
     };
+
     public onFormSearch = () => {
       this.isShowFormSearch.value = !this.isShowFormSearch.value;
       if (this.isShowFormSearch.value) {
-        // Enable button
         this.commonStore.eventBus.emit("showFormSearch", null);
       } else {
-        // Disable button
         this.commonStore.eventBus.emit("hideFormSearch", null);
       }
       return this.isShowFormSearch.value;
@@ -174,10 +176,12 @@ const app = defineClassComponent(
 
 <style scoped lang="scss">
 @import "@/assets/scss/modules";
+
 .result_search {
   margin: 0 10px;
   position: relative;
   height: 52px;
+
   & .search_bar {
     width: 100%;
     transition: all 0.2s linear 0s;
@@ -213,6 +217,7 @@ const app = defineClassComponent(
       }
     }
   }
+
   & .search_bar.hide {
     top: -250px;
     width: 100%;
@@ -244,16 +249,18 @@ const app = defineClassComponent(
       flex-direction: column;
       justify-content: space-between;
       width: 100%;
+
       & .card_header_types_const {
         margin-bottom: 12px;
         width: 100%;
+
         & .card_header_button_const {
           display: flex;
           justify-content: flex-end;
           margin-bottom: 10px;
+
           & button {
             padding: 4px 16px;
-
             align-items: center;
             background-color: transparent;
             border: 2px solid #9f085f;
@@ -273,6 +280,7 @@ const app = defineClassComponent(
             }
           }
         }
+
         & .card_header_title {
           font-size: 16px;
           font-weight: 700;
@@ -287,26 +295,31 @@ const app = defineClassComponent(
           text-overflow: ellipsis;
         }
       }
+
       & .card_header_img_const {
         margin-bottom: 10px;
         align-items: flex-start;
         display: flex;
         height: 100%;
+
         & img {
           height: 60px;
           margin-right: 15px;
           object-fit: cover;
           width: 100px;
         }
+
         & .card_header_hiring_title {
           display: flex;
           flex-direction: column;
           height: 100%;
           justify-content: space-between;
+
           & .card_header_types {
             display: flex;
             flex-wrap: wrap;
             margin-bottom: 4px;
+
             & .card_header_types_item {
               align-items: center;
               background: #e5d8cc;
@@ -322,6 +335,7 @@ const app = defineClassComponent(
               width: 18px;
             }
           }
+
           & span {
             font-size: 13px;
             font-weight: 400;
@@ -331,8 +345,10 @@ const app = defineClassComponent(
         }
       }
     }
+
     & .card_infor {
       margin-bottom: 10px;
+
       & .card_infor_item {
         margin-bottom: 2px;
         align-items: center;
@@ -342,12 +358,14 @@ const app = defineClassComponent(
         font-weight: 700;
         justify-content: flex-start;
         line-height: 19px;
+
         & i {
           font-size: 20px;
           margin-right: 4px;
         }
       }
     }
+
     & .card_body {
       -webkit-line-clamp: 2;
       -webkit-box-orient: vertical;
@@ -363,12 +381,14 @@ const app = defineClassComponent(
       text-overflow: ellipsis;
       white-space: pre-line;
     }
+
     & .card_footer {
       margin: 10px 0;
       align-items: center;
       display: flex;
       flex-wrap: wrap;
       justify-content: center;
+
       & .card_footer_label {
         border: 1px solid #378182;
         border-radius: 4px;
@@ -380,6 +400,7 @@ const app = defineClassComponent(
         padding: 2px 6px;
       }
     }
+
     & .card_period {
       color: #000;
       font-size: 11px;
@@ -387,57 +408,59 @@ const app = defineClassComponent(
       line-height: 16px;
     }
   }
+
   & .swiper_action_button {
     background-color: transparent;
     border: none;
     border-radius: 50%;
-
     height: 90px;
     overflow: hidden;
     padding: 0;
     position: absolute;
     width: 90px;
     z-index: 1;
-  }
-  & .swiper_action_button.like_button {
-    bottom: 100px;
-    box-shadow: 0 4px 8px rgba(157, 6, 95, 0.3);
-    left: 4px;
 
-    & img {
-      height: 100%;
-      object-fit: contain;
-      width: 100%;
+    & .like_button {
+      bottom: 100px;
+      box-shadow: 0 4px 8px rgba(157, 6, 95, 0.3);
+      left: 4px;
+
+      & img {
+        height: 100%;
+        object-fit: contain;
+        width: 100%;
+      }
     }
-  }
-  & .swiper_action_button.dislike_button {
-    bottom: 100px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    right: 4px;
 
-    & img {
-      height: 100%;
-      object-fit: contain;
-      width: 100%;
+    & .dislike_button {
+      bottom: 100px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      right: 4px;
+
+      & img {
+        height: 100%;
+        object-fit: contain;
+        width: 100%;
+      }
     }
-  }
 
-  & .swiper_action_button.skip_button {
-    height: 45px;
-    left: 50%;
-    padding: 0;
-    -webkit-transform: translateX(-50%);
-    transform: translateX(-50%);
-    width: 45px;
-    bottom: 80px;
+    & .skip_button {
+      height: 45px;
+      left: 50%;
+      padding: 0;
+      -webkit-transform: translateX(-50%);
+      transform: translateX(-50%);
+      width: 45px;
+      bottom: 80px;
 
-    & img {
-      -webkit-filter: drop-shadow(2px 2px 20px rgba(0, 0, 0, 0.5));
-      filter: drop-shadow(2px 2px 20px rgba(0, 0, 0, 0.5));
-      height: 100%;
-      object-fit: contain;
-      vertical-align: middle;
-      width: 100%;
+      & img {
+        -webkit-filter: drop-shadow(2px 2px 20px rgba(0, 0, 0, 0.5));
+        filter: drop-shadow(2px 2px 20px rgba(0, 0, 0, 0.5));
+        height: 100%;
+        object-fit: contain;
+        vertical-align: middle;
+        width: 100%;
+      }
     }
   }
 }
@@ -484,6 +507,7 @@ const app = defineClassComponent(
       transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
       font-size: 1.25rem;
     }
+
     & p {
       font-weight: 500;
       margin-left: 4px;
@@ -496,6 +520,7 @@ const app = defineClassComponent(
     }
   }
 }
+
 .guide_content_swiper {
   top: 0;
   left: 0;
@@ -522,10 +547,11 @@ const app = defineClassComponent(
     position: absolute;
     transform: translate(-50%, -50%);
   }
+  & .hide {
+    display: none;
+  }
 }
-.guide_content_swiper.hide {
-  display: none;
-}
+
 .guide_content_button {
   top: 0;
   left: 0;
@@ -552,8 +578,8 @@ const app = defineClassComponent(
     position: absolute;
     transform: translate(-50%, -50%);
   }
-}
-.guide_content_button.hide {
-  display: none;
+  & .hide {
+    display: none;
+  }
 }
 </style>

@@ -1,7 +1,7 @@
 <template>
   <div class="timeline-container">
     <ul class="timeline-list list">
-      <li class="timeline-item" v-for="data in app.filtersData.value" :key="data.id">
+      <li class="timeline-item" :id="data.id.toString()" v-for="data in app.filtersData.value" :key="data.id">
         <div class="datetime-wrapper">
           <span class="datetime-divider">{{ DatetimeHelper.getFullDate(data.updatedAt) }}</span>
         </div>
@@ -46,21 +46,18 @@
                 {{ app.t(`app.generalInformation`) }}
               </span>
             </span>
-            <router-link to="" class="event-link link-default">
+            <a :href="'#' + data.id" class="event-link link-default" scroll="smooth">
               <h2 class="event-title">{{ data.title }}</h2>
-            </router-link>
+            </a>
             <h3 class="event-subtitle" v-if="data.subtitle">{{ data.subtitle }}</h3>
             <ul class="event-list-group list">
               <li v-if="data.body">
                 <span class="event-body">{{ data.body }}</span>
               </li>
               <li v-if="data.eventPageUrl">
-                <a
-                  :href="data.eventPageUrl.includes('http') ? data.eventPageUrl : 'https://' + data.eventPageUrl"
-                  target="_blank"
-                  class="event-page-url"
-                  >{{ data.eventPageUrl }}</a
-                >
+                <a :href="PrimitiveHelper.getValidUrl(data.eventPageUrl)" target="_blank" class="event-page-url">{{
+                  data.eventPageUrl
+                }}</a>
               </li>
               <li v-if="data.eventStartAt && data.eventEndAt">
                 <div class="event-start-end">
@@ -84,7 +81,7 @@
     </ul>
     <div class="d-grid">
       <button class="load-more-btn g-btn" @click="app.onToggleMoreData">
-        <i class="bi bi-arrow-clockwise icon"></i>
+        <i class="bi bi-arrow-clockwise icon" :class="{ loading: app.isLoading.value }"></i>
         {{ app.t(`app.loadMore`, { value: app.target.value }) }}
       </button>
     </div>
@@ -95,17 +92,19 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { AppConst } from "@/const/app.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { TimelineListEmits, TimelineListProps } from "./TimelineListComponent";
 import type { Ref } from "vue";
 import type { NewsModel } from "@/models/news.model";
 
 const props = defineProps<TimelineListProps>();
-const emit = defineEmits<TimelineListEmits>();
+const emits = defineEmits<TimelineListEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public target: Ref<string> = this.ref(props.target);
     public limit: Ref<number> = this.ref(props.limit);
+    public isLoading: Ref<boolean> = this.ref(false);
 
     public filtersData: Ref<Array<NewsModel>> = this.computed(() => {
       return props.data.filter((_, index) => {
@@ -118,17 +117,21 @@ const app = defineClassComponent(
     }
 
     public onToggleEditButton = (id: number) => {
-      emit("onToggleEditButton", id);
+      emits("onToggleEditButton", id);
     };
 
     public onToggleDeleteButton = (id: number) => {
-      emit("onToggleDeleteButton", id);
+      emits("onToggleDeleteButton", id);
     };
 
     public onToggleMoreData = () => {
-      if (this.limit.value < props.data.length) {
-        this.limit.value += props.limit;
-      }
+      this.isLoading.value = true;
+      setTimeout(() => {
+        if (this.limit.value < props.data.length) {
+          this.limit.value += props.limit;
+        }
+        this.isLoading.value = false;
+      }, 1600);
     };
   },
 );
@@ -310,7 +313,20 @@ const app = defineClassComponent(
     & .icon {
       font-size: 1rem;
       margin-right: 0.5rem;
+
+      &.loading {
+        animation: spin 1s infinite forwards;
+      }
     }
+  }
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0);
+  }
+  100% {
+    transform: rotate(360deg);
   }
 }
 </style>

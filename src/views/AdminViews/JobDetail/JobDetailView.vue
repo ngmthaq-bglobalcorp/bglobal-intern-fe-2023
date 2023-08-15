@@ -30,10 +30,12 @@ const props = defineProps<JobDetailProps>();
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public organizationStore = useOrganizationStore();
+
     public columns: Ref<Array<any>> = this.ref([
       { field: "name", headerName: "name" },
       { field: "like", headerName: "like" },
     ]);
+
     public job: Ref<JobModel> = this.computed(() => this.organizationStore.job);
     public seekers: Ref<Array<SeekerModel>> = this.computed(() => this.organizationStore.actionSeekers);
 
@@ -41,8 +43,10 @@ const app = defineClassComponent(
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         await this.organizationStore.fetchFindJobById(props.jobId);
         await this.organizationStore.fetchAllSeekerLikeJob(props.jobId);
+        this.commonStore.setIsLoading(false);
       });
     }
 
@@ -51,11 +55,13 @@ const app = defineClassComponent(
     };
 
     public onToggleDeleteButton = async () => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.organizationStore.fetchDeleteJob(props.jobId);
       if (isSuccess) {
         this.organizationStore.jobs = this.organizationStore.jobs.filter((job) => job.id != parseInt(props.jobId));
         this.router.push(PathConst.adminJobsList);
       }
+      this.commonStore.setIsLoading(true);
     };
   },
 );

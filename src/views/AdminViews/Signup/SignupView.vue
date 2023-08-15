@@ -224,6 +224,7 @@ import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
+
     public show: Ref<boolean> = this.ref(false);
     public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");
@@ -311,6 +312,7 @@ const app = defineClassComponent(
           phoneNumber: this.phoneNumber.value,
           address: this.address.value,
         };
+        this.commonStore.setIsLoading(true);
         const isSuccess = await this.authStore.fetchOrganizationSignUp(data);
         if (isSuccess) {
           if (isSuccess.includes("Username")) {
@@ -328,6 +330,7 @@ const app = defineClassComponent(
         } else {
           this.errorInput.value = this.t(`message.errorUsernameOrPassword`);
         }
+        this.commonStore.setIsLoading(false);
       }
     };
 
@@ -389,15 +392,15 @@ const app = defineClassComponent(
 @import "@/assets/scss/admin";
 
 .signup-container {
-  flex: 1;
+  width: 100%;
+  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 100vh;
 
   & .content {
     width: 100%;
-    padding: 3rem 0;
+    padding: 3rem 1rem;
     max-width: 25rem;
 
     & .content-title {

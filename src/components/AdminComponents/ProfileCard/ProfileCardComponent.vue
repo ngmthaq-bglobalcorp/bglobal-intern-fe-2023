@@ -101,8 +101,8 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import type { Ref } from "vue";
 import type { ProfileCardProps } from "./ProfileCardComponent";
+import type { Ref } from "vue";
 
 const props = defineProps<ProfileCardProps>();
 
