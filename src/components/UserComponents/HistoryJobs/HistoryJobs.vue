@@ -174,10 +174,11 @@ const app = defineClassComponent(
 
         & .tag_dislike {
           color: #000;
-          background: #b2b2b2;
+          background-color: #b2b2b2;
         }
 
         & .show_details {
+          position: relative;
           color: #9f085f;
           background-color: $white;
           border: 2px solid #9f085f;
@@ -185,7 +186,6 @@ const app = defineClassComponent(
           display: inline-flex;
           align-items: center;
           justify-content: center;
-          position: relative;
           outline: 0px;
           padding: 10px 10px 10px 20px;
           margin-left: 5px;

@@ -41,32 +41,38 @@ const app = defineClassComponent(
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         if (props.username === this.user.value.username) {
           await this.commonStore.fetchUserProfileById(this.user.value.id.toString());
         } else {
           await this.commonStore.fetchUserProfileById(props.username);
         }
+        this.commonStore.setIsLoading(false);
       });
 
       this.watch(
         () => props.username,
         async (id) => {
+          this.commonStore.setIsLoading(true);
           if (id === this.user.value.username) {
             await this.commonStore.fetchUserProfileById(this.user.value.id.toString());
           } else {
             await this.commonStore.fetchUserProfileById(id);
           }
+          this.commonStore.setIsLoading(false);
         },
       );
     }
 
     public onUpdateAvatar = async (avatarUrl: string) => {
+      this.commonStore.setIsLoading(true);
       const organization = new OrganizationModel(this.profile.value);
       organization.avatar = avatarUrl;
       const isSuccess = await this.organizationStore.fetchUpdateProfile(organization);
       if (isSuccess) {
         this.profile.value.avatar = avatarUrl;
       }
+      this.commonStore.setIsLoading(false);
     };
 
     public onToggleUpdateProfile = () => {

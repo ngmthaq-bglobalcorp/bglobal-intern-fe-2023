@@ -12,10 +12,9 @@ export const api = new Api();
 export const useSeekersStore = defineClassStore(
   class Store extends BaseStore {
     public name: string = "seekers";
-
+    public job: Ref<JobModel> = this.ref(new JobModel({}));
     public profile: Ref<SeekerModel> = this.ref(new SeekerModel({}));
     public jobs: Ref<Array<JobModel>> = this.ref([]);
-    public job: Ref<JobModel> = this.ref(new JobModel({}));
     public totalJobs: Ref<number> = this.ref(0);
     public totalJobsWithCondition: Ref<number> = this.ref(0);
     public listLikeJobs: Ref<Array<JobModel>> = this.ref([]);

@@ -29,7 +29,7 @@
       <div class="history_list" v-for="job in app.filtersJobs.value" :key="job.id">
         <HistoryJobs
           :data="job"
-          :is-like="app.seekersStore.listLikeJobs.includes(job)"
+          :is-like="app.seekersStore.listLikeJobs.find((value) => value.id === job.id) ? true : false"
           @on-click-card="app.onClickCard"
           @on-toggle-view-detail="app.onToggleViewDetail"
         />
@@ -81,7 +81,7 @@ const app = defineClassComponent(
 
     public isLikeList: Ref<boolean> = this.ref(true);
     public pageNumber: Ref<number> = this.ref(1);
-    public pageSize: Ref<number> = this.ref(5);
+    public pageSize: Ref<number> = this.ref(10);
 
     public totalData: Ref<number> = this.computed(() => {
       if (this.isLikeList.value) {
