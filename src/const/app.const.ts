@@ -34,5 +34,8 @@ export class AppConst {
     listView: "list",
   };
 
-  public static CITY = ["Ha Noi", "Ho Chi Minh", "Hai Phong"];
+  public static DEFAULT = {
+    location: "_defautl",
+    time: "_defautl",
+  };
 }

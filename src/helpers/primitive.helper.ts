@@ -96,7 +96,8 @@ export class PrimitiveHelper {
 
   public static getSalary = (salary: number) => {
     let text = "";
-    text += "Salary: " + salary;
+    // text += "Salary: " + salary.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+    text += "Salary: " + salary.toLocaleString("vi-VN") + " VND";
     return text;
   };
 

@@ -5,7 +5,7 @@
       class="link"
       target="_blank"
       :href="PrimitiveHelper.getValidUrl(news.eventPageUrl)"
-      v-for="news in app.newsArray.value"
+      v-for="news in app.filterData.value"
       :key="news.id"
     >
       <template v-if="news.category === AppConst.NEWS_CATEGORY.seminar">
@@ -67,10 +67,15 @@ import type { Ref } from "vue";
 import type { NewsModel } from "@/models/news.model";
 
 const props = defineProps<NewsListProps>();
+const today = new Date();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public newsArray: Ref<Array<NewsModel>> = this.computed(() => props.newsArray);
+    public filterData: Ref<Array<NewsModel>> = this.computed(() => {
+      return props.newsArray.filter((value) => {
+        return value.opensAt <= today && value.expiresAt >= today;
+      });
+    });
 
     public constructor() {
       super();

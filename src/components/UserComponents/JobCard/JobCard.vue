@@ -216,14 +216,14 @@ const app = defineClassComponent(
         }
       }
     }
-  }
 
-  & .search_bar.hide {
-    top: -250px;
-    width: 100%;
-    transition: all 0.2s linear 0s;
-    position: absolute;
-    z-index: 2;
+    &.hide {
+      top: -250px;
+      width: 100%;
+      transition: all 0.2s linear 0s;
+      position: absolute;
+      z-index: 2;
+    }
   }
 }
 
@@ -420,7 +420,7 @@ const app = defineClassComponent(
     width: 90px;
     z-index: 1;
 
-    & .like_button {
+    &.like_button {
       bottom: 100px;
       box-shadow: 0 4px 8px rgba(157, 6, 95, 0.3);
       left: 4px;
@@ -432,7 +432,7 @@ const app = defineClassComponent(
       }
     }
 
-    & .dislike_button {
+    &.dislike_button {
       bottom: 100px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
       right: 4px;
@@ -444,7 +444,7 @@ const app = defineClassComponent(
       }
     }
 
-    & .skip_button {
+    &.skip_button {
       height: 45px;
       left: 50%;
       padding: 0;
@@ -474,7 +474,7 @@ const app = defineClassComponent(
   align-items: center;
   justify-content: center;
 
-  & button {
+  & .guide_swipe {
     color: #9f085f;
     border: 2px solid #9f085f;
     height: 30px;
@@ -508,7 +508,7 @@ const app = defineClassComponent(
       font-size: 1.25rem;
     }
 
-    & p {
+    & .title {
       font-weight: 500;
       margin-left: 4px;
       margin: 0px;
@@ -521,37 +521,7 @@ const app = defineClassComponent(
   }
 }
 
-.guide_content_swiper {
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 9000;
-  position: absolute;
-  background: rgba(255, 255, 255, 0.7);
-
-  & button {
-    top: 8px;
-    right: 8px;
-    position: absolute;
-    background-color: transparent;
-    cursor: pointer;
-    outline: 0px;
-    border: 0px;
-  }
-  & img {
-    top: 50%;
-    left: 50%;
-    width: 80%;
-    height: auto;
-    position: absolute;
-    transform: translate(-50%, -50%);
-  }
-  & .hide {
-    display: none;
-  }
-}
-
+.guide_content_swiper,
 .guide_content_button {
   top: 0;
   left: 0;
@@ -559,7 +529,6 @@ const app = defineClassComponent(
   bottom: 0;
   z-index: 9000;
   position: absolute;
-  background: white;
 
   & button {
     top: 8px;
@@ -578,8 +547,16 @@ const app = defineClassComponent(
     position: absolute;
     transform: translate(-50%, -50%);
   }
-  & .hide {
+  &.hide {
     display: none;
   }
+}
+
+.guide_content_swiper {
+  background: rgba(255, 255, 255, 0.7);
+}
+
+.guide_content_button {
+  background: white;
 }
 </style>

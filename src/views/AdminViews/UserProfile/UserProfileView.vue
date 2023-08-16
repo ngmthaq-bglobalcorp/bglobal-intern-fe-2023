@@ -20,11 +20,11 @@ import ProfileHeader from "@/components/AdminComponents/ProfileHeader/ProfileHea
 import ProfileCard from "@/components/AdminComponents/ProfileCard/ProfileCardComponent.vue";
 import { PathConst } from "@/const/path.const";
 import { OrganizationModel } from "@/models/organization.model";
+import { useAuthStore } from "@/stores/auth.store";
 import { useOrganizationStore } from "@/stores/organization.store";
 import type { UserProfileProps } from "./UserProfileView";
 import type { Ref } from "vue";
 import type { UserModel } from "@/models/user.model";
-import { useAuthStore } from "@/stores/auth.store";
 
 const props = defineProps<UserProfileProps>();
 

@@ -227,6 +227,8 @@
     },
     "form": {
       "location": "Location",
+      "secondLocation": "Second location",
+      "thirdLocation": "Third location",
       "startTime": "Start time",
       "endTime": "End time",
       "conditions": {
@@ -239,6 +241,7 @@
       },
       "applicable": {
         "title": "Applicable job",
+        "jobs": "Jobs",
         "result": "View search results",
         "searchCondition": "Search condition"
       }
