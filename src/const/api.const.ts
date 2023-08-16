@@ -49,6 +49,7 @@ export class ApiConst {
     seekerInteractWithJobs: "/seeker/jobs/:id",
     getSeekerProfile: "/seeker/profile",
     updateSeekerProfile: "/seeker/profile/update",
+    getSeekerHistory: "/seeker/history",
   };
 
   public static organizationsEndpoints = {

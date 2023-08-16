@@ -8,7 +8,7 @@
         @on-update-avatar="app.onUpdateAvatar"
         @on-toggle-update-profile="app.onToggleUpdateProfile"
       />
-      <ProfileCard :profile="app.profile.value" />
+      <ProfileCard :profile="app.profile.value" :editable="app.editable.value" />
     </div>
   </AdminLayout>
 </template>
