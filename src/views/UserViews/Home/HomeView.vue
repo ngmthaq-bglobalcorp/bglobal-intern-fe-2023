@@ -13,7 +13,7 @@
     <div class="userlayout">
       <FormSearch />
       <div class="search-condition">
-        <img class="" src="@/assets/img/ic_search.71514682dc7410fdb320ef5038e30837.svg" />
+        <img class="" src="@/assets/img/ic_search.svg" />
         <p class="">{{ app.t("jobsApp.form.applicable.searchCondition") }}</p>
       </div>
       <NewsList :news-array="app.newsArray.value" />

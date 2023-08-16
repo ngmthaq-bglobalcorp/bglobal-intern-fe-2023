@@ -17,6 +17,11 @@ export class AppConst {
     disabled: "DISABLE",
   };
 
+  public static INTERACTION_TYPE = {
+    like: "LIKE",
+    dislike: "DISLIKE",
+  };
+
   public static ORGANIZATION_TYPE = {
     typeB: "B",
     typeC: "C",

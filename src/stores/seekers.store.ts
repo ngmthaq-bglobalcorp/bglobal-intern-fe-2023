@@ -18,6 +18,7 @@ export const useSeekersStore = defineClassStore(
     public jobs: Ref<Array<JobModel>> = this.ref([]);
     public job: Ref<JobModel> = this.ref(new JobModel({}));
     public totalJobs: Ref<number> = this.ref(0);
+    public totalJobsWithCondition: Ref<number> = this.ref(0);
 
     public fetchProfile = async () => {
       try {
@@ -51,6 +52,7 @@ export const useSeekersStore = defineClassStore(
         }
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
@@ -78,10 +80,29 @@ export const useSeekersStore = defineClassStore(
         }
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
-    public fetchTotalJobs = async (data: any) => {
+    public fetchTotalJobs = async () => {
+      try {
+        const res = await api.get(ApiConst.seekersEndpoints.getAllSeekerJobs, { only_meta: "true" });
+        if (res.status === ApiConst.status.ok) {
+          const data: any = await res.text();
+          console.log(data);
+          this.totalJobs.value = parseInt(data);
+          console.log(this.totalJobs.value);
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    };
+
+    public fetchTotalJobsWithCondition = async (data: any) => {
       try {
         const params = [];
         params.push(["only_meta", "true"]);
@@ -104,13 +125,12 @@ export const useSeekersStore = defineClassStore(
         data.searchLabelsArray.map((value: any) => {
           params.push(["tagId", value]);
         });
-        console.log(params);
         const res = await api.get(ApiConst.seekersEndpoints.getAllSeekerJobs, params);
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.text();
           console.log(data);
-          this.totalJobs.value = parseInt(data);
-          console.log(this.totalJobs.value);
+          this.totalJobsWithCondition.value = parseInt(data);
+          console.log(this.totalJobsWithCondition.value);
           return true;
         } else {
           return false;
@@ -144,7 +164,6 @@ export const useSeekersStore = defineClassStore(
         data.searchLabelsArray.map((value: any) => {
           params.push(["tagId", value]);
         });
-        console.log(params);
         const res = await api.get(ApiConst.seekersEndpoints.getAllSeekerJobs, params);
         if (res.status === ApiConst.status.ok) {
           const data: any[] = await res.json();
@@ -252,6 +271,23 @@ export const useSeekersStore = defineClassStore(
         }
       } catch (error) {
         console.log(error);
+        return false;
+      }
+    };
+
+    public fetchInteractWithJob = async (id: string, interactionType: string) => {
+      try {
+        const res = await api.post(
+          ApiConst.seekersEndpoints.seekerInteractWithJobs.replace(":id", id) + "?interactionType=" + interactionType,
+        );
+        if (res.status === ApiConst.status.ok) {
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        console.log(error);
+        return false;
       }
     };
   },
