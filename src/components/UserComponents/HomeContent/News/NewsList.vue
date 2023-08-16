@@ -1,6 +1,6 @@
 <template>
   <div class="news">
-    <h1 class="tittle">{{ app.t("jobsApp.news.title") }}</h1>
+    <h1 class="title">{{ app.t("jobsApp.news.title") }}</h1>
     <a
       class="link"
       target="_blank"

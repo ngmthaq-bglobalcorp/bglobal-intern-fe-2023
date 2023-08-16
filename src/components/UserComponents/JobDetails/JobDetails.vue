@@ -2,34 +2,50 @@
   <div class="body_all">
     <div id="body">
       <div class="display_details" style="height: calc(100% - 183px)">
-        <button class="return_btn" tabindex="0" type="button">
+        <button class="return_btn" tabindex="0" type="button" @click="app.onToggleReturn">
           <i class="bi bi-caret-left"></i>
-          <p class="">Return</p>
+          <span class="content">{{ app.t(`jobsApp.jobCard.return`) }}</span>
         </button>
         <div class="like_and_dislike_button">
-          <button class="button" tabindex="0" type="button" id="like-button-id">
-            <i class="bi bi-bookmark"></i>
-            <p class="content">Like</p>
+          <button
+            class="button"
+            :class="{ active: app.isLike.value }"
+            tabindex="0"
+            type="button"
+            id="like-button-id"
+            @click="app.onToggleLikeButton"
+          >
+            <i class="bi bi-bookmark icon"></i>
+            <span class="content">{{ app.t(`jobsApp.jobCard.like`) }}</span>
           </button>
-          <button class="button" tabindex="0" type="button" id="dislike-button-id">
-            <i class="bi bi-x-lg"></i>
-            <p class="content">Dislike</p>
+          <button
+            class="button"
+            :class="{ active: app.isDislike.value }"
+            tabindex="0"
+            type="button"
+            id="dislike-button-id"
+            @click="app.onToggleDislikeButton"
+          >
+            <i class="bi bi-x-lg icon"></i>
+            <span class="content">{{ app.t(`jobsApp.jobCard.dislike`) }}</span>
           </button>
         </div>
-        <img class="main_image" :src="app.job.value.mainImageUrl" :alt="app.job.value.mainImageDesc" />
+        <img :src="app.job.value.mainImageUrl" alt="Main image" v-if="app.job.value.mainImageUrl" />
+        <img :src="app.job.value.subImages[0].url" alt="Main image" v-else-if="app.job.value.subImages.length > 0" />
+        <div style="padding: 20px" v-else></div>
         <div class="details_content">
-          <p class="title_1">{{ app.job.value.title }}</p>
-          <p class="title_2">{{ app.job.value.jobTitleCatchPhrase }}</p>
+          <p class="title_1" v-if="app.job.value.title">{{ app.job.value.title }}</p>
+          <p class="title_2" v-if="app.job.value.jobTitleCatchPhrase">{{ app.job.value.jobTitleCatchPhrase }}</p>
           <div class="card_infor">
-            <div class="card_infor_item">
+            <div class="card_infor_item" v-if="app.job.value.location">
               <i class="bi bi-geo-alt"></i>
               <div>{{ app.job.value.location.name }}</div>
             </div>
-            <div class="card_infor_item">
+            <div class="card_infor_item" v-if="app.job.value.salary">
               <i class="bi bi-cash-coin"></i>
               <div>{{ PrimitiveHelper.getSalary(app.job.value.salary) }}</div>
             </div>
-            <div class="card_infor_item">
+            <div class="card_infor_item" v-if="app.job.value.workingHours.length > 0">
               <i class="bi bi-clock"></i>
               <div>{{ PrimitiveHelper.getWorkingHours(app.job.value.workingHours) }}</div>
             </div>
@@ -95,20 +111,52 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import type { JobDetailProps } from "./JobDetails";
-import type { JobModel } from "@/models/job.model";
-import type { Ref } from "vue";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { useSeekersStore } from "@/stores/seekers.store";
+import type { JobDetailEmits, JobDetailProps } from "./JobDetails";
+import type { Ref } from "vue";
+import type { JobModel } from "@/models/job.model";
 
 const props = defineProps<JobDetailProps>();
+const emits = defineEmits<JobDetailEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public seekersStore = useSeekersStore();
+
     public job: Ref<JobModel> = this.computed(() => props.data);
+    public isLike: Ref<boolean> = this.computed(() => {
+      const job = app.seekersStore.listLikeJobs.find((value) => value.id == props.data.id);
+      if (job) {
+        return true;
+      } else {
+        return false;
+      }
+    });
+    public isDislike: Ref<boolean> = this.computed(() => {
+      const job = app.seekersStore.listHistoryJobs.find((value) => value.id == props.data.id);
+      if (job && !this.isLike.value) {
+        return true;
+      } else {
+        return false;
+      }
+    });
 
     public constructor() {
       super();
     }
+
+    public onToggleReturn = () => {
+      emits("onToggleReturn");
+    };
+
+    public onToggleLikeButton = () => {
+      emits("onToggleLikeButton", this.job.value.id);
+    };
+
+    public onToggleDislikeButton = () => {
+      emits("onToggleDislikeButton", this.job.value.id);
+    };
   },
 );
 </script>
@@ -136,52 +184,36 @@ const app = defineClassComponent(
       background-color: #fff;
 
       & .return_btn {
+        position: absolute;
         top: 10px;
         left: 10px;
         color: #9f085f;
-        border: 2px solid #9f085f;
-        position: absolute;
-        min-width: 78px;
         background: rgba(255, 255, 255, 0.5);
+        border: 2px solid #9f085f;
         border-radius: 24px;
+        min-width: 78px;
         display: inline-flex;
         align-items: center;
         justify-content: center;
-        box-sizing: border-box;
         outline: 0px;
         margin: 0px;
         cursor: pointer;
-        user-select: none;
-        vertical-align: middle;
-        appearance: none;
-        text-decoration: none;
-        font-family: Roboto, Helvetica, Arial, sans-serif;
-        letter-spacing: 0.02857em;
-        text-transform: uppercase;
         transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
           box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
           color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 
-        & i {
-          user-select: none;
-          display: inline-block;
-          fill: currentcolor;
-          flex-shrink: 0;
-          transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-          font-size: 1rem;
+        &:hover {
+          color: $white;
+          background-color: #9f085f;
         }
 
-        & p {
-          font-size: 13px;
+        & .content {
+          font-size: 14px;
           font-weight: 400;
-          line-height: 14px;
-          margin: 0;
+          line-height: 10px;
+          letter-spacing: 0.02857em;
+          text-transform: uppercase;
         }
-      }
-
-      & .return_btn:hover {
-        background-color: #9f085f;
-        color: white;
       }
 
       & .like_and_dislike_button {
@@ -204,14 +236,15 @@ const app = defineClassComponent(
           box-sizing: border-box;
           outline: 0px;
           margin: 0px;
+          padding: 7px 14px;
           cursor: pointer;
           user-select: none;
           vertical-align: middle;
           appearance: none;
           text-decoration: none;
-          font-weight: 500;
-          font-size: 0.8125rem;
-          line-height: 1.75;
+          font-size: 14px;
+          font-weight: 400;
+          line-height: 10px;
           letter-spacing: 0.02857em;
           text-transform: uppercase;
           transition: background-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
@@ -220,35 +253,34 @@ const app = defineClassComponent(
 
           &#like-button-id {
             color: #000;
-            margin-right: 10px;
             background-color: #fff;
+            margin-right: 10px;
 
             &.active {
-              background-color: #9f085f;
               color: white;
+              background-color: #9f085f;
             }
           }
 
           &#dislike-button-id {
             color: #000;
             background-color: #fff;
+
+            &.active {
+              color: #000;
+              background-color: #b2b2b2;
+            }
           }
 
-          & i {
-            user-select: none;
-            display: inline-block;
-            fill: currentcolor;
-            flex-shrink: 0;
+          & .icon {
+            margin-right: 0.25rem;
             transition: fill 200ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
-            font-size: 1rem;
           }
 
-          & p {
-            padding: 7px 2px;
+          & content {
             font-size: 10px;
             font-weight: 700;
             line-height: 10px;
-            margin: 0;
           }
         }
       }

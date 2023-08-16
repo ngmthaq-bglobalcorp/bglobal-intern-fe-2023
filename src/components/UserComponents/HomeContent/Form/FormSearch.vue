@@ -134,6 +134,7 @@ const app = defineClassComponent(
 
       this.onBeforeMount(async () => {
         const data: any = StorageHelper.getLocalStorage(KeyConst.keys.searchCondition);
+        this.commonStore.setIsLoading(true);
         if (data) {
           this.startTime.value = data.startTime || AppConst.DEFAULT.time;
           this.endTime.value = data.endTime || AppConst.DEFAULT.time;
@@ -146,6 +147,7 @@ const app = defineClassComponent(
         }
         await this.commonStore.fetchAllLocations();
         await this.commonStore.fetchAllSearchLabels();
+        this.commonStore.setIsLoading(false);
       });
 
       this.commonStore.eventBus.on("showFormSearch", () => {

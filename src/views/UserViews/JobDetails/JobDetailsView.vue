@@ -1,6 +1,11 @@
 <template>
   <UserLayout>
-    <JobDetails :data="app.job.value" />
+    <JobDetails
+      :data="app.job.value"
+      @on-toggle-return="app.onToggleReturn"
+      @on-toggle-like-button="app.onToggleLikeButton"
+      @on-toggle-dislike-button="app.onToggleDislikeButton"
+    />
   </UserLayout>
 </template>
 
@@ -8,6 +13,8 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import UserLayout from "@/layouts/UserLayout/UserLayout.vue";
 import JobDetails from "@/components/UserComponents/JobDetails/JobDetails.vue";
+import { AppConst } from "@/const/app.const";
+import { PathConst } from "@/const/path.const";
 import { useSeekersStore } from "@/stores/seekers.store";
 import type { JobDetailProps } from "./JobDetailsView";
 import type { Ref } from "vue";
@@ -30,6 +37,28 @@ const app = defineClassComponent(
         this.commonStore.setIsLoading(false);
       });
     }
+
+    public onToggleReturn = () => {
+      this.router.push(PathConst.userJobsList);
+    };
+
+    public onToggleLikeButton = async (id: number) => {
+      this.commonStore.setIsLoading(true);
+      const isSuccess = await this.seekersStore.fetchInteractWithJob(id.toString(), AppConst.INTERACTION_TYPE.like);
+      if (isSuccess) {
+        await this.seekersStore.fetchSeekerHistory();
+      }
+      this.commonStore.setIsLoading(false);
+    };
+
+    public onToggleDislikeButton = async (id: number) => {
+      this.commonStore.setIsLoading(true);
+      const isSuccess = await this.seekersStore.fetchInteractWithJob(id.toString(), AppConst.INTERACTION_TYPE.dislike);
+      if (isSuccess) {
+        await this.seekersStore.fetchSeekerHistory();
+      }
+      this.commonStore.setIsLoading(false);
+    };
   },
 );
 </script>
