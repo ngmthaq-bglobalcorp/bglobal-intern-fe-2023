@@ -73,7 +73,7 @@ const app = defineClassComponent(
       color: #fff;
       display: flex;
       align-items: center;
-      margin-left: 2px;
+      margin-left: 10px;
       justify-content: center;
 
       & p {

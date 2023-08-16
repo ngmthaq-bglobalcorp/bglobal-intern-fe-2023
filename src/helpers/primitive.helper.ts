@@ -66,8 +66,13 @@ export class PrimitiveHelper {
   };
 
   public static getSalary = (salary: number) => {
-    let text = "";
-    text += "Salary: " + salary;
+    // let text = "";
+    const text = salary.toLocaleString("vi-VN", {
+      style: "currency",
+      currency: "VND",
+      currencyDisplay: "symbol",
+    });
+    // text += formattedAmount;
     return text;
   };
 

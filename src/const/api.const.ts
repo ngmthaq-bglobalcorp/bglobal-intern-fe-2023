@@ -45,6 +45,7 @@ export class ApiConst {
 
   public static seekersEndpoints = {
     getAllSeekerJobs: "/seeker/jobs?",
+    getJobsById: "/seeker/jobs/{id}",
     updateSeekerJobs: "/seeker/jobs/{id}",
     getSeekerProfile: "/seeker/profile",
     updateSeekerProfile: "/seeker/profile/update",

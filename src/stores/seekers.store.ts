@@ -13,7 +13,7 @@ export const api = new Api();
 export const useSeekersStore = defineClassStore(
   class Store extends BaseStore {
     public name: string = "seekers";
-
+    public job: Ref<JobModel> = this.ref(new JobModel({}));
     public profile: Ref<SeekerModel> = this.ref(new SeekerModel({}));
     public jobs: Ref<Array<JobModel>> = this.ref([]);
 
@@ -126,6 +126,60 @@ export const useSeekersStore = defineClassStore(
           });
           this.jobs.value = jobs;
           console.log(this.jobs.value);
+          return true;
+        } else {
+          return false;
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    public fetchShowJobById = async (id: string) => {
+      try {
+        const res = await api.get(ApiConst.commonEndpoints.findJobById.replace("{id}", id));
+        if (res.status === ApiConst.status.ok) {
+          const data: any = await res.json();
+          console.log(data);
+          const job = {
+            id: data.id,
+            mainImageUrl: data.mainImage.url,
+            mainImageDesc: data.mainImage.description,
+            title: data.title,
+            jobTitleCatchPhrase: data.jobTitleCatchPhrase,
+            location: new LocationModel({
+              id: data.location.id,
+              name: data.location.city,
+            }),
+            salary: data.salary.monthly,
+            workingHours: data.workingHours,
+            searchLabels: data.searchLabels
+              ? data.searchLabels.map((value: any) => {
+                  return new SearchLabelModel({
+                    id: value.id,
+                    name: value.name,
+                    isEnabled: value.isEnabled,
+                  });
+                })
+              : [],
+            webApplication: data.webApplication.url,
+            catchText: data.catchText,
+            leadText: data.leadText,
+            subImages: data.subImages,
+            properties: data.properties,
+            postScripts: data.postScripts,
+            companySurvey: data.displayed && data.companySurvey.contents,
+            barometer: data.displayed && data.barometer.contents,
+            photoGallery: data.photoGallery.contents,
+            interview: data.displayed && data.interview.contents,
+            productCode: data.productCode,
+            opensAt: data.opensAt,
+            expiresAt: data.expiresAt,
+            updatedAt: data.updatedAt,
+            createdAt: data.createdAt,
+          };
+          this.job.value = new JobModel(job);
+          console.log(this.job.value);
           return true;
         } else {
           return false;

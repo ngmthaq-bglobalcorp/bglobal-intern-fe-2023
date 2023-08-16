@@ -25,7 +25,8 @@
       <div class="card_header">
         <div class="card_header_types_const">
           <div class="card_header_button_const">
-            <button @click="app.onClickCard(app.newsArray.id)">
+            <!-- <button @click="app.onClickCard(app.newsArray.id)"> -->
+            <button>
               <span>View the detail</span>
               <img src="@/assets/img/ic_arrow_forward.d87012f2877663d0aca7d5168712a610.svg" />
             </button>

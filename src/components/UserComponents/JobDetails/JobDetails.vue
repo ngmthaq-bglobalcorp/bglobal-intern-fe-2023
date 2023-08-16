@@ -16,106 +16,77 @@
             <p class="content">Dislike</p>
           </button>
         </div>
-        <img
-          class="main_image"
-          src="https://vcdn-sohoa.vnecdn.net/2021/02/16/v2-4f48da9ef042a1915ebfedd0682-6733-6243-1613447924.jpg"
-        />
+        <img class="main_image" :src="app.job.value.mainImageUrl" :alt="app.job.value.mainImageDesc" />
         <div class="details_content">
-          <p class="title_1">Company name</p>
-          <p class="title_2">Title 2</p>
+          <p class="title_1">{{ app.job.value.title }}</p>
+          <p class="title_2">{{ app.job.value.jobTitleCatchPhrase }}</p>
           <div class="card_infor">
             <div class="card_infor_item">
               <i class="bi bi-geo-alt"></i>
-              <div>Location</div>
+              <div>{{ app.job.value.location.name }}</div>
             </div>
             <div class="card_infor_item">
               <i class="bi bi-cash-coin"></i>
-              <div>Salary</div>
+              <div>{{ PrimitiveHelper.getSalary(app.job.value.salary) }}</div>
             </div>
             <div class="card_infor_item">
               <i class="bi bi-clock"></i>
-              <div>Time</div>
+              <div>{{ PrimitiveHelper.getWorkingHours(app.job.value.workingHours) }}</div>
             </div>
           </div>
-          <div class="card_footer">
-            <div class="card_footer_label">急なお休み･早退・シフト変更OK</div>
-            <div class="card_footer_label">応募前又は面接時職場見学OK</div>
-            <div class="card_footer_label">休憩室有</div>
-            <div class="card_footer_label">残業原則なし</div>
-            <div class="card_footer_label">車通勤OK</div>
-            <div class="card_footer_label">扶養控除内OK</div>
-            <div class="card_footer_label">履歴書不要</div>
-            <div class="card_footer_label">週3日以内の勤務</div>
+          <div class="card_footer" v-if="app.job.value.searchLabels.length > 0">
+            <div class="card_footer_label" v-for="label in app.job.value.searchLabels" :key="label.id">
+              {{ label.name }}
+            </div>
           </div>
-          <p class="main_details">
-            ★Time/13:30〜16:30 8/11･22･25･29/Tokachi Plaza 4F video editing room 8/8･Otofuke General Welfare Center 1F
-            Training Room 2 8/18･Otofuke Kyoei Community Center 1F training room ★Quo card gift for registered users
+          <p class="catch_text" v-if="app.job.value.catchText">
+            {{ app.job.value.catchText }}
           </p>
-          <p class="second_details">
-            Our company is a dispatch company born in Hokkaido♪ We are rooted in the local area and are close to the job
-            seekers, and we are trying to provide a job follow-up service so that you can work with peace of mind. I
-            will do my best so that everyone can work lively! <br />
-            (Happy point) ○Daily payment system available/regulations available ○Weekly payment system available/paid
-            every Friday/regulations available <br />
-            (Flow until joining the company) Application→Description of the flow up to work and registration→Workplace
-            tour→Joining procedures→Start of work <br />
-            (Job briefing session held) Advance reservations are not required. We are looking forward to seeing all of
-            you with all the infection measures ♪ *There are many jobs where people of all ages can play an active role.
+          <p class="lead_text" v-if="app.job.value.leadText">
+            {{ app.job.value.leadText }}
           </p>
-          <hr class="" />
-          <div class="sub_images">
-            <div class="sub_image">
-              <img
-                class="image"
-                src="https://haj-zone.imgix.net/70860d56-a24c-46a7-9953-92418c41e02b.jpg?auto=format%2Cenhance&amp;bri=1&amp;fill-color=fff&amp;fit=fill&amp;fp-x=0.5&amp;fp-y=0.5&amp;fp-z=1&amp;h=405&amp;q=60&amp;w=540"
-              />
-              <p class="description">
-                ＜嬉しい特典有＞ 当社にご登録後、お友達を紹介していただいた方に、3万円支給(規定有)制度有！
-                皆さん是非ご応募･ご登録ください！
-              </p>
+          <hr class="" v-if="app.job.value.subImages.length > 0" />
+          <div class="sub_images" v-if="app.job.value.subImages.length > 0">
+            <div class="sub_image" v-for="subImage in app.job.value.subImages" :key="subImage.id">
+              <img class="image" :src="subImage.url" alt="Sub Image" />
+              <p class="description">{{ subImage.description }}</p>
             </div>
-            <div class="sub_image" style="margin-left: 45px">
-              <img
-                class="image"
-                src="https://haj-zone.imgix.net/02929261-cb3d-4ed0-be68-8374d005be8f.jpg?auto=format%2Cenhance&amp;bri=1&amp;fill-color=fff&amp;fit=crop&amp;fp-x=0.5&amp;fp-y=0.5&amp;fp-z=1&amp;h=405&amp;q=60&amp;w=540"
-              />
-              <p class="description">
-                ○寮完備（Wi-Fi･家具･家電･備品付き/家賃月21,800円〜、1DK）リフォームしたばかりのキレイなお部屋です
-              </p>
+          </div>
+          <div class="properties" v-if="app.job.value.properties.length > 0">
+            <hr />
+
+            <div class="property" v-for="property in app.job.value.properties" :key="property.id">
+              <div class="title">[{{ property.title }}]</div>
+              <div class="content">{{ property.body }}</div>
+            </div>
+          </div>
+
+          <div class="post_scripts" v-if="app.job.value.postScripts.length > 0">
+            <hr />
+            <div class="content" v-for="post in app.job.value.postScripts" :key="post.id">
+              <i class="bi bi-star icon"></i>
+              <span class="body">{{ post.body }}</span>
             </div>
           </div>
           <hr />
-          <div class="properties">
-            <div class="property">
-              <div class="title">勤務先</div>
-              <div class="content">◇中川郡忠類<br />◇十勝郡浦幌町<br />※どちらも勤務出来る方</div>
-            </div>
-            <div class="property">
-              <div class="title">受動喫煙防止措置</div>
-              <div class="content">あり、屋内禁煙</div>
-            </div>
+          <div
+            class="job-photo-wrapper job-flex job-center job-border-bottom"
+            v-if="app.job.value.photoGallery.length > 0"
+          >
+            <ul class="photo-list list">
+              <li class="photo-item" v-for="photo in app.job.value.photoGallery" :key="photo.id">
+                <img :src="photo.url" alt="Photo gallery" class="photo" />
+                <span class="desc">{{ photo.description }}</span>
+              </li>
+            </ul>
           </div>
-          <hr />
-          <div class="post_scripts">
-            <div class="content">
-              ★＜入社キャンペーン！毎週スペシャルボーナス！＞<br />総額4万円支給！<br />◇給与の他に、1日2,000円×最大20日分（規定有）毎週末にスペシャルボーナスとして支給します！<br />お仕事スタートするならいまがチャンスです♪<br />
-            </div>
-          </div>
-          <hr />
         </div>
       </div>
       <div class="" id="fixed-area-id">
-        <a
-          class="link"
-          href="https://secure.haj.co.jp/haj/entry/apply/?media=sfsa&amp;webcd=250036004302120002&amp;application=pwa"
-          target="_blank"
-          >Web</a
-        >
-        <div class="information">
-          <a href="Tel:011-351-8811">Tel:011-351-8811</a>＜担当／北の漁場2号店 浅利＞<br />札幌市中央区北11条西21丁目<br />札幌第一卸市場内
-        </div>
+        <a class="link" :href="app.job.value.webApplication" target="_blank">Web</a>
+        <div class="information"></div>
         <p class="MuiTypography-root MuiTypography-body1 jss310 css-9l3uo3">
-          掲載期間：2023年8月10日 04:00～2023年9月11日 04:00
+          {{ PrimitiveHelper.getPostPeriod(app.job.value.opensAt, app.job.value.expiresAt) }}
         </p>
       </div>
     </div>
@@ -124,9 +95,17 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import type { JobDetailProps } from "./JobDetails";
+import type { JobModel } from "@/models/job.model";
+import type { Ref } from "vue";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
+
+const props = defineProps<JobDetailProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public job: Ref<JobModel> = this.computed(() => props.data);
+
     public constructor() {
       super();
     }
@@ -196,6 +175,11 @@ const app = defineClassComponent(
         }
       }
 
+      & .return_btn:hover {
+        background-color: #9f085f;
+        color: white;
+      }
+
       & .like_and_dislike_button {
         top: 10px;
         right: 10px;
@@ -234,6 +218,11 @@ const app = defineClassComponent(
             color: #000;
             margin-right: 10px;
             background-color: #fff;
+
+            &.active {
+              background-color: #9f085f;
+              color: white;
+            }
           }
 
           &#dislike-button-id {
@@ -288,7 +277,7 @@ const app = defineClassComponent(
         & .card_infor {
           margin-bottom: 10px;
           & .card_infor_item {
-            margin-bottom: 2px;
+            margin-bottom: 5px;
             align-items: center;
             color: #000;
             display: flex;
@@ -321,7 +310,7 @@ const app = defineClassComponent(
           }
         }
 
-        & .main_details {
+        & .catch_text {
           color: #000;
           font-size: 14px;
           font-weight: 700;
@@ -330,7 +319,7 @@ const app = defineClassComponent(
           margin-bottom: 20px;
         }
 
-        & .second_details {
+        & .lead_text {
           color: #000;
           font-size: 11px;
           font-weight: 400;
@@ -350,9 +339,10 @@ const app = defineClassComponent(
         }
 
         & .sub_images {
-          display: flex;
+          display: grid;
           flex-wrap: wrap;
-          align-items: flex-start;
+          grid: auto / auto auto auto;
+          grid-gap: 20px;
           margin-bottom: 5px;
           justify-content: center;
 
@@ -410,6 +400,10 @@ const app = defineClassComponent(
           }
         }
       }
+    }
+
+    & .display_details::-webkit-scrollbar {
+      display: none;
     }
 
     & #fixed-area-id {

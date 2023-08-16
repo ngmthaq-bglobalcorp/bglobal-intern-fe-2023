@@ -1,6 +1,6 @@
 <template>
   <BaseLayout>
-    <JobDetails />
+    <JobDetails :data="app.job.value" />
   </BaseLayout>
 </template>
 
@@ -11,17 +11,21 @@ import JobDetails from "@/components/UserComponents/JobDetails/JobDetails.vue";
 import type { JobModel } from "@/models/job.model";
 import { useSeekersStore } from "@/stores/seekers.store";
 import type { Ref } from "vue";
+
+import type { JobDetailProps } from "./JobDetailsView";
+
+const props = defineProps<JobDetailProps>();
+
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public seekersStore = useSeekersStore();
-
-    public newsArray: Ref<Array<JobModel>> = this.computed(() => this.seekersStore.jobs);
+    public job: Ref<JobModel> = this.computed(() => this.seekersStore.job);
 
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.seekersStore.fetchAllJobs();
+      this.onBeforeMount(async () => {
+        await this.seekersStore.fetchShowJobById(props.jobId);
       });
     }
   },
