@@ -2,11 +2,10 @@ import type { Ref } from "vue";
 import { BaseStore, defineClassStore } from "@/plugins/store.plugin";
 import { Api } from "@/plugins/api.plugin";
 import { ApiConst } from "@/const/api.const";
+import { AppConst } from "@/const/app.const";
+import { ModelHelper } from "@/helpers/model.helper";
 import { SeekerModel } from "@/models/seeker.model";
 import { JobModel } from "@/models/job.model";
-import { LocationModel } from "@/models/location.model";
-import { SearchLabelModel } from "@/models/searchLabel.model";
-import { AppConst } from "@/const/app.const";
 
 export const api = new Api();
 
@@ -18,6 +17,8 @@ export const useSeekersStore = defineClassStore(
     public jobs: Ref<Array<JobModel>> = this.ref([]);
     public totalJobs: Ref<number> = this.ref(0);
     public totalJobsWithCondition: Ref<number> = this.ref(0);
+    public listLikeJobs: Ref<Array<JobModel>> = this.ref([]);
+    public listHistoryJobs: Ref<Array<JobModel>> = this.ref([]);
 
     public fetchProfile = async () => {
       try {
@@ -58,17 +59,17 @@ export const useSeekersStore = defineClassStore(
     public fetchUpdateProfile = async (data: SeekerModel) => {
       try {
         const profile = {
-          name: data.name || "",
-          phone_number: data.phoneNumber || "",
-          profileImageUrl: data.avatar || "",
-          dob: data.birthday || "",
-          address: data.address || "",
-          website: data.website || "",
-          education: data.education || "",
-          experience: data.experience || "",
-          skills: data.skills || "",
-          achievements: data.achievements || "",
-          other_details: data.otherDetails || "",
+          name: data.name,
+          phone_number: data.phoneNumber,
+          profileImageUrl: data.avatar,
+          dob: data.birthday,
+          address: data.address,
+          website: data.website,
+          education: data.education,
+          experience: data.experience,
+          skills: data.skills,
+          achievements: data.achievements,
+          other_details: data.otherDetails,
         };
         console.log(profile);
         const res = await api.post(ApiConst.seekersEndpoints.updateSeekerProfile, profile);
@@ -167,47 +168,7 @@ export const useSeekersStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           const data: any[] = await res.json();
           console.log(data);
-          const jobs = data.map((data) => {
-            const job = {
-              id: data.id,
-              mainImageUrl: data.mainImage.url,
-              mainImageDesc: data.mainImage.description,
-              title: data.title,
-              jobTitleCatchPhrase: data.jobTitleCatchPhrase,
-              location: new LocationModel({
-                id: data.location.id,
-                name: data.location.city,
-              }),
-              salary: data.salary.monthly,
-              workingHours: data.workingHours,
-              searchLabels: data.searchLabels
-                ? data.searchLabels.map((value: any) => {
-                    return new SearchLabelModel({
-                      id: value.id,
-                      name: value.name,
-                      isEnabled: value.isEnabled,
-                    });
-                  })
-                : [],
-              webApplication: data.webApplication.url,
-              catchText: data.catchText,
-              leadText: data.leadText,
-              subImages: data.subImages,
-              properties: data.properties,
-              postScripts: data.postScripts,
-              companySurvey: data.companySurvey.displayed && data.companySurvey.contents,
-              barometer: data.barometer.displayed && data.barometer.contents,
-              photoGallery: data.photoGallery.contents,
-              interview: data.interview.displayed && data.interview.contents,
-              productCode: data.productCode,
-              opensAt: data.opensAt,
-              expiresAt: data.expiresAt,
-              updatedAt: data.updatedAt,
-              createdAt: data.createdAt,
-            };
-            return new JobModel(job);
-          });
-          this.jobs.value = jobs;
+          this.jobs.value = data.map((data) => ModelHelper.getJobModel(data));
           console.log(this.jobs.value);
           return true;
         } else {
@@ -225,44 +186,7 @@ export const useSeekersStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
           console.log(data);
-          const job = {
-            id: data.id,
-            mainImageUrl: data.mainImage.url,
-            mainImageDesc: data.mainImage.description,
-            title: data.title,
-            jobTitleCatchPhrase: data.jobTitleCatchPhrase,
-            location: new LocationModel({
-              id: data.location.id,
-              name: data.location.city,
-            }),
-            salary: data.salary.monthly,
-            workingHours: data.workingHours,
-            searchLabels: data.searchLabels
-              ? data.searchLabels.map((value: any) => {
-                  return new SearchLabelModel({
-                    id: value.id,
-                    name: value.name,
-                    isEnabled: value.isEnabled,
-                  });
-                })
-              : [],
-            webApplication: data.webApplication.url,
-            catchText: data.catchText,
-            leadText: data.leadText,
-            subImages: data.subImages,
-            properties: data.properties,
-            postScripts: data.postScripts,
-            companySurvey: data.displayed && data.companySurvey.contents,
-            barometer: data.displayed && data.barometer.contents,
-            photoGallery: data.photoGallery.contents,
-            interview: data.displayed && data.interview.contents,
-            productCode: data.productCode,
-            opensAt: data.opensAt,
-            expiresAt: data.expiresAt,
-            updatedAt: data.updatedAt,
-            createdAt: data.createdAt,
-          };
-          this.job.value = new JobModel(job);
+          this.job.value = ModelHelper.getJobModel(data);
           console.log(this.job.value);
           return true;
         } else {
@@ -290,57 +214,29 @@ export const useSeekersStore = defineClassStore(
       }
     };
 
-    public fetchShowJobById = async (id: string) => {
+    public fetchSeekerHistory = async () => {
       try {
-        const res = await api.get(ApiConst.commonEndpoints.findJobById.replace("{id}", id));
+        const res = await api.get(ApiConst.seekersEndpoints.getSeekerHistory);
         if (res.status === ApiConst.status.ok) {
-          const data: any = await res.json();
+          const data: any[] = await res.json();
           console.log(data);
-          const job = {
-            id: data.id,
-            mainImageUrl: data.mainImage.url,
-            mainImageDesc: data.mainImage.description,
-            title: data.title,
-            jobTitleCatchPhrase: data.jobTitleCatchPhrase,
-            location: new LocationModel({
-              id: data.location.id,
-              name: data.location.city,
-            }),
-            salary: data.salary.monthly,
-            workingHours: data.workingHours,
-            searchLabels: data.searchLabels
-              ? data.searchLabels.map((value: any) => {
-                  return new SearchLabelModel({
-                    id: value.id,
-                    name: value.name,
-                    isEnabled: value.isEnabled,
-                  });
-                })
-              : [],
-            webApplication: data.webApplication.url,
-            catchText: data.catchText,
-            leadText: data.leadText,
-            subImages: data.subImages,
-            properties: data.properties,
-            postScripts: data.postScripts,
-            companySurvey: data.displayed && data.companySurvey.contents,
-            barometer: data.displayed && data.barometer.contents,
-            photoGallery: data.photoGallery.contents,
-            interview: data.displayed && data.interview.contents,
-            productCode: data.productCode,
-            opensAt: data.opensAt,
-            expiresAt: data.expiresAt,
-            updatedAt: data.updatedAt,
-            createdAt: data.createdAt,
-          };
-          this.job.value = new JobModel(job);
-          console.log(this.job.value);
+          this.listLikeJobs.value = [];
+          this.listHistoryJobs.value = [];
+          data.forEach((value: any) => {
+            if (value.interactionType === AppConst.INTERACTION_TYPE.like) {
+              this.listLikeJobs.value.push(ModelHelper.getJobModel(value.job));
+            }
+            this.listHistoryJobs.value.push(ModelHelper.getJobModel(value.job));
+          });
+          console.log(this.listLikeJobs.value);
+          console.log(this.listHistoryJobs.value);
           return true;
         } else {
           return false;
         }
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
   },

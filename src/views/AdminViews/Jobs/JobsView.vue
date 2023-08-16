@@ -148,16 +148,19 @@ const app = defineClassComponent(
     public onTogglePrev = () => {
       if (this.pageNumber.value > 1) {
         this.pageNumber.value = this.pageNumber.value - 1;
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     };
 
     public onTogglePage = (page: number) => {
       this.pageNumber.value = page;
+      window.scrollTo({ top: 0, behavior: "smooth" });
     };
 
     public onToggleNext = () => {
       if (this.pageNumber.value < this.totalPages.value) {
         this.pageNumber.value = this.pageNumber.value + 1;
+        window.scrollTo({ top: 0, behavior: "smooth" });
       }
     };
   },

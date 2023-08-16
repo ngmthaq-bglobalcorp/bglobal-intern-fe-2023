@@ -30,7 +30,7 @@
             <small class="card-subtitle">{{ app.t(`app.about`) }}</small>
           </li>
 
-          <li class="card-item" v-if="app.profile.value.username">
+          <li class="card-item" v-if="app.profile.value.username && props.editable">
             <i class="bi bi-person-circle icon"></i>
             {{ app.profile.value.username }}
           </li>

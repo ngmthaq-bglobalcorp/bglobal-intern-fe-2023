@@ -282,6 +282,14 @@
         "is": "Is",
         "info": "List of job information kept"
       }
+    },
+    "history": {
+      "likedJobs": "Liked jobs",
+      "allJobs": "All jobs",
+      "viewedDate": "Viewed date: ",
+      "like": "Like",
+      "dislike": "Dislike",
+      "viewDetails": "View details"
     }
   }
 }
