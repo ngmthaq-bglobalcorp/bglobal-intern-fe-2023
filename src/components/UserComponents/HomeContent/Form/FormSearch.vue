@@ -54,7 +54,7 @@
           :for="label.id.toString()"
           class="tag-search"
           :class="{ active: app.searchLabelsArray.value.includes(label.id) }"
-          v-for="label in app.searchLabels.value"
+          v-for="label in app.filtersSearchLabels.value"
           :key="label.id"
         >
           <template v-if="label.isEnabled">
@@ -76,7 +76,7 @@
         <p class="title">{{ app.t("jobsApp.form.applicable.title") }}</p>
 
         <div class="result">
-          <p class="result-match">{{ app.currentJobNumber.value }}</p>
+          <p class="result-match">{{ app.totalJobsWithContion.value }}</p>
           <p class="jobs">&nbsp;/&nbsp;</p>
           <p class="result-sum">{{ app.totalJobsNumber.value }}</p>
           <p class="jobs">{{ app.t("jobsApp.form.applicable.jobs") }}</p>
@@ -121,18 +121,18 @@ const app = defineClassComponent(
     public secondLocation: Ref<string> = this.ref(AppConst.DEFAULT.location);
     public thirdLocation: Ref<string> = this.ref(AppConst.DEFAULT.location);
     public searchLabelsArray: Ref<Array<number>> = this.ref([]);
-    public currentJobNumber: Ref<number> = this.ref(0);
 
     public totalJobsNumber: Ref<number> = this.computed(() => this.seekerStore.totalJobs);
+    public totalJobsWithContion: Ref<number> = this.computed(() => this.seekerStore.totalJobsWithCondition);
     public locations: Ref<Array<LocationModel>> = this.computed(() => this.commonStore.locations);
-    public searchLabels: Ref<Array<SearchLabelModel>> = this.computed(() => this.commonStore.searchLabels);
+    public filtersSearchLabels: Ref<Array<SearchLabelModel>> = this.computed(() => {
+      return this.commonStore.searchLabels.filter((value) => value.isEnabled);
+    });
 
     public constructor() {
       super();
 
       this.onBeforeMount(async () => {
-        await this.commonStore.fetchAllLocations();
-        await this.commonStore.fetchAllSearchLabels();
         const data: any = StorageHelper.getLocalStorage(KeyConst.keys.searchCondition);
         if (data) {
           this.startTime.value = data.startTime || AppConst.DEFAULT.time;
@@ -141,8 +141,11 @@ const app = defineClassComponent(
           this.secondLocation.value = data.secondLocation || AppConst.DEFAULT.location;
           this.thirdLocation.value = data.thirdLocation || AppConst.DEFAULT.location;
           this.searchLabelsArray.value = data.searchLabelsArray || [];
-          await this.seekerStore.fetchTotalJobs(data);
+          await this.seekerStore.fetchTotalJobs();
+          await this.seekerStore.fetchTotalJobsWithCondition(data);
         }
+        await this.commonStore.fetchAllLocations();
+        await this.commonStore.fetchAllSearchLabels();
       });
 
       this.commonStore.eventBus.on("showFormSearch", () => {
@@ -174,7 +177,7 @@ const app = defineClassComponent(
       this.commonStore.setIsLoading(true);
       let isSuccess = true;
       isSuccess = await this.seekerStore.fetchAllJobs(data);
-      isSuccess = await this.seekerStore.fetchTotalJobs(data);
+      isSuccess = await this.seekerStore.fetchTotalJobsWithCondition(data);
       if (isSuccess) {
         StorageHelper.setLocalStorage(KeyConst.keys.searchCondition, data);
         this.router.push(PathConst.userJobsList);
@@ -222,7 +225,7 @@ const app = defineClassComponent(
         background-color: #fff;
         appearance: none;
         background: transparent;
-        background-image: url(@/assets/img/ic_expand.9b23fd7b7dbca75cefd0.svg);
+        background-image: url(@/assets/img/ic_expand.svg);
         background-position-x: 92%;
         background-position-y: 52%;
         background-repeat: no-repeat;
@@ -263,7 +266,7 @@ const app = defineClassComponent(
         background-color: #fff;
         appearance: none;
         background: transparent;
-        background-image: url(@/assets/img/ic_expand.9b23fd7b7dbca75cefd0.svg);
+        background-image: url(@/assets/img/ic_expand.svg);
         background-position-x: 92%;
         background-position-y: 52%;
         background-repeat: no-repeat;
@@ -330,13 +333,14 @@ const app = defineClassComponent(
       }
     }
   }
+
   & .applicable {
     display: flex;
     align-items: center;
     justify-content: space-between;
 
     & .suitable {
-      & .tittle {
+      & .title {
         color: #000;
         font-size: 10px;
         font-weight: 400;

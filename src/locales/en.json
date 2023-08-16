@@ -269,6 +269,19 @@
       "seminar": "Seminar",
       "corporateRecruitingSession": "Corporate recruiting session",
       "generalInformation": "General information"
+    },
+    "jobCard": {
+      "close": "Close",
+      "currentSearch": "Current search",
+      "viewDetail": "View the detail",
+      "methodOperation": "Method of operation",
+      "whatKeep": "What is like/dislike",
+      "message": {
+        "title": ["There are no unread jobs", "Match your criteria"],
+        "nextUpdate": "Next update will be",
+        "is": "Is",
+        "info": "List of job information kept"
+      }
     }
   }
 }

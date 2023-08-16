@@ -131,9 +131,9 @@ const app = defineClassComponent(
       super();
 
       this.watch(
-        () => this.profile.value.avatar,
-        (avatar) => {
-          this.avatar.value = avatar;
+        () => this.profile.value,
+        (profile) => {
+          this.avatar.value = profile.avatar;
         },
       );
 
