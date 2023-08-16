@@ -118,6 +118,8 @@ const app = defineClassComponent(
       const isSuccess = await this.authStore.fetchAdminSignOut();
       if (isSuccess) {
         window.location.href = PathConst.adminSignin.path;
+      } else {
+        window.location.href = PathConst.adminSignin.path;
       }
     };
   },

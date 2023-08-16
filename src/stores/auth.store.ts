@@ -59,10 +59,10 @@ export const useAuthStore = defineClassStore(
 
     public fetchAdminSignOut = async () => {
       try {
+        StorageHelper.removeLocalStorage(KeyConst.keys.currentUser);
         const res = await api.post(ApiConst.authEndpoints.logout);
         if (res.status === ApiConst.status.ok) {
           this.user.value = new UserModel({});
-          StorageHelper.removeLocalStorage(KeyConst.keys.currentUser);
           return true;
         } else {
           return false;
