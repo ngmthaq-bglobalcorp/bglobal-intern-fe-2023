@@ -13,18 +13,13 @@ export class Api extends Fetch {
   }
 
   public async onFailure(response: Response): Promise<Response> {
-    if (response.status === ApiConst.status.badRequest) {
-      console.log(response);
-    }
     if (response.status === ApiConst.status.unauthorized) {
-      console.log(response);
       if (!window.location.href.includes("/signin")) {
         StorageHelper.removeLocalStorage(KeyConst.keys.currentUser);
         window.location.replace("/admin/signin");
       }
     }
     if (response.status === ApiConst.status.forbidden) {
-      console.log(response);
       window.location.assign("/admin");
     }
     return response;

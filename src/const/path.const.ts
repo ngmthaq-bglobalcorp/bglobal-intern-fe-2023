@@ -20,6 +20,8 @@ import JobsListViewVue from "@/views/UserViews/JobsList/JobsListView.vue";
 import JobDetailsViewVue from "@/views/UserViews/JobDetails/JobDetailsView.vue";
 import HistoryViewVue from "@/views/UserViews/History/HistoryView.vue";
 import UserProfileViewVue from "@/views/UserViews/UserProfile/UserProfileView.vue";
+import NotFoundViewVue from "@/views/Errors/NotFoundView.vue";
+import InternalErrorViewVue from "@/views/Errors/InternalErrorView.vue";
 import { AppConst } from "./app.const";
 
 export class PathConst {
@@ -255,6 +257,26 @@ export class PathConst {
     meta: {
       title: "title.user.profile",
       auth: AppConst.ROLE.seeker,
+    },
+  };
+
+  public static notFound: Route = {
+    path: "/404",
+    name: "notFound",
+    component: NotFoundViewVue,
+    meta: {
+      title: "title.notFound",
+      auth: AppConst.ROLE.guest,
+    },
+  };
+
+  public static internalError: Route = {
+    path: "/500",
+    name: "internalError",
+    component: InternalErrorViewVue,
+    meta: {
+      title: "title.internalError",
+      auth: AppConst.ROLE.guest,
     },
   };
 }

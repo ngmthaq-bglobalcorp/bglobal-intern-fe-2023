@@ -53,15 +53,17 @@ export abstract class BaseComponent extends Vue {
           this.router.push(PathConst.home);
         } else if (to.meta.auth === AppConst.ROLE.auth) {
           this.router.push(PathConst.adminDashboard);
+        } else if (to.meta.auth === AppConst.ROLE.guest) {
+          next;
         } else if (to.meta.auth === AppConst.ROLE.all) {
           if (user.role === AppConst.ROLE.seeker) {
-            this.router.push(PathConst.home);
+            this.router.push(PathConst.notFound);
           } else {
             next;
           }
         } else {
           if (user.role === AppConst.ROLE.seeker && user.role != to.meta.auth) {
-            this.router.push(PathConst.home);
+            this.router.push(PathConst.notFound);
           } else if (user.role != to.meta.auth) {
             this.router.push(PathConst.adminDashboard);
           } else {
