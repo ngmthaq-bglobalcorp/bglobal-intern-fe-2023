@@ -1,6 +1,6 @@
 <template>
   <UserLayout>
-    <JobDetails :data="app.job.value"/>
+    <JobDetails :data="app.job.value" />
   </UserLayout>
 </template>
 

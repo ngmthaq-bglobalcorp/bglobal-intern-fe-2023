@@ -1,4 +1,3 @@
 export type JobDetailProps = {
-    jobId: string;
-  };
-  
+  jobId: string;
+};
