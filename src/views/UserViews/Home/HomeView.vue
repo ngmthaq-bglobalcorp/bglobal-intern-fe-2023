@@ -13,10 +13,10 @@
     <div class="userlayout">
       <FormSearch />
       <div class="search-condition">
-        <img class="" src="@/assets/img/ic_search.71514682dc7410fdb320ef5038e30837.svg" />
+        <img class="" src="@/assets/img/ic_search.svg" />
         <p class="">{{ app.t("jobsApp.form.applicable.searchCondition") }}</p>
       </div>
-      <NewsList :newsArray="app.newsArray.value" />
+      <NewsList :news-array="app.newsArray.value" />
       <CompanyDescribe />
     </div>
     <FooterComponent />
@@ -43,8 +43,10 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.adminStore.fetchAllNews();
+      this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
+        await this.adminStore.fetchAllNews();
+        this.commonStore.setIsLoading(false);
       });
     }
   },

@@ -1,9 +1,13 @@
 import type { JobModel } from "@/models/job.model";
 
-export type JobsListProps = {
-  newsArray: JobModel[];
+export type JobCardProps = {
+  data: JobModel;
 };
 
-export type JobsListEmits = {
+export type JobCardEmits = {
   (e: "onClickCard", id: number): void;
+  (e: "onToggleViewDetail", id: number): void;
+  (e: "onToggleLikeButton", id: number): void;
+  (e: "onToggleDislikeButton", id: number): void;
+  (e: "onToggleSkipButton"): void;
 };

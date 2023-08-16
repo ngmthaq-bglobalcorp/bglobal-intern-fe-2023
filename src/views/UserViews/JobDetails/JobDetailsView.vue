@@ -1,12 +1,12 @@
 <template>
-  <BaseLayout>
-    <JobDetails :data="app.job.value" />
-  </BaseLayout>
+  <UserLayout>
+    <JobDetails :data="app.job.value"/>
+  </UserLayout>
 </template>
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import BaseLayout from "@/layouts/BaseLayout.vue";
+import UserLayout from "@/layouts/UserLayout/UserLayout.vue";
 import JobDetails from "@/components/UserComponents/JobDetails/JobDetails.vue";
 import type { JobModel } from "@/models/job.model";
 import { useSeekersStore } from "@/stores/seekers.store";

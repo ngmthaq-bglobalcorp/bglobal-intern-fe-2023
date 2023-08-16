@@ -6,4 +6,5 @@ export type ProfileHeaderProps = {
 
 export type ProfileHeaderEmits = {
   (e: "onToggleUpdateProfile"): void;
+  (e: "onUpdateAvatar", avatarUrl: string): void;
 };

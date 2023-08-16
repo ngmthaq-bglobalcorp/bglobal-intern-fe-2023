@@ -33,7 +33,9 @@
       </div>
       <div class="job-footer">
         <ul class="footer-label list" v-if="app.job.value.searchLabels.length > 0">
-          <li class="search-label" v-for="label in app.job.value.searchLabels" :key="label.id">{{ label.name }}</li>
+          <li class="search-label" v-for="label in app.job.value.searchLabels" :key="label.id">
+            {{ label.name }}
+          </li>
         </ul>
         <div class="opens-expires" v-if="app.job.value.opensAt && app.job.value.expiresAt">
           <span>

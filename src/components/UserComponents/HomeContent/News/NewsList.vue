@@ -1,7 +1,13 @@
 <template>
   <div class="news">
-    <h1 class="title">{{ app.t("jobsApp.news.title") }}</h1>
-    <a class="link" target="_blank" :href="news.eventPageUrl" v-for="news in app.newsArray.value" :key="news.id">
+    <h1 class="tittle">{{ app.t("jobsApp.news.title") }}</h1>
+    <a
+      class="link"
+      target="_blank"
+      :href="PrimitiveHelper.getValidUrl(news.eventPageUrl)"
+      v-for="news in app.filterData.value"
+      :key="news.id"
+    >
       <template v-if="news.category === AppConst.NEWS_CATEGORY.seminar">
         <div class="image">
           <img src="@/assets/img/info-icon-seminar.svg" class="icon" />
@@ -52,18 +58,24 @@
 </template>
 
 <script setup lang="ts">
-import { AppConst } from "@/const/app.const";
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import { AppConst } from "@/const/app.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { NewsListProps } from "./NewsList";
-import type { NewsModel } from "@/models/news.model";
 import type { Ref } from "vue";
+import type { NewsModel } from "@/models/news.model";
 
 const props = defineProps<NewsListProps>();
+const today = new Date();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public newsArray: Ref<Array<NewsModel>> = this.computed(() => props.newsArray);
+    public filterData: Ref<Array<NewsModel>> = this.computed(() => {
+      return props.newsArray.filter((value) => {
+        return value.opensAt <= today && value.expiresAt >= today;
+      });
+    });
 
     public constructor() {
       super();

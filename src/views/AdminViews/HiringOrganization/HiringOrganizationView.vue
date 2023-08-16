@@ -1,6 +1,6 @@
 <template>
   <AdminLayout>
-    <PageHeader :target="app.t(`app.hiringOrganization`)" button="" icon="" />
+    <PageHeader :target="app.t(`app.hiringOrganization`)" />
     <Datatable
       :columns="app.columns.value"
       :data="app.filetrsData.value"
@@ -24,6 +24,7 @@ import type { OrganizationModel } from "@/models/organization.model";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public adminStore = useAdminStore();
+
     public columns: Ref<any> = this.ref([
       { field: "id", headerName: "id" },
       { field: "username", headerName: "username" },
@@ -32,17 +33,21 @@ const app = defineClassComponent(
       { field: "phone", headerName: "phone" },
       { field: "status", headerName: "status" },
     ]);
+
     public filetrsData: Ref<Array<OrganizationModel>> = this.computed(() => this.adminStore.organizations);
 
     public constructor() {
       super();
 
       this.onBeforeMount(async () => {
+        this.commonStore.setIsLoading(true);
         await this.adminStore.fetchAllOrganizations();
+        this.commonStore.setIsLoading(false);
       });
     }
 
     public onDeleteSelected = (selectedArray: Array<number>) => {
+      this.commonStore.setIsLoading(true);
       selectedArray.forEach(async (value: number) => {
         const isSuccess = await this.adminStore.fetchDeleteOrganizations(value.toString());
         if (isSuccess) {
@@ -51,9 +56,11 @@ const app = defineClassComponent(
           );
         }
       });
+      this.commonStore.setIsLoading(false);
     };
 
     public onLockSelected = async (id: number) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.adminStore.fetchChangeUserStatus(
         id.toString(),
         AppConst.STATUS.disabled.toLowerCase(),
@@ -64,9 +71,11 @@ const app = defineClassComponent(
           organization.status = AppConst.STATUS.disabled;
         }
       }
+      this.commonStore.setIsLoading(false);
     };
 
     public onUnlockSelected = async (id: number) => {
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.adminStore.fetchChangeUserStatus(
         id.toString(),
         AppConst.STATUS.active.toLowerCase(),
@@ -77,6 +86,7 @@ const app = defineClassComponent(
           organization.status = AppConst.STATUS.active;
         }
       }
+      this.commonStore.setIsLoading(false);
     };
   },
 );

@@ -1,5 +1,6 @@
 <template>
   <div id="admin-layout">
+    <WaitingComponent :is-waiting="app.commonStore.isLoading" />
     <SidebarComponent />
     <div class="layout-content">
       <NavbarComponent />
@@ -11,8 +12,18 @@
 </template>
 
 <script setup lang="ts">
+import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import SidebarComponent from "@/components/AdminComponents/Sidebar/SidebarComponent.vue";
 import NavbarComponent from "@/components/AdminComponents/Navbar/NavbarComponent.vue";
+import WaitingComponent from "@/components/AppComponents/WaitingComponent/WaitingComponent.vue";
+
+const app = defineClassComponent(
+  class Component extends BaseComponent {
+    public constructor() {
+      super();
+    }
+  },
+);
 </script>
 
 <style scoped lang="scss">

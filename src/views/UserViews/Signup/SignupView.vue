@@ -1,5 +1,5 @@
 <template>
-  <UserLayout>
+  <UserLayout :is-auth="true">
     <div class="signup-container">
       <div class="content">
         <!-- Form -->
@@ -140,6 +140,7 @@ import type { Ref } from "vue";
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
+
     public show: Ref<boolean> = this.ref(false);
     public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");
@@ -191,6 +192,7 @@ const app = defineClassComponent(
           username: this.username.value,
           password: this.password.value,
         };
+        this.commonStore.setIsLoading(true);
         const isSuccess = await this.authStore.fetchSeekerSignUp(data);
         if (isSuccess) {
           if (isSuccess.includes("Username")) {
@@ -202,6 +204,7 @@ const app = defineClassComponent(
         } else {
           this.errorInput.value = this.t(`message.errorUsernameOrPassword`);
         }
+        this.commonStore.setIsLoading(false);
       }
     };
 
@@ -238,19 +241,14 @@ const app = defineClassComponent(
 @import "@/assets/scss/modules";
 @import "@/assets/scss/user";
 
-::-webkit-scrollbar {
-  display: none;
-}
-
 .signup-container {
   display: flex;
+  align-items: center;
   justify-content: center;
-  height: calc(100vh - 104px - 185px);
-  overflow-y: scroll;
 
   & .content {
     width: 100%;
-    padding: 3rem 0;
+    padding: 3rem 1rem;
     max-width: 25rem;
 
     & .content-title {

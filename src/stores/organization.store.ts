@@ -63,7 +63,7 @@ export const useOrganizationStore = defineClassStore(
           organizationType: data.organizationType || AppConst.ORGANIZATION_TYPE.typeB,
         };
         console.log(profile);
-        const res = await api.put(ApiConst.organizationsEndpoints.updateOrganizationProfile, JSON.stringify(profile));
+        const res = await api.put(ApiConst.organizationsEndpoints.updateOrganizationProfile, profile);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {
@@ -133,7 +133,7 @@ export const useOrganizationStore = defineClassStore(
 
     public fetchFindJobById = async (id: string) => {
       try {
-        const res = await api.get(ApiConst.organizationsEndpoints.findOrganizationJobsById.replace("{id}", id));
+        const res = await api.get(ApiConst.organizationsEndpoints.findOrganizationJobsById.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
           console.log(data);
@@ -259,7 +259,7 @@ export const useOrganizationStore = defineClassStore(
           productCode: "",
         };
         console.log(job);
-        const res = await api.post(ApiConst.organizationsEndpoints.createOrganizationJobs, JSON.stringify(job));
+        const res = await api.post(ApiConst.organizationsEndpoints.createOrganizationJobs, job);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {
@@ -344,10 +344,7 @@ export const useOrganizationStore = defineClassStore(
           productCode: "",
         };
         console.log(job);
-        const res = await api.put(
-          ApiConst.organizationsEndpoints.updateOrganizationJobs.replace("{id}", id),
-          JSON.stringify(job),
-        );
+        const res = await api.put(ApiConst.organizationsEndpoints.updateOrganizationJobs.replace(":id", id), job);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {
@@ -360,7 +357,7 @@ export const useOrganizationStore = defineClassStore(
 
     public fetchDeleteJob = async (id: string) => {
       try {
-        const res = await api.delete(ApiConst.organizationsEndpoints.deleteOrganizationJobs.replace("{id}", id));
+        const res = await api.delete(ApiConst.organizationsEndpoints.deleteOrganizationJobs.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {
@@ -373,7 +370,7 @@ export const useOrganizationStore = defineClassStore(
 
     public fetchAllSeekerLikeJob = async (id: string) => {
       try {
-        const res = await api.get(ApiConst.organizationsEndpoints.getAllSeekerLikeJob.replace("{id}", id));
+        const res = await api.get(ApiConst.organizationsEndpoints.getAllSeekerLikeJob.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           const data: any[] = await res.json();
           console.log(data);

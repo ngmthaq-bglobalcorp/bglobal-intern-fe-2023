@@ -58,7 +58,7 @@ export const useAdminStore = defineClassStore(
 
     public fetchDeleteSeekers = async (id: string) => {
       try {
-        const res = await api.delete(ApiConst.adminEndpoints.deleteSeeker.replace("{id}", id));
+        const res = await api.delete(ApiConst.adminEndpoints.deleteSeeker.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {
@@ -105,7 +105,7 @@ export const useAdminStore = defineClassStore(
 
     public fetchDeleteOrganizations = async (id: string) => {
       try {
-        const res = await api.delete(ApiConst.adminEndpoints.deleteOrganization.replace("{id}", id));
+        const res = await api.delete(ApiConst.adminEndpoints.deleteOrganization.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {
@@ -118,7 +118,7 @@ export const useAdminStore = defineClassStore(
 
     public fetchChangeUserStatus = async (id: string, status: string) => {
       try {
-        const res = await api.post(ApiConst.adminEndpoints.changeUserStatus.replace("{id}", id), status);
+        const res = await api.post(ApiConst.adminEndpoints.changeUserStatus.replace(":id", id), status);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {
@@ -165,7 +165,7 @@ export const useAdminStore = defineClassStore(
 
     public fetchFindNewsById = async (id: string) => {
       try {
-        const res = await api.get(ApiConst.adminEndpoints.findNewsById.replace("{id}", id));
+        const res = await api.get(ApiConst.adminEndpoints.findNewsById.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
           console.log(data);
@@ -214,7 +214,7 @@ export const useAdminStore = defineClassStore(
             : DatetimeHelper.getDateTime(new Date()),
         };
         console.log(news);
-        const res = await api.post(ApiConst.adminEndpoints.createNews, JSON.stringify(news));
+        const res = await api.post(ApiConst.adminEndpoints.createNews, news);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {
@@ -244,7 +244,7 @@ export const useAdminStore = defineClassStore(
             ? DatetimeHelper.getDateTime(data.expiresAt)
             : DatetimeHelper.getDateTime(new Date()),
         };
-        const res = await api.put(ApiConst.adminEndpoints.deleteNews.replace("{id}", id), JSON.stringify(news));
+        const res = await api.put(ApiConst.adminEndpoints.deleteNews.replace(":id", id), news);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {
@@ -257,7 +257,7 @@ export const useAdminStore = defineClassStore(
 
     public fetchDeleteNews = async (id: string) => {
       try {
-        const res = await api.delete(ApiConst.adminEndpoints.deleteNews.replace("{id}", id));
+        const res = await api.delete(ApiConst.adminEndpoints.deleteNews.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {

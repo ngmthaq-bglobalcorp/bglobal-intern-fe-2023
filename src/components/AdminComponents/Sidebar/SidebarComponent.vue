@@ -63,14 +63,17 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import { PathConst } from "@/const/path.const";
 import { AppConst } from "@/const/app.const";
+import { PathConst } from "@/const/path.const";
 import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
+
+    public darkMode: Ref<Boolean> = this.ref(false);
+    public collapse: Ref<Boolean> = this.ref(false);
     public adminItems: Ref<Array<any>> = this.ref([
       {
         name: "adminDashboard",
@@ -121,8 +124,6 @@ const app = defineClassComponent(
         icon: "bi-list-task",
       },
     ]);
-    public darkMode: Ref<Boolean> = this.ref(false);
-    public collapse: Ref<Boolean> = this.ref(false);
 
     public filtersSidebarItem = this.computed(() => {
       if (this.authStore.user.role.includes(AppConst.ROLE.admin)) {

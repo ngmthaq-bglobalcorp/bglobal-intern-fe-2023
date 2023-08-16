@@ -3,8 +3,9 @@
     <div class="select-1">
       <div class="location-time">
         <p>{{ app.t("jobsApp.form.location") }}</p>
-        <select class="first_search_row custom_select" style="width: 136px" v-model="app.fisrtLocation.value">
-          <option :value="location.id" v-for="location in app.locations.value" :key="location.id">
+        <select class="first_search_row custom_select" style="width: 136px" v-model="app.firstLocation.value">
+          <option :value="AppConst.DEFAULT.location">{{ app.t("jobsApp.form.location") }}</option>
+          <option :value="location.name" v-for="location in app.locations.value" :key="location.id">
             {{ location.name }}
           </option>
         </select>
@@ -13,32 +14,34 @@
       <div class="location-time">
         <p>{{ app.t("jobsApp.form.startTime") }}</p>
         <select class="jss86 custom_select" v-model="app.startTime.value">
-          <option value="_default_selection">{{ app.t("jobsApp.form.startTime") }}</option>
-          <option :value="hour" v-for="hour in PrimitiveHelper.time()" :key="hour">{{ hour }}</option>
+          <option :value="AppConst.DEFAULT.time">{{ app.t("jobsApp.form.startTime") }}</option>
+          <option :value="hour" v-for="hour in PrimitiveHelper.getTime()" :key="hour">{{ hour }}</option>
         </select>
       </div>
       <i class="bi bi-x" style="font-size: 1.5rem"></i>
       <div class="location-time">
         <p>{{ app.t("jobsApp.form.endTime") }}</p>
         <select class="jss86 custom_select" v-model="app.endTime.value">
-          <option value="_default_selection">{{ app.t("jobsApp.form.endTime") }}</option>
-          <option :value="hour" v-for="hour in PrimitiveHelper.time()" :key="hour">{{ hour }}</option>
+          <option :value="AppConst.DEFAULT.time">{{ app.t("jobsApp.form.endTime") }}</option>
+          <option :value="hour" v-for="hour in PrimitiveHelper.getTime()" :key="hour">{{ hour }}</option>
         </select>
       </div>
     </div>
     <div class="select-2">
       <div class="location-sub-2-3">
-        <p>Second {{ app.t("jobsApp.form.location") }}</p>
+        <p>{{ app.t("jobsApp.form.secondLocation") }}</p>
         <select class="custom_select" v-model="app.secondLocation.value">
-          <option :value="location.id" v-for="location in app.locations.value" :key="location.id">
+          <option :value="AppConst.DEFAULT.location">{{ app.t("jobsApp.form.location") }}</option>
+          <option :value="location.name" v-for="location in app.locations.value" :key="location.id">
             {{ location.name }}
           </option>
         </select>
       </div>
       <div class="location-sub-2-3">
-        <p>Third {{ app.t("jobsApp.form.location") }}</p>
+        <p>{{ app.t("jobsApp.form.thirdLocation") }}</p>
         <select class="custom_select" v-model="app.thirdLocation.value">
-          <option :value="location.id" v-for="location in app.locations.value" :key="location.id">
+          <option :value="AppConst.DEFAULT.location">{{ app.t("jobsApp.form.location") }}</option>
+          <option :value="location.name" v-for="location in app.locations.value" :key="location.id">
             {{ location.name }}
           </option>
         </select>
@@ -51,7 +54,7 @@
           :for="label.id.toString()"
           class="tag-search"
           :class="{ active: app.searchLabelsArray.value.includes(label.id) }"
-          v-for="label in app.searchLabels.value"
+          v-for="label in app.filtersSearchLabels.value"
           :key="label.id"
         >
           <template v-if="label.isEnabled">
@@ -73,22 +76,20 @@
         <p class="title">{{ app.t("jobsApp.form.applicable.title") }}</p>
 
         <div class="result">
-          <p class="result-match">2</p>
+          <p class="result-match">{{ app.totalJobsWithContion.value }}</p>
           <p class="jobs">&nbsp;/&nbsp;</p>
-          <p class="result-sum">394</p>
-          <p class="jobs">Jobs</p>
+          <p class="result-sum">{{ app.totalJobsNumber.value }}</p>
+          <p class="jobs">{{ app.t("jobsApp.form.applicable.jobs") }}</p>
         </div>
       </div>
       <button
-        :disabled="app.isDisableSearchButton.value"
         class="view-result"
-        tabindex="0"
         type="submit"
         form="homepage_search_form_id"
+        tabindex="0"
+        :disabled="app.isDisableSearchButton.value"
       >
-        <RouterLink :to="PathConst.userJobsList" class="item-link">
-          {{ app.t("jobsApp.form.applicable.result") }}
-        </RouterLink>
+        {{ app.t("jobsApp.form.applicable.result") }}
       </button>
     </div>
   </form>
@@ -97,8 +98,11 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { AppConst } from "@/const/app.const";
+import { KeyConst } from "@/const/key.const";
 import { PathConst } from "@/const/path.const";
-import { useCommonStore } from "@/stores/common.store";
+import { StorageHelper } from "@/helpers/storage.helper";
+import { useSeekersStore } from "@/stores/seekers.store";
 import type { FormSearchProps } from "./FormSearch";
 import type { Ref } from "vue";
 import type { LocationModel } from "@/models/location.model";
@@ -108,24 +112,40 @@ const props = defineProps<FormSearchProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public commonStore = useCommonStore();
+    public seekerStore = useSeekersStore();
+
     public isDisableSearchButton: Ref<boolean> = this.ref(Boolean(props.isDisableSearchButton));
-    public fisrtLocation: Ref<number> = this.ref(1);
-    public secondLocation: Ref<number> = this.ref(1);
-    public thirdLocation: Ref<number> = this.ref(1);
-    public startTime: Ref<string> = this.ref("_default_selection");
-    public endTime: Ref<string> = this.ref("_default_selection");
+    public startTime: Ref<string> = this.ref(AppConst.DEFAULT.time);
+    public endTime: Ref<string> = this.ref(AppConst.DEFAULT.time);
+    public firstLocation: Ref<string> = this.ref(AppConst.DEFAULT.location);
+    public secondLocation: Ref<string> = this.ref(AppConst.DEFAULT.location);
+    public thirdLocation: Ref<string> = this.ref(AppConst.DEFAULT.location);
     public searchLabelsArray: Ref<Array<number>> = this.ref([]);
 
+    public totalJobsNumber: Ref<number> = this.computed(() => this.seekerStore.totalJobs);
+    public totalJobsWithContion: Ref<number> = this.computed(() => this.seekerStore.totalJobsWithCondition);
     public locations: Ref<Array<LocationModel>> = this.computed(() => this.commonStore.locations);
-    public searchLabels: Ref<Array<SearchLabelModel>> = this.computed(() => this.commonStore.searchLabels);
+    public filtersSearchLabels: Ref<Array<SearchLabelModel>> = this.computed(() => {
+      return this.commonStore.searchLabels.filter((value) => value.isEnabled);
+    });
 
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.commonStore.fetchAllLocations();
-        this.commonStore.fetchAllSearchLabels();
+      this.onBeforeMount(async () => {
+        const data: any = StorageHelper.getLocalStorage(KeyConst.keys.searchCondition);
+        if (data) {
+          this.startTime.value = data.startTime || AppConst.DEFAULT.time;
+          this.endTime.value = data.endTime || AppConst.DEFAULT.time;
+          this.firstLocation.value = data.firstLocation || AppConst.DEFAULT.location;
+          this.secondLocation.value = data.secondLocation || AppConst.DEFAULT.location;
+          this.thirdLocation.value = data.thirdLocation || AppConst.DEFAULT.location;
+          this.searchLabelsArray.value = data.searchLabelsArray || [];
+          await this.seekerStore.fetchTotalJobs();
+          await this.seekerStore.fetchTotalJobsWithCondition(data);
+        }
+        await this.commonStore.fetchAllLocations();
+        await this.commonStore.fetchAllSearchLabels();
       });
 
       this.commonStore.eventBus.on("showFormSearch", () => {
@@ -145,8 +165,24 @@ const app = defineClassComponent(
       }
     };
 
-    public onSubmitForm = () => {
-      this.router.push(PathConst.userJobsList);
+    public onSubmitForm = async () => {
+      const data = {
+        startTime: this.startTime.value,
+        endTime: this.endTime.value,
+        firstLocation: this.firstLocation.value,
+        secondLocation: this.secondLocation.value,
+        thirdLocation: this.thirdLocation.value,
+        searchLabelsArray: this.searchLabelsArray.value,
+      };
+      this.commonStore.setIsLoading(true);
+      let isSuccess = true;
+      isSuccess = await this.seekerStore.fetchAllJobs(data);
+      isSuccess = await this.seekerStore.fetchTotalJobsWithCondition(data);
+      if (isSuccess) {
+        StorageHelper.setLocalStorage(KeyConst.keys.searchCondition, data);
+        this.router.push(PathConst.userJobsList);
+      }
+      this.commonStore.setIsLoading(false);
     };
   },
 );
@@ -160,18 +196,22 @@ const app = defineClassComponent(
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 0 0 15px 15px;
   background-color: #fff;
+
   & .select-1 {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     & .location-time {
       flex: 1;
+
       & p {
         font-size: 14px;
         font-weight: 700;
         line-height: 20px;
         margin: 0px;
       }
+
       & .custom_select {
         color: #000;
         width: 100%;
@@ -185,7 +225,7 @@ const app = defineClassComponent(
         background-color: #fff;
         appearance: none;
         background: transparent;
-        background-image: url(@/assets/img/ic_expand.9b23fd7b7dbca75cefd0.svg);
+        background-image: url(@/assets/img/ic_expand.svg);
         background-position-x: 92%;
         background-position-y: 52%;
         background-repeat: no-repeat;
@@ -205,12 +245,14 @@ const app = defineClassComponent(
       flex-shrink: 1;
       flex-basis: 0%;
       margin-right: 15px;
+
       & p {
         font-size: 14px;
         font-weight: 700;
         line-height: 20px;
         margin: 0px;
       }
+
       & .custom_select {
         color: #000;
         width: 100%;
@@ -224,7 +266,7 @@ const app = defineClassComponent(
         background-color: #fff;
         appearance: none;
         background: transparent;
-        background-image: url(@/assets/img/ic_expand.9b23fd7b7dbca75cefd0.svg);
+        background-image: url(@/assets/img/ic_expand.svg);
         background-position-x: 92%;
         background-position-y: 52%;
         background-repeat: no-repeat;
@@ -232,8 +274,10 @@ const app = defineClassComponent(
       }
     }
   }
+
   & .condition {
     margin-top: 15px;
+
     & p {
       font-size: 14px;
       font-weight: 700;
@@ -241,6 +285,7 @@ const app = defineClassComponent(
       margin: 0px;
       letter-spacing: 0.00938em;
     }
+
     & .tag {
       height: 100%;
       margin: 5px 0;
@@ -288,21 +333,25 @@ const app = defineClassComponent(
       }
     }
   }
+
   & .applicable {
     display: flex;
     align-items: center;
     justify-content: space-between;
+
     & .suitable {
-      & .tittle {
+      & .title {
         color: #000;
         font-size: 10px;
         font-weight: 400;
         line-height: 24px;
       }
+
       & .result {
         display: flex;
         align-items: flex-end;
         justify-content: flex-start;
+
         & .result-match {
           color: #378182;
           font-size: 24px;
@@ -311,13 +360,16 @@ const app = defineClassComponent(
           margin-right: 3px;
           margin: 0px;
         }
+
         & .jobs {
           color: #000;
           font-size: 10px;
           font-weight: 400;
           line-height: 24px;
           margin: 0px;
+          margin-left: 1px;
         }
+
         & .result-sum {
           color: #378182;
           display: flex;
@@ -330,6 +382,7 @@ const app = defineClassComponent(
         }
       }
     }
+
     & .view-result {
       color: #fff;
       width: 180px;
@@ -338,15 +391,12 @@ const app = defineClassComponent(
       box-shadow: 0px 4px 8px rgba(157, 6, 95, 0.3);
       border-radius: 30px;
       border: none;
-      & .item-link {
-        text-decoration: none;
-        color: #fff;
+
+      &:disabled {
+        color: #666666;
+        background: rgba(0, 0, 0, 0.1);
+        box-shadow: none;
       }
-    }
-    & .view-result:disabled {
-      color: #666666;
-      background: rgba(0, 0, 0, 0.1);
-      box-shadow: none;
     }
   }
 }

@@ -32,6 +32,7 @@ const app = defineClassComponent(
 @import "@/assets/scss/modules";
 .company-describe {
   margin-top: 30px;
+
   & .describe {
     color: #000;
     font-size: 18px;
@@ -39,6 +40,7 @@ const app = defineClassComponent(
     line-height: 26px;
     letter-spacing: 0.00938em;
   }
+
   & .we-will-help {
     color: #000;
     font-size: 11px;
@@ -47,6 +49,7 @@ const app = defineClassComponent(
     line-height: 16px;
     letter-spacing: 0.00938em;
   }
+
   & .click {
     height: 42px;
     background: linear-gradient(180deg, #e65078 0%, #c0296b 100%);

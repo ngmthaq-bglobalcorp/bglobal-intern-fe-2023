@@ -26,17 +26,7 @@ export const useAuthStore = defineClassStore(
 
     public fetchAdminSignIn = async (username: string, password: string, remember: boolean = true) => {
       try {
-        // const headers = new Headers();
-        // headers.append("Content-Type", " application/json");
-        // const res = await api.post(
-        //   ApiConst.authEndpoints.login,
-        //   JSON.stringify({ username: username, password: password }),
-        //   { headers: headers },
-        // );
-        const res = await api.post(
-          ApiConst.authEndpoints.login,
-          JSON.stringify({ username: username, password: password }),
-        );
+        const res = await api.post(ApiConst.authEndpoints.login, { username: username, password: password });
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
           console.log(data);
@@ -95,7 +85,7 @@ export const useAuthStore = defineClassStore(
           introduction: data.introduction || "",
           organizationType: data.organizationType || AppConst.ORGANIZATION_TYPE.typeB,
         };
-        const res = await api.post(ApiConst.authEndpoints.organizationSignup, JSON.stringify(organization));
+        const res = await api.post(ApiConst.authEndpoints.organizationSignup, organization);
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
           console.log(data);
@@ -122,7 +112,7 @@ export const useAuthStore = defineClassStore(
           username: data.username || "",
           password: data.password || "",
         };
-        const res = await api.post(ApiConst.authEndpoints.seekerSignup, JSON.stringify(seeker));
+        const res = await api.post(ApiConst.authEndpoints.seekerSignup, seeker);
         if (res.status === ApiConst.status.ok) {
           const data = await res.json();
           console.log(data);
@@ -156,9 +146,14 @@ export const useAuthStore = defineClassStore(
       }
     };
 
-    public fetchUpdatePassword = async (password: any) => {
+    public fetchUpdatePassword = async (data: any) => {
       try {
-        const res = await api.post(ApiConst.authEndpoints.changePassword, JSON.stringify(password));
+        const passwordObj = {
+          oldPassword: data.currentPassword || "",
+          newPassword: data.newPassword || "",
+        };
+        console.log(passwordObj);
+        const res = await api.post(ApiConst.authEndpoints.changePassword, passwordObj);
         if (res.status === ApiConst.status.ok) {
           return true;
         } else {

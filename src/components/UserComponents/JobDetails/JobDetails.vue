@@ -116,8 +116,12 @@ const app = defineClassComponent(
 <style scoped lang="scss">
 @import "@/assets/scss/modules";
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 .body_all {
-  height: calc(100% - 52px);
+  height: 100%;
 
   & #body {
     width: 100%;
@@ -285,6 +289,7 @@ const app = defineClassComponent(
             font-weight: 700;
             justify-content: flex-start;
             line-height: 19px;
+
             & i {
               font-size: 20px;
               margin-right: 4px;
@@ -298,6 +303,7 @@ const app = defineClassComponent(
           display: flex;
           flex-wrap: wrap;
           justify-content: center;
+
           & .card_footer_label {
             border: 1px solid #378182;
             border-radius: 4px;

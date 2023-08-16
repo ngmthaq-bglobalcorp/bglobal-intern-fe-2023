@@ -17,6 +17,11 @@ export class AppConst {
     disabled: "DISABLE",
   };
 
+  public static INTERACTION_TYPE = {
+    like: "LIKE",
+    dislike: "DISLIKE",
+  };
+
   public static ORGANIZATION_TYPE = {
     typeB: "B",
     typeC: "C",
@@ -34,5 +39,8 @@ export class AppConst {
     listView: "list",
   };
 
-  public static CITY = ["Ha Noi", "Ho Chi Minh", "Hai Phong"];
+  public static DEFAULT = {
+    location: "_defautl",
+    time: "_defautl",
+  };
 }

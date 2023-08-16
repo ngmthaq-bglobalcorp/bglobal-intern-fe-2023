@@ -30,21 +30,6 @@ export class PrimitiveHelper {
     throw new Error("Cannot convert hex to rgb");
   };
 
-  public static time = (start: number = 0, end: number = 23, step: number = 30) => {
-    const arrayHours: Array<string> = [];
-    for (let i = start; i <= end; i++) {
-      if (i <= 9) {
-        arrayHours.push("0" + i + ":00");
-        arrayHours.push("0" + i + ":" + step);
-      } else {
-        arrayHours.push(String(i) + ":00");
-        arrayHours.push(String(i) + ":" + String(step));
-      }
-    }
-
-    return arrayHours;
-  };
-
   public static isValidEmail = (email: string) => {
     const expression: RegExp =
       /^(?=.{1,254}$)(?=.{1,64}@)[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+(\.[-!#$%&'*+/0-9=?A-Z^_`a-z{|}~]+)*@[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?(\.[A-Za-z0-9]([A-Za-z0-9-]{0,61}[A-Za-z0-9])?)*$/;
@@ -53,10 +38,10 @@ export class PrimitiveHelper {
   };
 
   public static isValidPassword = (password: string) => {
-    if (password.length < 8) {
-      return false;
-    }
-    return true;
+    const expression: RegExp =
+      /^(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%^&*(),.?":{}|<>])[A-Za-z0-9!@#$%^&*(),.?":{}|<>]{8,}$/;
+    const result: boolean = expression.test(password);
+    return result;
   };
 
   public static isValidPhoneNumber = (phone: string) => {
@@ -65,14 +50,54 @@ export class PrimitiveHelper {
     return result;
   };
 
+  public static isValidUrl = (url: string) => {
+    const expression: RegExp = /^(https?|ftp):\/\/[^\s/$.?#].[^\s]*$/;
+    const result: boolean = expression.test(url);
+    return result;
+  };
+
+  public static isValidCountHours = (hour: number) => {
+    if (hour >= 0 && hour <= 24) {
+      return true;
+    }
+    return false;
+  };
+
+  public static getValidUrl = (url: string) => {
+    if (url) {
+      return this.isValidUrl(url) ? url : "https://" + url;
+    }
+    return "";
+  };
+
+  public static getTime = (start: number = 0, end: number = 23, step: number = 30) => {
+    const arrayHours: Array<string> = [];
+    for (let i = start; i <= end; i++) {
+      if (i <= 9) {
+        arrayHours.push("0" + i + ":00");
+        arrayHours.push("0" + i + ":" + step);
+      } else {
+        arrayHours.push(i + ":00");
+        arrayHours.push(i + ":" + step);
+      }
+    }
+    return arrayHours;
+  };
+
+  public static getCountHour = (startTime: string, endTime: string) => {
+    const startHour = startTime.split(":")[0];
+    const startMinute = startTime.split(":")[1];
+    const endHour = endTime.split(":")[0];
+    const endMinute = endTime.split(":")[1];
+    const start = parseInt(startHour) + parseInt(startMinute) / 60;
+    const end = parseInt(endHour) + parseInt(endMinute) / 60;
+    return end - start;
+  };
+
   public static getSalary = (salary: number) => {
-    // let text = "";
-    const text = salary.toLocaleString("vi-VN", {
-      style: "currency",
-      currency: "VND",
-      currencyDisplay: "symbol",
-    });
-    // text += formattedAmount;
+    let text = "";
+    // text += "Salary: " + salary.toLocaleString("vi-VN", { style: "currency", currency: "VND" });
+    text += "Salary: " + salary.toLocaleString("vi-VN") + " VND";
     return text;
   };
 

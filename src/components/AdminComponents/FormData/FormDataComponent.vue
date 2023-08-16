@@ -22,6 +22,7 @@
 
                 <div class="custom-input-group">
                   <div class="input-image" v-for="image of input.model" :key="image">
+                    <LoadingComponent :is-loading="!image.includes('res.cloudinary.com')" />
                     <img :src="image" :alt="input.label" class="image" v-if="image" />
                     <button class="delete-btn" @click.prevent="app.onToggleDeleteImage(input, image)">
                       <i class="bi bi-x-circle"></i>
@@ -105,6 +106,35 @@
               </template>
               <!-- Select Input -->
 
+              <!-- Text DateTime Input -->
+              <template v-else-if="input.type === 'dateTime'">
+                <label class="input-label" :for="input.name">
+                  {{ input.label }}
+                  <span class="input-label-secondary" v-if="input.required">*</span>
+                </label>
+
+                <div class="custom-input-group d-flex flex-row">
+                  <!-- Custom Input -->
+                  <template v-for="child in input.children" :key="child.id">
+                    <input
+                      :type="child.type"
+                      :class="['input-form', { 'is-invalid': child.error }]"
+                      :name="input.name + child.name"
+                      :id="input.name + child.name"
+                      :placeholder="child.placeholder"
+                      v-model="child.model"
+                      @focus="app.onFocusInputText(child)"
+                    />
+
+                    <div class="invalid-feedback" v-if="child.error">{{ child.error }}</div>
+                  </template>
+
+                  <div class="invalid-feedback" v-if="input.error">{{ input.error }}</div>
+                  <!-- End Custom Input -->
+                </div>
+              </template>
+              <!-- End DateTime Input -->
+
               <!-- Select Multiple Input -->
               <template v-else-if="input.type === 'selectMultiple'">
                 <label class="input-label" :for="input.name">
@@ -153,20 +183,28 @@
                       </label>
                     </div>
                     <div class="input-time" v-else-if="child.type === 'time'">
+                      <!-- Time Select -->
                       <label class="input-label" :for="input.name + child.name">
                         {{ child.label }}
                         <span class="input-label-secondary" v-if="child.required">*</span>
                       </label>
-                      <input
-                        :type="child.type"
-                        :class="['input-form', { 'is-invalid': child.error }]"
-                        :name="input.name + child.name"
+                      <select
+                        :class="['input-form', { 'is-invalid': input.error }]"
                         :id="input.name + child.name"
-                        :placeholder="child.placeholder"
                         v-model="child.model"
-                        @focus="app.onFocusInputText(child)"
-                      />
+                      >
+                        <option
+                          :value="option"
+                          :selected="option === child.model"
+                          v-for="option in child.children"
+                          :key="option"
+                        >
+                          {{ option }}
+                        </option>
+                      </select>
+
                       <div class="invalid-feedback" v-if="child.error">{{ child.error }}</div>
+                      <!-- End Time Select -->
                     </div>
                     <div class="input-time" v-else>
                       <label class="input-label" :for="input.name + child.name">
@@ -200,7 +238,7 @@
                     <div class="text-wrapper">
                       <span class="time" v-if="item.startTime">{{ `Start time: ${item.startTime}` }}</span>
                       <span class="time" v-if="item.endTime">{{ `End time: ${item.endTime}` }}</span>
-                      <span class="time" v-if="item.countHours">{{ `Hours: ${item.countHours}` }}</span>
+                      <span class="time" v-if="item.countHours.toString()">{{ `Hours: ${item.countHours}` }}</span>
                       <span class="time">
                         <template v-if="item.isFullTime">
                           {{ `Fulltime` }}
@@ -225,7 +263,7 @@
                   <span class="input-label-secondary" v-if="input.required">*</span>
                 </label>
 
-                <div class="custom-input-group">
+                <div class="custom-input-group flex-column">
                   <!-- Custom Input -->
                   <template v-for="child in input.children" :key="child.id">
                     <div class="custom-check" v-if="child.type === 'checkbox'">
@@ -341,17 +379,17 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import { useCommonStore } from "@/stores/common.store";
+import LoadingComponent from "@/components/AppComponents/LoadingComponent/LoadingComponent.vue";
+import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import type { FormDataEmits, FormDataProps } from "./FormDataComponent";
 import type { Ref } from "vue";
 import type { SearchLabelModel } from "@/models/searchLabel.model";
 
 const props = defineProps<FormDataProps>();
-const emit = defineEmits<FormDataEmits>();
+const emits = defineEmits<FormDataEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public commonStore = useCommonStore();
     public input: Ref<any> = this.ref(props.input);
 
     public constructor() {
@@ -409,6 +447,10 @@ const app = defineClassComponent(
       input.model = input.model.filter((value: any) => value != item);
     };
 
+    public onFocusInputText = (input: any) => {
+      input.error = "";
+    };
+
     public onToggleSelectMultiple = (input: any, label: SearchLabelModel) => {
       if (input.model.includes(label)) {
         input.model = input.model.filter((value: SearchLabelModel) => value != label);
@@ -420,8 +462,11 @@ const app = defineClassComponent(
     public onToggleAddButton = (input: any) => {
       let inputObj = {};
       let isValidInput = input.children.every((value: any) => {
-        if (value.required && !value.model) {
-          value.error = this.t(`app.notBlank`, { value: value.label });
+        if (value.required && !value.model.toString()) {
+          value.error = this.t(`message.notBlank`, { value: value.label });
+          return false;
+        } else if (value.name === "countHours" && !PrimitiveHelper.isValidCountHours(value.model)) {
+          value.error = app.t(`message.errorCountHours`);
           return false;
         } else {
           inputObj = {
@@ -435,7 +480,7 @@ const app = defineClassComponent(
         input.model.push(inputObj);
         input.children.forEach((value: any) => {
           if (value.type === "time") {
-            value.model = "00:00";
+            value.model = PrimitiveHelper.getTime()[0];
           } else {
             value.model = "";
           }
@@ -443,17 +488,19 @@ const app = defineClassComponent(
       }
     };
 
-    public onFocusInputText = (input: any) => {
-      input.error = "";
-    };
-
     public onSubmitForm = () => {
       let data: any = {};
       let isValidInput = true;
       app.input.value.map((input: any) => {
         input.children.map((value: any) => {
-          if (value.required && value.model.length === 0) {
-            value.error = this.t(`app.notBlank`, { value: value.label });
+          if (value.type === "dateTime") {
+            value.model += value.children[1].model + " " + value.children[0].model;
+            data = {
+              ...data,
+              [value.name]: new Date(value.model),
+            };
+          } else if (value.required && value.model.length === 0) {
+            value.error = this.t(`message.notBlank`, { value: value.label });
             isValidInput = false;
           } else {
             if (value.type === "date") {
@@ -471,7 +518,7 @@ const app = defineClassComponent(
         });
       });
       if (isValidInput) {
-        emit("onSubmitForm", data);
+        emits("onSubmitForm", data);
       }
     };
   },
@@ -510,6 +557,7 @@ const app = defineClassComponent(
     & .form-group-wrapper {
       width: 100%;
       display: flex;
+      gap: 0.5rem;
       margin-bottom: 1.5rem;
 
       & .form-group {
@@ -532,6 +580,12 @@ const app = defineClassComponent(
           align-items: center;
           flex-wrap: wrap;
           gap: 0.5rem;
+
+          &.flex-row {
+            & .input-form {
+              flex: 1;
+            }
+          }
 
           & .input-form {
             display: block;
@@ -642,10 +696,13 @@ const app = defineClassComponent(
 
           & .group-check {
             width: 100%;
+            height: 100%;
             display: flex;
             align-items: center;
 
             & label.input-form {
+              flex: 1;
+              height: 100%;
               text-align: center;
               cursor: pointer;
 
@@ -715,7 +772,7 @@ const app = defineClassComponent(
           & .input-time {
             flex: 1;
             display: flex;
-            align-items: center;
+            flex-direction: column;
             flex-wrap: wrap;
           }
 

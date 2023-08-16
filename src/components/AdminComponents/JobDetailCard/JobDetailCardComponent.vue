@@ -3,7 +3,7 @@
   <div class="job-detail-card-container custom-card">
     <!-- Infomation -->
     <div class="job-wrapper">
-      <div class="job-header" v-if="app.job.value.mainImageUrl">
+      <div class="job-header" v-if="app.job.value.mainImageUrl && app.show.value">
         <img :src="app.job.value.mainImageUrl" :alt="app.job.value.mainImageDesc" class="main-img" />
       </div>
       <div class="job-body">
@@ -90,14 +90,16 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
-import type { Ref } from "vue";
 import type { JobDetailCardProps } from "./JobDetailCardComponent";
+import type { Ref } from "vue";
 import type { JobModel } from "@/models/job.model";
 
 const props = defineProps<JobDetailCardProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public show: Ref<boolean> = this.ref(false);
+
     public job: Ref<JobModel> = this.computed(() => props.data);
 
     public constructor() {
