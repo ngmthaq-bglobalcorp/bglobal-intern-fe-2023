@@ -3,8 +3,9 @@
     <div class="select-1">
       <div class="location-time">
         <p>{{ app.t("jobsApp.form.location") }}</p>
-        <select class="first_search_row custom_select" style="width: 136px" v-model="app.fisrtLocation.value">
-          <option :value="location.id" v-for="location in app.locations.value" :key="location.id">
+        <select class="first_search_row custom_select" style="width: 136px" v-model="app.firstLocation.value">
+          <option :value="AppConst.DEFAULT.location">{{ app.t("jobsApp.form.location") }}</option>
+          <option :value="location.name" v-for="location in app.locations.value" :key="location.id">
             {{ location.name }}
           </option>
         </select>
@@ -13,7 +14,7 @@
       <div class="location-time">
         <p>{{ app.t("jobsApp.form.startTime") }}</p>
         <select class="jss86 custom_select" v-model="app.startTime.value">
-          <option value="_default_selection">{{ app.t("jobsApp.form.startTime") }}</option>
+          <option :value="AppConst.DEFAULT.time">{{ app.t("jobsApp.form.startTime") }}</option>
           <option :value="hour" v-for="hour in PrimitiveHelper.getTime()" :key="hour">{{ hour }}</option>
         </select>
       </div>
@@ -21,24 +22,26 @@
       <div class="location-time">
         <p>{{ app.t("jobsApp.form.endTime") }}</p>
         <select class="jss86 custom_select" v-model="app.endTime.value">
-          <option value="_default_selection">{{ app.t("jobsApp.form.endTime") }}</option>
+          <option :value="AppConst.DEFAULT.time">{{ app.t("jobsApp.form.endTime") }}</option>
           <option :value="hour" v-for="hour in PrimitiveHelper.getTime()" :key="hour">{{ hour }}</option>
         </select>
       </div>
     </div>
     <div class="select-2">
       <div class="location-sub-2-3">
-        <p>Second {{ app.t("jobsApp.form.location") }}</p>
+        <p>{{ app.t("jobsApp.form.secondLocation") }}</p>
         <select class="custom_select" v-model="app.secondLocation.value">
-          <option :value="location.id" v-for="location in app.locations.value" :key="location.id">
+          <option :value="AppConst.DEFAULT.location">{{ app.t("jobsApp.form.location") }}</option>
+          <option :value="location.name" v-for="location in app.locations.value" :key="location.id">
             {{ location.name }}
           </option>
         </select>
       </div>
       <div class="location-sub-2-3">
-        <p>Third {{ app.t("jobsApp.form.location") }}</p>
+        <p>{{ app.t("jobsApp.form.thirdLocation") }}</p>
         <select class="custom_select" v-model="app.thirdLocation.value">
-          <option :value="location.id" v-for="location in app.locations.value" :key="location.id">
+          <option :value="AppConst.DEFAULT.location">{{ app.t("jobsApp.form.location") }}</option>
+          <option :value="location.name" v-for="location in app.locations.value" :key="location.id">
             {{ location.name }}
           </option>
         </select>
@@ -73,22 +76,20 @@
         <p class="title">{{ app.t("jobsApp.form.applicable.title") }}</p>
 
         <div class="result">
-          <p class="result-match">2</p>
+          <p class="result-match">{{ app.currentJobNumber.value }}</p>
           <p class="jobs">&nbsp;/&nbsp;</p>
-          <p class="result-sum">394</p>
-          <p class="jobs">Jobs</p>
+          <p class="result-sum">{{ app.totalJobsNumber.value }}</p>
+          <p class="jobs">{{ app.t("jobsApp.form.applicable.jobs") }}</p>
         </div>
       </div>
       <button
-        :disabled="app.isDisableSearchButton.value"
         class="view-result"
-        tabindex="0"
         type="submit"
         form="homepage_search_form_id"
+        tabindex="0"
+        :disabled="app.isDisableSearchButton.value"
       >
-        <RouterLink to="/user/joblist" class="item-link">
-          {{ app.t("jobsApp.form.applicable.result") }}
-        </RouterLink>
+        {{ app.t("jobsApp.form.applicable.result") }}
       </button>
     </div>
   </form>
@@ -97,7 +98,11 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { AppConst } from "@/const/app.const";
+import { KeyConst } from "@/const/key.const";
 import { PathConst } from "@/const/path.const";
+import { StorageHelper } from "@/helpers/storage.helper";
+import { useSeekersStore } from "@/stores/seekers.store";
 import type { FormSearchProps } from "./FormSearch";
 import type { Ref } from "vue";
 import type { LocationModel } from "@/models/location.model";
@@ -107,23 +112,37 @@ const props = defineProps<FormSearchProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public isDisableSearchButton: Ref<boolean> = this.ref(Boolean(props.isDisableSearchButton));
-    public fisrtLocation: Ref<number> = this.ref(1);
-    public secondLocation: Ref<number> = this.ref(1);
-    public thirdLocation: Ref<number> = this.ref(1);
-    public startTime: Ref<string> = this.ref("_default_selection");
-    public endTime: Ref<string> = this.ref("_default_selection");
-    public searchLabelsArray: Ref<Array<number>> = this.ref([]);
+    public seekerStore = useSeekersStore();
 
+    public isDisableSearchButton: Ref<boolean> = this.ref(Boolean(props.isDisableSearchButton));
+    public startTime: Ref<string> = this.ref(AppConst.DEFAULT.time);
+    public endTime: Ref<string> = this.ref(AppConst.DEFAULT.time);
+    public firstLocation: Ref<string> = this.ref(AppConst.DEFAULT.location);
+    public secondLocation: Ref<string> = this.ref(AppConst.DEFAULT.location);
+    public thirdLocation: Ref<string> = this.ref(AppConst.DEFAULT.location);
+    public searchLabelsArray: Ref<Array<number>> = this.ref([]);
+    public currentJobNumber: Ref<number> = this.ref(0);
+
+    public totalJobsNumber: Ref<number> = this.computed(() => this.seekerStore.totalJobs);
     public locations: Ref<Array<LocationModel>> = this.computed(() => this.commonStore.locations);
     public searchLabels: Ref<Array<SearchLabelModel>> = this.computed(() => this.commonStore.searchLabels);
 
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.commonStore.fetchAllLocations();
-        this.commonStore.fetchAllSearchLabels();
+      this.onBeforeMount(async () => {
+        await this.commonStore.fetchAllLocations();
+        await this.commonStore.fetchAllSearchLabels();
+        const data: any = StorageHelper.getLocalStorage(KeyConst.keys.searchCondition);
+        if (data) {
+          this.startTime.value = data.startTime || AppConst.DEFAULT.time;
+          this.endTime.value = data.endTime || AppConst.DEFAULT.time;
+          this.firstLocation.value = data.firstLocation || AppConst.DEFAULT.location;
+          this.secondLocation.value = data.secondLocation || AppConst.DEFAULT.location;
+          this.thirdLocation.value = data.thirdLocation || AppConst.DEFAULT.location;
+          this.searchLabelsArray.value = data.searchLabelsArray || [];
+          await this.seekerStore.fetchTotalJobs(data);
+        }
       });
 
       this.commonStore.eventBus.on("showFormSearch", () => {
@@ -143,8 +162,24 @@ const app = defineClassComponent(
       }
     };
 
-    public onSubmitForm = () => {
-      this.router.push(PathConst.userJobsList);
+    public onSubmitForm = async () => {
+      const data = {
+        startTime: this.startTime.value,
+        endTime: this.endTime.value,
+        firstLocation: this.firstLocation.value,
+        secondLocation: this.secondLocation.value,
+        thirdLocation: this.thirdLocation.value,
+        searchLabelsArray: this.searchLabelsArray.value,
+      };
+      this.commonStore.setIsLoading(true);
+      let isSuccess = true;
+      isSuccess = await this.seekerStore.fetchAllJobs(data);
+      isSuccess = await this.seekerStore.fetchTotalJobs(data);
+      if (isSuccess) {
+        StorageHelper.setLocalStorage(KeyConst.keys.searchCondition, data);
+        this.router.push(PathConst.userJobsList);
+      }
+      this.commonStore.setIsLoading(false);
     };
   },
 );
@@ -328,6 +363,7 @@ const app = defineClassComponent(
           font-weight: 400;
           line-height: 24px;
           margin: 0px;
+          margin-left: 1px;
         }
 
         & .result-sum {
@@ -351,11 +387,6 @@ const app = defineClassComponent(
       box-shadow: 0px 4px 8px rgba(157, 6, 95, 0.3);
       border-radius: 30px;
       border: none;
-
-      & .item-link {
-        text-decoration: none;
-        color: #fff;
-      }
 
       &:disabled {
         color: #666666;
