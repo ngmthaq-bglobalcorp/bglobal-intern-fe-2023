@@ -49,12 +49,14 @@ const app = defineClassComponent(
     }
 
     public onToggleSignOut = async () => {
-      this.commonStore.isLoading = true;
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.authStore.fetchAdminSignOut();
       if (isSuccess) {
-        window.location.href = PathConst.userSignin.path;
+        // window.location.href = PathConst.userSignin.path;
+      } else {
+        // window.location.href = PathConst.userSignin.path;
       }
-      this.commonStore.isLoading = false;
+      this.commonStore.setIsLoading(false);
     };
   },
 );

@@ -207,6 +207,7 @@
     "userLikeJob": "User like job",
     "hello": "Hello, nice to see you!",
     "enjoy": "You are now minutes away from creativity than ever before. Enjoy!",
+    "create": "Create my first job",
     "notFound": "Sorry, the page you're looking for cannot be found.",
     "internalError": "The server encountered an internal error or misconfiguration and was unable to complete your request."
   },

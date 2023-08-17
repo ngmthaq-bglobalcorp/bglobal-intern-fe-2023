@@ -387,7 +387,7 @@
     <!-- End Card -->
 
     <!-- Card -->
-    <div id="deleteAccountSection" class="custom-card">
+    <div id="deleteAccountSection" class="custom-card" v-if="app.isDisplayed.value">
       <div class="custom-header">
         <h4 class="card-title">{{ app.t(`app.deleteAccount`) }}</h4>
       </div>
@@ -438,6 +438,7 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public profile: Ref<OrganizationModel> = this.computed(() => props.profile);
 
+    public isDisplayed: Ref<boolean> = this.ref(false);
     public typeArray: Ref<Array<string>> = this.ref(Object.values(AppConst.ORGANIZATION_TYPE));
     public requirementsIndexArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.requirements`)));
     public newEmail: Ref<string> = this.ref("");

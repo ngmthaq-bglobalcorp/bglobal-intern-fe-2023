@@ -35,7 +35,7 @@
               {{ app.t(`app.preferences`) }}
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="app.isDisplayed.value">
             <a class="nav-link" href="#deleteAccountSection" scroll="smooth">
               <i class="bi bi-trash icon"></i>
               {{ app.t(`app.deleteAccount`) }}
@@ -91,6 +91,7 @@ const app = defineClassComponent(
     public organizationStore = useOrganizationStore();
     public authStore = useAuthStore();
 
+    public isDisplayed: Ref<boolean> = this.ref(false);
     public messageInfoUpdateSuccess: Ref<string> = this.ref("");
     public messageInfoUpdateFailed: Ref<string> = this.ref("");
     public messageEmailUpdateSuccess: Ref<string> = this.ref("");

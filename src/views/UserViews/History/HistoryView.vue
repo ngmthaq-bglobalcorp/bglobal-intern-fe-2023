@@ -36,7 +36,7 @@
       </div>
 
       <!-- Pagination -->
-      <nav class="footer-pagination">
+      <nav class="footer-pagination" v-if="app.totalPages.value > 0">
         <ul class="page-list">
           <li class="page-item">
             <button :class="['page-btn', { disabled: app.pageNumber.value <= 1 }]" @click.prevent="app.onTogglePrev">

@@ -2,12 +2,14 @@
   <div class="profile-update-container">
     <!-- Card -->
     <div id="content" class="custom-card">
-      <div class="custom-header">
+      <div class="custom-header" @click="app.onToggleHeader(app.infoCollapse)">
         <h2 class="card-title">{{ app.t(`app.basicInformation`) }}</h2>
+        <i class="bi bi-chevron-down" v-if="app.infoCollapse.value"></i>
+        <i class="bi bi-chevron-up" v-else></i>
       </div>
 
       <!-- Body -->
-      <div class="custom-body">
+      <div class="custom-body" :class="{ disabled: app.infoCollapse.value }">
         <!-- Form -->
         <div class="success-message" v-if="props.messageInfoUpdateSuccess">
           {{ props.messageInfoUpdateSuccess }}
@@ -249,12 +251,14 @@
 
     <!-- Card -->
     <div id="emailSection" class="custom-card">
-      <div class="custom-header">
+      <div class="custom-header" @click="app.onToggleHeader(app.emailCollapse)">
         <h2 class="card-title">{{ app.t(`app.email`) }}</h2>
+        <i class="bi bi-chevron-down" v-if="app.emailCollapse.value"></i>
+        <i class="bi bi-chevron-up" v-else></i>
       </div>
 
       <!-- Body -->
-      <div class="custom-body">
+      <div class="custom-body" :class="{ disabled: app.emailCollapse.value }">
         <div class="card-text">
           {{ app.t(`app.currentEmail`) }}<span class="font-weight-bold">{{ app.email.value }}</span>
         </div>
@@ -299,12 +303,14 @@
 
     <!-- Card -->
     <div id="passwordSection" class="custom-card">
-      <div class="custom-header">
+      <div class="custom-header" @click="app.onToggleHeader(app.passwordCollapse)">
         <h2 class="card-title">{{ app.t(`app.changePassword`) }}</h2>
+        <i class="bi bi-chevron-down" v-if="app.passwordCollapse.value"></i>
+        <i class="bi bi-chevron-up" v-else></i>
       </div>
 
       <!-- Body -->
-      <div class="custom-body">
+      <div class="custom-body" :class="{ disabled: app.passwordCollapse.value }">
         <!-- Form -->
         <div class="success-message" v-if="props.messagePasswordUpdateSuccess">
           {{ props.messagePasswordUpdateSuccess }}
@@ -405,12 +411,14 @@
 
     <!-- Card -->
     <div id="preferencesSection" class="custom-card">
-      <div class="custom-header">
+      <div class="custom-header" @click="app.onToggleHeader(app.preferencesCollapse)">
         <h2 class="card-title">{{ app.t(`app.preferences`) }}</h2>
+        <i class="bi bi-chevron-down" v-if="app.preferencesCollapse.value"></i>
+        <i class="bi bi-chevron-up" v-else></i>
       </div>
 
       <!-- Body -->
-      <div class="custom-body">
+      <div class="custom-body" :class="{ disabled: app.preferencesCollapse.value }">
         <!-- Form -->
         <form id="changePreferencesForm" action="" @submit.prevent="app.onUpdateLanguage">
           <!-- Form Group -->
@@ -456,13 +464,15 @@
     <!-- End Card -->
 
     <!-- Card -->
-    <div id="deleteAccountSection" class="custom-card">
-      <div class="custom-header">
+    <div id="deleteAccountSection" class="custom-card" v-if="app.isDisplayed.value">
+      <div class="custom-header" @click="app.onToggleHeader(app.deleteCollapse)">
         <h4 class="card-title">{{ app.t(`app.deleteAccount`) }}</h4>
+        <i class="bi bi-chevron-down" v-if="app.deleteCollapse.value"></i>
+        <i class="bi bi-chevron-up" v-else></i>
       </div>
 
       <!-- Body -->
-      <div class="custom-body">
+      <div class="custom-body" :class="{ disabled: app.deleteCollapse.value }">
         <div class="card-text">{{ app.t(`app.deleteNotice`) }}</div>
 
         <div class="form-group">
@@ -506,6 +516,12 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public profile: Ref<SeekerModel> = this.computed(() => props.profile);
 
+    public isDisplayed: Ref<boolean> = this.ref(false);
+    public infoCollapse: Ref<boolean> = this.ref(false);
+    public emailCollapse: Ref<boolean> = this.ref(false);
+    public passwordCollapse: Ref<boolean> = this.ref(false);
+    public preferencesCollapse: Ref<boolean> = this.ref(false);
+    public deleteCollapse: Ref<boolean> = this.ref(false);
     public requirementsIndexArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.requirements`)));
     public newEmail: Ref<string> = this.ref("");
     public currentPassword: Ref<string> = this.ref("");
@@ -566,6 +582,10 @@ const app = defineClassComponent(
         },
       );
     }
+
+    public onToggleHeader = (target: any) => {
+      target.value = !target.value;
+    };
 
     public onToggleEmail = () => {
       const element = document.getElementById("emailSection");
@@ -725,7 +745,7 @@ const app = defineClassComponent(
   flex-wrap: wrap;
 
   & .custom-card {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 
     & .custom-header {
       display: flex;
@@ -733,7 +753,7 @@ const app = defineClassComponent(
       justify-content: space-between;
       gap: 0.5rem;
       padding: 1rem 1.3125rem;
-      border-bottom: 0.0625rem solid $border;
+      cursor: pointer;
 
       & .card-title {
         font-size: 1rem;
@@ -744,7 +764,19 @@ const app = defineClassComponent(
     }
 
     & .custom-body {
+      border-top: 0.0625rem solid $border;
       padding: 1.3125rem 1.3125rem;
+      opacity: 1;
+      visibility: visible;
+      transition: transform 1s ease-in-out;
+
+      &.disabled {
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        border: 0;
+        transform: translate3d(0, -100%, 0);
+      }
 
       & .success-message,
       & .fail-message {

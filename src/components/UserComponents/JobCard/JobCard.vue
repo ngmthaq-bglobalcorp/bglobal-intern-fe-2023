@@ -26,7 +26,7 @@
                 alt="Main image"
                 v-else-if="app.job.value.subImages.length > 0"
               />
-              <div class="card_header_hiring_title" v-if="app.show.value">
+              <div class="card_header_hiring_title" v-if="app.isDisplayed.value">
                 <div class="card_header_types">
                   <div class="card_header_types_item">A</div>
                   <div class="card_header_types_item">B</div>
@@ -181,7 +181,7 @@ const emits = defineEmits<JobCardEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public show: Ref<boolean> = this.ref(false);
+    public isDisplayed: Ref<boolean> = this.ref(false);
     public isShowTutorial: Ref<boolean> = this.ref(false);
     public isShowUserGuild: Ref<boolean> = this.ref(false);
 
@@ -309,7 +309,7 @@ const app = defineClassComponent(
             -webkit-box-orient: vertical;
             color: #000;
             display: -webkit-box;
-            line-break: anywhere;
+            line-break: auto;
             margin: 0;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -393,7 +393,7 @@ const app = defineClassComponent(
         display: -webkit-box;
         font-size: 13px;
         font-weight: 400;
-        line-break: anywhere;
+        line-break: auto;
         line-height: 19px;
         margin-bottom: 10px;
         overflow: hidden;

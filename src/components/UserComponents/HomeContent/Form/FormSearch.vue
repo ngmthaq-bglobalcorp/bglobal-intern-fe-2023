@@ -318,7 +318,7 @@ const app = defineClassComponent(
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         display: -webkit-box;
-        line-break: anywhere;
+        line-break: auto;
         overflow: hidden;
         text-overflow: ellipsis;
         margin: 0 5px 10px 5px;

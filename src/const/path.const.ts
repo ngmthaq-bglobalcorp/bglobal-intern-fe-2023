@@ -159,7 +159,7 @@ export class PathConst {
   };
 
   public static adminUserProfile: Route = {
-    path: "/admin/:username",
+    path: "/admin/user/:username",
     name: "adminUserProfile",
     component: UserProfileAdminViewVue,
     props: true,

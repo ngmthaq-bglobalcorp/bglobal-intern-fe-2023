@@ -12,7 +12,7 @@
             </span>
           </div>
 
-          <div class="signup-google" v-if="app.show.value">
+          <div class="signup-google" v-if="app.isDisplayed.value">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
                 <img src="@\assets\img\google.svg" alt="Google" class="image avatar" />
@@ -21,7 +21,7 @@
             </button>
           </div>
 
-          <div class="content-or" v-if="app.show.value">
+          <div class="content-or" v-if="app.isDisplayed.value">
             <span class="divider text-muted">{{ app.t(`app.or`) }}</span>
           </div>
 
@@ -202,7 +202,7 @@
 
           <button type="submit" class="g-btn submit-btn">{{ app.t(`app.buttonCreate`) }}</button>
 
-          <button type="submit" class="g-btn trial-btn" v-if="app.show.value">
+          <button type="submit" class="g-btn trial-btn" v-if="app.isDisplayed.value">
             {{ app.t(`app.startTrial`) }}
             <i class="tio-chevron-right"></i>
           </button>
@@ -225,7 +225,7 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
 
-    public show: Ref<boolean> = this.ref(false);
+    public isDisplayed: Ref<boolean> = this.ref(false);
     public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");
     public confirmPassword: Ref<string> = this.ref("");
@@ -326,6 +326,8 @@ const app = defineClassComponent(
             this.errorEmail.value = this.t("message.errorEmail");
           } else {
             window.location.replace(PathConst.adminDashboard.path);
+            // window.location.href = PathConst.adminDashboard.path;
+            // this.router.push(PathConst.adminDashboard);
           }
         } else {
           this.errorInput.value = this.t(`message.errorUsernameOrPassword`);

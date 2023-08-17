@@ -30,7 +30,7 @@ const app = defineClassComponent(
       { field: "username", headerName: "username" },
       { field: "name", headerName: "name" },
       { field: "email", headerName: "email" },
-      { field: "phone", headerName: "phone" },
+      { field: "phoneNumber", headerName: "phone" },
       { field: "status", headerName: "status" },
     ]);
 

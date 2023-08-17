@@ -29,7 +29,9 @@
         </li>
       </ul>
     </div>
-    <ul class="jobs-list list">
+
+    <!-- Job Card List -->
+    <ul class="jobs-list list" v-if="app.filtersJobs.value.length > 0">
       <li class="jobs-item" v-for="item in app.filtersJobs.value" :key="item.id">
         <JobCard
           :data="item"
@@ -39,9 +41,19 @@
         />
       </li>
     </ul>
+    <!-- End Job Card List -->
+
+    <!-- Message -->
+    <div class="jobs-message" v-else>
+      <img src="@/assets/img/oc-collaboration.svg" alt="Hi" class="image" />
+      <h1 class="title">{{ app.t(`app.hello`) }}</h1>
+      <span class="desc">{{ app.t(`app.enjoy`) }}</span>
+      <button class="small-btn primary-btn" @click="app.onToggleCreateButton">{{ app.t(`app.create`) }}</button>
+    </div>
+    <!-- End Message -->
 
     <!-- Pagination -->
-    <div class="footer-pagination">
+    <div class="footer-pagination" v-if="app.totalPages.value > 0">
       <ul class="list">
         <li class="page-item">
           <button
@@ -117,6 +129,10 @@ const app = defineClassComponent(
     }
 
     public onToggleButton = () => {
+      this.router.push(PathConst.adminAddJob);
+    };
+
+    public onToggleCreateButton = () => {
       this.router.push(PathConst.adminAddJob);
     };
 
@@ -228,6 +244,36 @@ const app = defineClassComponent(
   & .jobs-item {
     padding: 0 0.75rem;
     margin-bottom: 2rem;
+  }
+}
+
+.jobs-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+
+  & .image {
+    width: 100%;
+    max-width: 16rem;
+    height: auto;
+    vertical-align: middle;
+    margin-bottom: 2rem;
+  }
+
+  & .title {
+    color: $black;
+    font-size: 1.4109375rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  & .desc {
+    margin-top: 0;
+    margin-bottom: 1rem;
   }
 }
 
