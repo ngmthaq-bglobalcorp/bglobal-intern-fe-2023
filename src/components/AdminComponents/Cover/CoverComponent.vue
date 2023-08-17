@@ -13,7 +13,7 @@
 
     <div class="content">
       <div class="content-image">
-        <img src="@\assets\img\chat.svg" alt="Image" class="image" />
+        <img src="@\assets\img\oc-chatting.svg" alt="Image" class="image" />
       </div>
 
       <div class="content-title">
