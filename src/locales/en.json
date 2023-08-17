@@ -1,0 +1,302 @@
+{
+  "lang": "en",
+  "title": {
+    "notFound": "Not Found",
+    "internalError": "Error",
+    "user": {
+      "signup": "Sign Up",
+      "signin": "Sign In",
+      "forgotPassword": "Forgot Password",
+      "home": "Homepage",
+      "jobslist": "Jobs list",
+      "jobDetails": "Job details",
+      "history": "History",
+      "profile": "Profile"
+    },
+    "admin": {
+      "signup": "Sign Up",
+      "signin": "Sign In",
+      "forgotPassword": "Forgot Password",
+      "dashboard": "Dashboard",
+      "seekers": "Seekers",
+      "hiringOrganization": "Hiring Organization",
+      "news": "News",
+      "addNews": "Add news",
+      "updateNews": "Update news",
+      "jobs": "Jobs",
+      "addJob": "Add job",
+      "updateJob": "Update job",
+      "userProfile": "Profile",
+      "updateProfile": "Update Profile"
+    }
+  },
+  "message": {
+    "errorUsernameOrPassword": "Please enter a valid username or password.",
+    "errorUsernameExists": "This username already exists.",
+    "errorNameExists": "This name has been taken.",
+    "errorEmailExists": "This username already exists.",
+    "errorUsername": "Please enter a valid username.",
+    "errorPassword": "Your password is invalid. Please try again.",
+    "errorConfirmPassword": "Password does not match the confirm password.",
+    "errorName": "Please enter your name.",
+    "errorEmail": "Please enter a valid email address.",
+    "errorPhoneNumber": "Please enter a valid phone number.",
+    "errorAddress": "Please enter address.",
+    "errorTerms": "Please accept our Terms and Conditions.",
+    "errorOtp": "Please enter a valid OTP.",
+    "errorUrl": "Please enter a valid url.",
+    "errorCountHours": "CountHour must be within the range of 0 to 24.",
+    "notBlank": "{value} cannot be blank",
+    "updateSuccess": "Update successfull",
+    "updateFailed": "Update failed"
+  },
+  "app": {
+    "coverTitle": "The best part? Everything.",
+    "coverContent": [
+      {
+        "title": "Stick to your budget",
+        "content": "Find the right service for every price point. No hourly rates, just project-based pricing."
+      },
+      {
+        "title": "Get quality work done quickly",
+        "content": "Hand your project over to a talented freelancer in minutes, get long-lasting results."
+      },
+      {
+        "title": "Pay when you're happy",
+        "content": "Upfront quotes mean no surprises. Payments only get released when you approve."
+      },
+      {
+        "title": "Count on 24/7 support",
+        "content": "Our round-the-clock support team is available to help anytime, anywhere."
+      }
+    ],
+    "createAccount": "Create your account",
+    "haveAccount": "Already have an account?",
+    "signinHere": "Sign in here",
+    "signupGoogle": "Sign up with Google",
+    "or": "OR",
+    "organizationName": "Organization name",
+    "organizationEmail": "Organization email",
+    "username": "Username",
+    "password": "Password",
+    "confirmPassword": "Confirm password",
+    "forgotPassword": "Forgot Password?",
+    "passwordRequired": "8+ characters required",
+    "iAccept": "I accept the ",
+    "termsAndConditions": "Terms and Conditions",
+    "buttonCreate": "Create an account",
+    "startTrial": "or Start your 30-day trial",
+    "signin": "Sign in",
+    "dontHaveAccount": "Don't have an account yet?",
+    "signupHere": "Sign up here",
+    "signinGoogle": "Sign in with Google",
+    "rememberMe": "Remember me",
+    "forgotPasswordTitle": "Enter the email address you used when you joined and we'll send you instructions to reset your password.",
+    "emailOtp": "Email OTP",
+    "resendOtp": "Resend OTP?",
+    "submit": "Submit",
+    "backToSignin": "Back to Sign in",
+    "search": "Search...",
+    "searchSeekers": "Search seekers",
+    "profile": "Profile",
+    "settings": "Settings",
+    "signout": "Sign out",
+    "dashboard": "Dashboard",
+    "manage": "Manage",
+    "seekers": "Seekers",
+    "hiringOrganization": "Hiring Organization",
+    "news": "News",
+    "jobs": "Jobs",
+    "job": "Job",
+    "add": "Add {value}",
+    "selected": "Selected",
+    "delete": "Delete",
+    "unlock": "Unlock",
+    "lock": "Lock",
+    "showing": "Showing:",
+    "of": "of",
+    "prev": "Prev",
+    "next": "Next",
+    "uploadCover": "Upload cover",
+    "jobsList": "Jobs list",
+    "update": "Update {value}",
+    "completeProfile": "Complete your profile",
+    "about": "About",
+    "contacts": "Contacts",
+    "introduction": "Introduction",
+    "basicInformation": "Basic information",
+    "name": "Full name",
+    "email": "Email",
+    "preferences": "Preferences",
+    "deleteAccount": "Delete account",
+    "saveChanges": "Save changes",
+    "phoneNumber": "Phone number",
+    "birthday": "Birthday",
+    "website": "Website",
+    "address": "Address",
+    "education": "Education",
+    "experience": "Experience",
+    "skills": "Skills",
+    "achievements": "Achievements",
+    "otherDetails": "Other Details",
+    "accountType": "Account type",
+    "currentEmail": "Your current email address is ",
+    "newEmail": "New email address",
+    "enterNewEmail": "Enter new email address",
+    "changePassword": "Change password",
+    "currentPassword": "Current password",
+    "enterCurrentPassword": "Enter current password",
+    "newPassword": "New password",
+    "enterNewPassword": "Enter new password",
+    "confirmNewPassword": "Confirm new password",
+    "passwordRequirements": "Password requirements:",
+    "ensureRequirements": "Ensure that these requirements are met:",
+    "requirements": [
+      "Minimum 8 characters long - the more, the better.",
+      "At least one uppercase letter (A-Z).",
+      "At least one digit (0-9).",
+      "At least one special character.",
+      "Any combination of uppercase letters, lowercase letters, digits, and special characters"
+    ],
+    "language": "Language",
+    "timezone": "Time zone",
+    "yourTimezone": "Your time zone",
+    "deleteNotice": "When you delete your account, you lose access to account services, and we permanently delete your personal data.",
+    "confirmDelete": "Confirm that I want to delete my account.",
+    "loadMore": "Load more {value}",
+    "category": "Category",
+    "seminar": "Seminar",
+    "corporateRecruitingSession": "Corporate recruiting session",
+    "generalInformation": "General information",
+    "opensAt": "Opens at",
+    "expiresAt": "Expires at",
+    "title": "Title",
+    "subtitle": "Subtitle",
+    "body": "Body",
+    "eventPageUrl": "Event page url",
+    "eventStartAt": "Event start at",
+    "eventEndAt": "Event end at",
+    "location": "Location",
+    "overview": "Overview",
+    "activity": "Activity",
+    "myProfile": "My profile",
+    "back": "Back",
+    "mainImage": "Main image",
+    "jobTitleCatchPhrase": "Job title catch phrase",
+    "salary": "Salary",
+    "workingHours": "Working hours",
+    "searchLabels": "Search labels",
+    "webApplication": "Web application",
+    "catchText": "Catch text",
+    "leadText": "Lead text",
+    "subImages": "Sub images",
+    "properties": "Properties",
+    "postScripts": "Post scripts",
+    "companySurvey": "Company survey",
+    "barometer": "barometer",
+    "photoGallery": "Photo gallery",
+    "interview": "Interview",
+    "propertyTitle": "Property title",
+    "propertyBody": "Property body",
+    "startTime": "Start time",
+    "endTime": "End time",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "isFullTime": "Is full time",
+    "countHours": "Count hours",
+    "userLikeJob": "User like job",
+    "hello": "Hello, nice to see you!",
+    "enjoy": "You are now minutes away from creativity than ever before. Enjoy!",
+    "notFound": "Sorry, the page you're looking for cannot be found.",
+    "internalError": "The server encountered an internal error or misconfiguration and was unable to complete your request."
+  },
+  "jobsApp": {
+    "header": {
+      "home": "Home",
+      "profile": "Profile",
+      "history": "History",
+      "logout": "Logout",
+      "secondHeader": [
+        {
+          "title": "Sudden rest"
+        },
+        {
+          "title": "Workplace tour"
+        },
+        {
+          "title": "No overtime principle"
+        }
+      ],
+      "caption": "Carefully selected only the work!"
+    },
+    "form": {
+      "location": "Location",
+      "secondLocation": "Second location",
+      "thirdLocation": "Third location",
+      "startTime": "Start time",
+      "endTime": "End time",
+      "conditions": {
+        "title": "Conditions",
+        "holiday": "Holiday",
+        "rest": "3 days/week",
+        "allowance": "The allowance for dependents",
+        "station": "Around JR/subway stations",
+        "commuting": "Commuting by car"
+      },
+      "applicable": {
+        "title": "Applicable job",
+        "jobs": "Jobs",
+        "result": "View search results",
+        "searchCondition": "Search condition"
+      }
+    },
+    "news": {
+      "title": "News"
+    },
+    "companyDescribe": {
+      "describe": "Job search support center consultation reservation",
+      "weWillHelp": "We will help and support you with your concerns. It doesn't matter if you're having trouble finding a job, worrying about it, or even something trivial. You can consult either face-to-face interview, web remote interview, or both.",
+      "link": "Consultation application form"
+    },
+    "footer": {
+      "termOfService": "Term of service",
+      "privacyPolicy": "Privacy policy",
+      "socialMediaPolicy": "Social media policy",
+      "inquiry": "Inquiry",
+      "postingOnShufukita": "Posting on Shufukita",
+      "license": {
+        "company": "HAJ Co., Ltd. Hokkaido part-time job information company",
+        "title": "(c) Hokkaido Arbeit Johosha co.,ltd. All Rights Reserved."
+      }
+    },
+    "newsCategory": {
+      "seminar": "Seminar",
+      "corporateRecruitingSession": "Corporate recruiting session",
+      "generalInformation": "General information"
+    },
+    "jobCard": {
+      "close": "Close",
+      "currentSearch": "Current search",
+      "viewDetail": "View the detail",
+      "methodOperation": "Method of operation",
+      "whatKeep": "What is like/dislike",
+      "like": "Like",
+      "dislike": "Dislike",
+      "return": "Return",
+      "message": {
+        "title": ["There are no unread jobs", "Match your criteria"],
+        "nextUpdate": "Next update will be",
+        "is": "Is",
+        "info": "List of job information kept"
+      }
+    },
+    "history": {
+      "likedJobs": "Liked jobs",
+      "allJobs": "All jobs",
+      "viewedDate": "Viewed date: ",
+      "like": "Like",
+      "dislike": "Dislike",
+      "viewDetails": "View details"
+    }
+  }
+}

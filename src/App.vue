@@ -4,18 +4,24 @@
 </template>
 
 <script setup lang="ts">
+import { BaseComponent, defineClassComponent } from "./plugins/component.plugin";
+import InternalErrorView from "@/views/Errors/InternalErrorView.vue";
 import { RouterView } from "vue-router";
 import { AppConst } from "./const/app.const";
-import { BaseComponent, defineClassComponent } from "./plugins/component.plugin";
 import { GlobalEvent } from "./plugins/event.plugin";
-import InternalErrorView from "@/views/errors/InternalErrorView.vue";
+import { useAuthStore } from "./stores/auth.store";
 
 const app = defineClassComponent(
   class App extends BaseComponent {
+    public authStore = useAuthStore();
     public isError = this.ref(false);
 
     public constructor() {
       super();
+
+      this.onBeforeMount(() => {
+        this.authStore.getAdminUser();
+      });
 
       this.watch(
         () => this.route.fullPath,
@@ -26,10 +32,6 @@ const app = defineClassComponent(
 
       GlobalEvent.on(AppConst.EVENTS.internalError, () => {
         this.isError.value = true;
-      });
-
-      this.searchParams.onStateChange((params) => {
-        console.log(params);
       });
     }
   },

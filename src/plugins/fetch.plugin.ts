@@ -70,13 +70,19 @@ export abstract class Fetch {
    * @param configs HttpRequestInit
    * @return Promise<Response>
    */
-  protected async fetch(uri: string, method: HttpMethods, params: HttpParams | null, body: HttpBody | null, configs: HttpRequestInit): Promise<Response> {
+  protected async fetch(
+    uri: string,
+    method: HttpMethods,
+    params: HttpParams | null,
+    body: HttpBody | null,
+    configs: HttpRequestInit,
+  ): Promise<Response> {
     try {
       const baseUrl = this.baseUrl ? (this.baseUrl.endsWith("/") ? this.baseUrl : this.baseUrl + "/") : "";
       const path = uri.startsWith("/") ? uri.substring(1) : uri;
       const fullPath = uri.indexOf("http://") === 0 || uri.indexOf("https://") === 0 ? uri : baseUrl + path;
       const headers = this.configs.headers;
-      configs.headers.forEach((value, key) => headers.append(key, value));
+      configs.headers.forEach((value, key) => headers.set(key, value));
       const response: Response = await fetch(fullPath + this.getParameters(params), {
         ...this.configs,
         ...configs,
@@ -96,25 +102,77 @@ export abstract class Fetch {
     }
   }
 
-  public async get(uri: string, params: HttpParams | null = null, configs: HttpRequestInit = defaultHttpRequestConfigs): Promise<Response> {
+  public async get(
+    uri: string,
+    params: HttpParams | null = null,
+    configs: HttpRequestInit = defaultHttpRequestConfigs,
+  ): Promise<Response> {
     return this.fetch(uri, "GET", params, null, configs);
   }
 
-  public async post(uri: string, body: HttpBody | null = null, configs: HttpRequestInit = defaultHttpRequestConfigs): Promise<Response> {
+  public async post(
+    uri: string,
+    body: HttpBody | null = null,
+    configs: HttpRequestInit = defaultHttpRequestConfigs,
+  ): Promise<Response> {
+    if (isBodyInit(body)) {
+      this.configs.headers.delete("Content-Type");
+      configs.headers.delete("Content-Type");
+    } else {
+      body = JSON.stringify(body);
+      configs.headers.set("Content-Type", "application/json");
+    }
     return this.fetch(uri, "POST", null, body, configs);
   }
 
-  public async put(uri: string, body: HttpBody | null = null, configs: HttpRequestInit = defaultHttpRequestConfigs): Promise<Response> {
+  public async put(
+    uri: string,
+    body: HttpBody | null = null,
+    configs: HttpRequestInit = defaultHttpRequestConfigs,
+  ): Promise<Response> {
+    if (isBodyInit(body)) {
+      this.configs.headers.delete("Content-Type");
+      configs.headers.delete("Content-Type");
+    } else {
+      body = JSON.stringify(body);
+      configs.headers.set("Content-Type", "application/json");
+    }
     return this.fetch(uri, "PUT", null, body, configs);
   }
 
-  public async patch(uri: string, body: HttpBody | null = null, configs: HttpRequestInit = defaultHttpRequestConfigs): Promise<Response> {
+  public async patch(
+    uri: string,
+    body: HttpBody | null = null,
+    configs: HttpRequestInit = defaultHttpRequestConfigs,
+  ): Promise<Response> {
+    if (isBodyInit(body)) {
+      this.configs.headers.delete("Content-Type");
+      configs.headers.delete("Content-Type");
+    } else {
+      body = JSON.stringify(body);
+      configs.headers.set("Content-Type", "application/json");
+    }
     return this.fetch(uri, "PATCH", null, body, configs);
   }
 
-  public async delete(uri: string, body: HttpBody | null = null, configs: HttpRequestInit = defaultHttpRequestConfigs): Promise<Response> {
+  public async delete(
+    uri: string,
+    body: HttpBody | null = null,
+    configs: HttpRequestInit = defaultHttpRequestConfigs,
+  ): Promise<Response> {
     return this.fetch(uri, "DELETE", null, body, configs);
   }
+}
+
+export function isBodyInit(body: any): body is BodyInit {
+  return (
+    typeof body === "string" ||
+    body instanceof ArrayBuffer ||
+    body instanceof Blob ||
+    body instanceof FormData ||
+    body instanceof URLSearchParams ||
+    body instanceof ReadableStream
+  );
 }
 
 export const defaultHttpRequestConfigs: HttpRequestInit = {
@@ -125,7 +183,7 @@ export type HttpMethods = "GET" | "HEAD" | "POST" | "PUT" | "DELETE" | "CONNECT"
 
 export type HttpHeaders = Headers & {};
 
-export type HttpBody = BodyInit & {};
+export type HttpBody = BodyInit & {} & any;
 
 export type HttpParams = string[][] | Record<string, string> | string | URLSearchParams;
 
