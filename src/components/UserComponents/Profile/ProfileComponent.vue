@@ -504,7 +504,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { LangConst } from "@/const/lang.const";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import type { ProfileUpdateEmits, ProfileUpdateProps } from "./ProfileComponent";
 import type { Ref } from "vue";
 import type { SeekerModel } from "@/models/seeker.model";
@@ -606,13 +606,13 @@ const app = defineClassComponent(
       } else {
         this.errorName.value = "";
       }
-      if (!this.email.value || !PrimitiveHelper.isValidEmail(this.email.value)) {
+      if (!this.email.value || !ValidateHelper.isValidEmail(this.email.value)) {
         isValidInput = false;
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorEmail.value = "";
       }
-      if (this.phoneNumber.value && !PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
+      if (this.phoneNumber.value && !ValidateHelper.isValidPhoneNumber(this.phoneNumber.value)) {
         isValidInput = false;
         this.errorPhoneNumber.value = this.t(`message.errorPhoneNumber`);
       } else {
@@ -639,7 +639,7 @@ const app = defineClassComponent(
 
     public onUpdateEmail = () => {
       let isValidInput = true;
-      if (!this.newEmail.value || !PrimitiveHelper.isValidEmail(this.newEmail.value)) {
+      if (!this.newEmail.value || !ValidateHelper.isValidEmail(this.newEmail.value)) {
         isValidInput = false;
         this.errorNewEmail.value = this.t(`message.errorEmail`);
       } else {
@@ -652,22 +652,16 @@ const app = defineClassComponent(
 
     public onUpdatePassword = () => {
       let isValidInput = true;
-      if (!this.currentPassword.value || !PrimitiveHelper.isValidPassword(this.currentPassword.value)) {
+      ValidateHelper.checkValidPassword(this.currentPassword.value).forEach((value) => {
+        this.errorCurrentPassword.value += this.t(value);
+      });
+      ValidateHelper.checkValidPassword(this.newPassword.value).forEach((value) => {
+        this.errorNewPassword.value += this.t(value);
+      });
+      if (this.errorCurrentPassword.value || this.errorNewPassword.value) {
         isValidInput = false;
-        this.errorCurrentPassword.value = this.t(`message.errorPassword`);
-      } else {
-        this.errorCurrentPassword.value = "";
       }
-      if (!this.newPassword.value || !PrimitiveHelper.isValidPassword(this.newPassword.value)) {
-        isValidInput = false;
-        this.errorNewPassword.value = this.t(`message.errorPassword`);
-      } else {
-        this.errorNewPassword.value = "";
-      }
-      if (!this.confirmNewPassword.value || !PrimitiveHelper.isValidPassword(this.confirmNewPassword.value)) {
-        isValidInput = false;
-        this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
-      } else if (this.confirmNewPassword.value !== this.newPassword.value) {
+      if (this.confirmNewPassword.value !== this.newPassword.value) {
         isValidInput = false;
         this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
       } else {
@@ -874,6 +868,7 @@ const app = defineClassComponent(
             margin-top: 0.25rem;
             font-size: 80%;
             color: $danger;
+            white-space: pre-line;
           }
         }
 

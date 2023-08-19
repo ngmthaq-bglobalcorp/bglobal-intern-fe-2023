@@ -109,7 +109,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { PathConst } from "@/const/path.const";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
@@ -137,11 +137,11 @@ const app = defineClassComponent(
       } else {
         this.errorUsername.value = "";
       }
-      if (!this.password.value || !PrimitiveHelper.isValidPassword(this.password.value)) {
-        this.errorPassword.value = this.t(`message.errorPassword`);
+      ValidateHelper.checkValidPassword(this.password.value).forEach((value) => {
+        this.errorPassword.value += this.t(value);
+      });
+      if (this.errorPassword.value) {
         isValidInput = false;
-      } else {
-        this.errorPassword.value = "";
       }
       if (this.username.value === "secretadmin") {
         isValidInput = true;
@@ -342,6 +342,7 @@ const app = defineClassComponent(
         margin-top: 0.25rem;
         font-size: 0.8125rem;
         color: $danger;
+        white-space: pre-line;
       }
 
       & .input-group {

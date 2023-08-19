@@ -131,7 +131,7 @@ const app = defineClassComponent(
 
 .update-profile-container {
   & .profile-content {
-    padding: 1.5rem 1.5rem;
+    padding: 1.5rem 0.75rem;
   }
 }
 </style>

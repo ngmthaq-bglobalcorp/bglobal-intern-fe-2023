@@ -185,6 +185,7 @@ const app = defineClassComponent(
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  gap: 1.5rem;
 
   & .profile-nav {
     flex: 3;
@@ -227,7 +228,6 @@ const app = defineClassComponent(
 
   & .profile-content {
     flex: 9;
-    margin-left: 1.5rem;
   }
 }
 </style>

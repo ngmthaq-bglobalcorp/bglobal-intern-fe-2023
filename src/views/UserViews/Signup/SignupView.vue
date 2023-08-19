@@ -133,7 +133,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import UserLayout from "@/layouts/UserLayout/UserLayout.vue";
 import { PathConst } from "@/const/path.const";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
@@ -164,18 +164,15 @@ const app = defineClassComponent(
       } else {
         this.errorUsername.value = "";
       }
-      if (!this.password.value || !PrimitiveHelper.isValidPassword(this.password.value)) {
-        this.errorPassword.value = this.t("message.errorPassword");
+      ValidateHelper.checkValidPassword(this.password.value).forEach((value) => {
+        this.errorPassword.value += this.t(value);
+      });
+      if (this.errorPassword.value) {
         isValidInput = false;
-      } else {
-        this.errorPassword.value = "";
       }
-      if (!this.confirmPassword.value || !PrimitiveHelper.isValidPassword(this.confirmPassword.value)) {
-        this.errorConfirmPassword.value = this.t("message.errorConfirmPassword");
+      if (this.confirmPassword.value !== this.password.value) {
         isValidInput = false;
-      } else if (this.confirmPassword.value !== this.password.value) {
-        this.errorConfirmPassword.value = this.t("message.errorConfirmPassword");
-        isValidInput = false;
+        this.errorConfirmPassword.value = this.t(`message.errorConfirmPassword`);
       } else {
         this.errorConfirmPassword.value = "";
       }
@@ -395,6 +392,7 @@ const app = defineClassComponent(
         margin-top: 0.25rem;
         font-size: 80%;
         color: $danger;
+        white-space: pre-line;
       }
 
       & .input-group {

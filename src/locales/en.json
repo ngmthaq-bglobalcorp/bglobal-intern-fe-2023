@@ -38,6 +38,7 @@
     "errorUsername": "Please enter a valid username.",
     "errorPassword": "Your password is invalid. Please try again.",
     "errorConfirmPassword": "Password does not match the confirm password.",
+    "errorPasswordContain": "Password must contain {value}.",
     "errorName": "Please enter your name.",
     "errorEmail": "Please enter a valid email address.",
     "errorPhoneNumber": "Please enter a valid phone number.",
@@ -46,6 +47,7 @@
     "errorOtp": "Please enter a valid OTP.",
     "errorUrl": "Please enter a valid url.",
     "errorCountHours": "CountHour must be within the range of 0 to 24.",
+    "passwordNotBlank": "Password cannot be blank",
     "notBlank": "{value} cannot be blank",
     "updateSuccess": "Update successfull",
     "updateFailed": "Update failed"
@@ -151,13 +153,13 @@
     "confirmNewPassword": "Confirm new password",
     "passwordRequirements": "Password requirements:",
     "ensureRequirements": "Ensure that these requirements are met:",
-    "requirements": [
-      "Minimum 8 characters long - the more, the better.",
-      "At least one uppercase letter (A-Z).",
-      "At least one digit (0-9).",
-      "At least one special character.",
-      "Any combination of uppercase letters, lowercase letters, digits, and special characters"
-    ],
+    "requirements": {
+      "minLength": "Minimum 8 characters long - the more, the better.",
+      "haveUppercase": "At least one uppercase letter (A-Z).",
+      "haveDigit": "At least one digit (0-9).",
+      "haveSpecial": "At least one special character.",
+      "anyCombination": "Any combination of uppercase letters, lowercase letters, digits, and special characters"
+    },
     "language": "Language",
     "timezone": "Time zone",
     "yourTimezone": "Your time zone",
