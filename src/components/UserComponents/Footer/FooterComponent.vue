@@ -1,22 +1,18 @@
 <template>
   <div class="footer">
     <div class="rule">
-      <a target="_blank" href="https://www.haj.co.jp/rules/?mediaid=25">{{ app.t("jobsApp.footer.termOfService") }}</a>
-      <a target="_blank" href="https://official.haj.co.jp/privacy-policy.html">{{
-        app.t("jobsApp.footer.privacyPolicy")
-      }}</a>
-      <a target="_blank" href="https://official.haj.co.jp/social-media-policy.html">{{
-        app.t("jobsApp.footer.socialMediaPolicy")
-      }}</a>
+      <a target="_blank" href="" class="link">{{ app.t("jobsApp.footer.termOfService") }}</a>
+      <a target="_blank" href="" class="link">{{ app.t("jobsApp.footer.privacyPolicy") }}</a>
+      <a target="_blank" href="" class="link">{{ app.t("jobsApp.footer.socialMediaPolicy") }}</a>
     </div>
     <div class="rule">
-      <a target="_blank" href="https://official.haj.co.jp/contact/">{{ app.t("jobsApp.footer.inquiry") }}</a>
-      <a target="_blank" href="https://www.shufukita.jp/client.php">{{ app.t("jobsApp.footer.postingOnShufukita") }}</a>
+      <a target="_blank" href="" class="link">{{ app.t("jobsApp.footer.inquiry") }}</a>
+      <a target="_blank" href="" class="link">{{ app.t("jobsApp.footer.postingOnShufukita") }}</a>
     </div>
     <div class="license">
-      <a target="_blank" href="https://official.haj.co.jp/">{{ app.t("jobsApp.footer.license.company") }}</a>
-      <p>{{ app.t("jobsApp.footer.license.title") }}</p>
-      <span>v1.0.7</span>
+      <a target="_blank" href="" class="link">{{ app.t("jobsApp.footer.license.company") }}</a>
+      <span class="license-title">{{ app.t("jobsApp.footer.license.title") }}</span>
+      <span class="version">{{ app.t("jobsApp.footer.version") }}</span>
     </div>
   </div>
 </template>
@@ -37,50 +33,49 @@ const app = defineClassComponent(
 @import "@/assets/scss/modules";
 
 .footer {
-  margin-top: 45px;
+  margin-top: 3rem;
 
   & .rule {
     display: flex;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
     justify-content: center;
 
-    & a {
+    & .link {
       color: #000;
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 400;
-      line-height: 16px;
-      margin-right: 25px;
+      line-height: 1rem;
+      margin-right: 1.5rem;
     }
   }
 
   & .license {
-    padding: 10px;
+    padding: 0.625rem;
     background: #e65078;
+    text-align: center;
 
-    & a {
+    & .link {
       color: black;
       display: block;
-      font-size: 10px;
-      text-align: center;
+      font-size: 0.625rem;
       font-weight: 400;
-      line-height: 12px;
+      line-height: 0.75rem;
     }
 
-    & p {
+    & .license-title {
       color: #fff;
-      font-size: 9px;
-      text-align: center;
+      font-size: 0.5625rem;
       font-weight: 400;
-      line-height: 11px;
+      line-height: 0.75rem;
       padding-top: 6px;
     }
 
-    & span {
+    & .version {
       display: block;
-      font-size: 11px;
+      font-size: 0.6875rem;
       text-align: right;
       font-weight: 400;
-      line-height: 13px;
+      line-height: 0.75rem;
     }
   }
 }

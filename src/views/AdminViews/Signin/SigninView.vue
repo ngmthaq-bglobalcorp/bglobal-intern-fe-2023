@@ -138,7 +138,7 @@ const app = defineClassComponent(
         this.errorUsername.value = "";
       }
       ValidateHelper.checkValidPassword(this.password.value).forEach((value) => {
-        this.errorPassword.value += this.t(value);
+        this.errorPassword.value += this.t(value) + "\n";
       });
       if (this.errorPassword.value) {
         isValidInput = false;

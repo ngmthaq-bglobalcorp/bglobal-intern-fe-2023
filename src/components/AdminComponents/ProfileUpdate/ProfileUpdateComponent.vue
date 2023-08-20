@@ -565,10 +565,10 @@ const app = defineClassComponent(
     public onUpdatePassword = () => {
       let isValidInput = true;
       ValidateHelper.checkValidPassword(this.currentPassword.value).forEach((value) => {
-        this.errorCurrentPassword.value += this.t(value);
+        this.errorCurrentPassword.value += this.t(value) + "\n";
       });
       ValidateHelper.checkValidPassword(this.newPassword.value).forEach((value) => {
-        this.errorNewPassword.value += this.t(value);
+        this.errorNewPassword.value += this.t(value) + "\n";
       });
       if (this.errorCurrentPassword.value || this.errorNewPassword.value) {
         isValidInput = false;

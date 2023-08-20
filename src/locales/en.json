@@ -270,7 +270,8 @@
       "license": {
         "company": "HAJ Co., Ltd. Hokkaido part-time job information company",
         "title": "(c) Hokkaido Arbeit Johosha co.,ltd. All Rights Reserved."
-      }
+      },
+      "version": "v1.0.0"
     },
     "newsCategory": {
       "seminar": "Seminar",

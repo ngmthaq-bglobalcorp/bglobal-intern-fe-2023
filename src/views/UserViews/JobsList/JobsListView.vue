@@ -8,9 +8,9 @@
       @on-toggle-dislike-button="app.onToggleDislikeButton"
       @on-toggle-skip-button="app.onToggleSkipButton"
     >
-      <div class="result_search">
-        <div class="search_bar" :class="{ hide: !app.isShowFormSearch.value }">
-          <FormSearch is-disable-search-button />
+      <div class="result_search" :style="{ height: app.searchHeight.value }">
+        <div class="search_bar" :style="{ top: app.isShowFormSearch.value ? 0 : app.formSearchHide.value }">
+          <FormSearch is-disable-search-button @get-height="app.setHeight" />
           <div class="search-condition" @click="app.onOpenFormSearch()">
             <div class="content" v-if="app.isShowFormSearch.value">
               <i class="bi bi-arrow-up-short" style="font-size: 18px; color: #9f085f"></i>
@@ -46,6 +46,8 @@ const app = defineClassComponent(
 
     public searchData = this.ref(StorageHelper.getLocalStorage(KeyConst.keys.searchCondition));
     public isShowFormSearch: Ref<boolean> = this.ref(false);
+    public formSearchHide: Ref<string> = this.ref("");
+    public searchHeight: Ref<string> = this.ref("");
     public currentIndex: Ref<number> = this.ref(0);
 
     public filtersJobs: Ref<Array<JobModel>> = this.computed(() => this.seekersStore.jobs);
@@ -110,6 +112,11 @@ const app = defineClassComponent(
         this.currentIndex.value = 0;
       }
     };
+
+    public setHeight = (formHeight: number, elementHeight: number) => {
+      this.searchHeight.value = elementHeight + "px";
+      this.formSearchHide.value = "-" + (formHeight - elementHeight - 10) + "px";
+    };
   },
 );
 </script>
@@ -120,7 +127,6 @@ const app = defineClassComponent(
 .result_search {
   margin: 0 10px;
   position: relative;
-  height: 52px;
 
   & .search_bar {
     width: 100%;
@@ -128,6 +134,10 @@ const app = defineClassComponent(
     top: 0px;
     z-index: 2;
     transition: all 0.2s linear 0s;
+
+    &.hide {
+      top: -250px;
+    }
 
     & .search-condition {
       width: 210px;
@@ -155,14 +165,6 @@ const app = defineClassComponent(
           padding-left: 6px;
         }
       }
-    }
-
-    &.hide {
-      top: -250px;
-      width: 100%;
-      transition: all 0.2s linear 0s;
-      position: absolute;
-      z-index: 2;
     }
   }
 }

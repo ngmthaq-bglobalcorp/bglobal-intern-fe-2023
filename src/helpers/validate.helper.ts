@@ -33,7 +33,7 @@ export class ValidateHelper {
   };
 
   public static checkValidPassword = (password: string) => {
-    let result = [];
+    const result = [];
     if (password.length == 0) {
       result.push(`message.passwordNotBlank`);
     }
