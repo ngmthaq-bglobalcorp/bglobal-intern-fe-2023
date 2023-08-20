@@ -4,9 +4,12 @@ import { Api } from "@/plugins/api.plugin";
 import { ApiConst } from "@/const/api.const";
 import { AppConst } from "@/const/app.const";
 import { KeyConst } from "@/const/key.const";
+import { PathConst } from "@/const/path.const";
+import { ModelHelper } from "@/helpers/model.helper";
 import { StorageHelper } from "@/helpers/storage.helper";
 import { UserModel } from "@/models/user.model";
-import { PathConst } from "@/const/path.const";
+import type { SeekerModel } from "@/models/seeker.model";
+import type { OrganizationModel } from "@/models/organization.model";
 
 export const api = new Api();
 
@@ -14,14 +17,47 @@ export const useAuthStore = defineClassStore(
   class Store extends BaseStore {
     public name: string = "auth";
 
+    public token: Ref<string> = this.ref("");
     public user: Ref<UserModel> = this.ref(new UserModel({}));
+    public profile: Ref<UserModel | SeekerModel | OrganizationModel> = this.ref(new UserModel({}));
 
-    public getAdminUser = () => {
+    public getAdminUser = async () => {
       if (this.user.value.id < 0) {
         const data: any = StorageHelper.getLocalStorage(KeyConst.keys.currentUser);
         if (data) {
           this.user.value = new UserModel(data.user);
+          this.profile.value = await this.fetchUserProfileById(this.user.value.id.toString());
         }
+      } else {
+        this.profile.value = await this.fetchUserProfileById(this.user.value.id.toString());
+      }
+    };
+
+    public fetchUserProfileById = async (id: string) => {
+      try {
+        const res = await api.get(ApiConst.commonEndpoints.getUserProfileById.replace(":id", id));
+        if (res.status === ApiConst.status.ok) {
+          const data: any = await res.json();
+          if (data.role === AppConst.ROLE.admin) {
+            const user = {
+              id: data.id,
+              name: data.name || data.username,
+              username: data.username,
+              avatar: data.avatar,
+              email: data.email,
+              role: data.role,
+            };
+            return new UserModel(user);
+          } else if (data.user.role === AppConst.ROLE.organization) {
+            return ModelHelper.getOrganizationModel(data);
+          } else if (data.user.role === AppConst.ROLE.seeker) {
+            return ModelHelper.getSeekerModel(data);
+          }
+        }
+        return new UserModel({});
+      } catch (error) {
+        console.log(error);
+        return new UserModel({});
       }
     };
 
@@ -38,14 +74,17 @@ export const useAuthStore = defineClassStore(
             email: data.email,
             role: data.role[0],
           };
+          this.token.value = data.token;
           this.user.value = new UserModel(user);
           const currentUser = {
-            token: data.token,
+            token: this.token.value,
             user: this.user.value,
           };
           if (remember) {
+            // StorageHelper.setLocalStorage(KeyConst.keys.token, token);
             StorageHelper.setLocalStorage(KeyConst.keys.currentUser, currentUser);
           } else {
+            // StorageHelper.setSessionStorage(KeyConst.keys.token, token);
             StorageHelper.setSessionStorage(KeyConst.keys.currentUser, currentUser);
           }
           return true;
@@ -59,6 +98,7 @@ export const useAuthStore = defineClassStore(
 
     public fetchAdminSignOut = async () => {
       try {
+        StorageHelper.removeLocalStorage(KeyConst.keys.token);
         StorageHelper.removeLocalStorage(KeyConst.keys.currentUser);
         if (window.location.href.includes("/admin")) {
           window.location.href = PathConst.adminSignin.path;

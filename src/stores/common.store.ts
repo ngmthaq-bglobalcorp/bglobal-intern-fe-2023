@@ -27,7 +27,6 @@ export const useCommonStore = defineClassStore(
 
     public locations: Ref<Array<LocationModel>> = this.ref([]);
     public searchLabels: Ref<Array<SearchLabelModel>> = this.ref([]);
-    public profile: Ref<SeekerModel | OrganizationModel> = this.ref(new OrganizationModel({}));
 
     public setIsLoading = (bool: boolean) => {
       this.isLoading.value = bool;
@@ -113,26 +112,6 @@ export const useCommonStore = defineClassStore(
       } catch (error) {
         console.log(error);
         return "";
-      }
-    };
-
-    public fetchUserProfileById = async (id: string) => {
-      try {
-        const res = await api.get(ApiConst.commonEndpoints.getUserProfileById.replace(":id", id));
-        if (res.status === ApiConst.status.ok) {
-          const data: any = await res.json();
-          if (data.user.role === AppConst.ROLE.organization) {
-            this.profile.value = ModelHelper.getOrganizationModel(data);
-            return true;
-          } else if (data.user.role === AppConst.ROLE.seeker) {
-            this.profile.value = ModelHelper.getSeekerModel(data);
-            return true;
-          }
-        }
-        return false;
-      } catch (error) {
-        console.log(error);
-        return false;
       }
     };
   },

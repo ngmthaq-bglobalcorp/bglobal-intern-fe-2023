@@ -126,18 +126,20 @@ const app = defineClassComponent(
     ]);
 
     public filtersSidebarItem = this.computed(() => {
-      if (this.authStore.user.role.includes(AppConst.ROLE.admin)) {
+      if (this.authStore.user.role === AppConst.ROLE.admin) {
         return this.adminItems.value;
-      } else {
+      } else if (this.authStore.user.role === AppConst.ROLE.organization) {
         return this.organizationItems.value;
+      } else {
+        return [];
       }
     });
 
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.authStore.getAdminUser();
+      this.onBeforeMount(async () => {
+        await this.authStore.getAdminUser();
       });
     }
 

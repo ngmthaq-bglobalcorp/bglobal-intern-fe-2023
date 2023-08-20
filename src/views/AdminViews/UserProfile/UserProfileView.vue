@@ -25,6 +25,7 @@ import { useOrganizationStore } from "@/stores/organization.store";
 import type { UserProfileProps } from "./UserProfileView";
 import type { Ref } from "vue";
 import type { UserModel } from "@/models/user.model";
+import type { SeekerModel } from "@/models/seeker.model";
 
 const props = defineProps<UserProfileProps>();
 
@@ -33,31 +34,43 @@ const app = defineClassComponent(
     public authStore = useAuthStore();
     public organizationStore = useOrganizationStore();
 
-    public user: Ref<UserModel> = this.computed(() => this.authStore.user);
-    public profile: Ref<any> = this.computed(() => this.commonStore.profile);
+    public profile: Ref<UserModel | SeekerModel | OrganizationModel> = this.ref(new OrganizationModel({}));
+
     public editable: Ref<boolean> = this.computed(() => this.profile.value.username === props.username);
+    public user: Ref<UserModel> = this.computed(() => this.authStore.user);
+    public userId: Ref<string> = this.computed(() => {
+      if (props.username && props.username === this.user.value.username) {
+        return this.user.value.id.toString();
+      } else if (props.userId) {
+        return props.userId;
+      } else {
+        return "0";
+      }
+    });
 
     public constructor() {
       super();
 
       this.onBeforeMount(async () => {
         this.commonStore.setIsLoading(true);
-        if (props.username === this.user.value.username) {
-          await this.commonStore.fetchUserProfileById(this.user.value.id.toString());
-        } else {
-          await this.commonStore.fetchUserProfileById(props.username);
+        if (this.userId.value) {
+          this.profile.value = await this.authStore.fetchUserProfileById(this.userId.value);
+          if (this.profile.value.id < 0) {
+            this.router.push(PathConst.notFound);
+          }
         }
         this.commonStore.setIsLoading(false);
       });
 
       this.watch(
-        () => props.username,
+        () => this.userId.value,
         async (id) => {
           this.commonStore.setIsLoading(true);
-          if (id === this.user.value.username) {
-            await this.commonStore.fetchUserProfileById(this.user.value.id.toString());
-          } else {
-            await this.commonStore.fetchUserProfileById(id);
+          if (this.userId.value) {
+            this.profile.value = await this.authStore.fetchUserProfileById(this.userId.value);
+            if (this.profile.value.id < 0) {
+              this.router.push(PathConst.notFound);
+            }
           }
           this.commonStore.setIsLoading(false);
         },
@@ -76,7 +89,7 @@ const app = defineClassComponent(
     };
 
     public onToggleUpdateProfile = () => {
-      this.router.push(PathConst.adminUpdateProfile);
+      this.router.push({ ...PathConst.adminUpdateProfile, params: { username: app.profile.value.username } });
     };
   },
 );

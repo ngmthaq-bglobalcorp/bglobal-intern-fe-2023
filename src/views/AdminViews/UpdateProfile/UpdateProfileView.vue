@@ -84,7 +84,10 @@ import { PathConst } from "@/const/path.const";
 import { OrganizationModel } from "@/models/organization.model";
 import { useAuthStore } from "@/stores/auth.store";
 import { useOrganizationStore } from "@/stores/organization.store";
+import type { UpdateProfileProps } from "./UpdateProfileView";
 import type { Ref } from "vue";
+
+const props = defineProps<UpdateProfileProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -112,7 +115,7 @@ const app = defineClassComponent(
     }
 
     public onToggleButton = () => {
-      this.router.push({ ...PathConst.adminUserProfile, params: { username: this.profile.value.username } });
+      this.router.push({ ...PathConst.adminProfile, params: { username: this.profile.value.username } });
     };
 
     public onUpdateAvatar = async (avatarUrl: string) => {

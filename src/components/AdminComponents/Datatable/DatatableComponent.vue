@@ -74,14 +74,15 @@
             <td class="sorting-1" v-for="column in props.columns" :key="column.field">
               <template v-if="column.field === 'username'">
                 <router-link
-                  :to="{ ...PathConst.adminUserProfile, params: { username: data.userId } }"
+                  :to="{ ...PathConst.adminUserProfile, params: { userId: data.userId } }"
                   class="item-name link-default"
+                  v-if="data.userId"
                 >
                   <div class="avatar">
                     <AvatarComponent
                       :avatar-image="data.avatar || ''"
                       avatar-alt="Avatar"
-                      :avatar-init="data[column.field][0]"
+                      :avatar-init="data[column.field]"
                     />
                   </div>
                   <span>{{ data[column.field] }}</span>
