@@ -184,6 +184,7 @@ export const useAuthStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           return true;
         }
+        res.text();
         return false;
       } catch (error) {
         console.log(error);

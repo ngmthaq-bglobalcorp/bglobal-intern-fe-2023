@@ -641,4 +641,29 @@ const app = defineClassComponent(
     }
   }
 }
+
+@media screen and (max-height: $breakpoint-md) {
+  .job-card-container {
+    & #swiper {
+      & .card {
+        & .card_header {
+          & .card_header_types_const {
+            & .card_header_button_const {
+              & button {
+                padding: 4px 16px;
+              }
+            }
+          }
+
+          & .card_header_img_const {
+            & img {
+              height: 60px;
+              width: 100px;
+            }
+          }
+        }
+      }
+    }
+  }
+}
 </style>

@@ -96,7 +96,7 @@ const app = defineClassComponent(
         this.seekersStore.profile.email = email;
         this.messageEmailUpdateSuccess.value = this.t(`message.updateSuccess`);
       } else {
-        this.messageEmailUpdateFailed.value = this.t(`message.updateFailed`);
+        this.messageEmailUpdateFailed.value = this.t(`message.errorEmailExists`, { value: email });
       }
       this.commonStore.setIsLoading(false);
     };

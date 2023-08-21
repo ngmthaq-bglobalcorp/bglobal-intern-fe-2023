@@ -2,6 +2,7 @@ export type TimelineListProps = {
   target: string;
   data: Array<any>;
   limit: number;
+  isShowLoadButton?: boolean;
 };
 
 export type TimelineListEmits = {

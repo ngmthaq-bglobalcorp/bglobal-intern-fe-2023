@@ -319,7 +319,7 @@ const app = defineClassComponent(
             this.errorInput.value = this.t(`message.errorNameExists`);
             this.errorName.value = this.t("message.errorName");
           } else if (isSuccess.includes("Email ")) {
-            this.errorInput.value = this.t(`message.errorEmailExists`);
+            this.errorInput.value = this.t(`message.errorEmailExists`, { value: this.email.value });
             this.errorEmail.value = this.t("message.errorEmail");
           } else {
             window.location.replace(PathConst.adminDashboard.path);

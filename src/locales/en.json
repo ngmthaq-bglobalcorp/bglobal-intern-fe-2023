@@ -34,7 +34,7 @@
     "errorUsernameOrPassword": "Please enter a valid username or password.",
     "errorUsernameExists": "This username already exists.",
     "errorNameExists": "This name has been taken.",
-    "errorEmailExists": "This username already exists.",
+    "errorEmailExists": "Email {value} already exists.",
     "errorUsername": "Please enter a valid username.",
     "errorPassword": "Your password is invalid. Please try again.",
     "errorConfirmPassword": "Password does not match the confirm password.",

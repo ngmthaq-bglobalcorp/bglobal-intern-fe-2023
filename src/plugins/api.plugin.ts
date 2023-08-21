@@ -1,6 +1,7 @@
 import { Fetch, type HttpRequestInit } from "./fetch.plugin";
 import { ApiConst } from "@/const/api.const";
 import { KeyConst } from "@/const/key.const";
+import { PathConst } from "@/const/path.const";
 import { StorageHelper } from "@/helpers/storage.helper";
 
 export class Api extends Fetch {
@@ -17,18 +18,19 @@ export class Api extends Fetch {
       if (!window.location.href.includes("/signin")) {
         StorageHelper.removeLocalStorage(KeyConst.keys.currentUser);
         if (window.location.href.includes("/admin")) {
-          window.location.replace("/admin/signin");
+          window.location.replace(PathConst.adminSignin.path);
         } else {
-          window.location.replace("/signin");
+          window.location.replace(PathConst.userSignin.path);
         }
       }
-    }
-    if (response.status === ApiConst.status.forbidden) {
+    } else if (response.status === ApiConst.status.forbidden) {
       if (window.location.href.includes("/admin")) {
-        window.location.assign("/admin");
+        window.location.assign(PathConst.adminDashboard.path);
       } else {
-        window.location.assign("/");
+        window.location.assign(PathConst.home.path);
       }
+    } else if (response.status === ApiConst.status.internalError) {
+      window.location.assign(PathConst.internalError.path);
     }
     return response;
   }
