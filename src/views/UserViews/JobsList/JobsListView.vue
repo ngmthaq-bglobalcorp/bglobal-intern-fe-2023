@@ -56,8 +56,8 @@ const app = defineClassComponent(
       const data: any = StorageHelper.getLocalStorage(KeyConst.keys.searchCondition);
       return {
         ...data,
-        startAtPagination: this.pageNumber.value,
-        endAtPagination: this.pageNumber.value + this.pageSize.value,
+        startAtPagination: (this.pageNumber.value - 1) * this.pageSize.value,
+        endAtPagination: (this.pageNumber.value - 1) * this.pageSize.value + this.pageSize.value,
       };
     });
     public filtersJobs: Ref<Array<JobModel>> = this.ref([]);
@@ -79,8 +79,15 @@ const app = defineClassComponent(
         (jobs) => {
           jobs.forEach((value) => {
             this.filtersJobs.value.push(value);
+            if (
+              this.filtersJobs.value.length >
+                2 * AppConst.JOBS_PAGINATION.pageSizeDefault - AppConst.JOBS_PAGINATION.stepDefault &&
+              this.filtersIndex.value > 0
+            ) {
+              this.filtersJobs.value.shift();
+              this.filtersIndex.value--;
+            }
           });
-          this.filtersIndex.value = AppConst.DEFAULT.index;
         },
       );
     }
@@ -132,10 +139,16 @@ const app = defineClassComponent(
 
     public onToggleSkipButton = async () => {
       if (this.currentIndex.value < this.seekersStore.totalJobsWithCondition - 1) {
-        if (this.filtersIndex.value >= AppConst.JOBS_PAGINATION.stepDefault) {
+        this.filtersIndex.value++;
+        this.currentIndex.value++;
+        if (this.filtersIndex.value >= this.filtersJobs.value.length / 2) {
+          if (this.pageNumber.value * this.pageSize.value >= this.seekersStore.totalJobsWithCondition) {
+            this.pageNumber.value = 1;
+          } else {
+            this.pageNumber.value++;
+          }
           await this.seekersStore.fetchAllJobs(this.searchData.value);
         }
-        this.currentIndex.value++;
       } else {
         this.currentIndex.value = 0;
       }

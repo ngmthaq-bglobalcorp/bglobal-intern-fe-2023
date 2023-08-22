@@ -32,6 +32,14 @@ export class ValidateHelper {
     return false;
   };
 
+  public static isExpired = (opensAt: Date, expiresAt: Date) => {
+    const today = new Date();
+    if (today >= opensAt && today <= expiresAt) {
+      return true;
+    }
+    return false;
+  };
+
   public static checkValidPassword = (password: string) => {
     const result = [];
     if (password.length == 0) {

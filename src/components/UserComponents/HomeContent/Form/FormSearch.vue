@@ -38,7 +38,7 @@
         </select>
       </div>
       <div class="location-sub-2-3">
-        <span>{{ app.t("jobsApp.form.thirdLocation") }}</span>
+        <span class="text">{{ app.t("jobsApp.form.thirdLocation") }}</span>
         <select class="custom_select" v-model="app.thirdLocation.value">
           <option :value="AppConst.DEFAULT.location">{{ app.t("jobsApp.form.location") }}</option>
           <option :value="location.name" v-for="location in app.locations.value" :key="location.id">
@@ -188,7 +188,9 @@ const app = defineClassComponent(
         searchLabelsArray: this.searchLabelsArray.value,
       };
       this.commonStore.setIsLoading(true);
-      const isSuccess = await this.seekersStore.fetchTotalJobsWithCondition(data);
+      let isSuccess = true;
+      isSuccess = await this.seekersStore.fetchTotalJobsWithCondition(data);
+      isSuccess = await this.seekersStore.fetchAllJobs(data);
       if (isSuccess) {
         StorageHelper.setLocalStorage(KeyConst.keys.searchCondition, data);
         this.isDisableSearchButton.value = true;

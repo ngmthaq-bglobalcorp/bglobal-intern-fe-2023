@@ -66,6 +66,7 @@
         <button
           class="swiper_action_button like_button"
           style="transform: scale(1); display: block"
+          :disabled="app.isExpired"
           @click="app.onToggleLikeButton"
         >
           <img src="@/assets/img/img_btn_keep.png" class="" />
@@ -73,6 +74,7 @@
         <button
           class="swiper_action_button dislike_button"
           style="transform: scale(1); display: block"
+          :disabled="app.isExpired"
           @click="app.onToggleDislikeButton"
         >
           <img src="@/assets/img/img_btn_ng.png" class="" />
@@ -172,6 +174,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { JobModel } from "@/models/job.model";
 import type { JobCardEmits, JobCardProps } from "./JobCard";
 import type { Ref } from "vue";
@@ -197,6 +200,12 @@ const app = defineClassComponent(
         },
       );
     }
+
+    public isExpired = () => {
+      if (this.job.value.id > 0) {
+        return ValidateHelper.isExpired(this.job.value.opensAt, this.job.value.expiresAt);
+      }
+    };
 
     public onToggleShowTutorial = (isShow: boolean) => {
       this.isShowTutorial.value = isShow;
@@ -439,6 +448,10 @@ const app = defineClassComponent(
       position: absolute;
       width: 90px;
       z-index: 1;
+
+      &:disabled {
+        pointer-events: none;
+      }
 
       &.like_button {
         bottom: 88px;

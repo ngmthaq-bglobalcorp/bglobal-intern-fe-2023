@@ -50,7 +50,7 @@ export class AppConst {
 
   public static JOBS_PAGINATION = {
     pageNumberDefault: 1,
-    pageSizeDefault: 3,
-    stepDefault: 2,
+    pageSizeDefault: 2,
+    stepDefault: 1,
   };
 }
