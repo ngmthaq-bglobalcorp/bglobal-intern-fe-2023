@@ -3,5 +3,6 @@ export type FormSearchProps = {
 };
 
 export type FormSearchEmits = {
+  (e: "onSubmitForm"): void;
   (e: "getHeight", formHeight: number, elementHeight: number): void;
 };

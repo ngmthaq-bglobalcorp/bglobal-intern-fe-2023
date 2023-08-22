@@ -70,6 +70,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import UserLayout from "@/layouts/UserLayout/UserLayout.vue";
 import HistoryJobs from "@/components/UserComponents/HistoryJobs/HistoryJobs.vue";
+import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
 import { useSeekersStore } from "@/stores/seekers.store";
 import type { Ref } from "vue";
@@ -80,8 +81,8 @@ const app = defineClassComponent(
     public seekersStore = useSeekersStore();
 
     public isLikeList: Ref<boolean> = this.ref(true);
-    public pageNumber: Ref<number> = this.ref(1);
-    public pageSize: Ref<number> = this.ref(10);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
+    public pageSize: Ref<number> = this.ref(AppConst.DEFAULT.pageSize);
 
     public totalData: Ref<number> = this.computed(() => {
       if (this.isLikeList.value) {

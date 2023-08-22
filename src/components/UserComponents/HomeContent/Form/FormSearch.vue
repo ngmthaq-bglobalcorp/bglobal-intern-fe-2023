@@ -107,14 +107,13 @@ import type { FormSearchEmits, FormSearchProps } from "./FormSearch";
 import type { Ref } from "vue";
 import type { LocationModel } from "@/models/location.model";
 import type { SearchLabelModel } from "@/models/searchLabel.model";
-import { ref } from "vue";
 
 const props = defineProps<FormSearchProps>();
 const emits = defineEmits<FormSearchEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public seekerStore = useSeekersStore();
+    public seekersStore = useSeekersStore();
 
     public isDisableSearchButton: Ref<boolean> = this.ref(Boolean(props.isDisableSearchButton));
     public startTime: Ref<string> = this.ref(AppConst.DEFAULT.time);
@@ -124,8 +123,8 @@ const app = defineClassComponent(
     public thirdLocation: Ref<string> = this.ref(AppConst.DEFAULT.location);
     public searchLabelsArray: Ref<Array<number>> = this.ref([]);
 
-    public totalJobsNumber: Ref<number> = this.computed(() => this.seekerStore.totalJobs);
-    public totalJobsWithContion: Ref<number> = this.computed(() => this.seekerStore.totalJobsWithCondition);
+    public totalJobsNumber: Ref<number> = this.computed(() => this.seekersStore.totalJobs);
+    public totalJobsWithContion: Ref<number> = this.computed(() => this.seekersStore.totalJobsWithCondition);
     public locations: Ref<Array<LocationModel>> = this.computed(() => this.commonStore.locations);
     public filtersSearchLabels: Ref<Array<SearchLabelModel>> = this.computed(() => {
       return this.commonStore.searchLabels.filter((value) => value.isEnabled);
@@ -136,7 +135,6 @@ const app = defineClassComponent(
 
       this.onBeforeMount(async () => {
         const data: any = StorageHelper.getLocalStorage(KeyConst.keys.searchCondition);
-        this.commonStore.setIsLoading(true);
         if (data) {
           this.startTime.value = data.startTime || AppConst.DEFAULT.time;
           this.endTime.value = data.endTime || AppConst.DEFAULT.time;
@@ -144,12 +142,7 @@ const app = defineClassComponent(
           this.secondLocation.value = data.secondLocation || AppConst.DEFAULT.location;
           this.thirdLocation.value = data.thirdLocation || AppConst.DEFAULT.location;
           this.searchLabelsArray.value = data.searchLabelsArray || [];
-          await this.seekerStore.fetchTotalJobs();
-          await this.seekerStore.fetchTotalJobsWithCondition(data);
         }
-        await this.commonStore.fetchAllLocations();
-        await this.commonStore.fetchAllSearchLabels();
-        this.commonStore.setIsLoading(false);
       });
 
       this.onMounted(() => {
@@ -195,12 +188,11 @@ const app = defineClassComponent(
         searchLabelsArray: this.searchLabelsArray.value,
       };
       this.commonStore.setIsLoading(true);
-      let isSuccess = true;
-      isSuccess = await this.seekerStore.fetchAllJobs(data);
-      isSuccess = await this.seekerStore.fetchTotalJobsWithCondition(data);
+      const isSuccess = await this.seekersStore.fetchTotalJobsWithCondition(data);
       if (isSuccess) {
         StorageHelper.setLocalStorage(KeyConst.keys.searchCondition, data);
         this.isDisableSearchButton.value = true;
+        emits("onSubmitForm");
         this.router.push(PathConst.userJobsList);
       }
       this.commonStore.setIsLoading(false);

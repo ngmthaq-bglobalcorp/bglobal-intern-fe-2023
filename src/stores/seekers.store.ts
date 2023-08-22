@@ -66,8 +66,8 @@ export const useSeekersStore = defineClassStore(
       try {
         const res = await api.get(ApiConst.seekersEndpoints.getAllSeekerJobs, { only_meta: "true" });
         if (res.status === ApiConst.status.ok) {
-          const data: any = await res.text();
-          this.totalJobs.value = parseInt(data);
+          const data: any = await res.json();
+          this.totalJobs.value = parseInt(data.allResult);
           return true;
         }
         return false;
@@ -82,6 +82,12 @@ export const useSeekersStore = defineClassStore(
         const params = [];
         params.push(["only_meta", "true"]);
         params.push(["advanceSearch", "true"]);
+        if (data.startAtPagination && data.startAtPagination > 0) {
+          params.push(["startAtPagination", data.startAtPagination]);
+        }
+        if (data.endAtPagination && data.endAtPagination > 0) {
+          params.push(["endAtPagination", data.endAtPagination]);
+        }
         if (data.startTime != AppConst.DEFAULT.time) {
           params.push(["startTime", data.startTime]);
         }
@@ -102,8 +108,9 @@ export const useSeekersStore = defineClassStore(
         });
         const res = await api.get(ApiConst.seekersEndpoints.getAllSeekerJobs, params);
         if (res.status === ApiConst.status.ok) {
-          const data: any = await res.text();
-          this.totalJobsWithCondition.value = parseInt(data);
+          const data: any = await res.json();
+          this.totalJobs.value = parseInt(data.allResult);
+          this.totalJobsWithCondition.value = parseInt(data.searchResult);
           return true;
         }
         return false;
@@ -118,6 +125,12 @@ export const useSeekersStore = defineClassStore(
         const params = [];
         params.push(["only_meta", "false"]);
         params.push(["advanceSearch", "true"]);
+        if (data.startAtPagination > 0) {
+          params.push(["startAtPagination", data.startAtPagination]);
+        }
+        if (data.endAtPagination > 0) {
+          params.push(["endAtPagination", data.endAtPagination]);
+        }
         if (data.startTime != AppConst.DEFAULT.time) {
           params.push(["startTime", data.startTime]);
         }

@@ -30,7 +30,7 @@ export class Api extends Fetch {
         window.location.assign(PathConst.home.path);
       }
     } else if (response.status === ApiConst.status.internalError) {
-      window.location.assign(PathConst.internalError.path);
+      // window.location.assign(PathConst.internalError.path);
     }
     return response;
   }

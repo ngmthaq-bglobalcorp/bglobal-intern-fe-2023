@@ -30,13 +30,17 @@ import FormSearch from "@/components/UserComponents/HomeContent/Form/FormSearch.
 import NewsList from "@/components/UserComponents/HomeContent/News/NewsList.vue";
 import CompanyDescribe from "@/components/UserComponents/HomeContent/CompanyDescribe/CompanyDescribe.vue";
 import FooterComponent from "@/components/UserComponents/Footer/FooterComponent.vue";
+import { KeyConst } from "@/const/key.const";
+import { StorageHelper } from "@/helpers/storage.helper";
 import { useAdminStore } from "@/stores/admin.store";
+import { useSeekersStore } from "@/stores/seekers.store";
 import type { Ref } from "vue";
 import type { NewsModel } from "@/models/news.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public adminStore = useAdminStore();
+    public seekersStore = useSeekersStore();
 
     public newsArray: Ref<Array<NewsModel>> = this.computed(() => this.adminStore.newsList);
 
@@ -45,6 +49,11 @@ const app = defineClassComponent(
 
       this.onBeforeMount(async () => {
         this.commonStore.setIsLoading(true);
+        const data: any = StorageHelper.getLocalStorage(KeyConst.keys.searchCondition);
+
+        await this.commonStore.fetchAllLocations();
+        await this.commonStore.fetchAllSearchLabels();
+        await this.seekersStore.fetchTotalJobsWithCondition(data);
         await this.adminStore.fetchAllNews();
         this.commonStore.setIsLoading(false);
       });
