@@ -13,6 +13,7 @@
             tabindex="0"
             type="button"
             id="like_button_id"
+            :disabled="app.isExpired"
             @click="app.onToggleLikeButton"
           >
             <i class="bi bi-bookmark icon"></i>
@@ -24,6 +25,7 @@
             tabindex="0"
             type="button"
             id="dislike_button_id"
+            :disabled="app.isExpired"
             @click="app.onToggleDislikeButton"
           >
             <i class="bi bi-x-lg icon"></i>
@@ -119,6 +121,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { useSeekersStore } from "@/stores/seekers.store";
 import type { JobDetailEmits, JobDetailProps } from "./JobDetails";
 import type { Ref } from "vue";
@@ -159,6 +162,12 @@ const app = defineClassComponent(
         }
       });
     }
+
+    public isExpired = () => {
+      if (this.job.value.id > 0) {
+        return ValidateHelper.isExpired(this.job.value.opensAt, this.job.value.expiresAt);
+      }
+    };
 
     public onToggleReturn = () => {
       emits("onToggleReturn");
@@ -281,6 +290,10 @@ const app = defineClassComponent(
               color: #000;
               background-color: #b2b2b2;
             }
+          }
+
+          &:disabled {
+            pointer-events: none;
           }
 
           & .icon {

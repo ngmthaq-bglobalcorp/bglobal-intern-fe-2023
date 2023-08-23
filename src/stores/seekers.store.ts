@@ -82,10 +82,10 @@ export const useSeekersStore = defineClassStore(
         const params = [];
         params.push(["only_meta", "true"]);
         params.push(["advanceSearch", "true"]);
-        if (data.startAtPagination && data.startAtPagination > 0) {
+        if (data.startAtPagination >= 0) {
           params.push(["startAtPagination", data.startAtPagination]);
         }
-        if (data.endAtPagination && data.endAtPagination > 0) {
+        if (data.endAtPagination >= 0) {
           params.push(["endAtPagination", data.endAtPagination]);
         }
         if (data.startTime != AppConst.DEFAULT.time) {
@@ -125,10 +125,10 @@ export const useSeekersStore = defineClassStore(
         const params = [];
         params.push(["only_meta", "false"]);
         params.push(["advanceSearch", "true"]);
-        if (data.startAtPagination > 0) {
+        if (data.startAtPagination >= 0) {
           params.push(["startAtPagination", data.startAtPagination]);
         }
-        if (data.endAtPagination > 0) {
+        if (data.endAtPagination >= 0) {
           params.push(["endAtPagination", data.endAtPagination]);
         }
         if (data.startTime != AppConst.DEFAULT.time) {
