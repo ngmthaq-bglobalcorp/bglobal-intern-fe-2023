@@ -44,8 +44,13 @@ const app = defineClassComponent(
 
       this.onBeforeMount(async () => {
         this.commonStore.setIsLoading(true);
-        await this.organizationStore.fetchFindJobById(props.jobId);
-        await this.organizationStore.fetchAllSeekerLikeJob(props.jobId);
+        let isSuccess = true;
+        isSuccess = await this.organizationStore.fetchFindJobById(props.jobId);
+        if (isSuccess) {
+          await this.organizationStore.fetchAllSeekerLikeJob(props.jobId);
+        } else {
+          this.router.push(PathConst.notFound);
+        }
         this.commonStore.setIsLoading(false);
       });
     }

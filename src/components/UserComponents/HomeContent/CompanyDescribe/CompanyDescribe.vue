@@ -1,18 +1,16 @@
 <template>
   <div class="company-describe">
     <p class="describe">{{ app.t("jobsApp.companyDescribe.describe") }}</p>
-    <p class="we-will-help">
-      We will help and support you with your concerns. It doesn't matter if you're having trouble finding a job,
-      worrying about it, or even something trivial. You can consult either face-to-face interview, web remote interview,
-      or both.
-    </p>
+    <p class="we-will-help">{{ app.t("jobsApp.companyDescribe.weWillHelp") }}</p>
     <a
       class="click"
       tabindex="0"
       href="https://secure.haj.co.jp/event/saposen-haj/?mediaid=25&amp;application=pwa"
       target="_blank"
-      >{{ app.t("jobsApp.companyDescribe.link") }}<span class="MuiTouchRipple-root css-w0pj6f"></span
-    ></a>
+    >
+      {{ app.t("jobsApp.companyDescribe.link") }}
+      <span class="MuiTouchRipple-root css-w0pj6f"></span>
+    </a>
   </div>
 </template>
 

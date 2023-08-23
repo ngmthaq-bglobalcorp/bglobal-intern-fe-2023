@@ -316,8 +316,8 @@
               <span>{{ app.t(`app.ensureRequirements`) }}</span>
 
               <ul>
-                <li v-for="index in app.requirementsIndexArray.value" :key="index">
-                  {{ app.t(`app.requirements.${index}`) }}
+                <li v-for="requirement in app.requirementsArray.value" :key="requirement">
+                  {{ app.t(`app.requirements.${requirement}`) }}
                 </li>
               </ul>
             </div>
@@ -387,7 +387,7 @@
     <!-- End Card -->
 
     <!-- Card -->
-    <div id="deleteAccountSection" class="custom-card">
+    <div id="deleteAccountSection" class="custom-card" v-if="app.isDisplayed.value">
       <div class="custom-header">
         <h4 class="card-title">{{ app.t(`app.deleteAccount`) }}</h4>
       </div>
@@ -426,7 +426,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { AppConst } from "@/const/app.const";
 import { LangConst } from "@/const/lang.const";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import type { ProfileUpdateEmits, ProfileUpdateProps } from "./ProfileUpdateComponent";
 import type { Ref } from "vue";
 import type { OrganizationModel } from "@/models/organization.model";
@@ -438,8 +438,9 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public profile: Ref<OrganizationModel> = this.computed(() => props.profile);
 
+    public isDisplayed: Ref<boolean> = this.ref(false);
     public typeArray: Ref<Array<string>> = this.ref(Object.values(AppConst.ORGANIZATION_TYPE));
-    public requirementsIndexArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.requirements`)));
+    public requirementsArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.requirements`)));
     public newEmail: Ref<string> = this.ref("");
     public currentPassword: Ref<string> = this.ref("");
     public newPassword: Ref<string> = this.ref("");
@@ -515,13 +516,13 @@ const app = defineClassComponent(
       } else {
         this.errorName.value = "";
       }
-      if (!this.email.value || !PrimitiveHelper.isValidEmail(this.email.value)) {
+      if (!this.email.value || !ValidateHelper.isValidEmail(this.email.value)) {
         isValidInput = false;
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorEmail.value = "";
       }
-      if (!this.phoneNumber.value || !PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
+      if (!this.phoneNumber.value || !ValidateHelper.isValidPhoneNumber(this.phoneNumber.value)) {
         isValidInput = false;
         this.errorPhoneNumber.value = this.t(`message.errorPhoneNumber`);
       } else {
@@ -550,7 +551,7 @@ const app = defineClassComponent(
 
     public onUpdateEmail = () => {
       let isValidInput = true;
-      if (!this.newEmail.value || !PrimitiveHelper.isValidEmail(this.newEmail.value)) {
+      if (!this.newEmail.value || !ValidateHelper.isValidEmail(this.newEmail.value)) {
         isValidInput = false;
         this.errorNewEmail.value = this.t(`message.errorEmail`);
       } else {
@@ -563,22 +564,16 @@ const app = defineClassComponent(
 
     public onUpdatePassword = () => {
       let isValidInput = true;
-      if (!this.currentPassword.value || !PrimitiveHelper.isValidPassword(this.currentPassword.value)) {
+      ValidateHelper.checkValidPassword(this.currentPassword.value).forEach((value) => {
+        this.errorCurrentPassword.value += this.t(value) + "\n";
+      });
+      ValidateHelper.checkValidPassword(this.newPassword.value).forEach((value) => {
+        this.errorNewPassword.value += this.t(value) + "\n";
+      });
+      if (this.errorCurrentPassword.value || this.errorNewPassword.value) {
         isValidInput = false;
-        this.errorCurrentPassword.value = this.t(`message.errorPassword`);
-      } else {
-        this.errorCurrentPassword.value = "";
       }
-      if (!this.newPassword.value || !PrimitiveHelper.isValidPassword(this.newPassword.value)) {
-        isValidInput = false;
-        this.errorNewPassword.value = this.t(`message.errorPassword`);
-      } else {
-        this.errorNewPassword.value = "";
-      }
-      if (!this.confirmNewPassword.value || !PrimitiveHelper.isValidPassword(this.confirmNewPassword.value)) {
-        isValidInput = false;
-        this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
-      } else if (this.confirmNewPassword.value !== this.newPassword.value) {
+      if (this.confirmNewPassword.value !== this.newPassword.value) {
         isValidInput = false;
         this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
       } else {
@@ -779,6 +774,7 @@ const app = defineClassComponent(
             margin-top: 0.25rem;
             font-size: 80%;
             color: $danger;
+            white-space: pre-line;
           }
         }
 

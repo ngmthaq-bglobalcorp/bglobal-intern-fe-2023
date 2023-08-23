@@ -79,7 +79,7 @@ const app = defineClassComponent(
       const seeker = new SeekerModel(data);
       const isSuccess = await this.seekersStore.fetchUpdateProfile(seeker);
       if (isSuccess) {
-        console.log("Update profile");
+        await this.seekersStore.fetchProfile();
         this.messageInfoUpdateSuccess.value = this.t(`message.updateSuccess`);
       } else {
         this.messageInfoUpdateFailed.value = this.t(`message.updateFailed`);
@@ -96,7 +96,7 @@ const app = defineClassComponent(
         this.seekersStore.profile.email = email;
         this.messageEmailUpdateSuccess.value = this.t(`message.updateSuccess`);
       } else {
-        this.messageEmailUpdateFailed.value = this.t(`message.updateFailed`);
+        this.messageEmailUpdateFailed.value = this.t(`message.errorEmailExists`, { value: email });
       }
       this.commonStore.setIsLoading(false);
     };
@@ -131,7 +131,7 @@ const app = defineClassComponent(
 
 .update-profile-container {
   & .profile-content {
-    padding: 1.5rem 1.5rem 0;
+    padding: 1.5rem 0.75rem;
   }
 }
 </style>

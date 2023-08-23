@@ -3,7 +3,7 @@
   <div class="job-detail-card-container custom-card">
     <!-- Infomation -->
     <div class="job-wrapper">
-      <div class="job-header" v-if="app.job.value.mainImageUrl && app.show.value">
+      <div class="job-header" v-if="app.job.value.mainImageUrl && app.isDisplayed.value">
         <img :src="app.job.value.mainImageUrl" :alt="app.job.value.mainImageDesc" class="main-img" />
       </div>
       <div class="job-body">
@@ -98,7 +98,7 @@ const props = defineProps<JobDetailCardProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public show: Ref<boolean> = this.ref(false);
+    public isDisplayed: Ref<boolean> = this.ref(false);
 
     public job: Ref<JobModel> = this.computed(() => props.data);
 

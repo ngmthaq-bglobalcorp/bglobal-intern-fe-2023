@@ -38,7 +38,7 @@ const app = defineClassComponent(
 
     & .image {
       width: 100%;
-      max-width: 40rem;
+      max-width: 25rem;
       height: auto;
       vertical-align: middle;
       margin-bottom: 2rem;

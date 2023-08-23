@@ -2,12 +2,14 @@
   <div class="profile-update-container">
     <!-- Card -->
     <div id="content" class="custom-card">
-      <div class="custom-header">
+      <div class="custom-header" @click="app.onToggleHeader(app.infoCollapse)">
         <h2 class="card-title">{{ app.t(`app.basicInformation`) }}</h2>
+        <i class="bi bi-chevron-down" v-if="app.infoCollapse.value"></i>
+        <i class="bi bi-chevron-up" v-else></i>
       </div>
 
       <!-- Body -->
-      <div class="custom-body">
+      <div class="custom-body" :class="{ disabled: app.infoCollapse.value }">
         <!-- Form -->
         <div class="success-message" v-if="props.messageInfoUpdateSuccess">
           {{ props.messageInfoUpdateSuccess }}
@@ -249,12 +251,14 @@
 
     <!-- Card -->
     <div id="emailSection" class="custom-card">
-      <div class="custom-header">
+      <div class="custom-header" @click="app.onToggleHeader(app.emailCollapse)">
         <h2 class="card-title">{{ app.t(`app.email`) }}</h2>
+        <i class="bi bi-chevron-down" v-if="app.emailCollapse.value"></i>
+        <i class="bi bi-chevron-up" v-else></i>
       </div>
 
       <!-- Body -->
-      <div class="custom-body">
+      <div class="custom-body" :class="{ disabled: app.emailCollapse.value }">
         <div class="card-text">
           {{ app.t(`app.currentEmail`) }}<span class="font-weight-bold">{{ app.email.value }}</span>
         </div>
@@ -299,12 +303,14 @@
 
     <!-- Card -->
     <div id="passwordSection" class="custom-card">
-      <div class="custom-header">
+      <div class="custom-header" @click="app.onToggleHeader(app.passwordCollapse)">
         <h2 class="card-title">{{ app.t(`app.changePassword`) }}</h2>
+        <i class="bi bi-chevron-down" v-if="app.passwordCollapse.value"></i>
+        <i class="bi bi-chevron-up" v-else></i>
       </div>
 
       <!-- Body -->
-      <div class="custom-body">
+      <div class="custom-body" :class="{ disabled: app.passwordCollapse.value }">
         <!-- Form -->
         <div class="success-message" v-if="props.messagePasswordUpdateSuccess">
           {{ props.messagePasswordUpdateSuccess }}
@@ -405,12 +411,14 @@
 
     <!-- Card -->
     <div id="preferencesSection" class="custom-card">
-      <div class="custom-header">
+      <div class="custom-header" @click="app.onToggleHeader(app.preferencesCollapse)">
         <h2 class="card-title">{{ app.t(`app.preferences`) }}</h2>
+        <i class="bi bi-chevron-down" v-if="app.preferencesCollapse.value"></i>
+        <i class="bi bi-chevron-up" v-else></i>
       </div>
 
       <!-- Body -->
-      <div class="custom-body">
+      <div class="custom-body" :class="{ disabled: app.preferencesCollapse.value }">
         <!-- Form -->
         <form id="changePreferencesForm" action="" @submit.prevent="app.onUpdateLanguage">
           <!-- Form Group -->
@@ -456,13 +464,15 @@
     <!-- End Card -->
 
     <!-- Card -->
-    <div id="deleteAccountSection" class="custom-card">
-      <div class="custom-header">
+    <div id="deleteAccountSection" class="custom-card" v-if="app.isDisplayed.value">
+      <div class="custom-header" @click="app.onToggleHeader(app.deleteCollapse)">
         <h4 class="card-title">{{ app.t(`app.deleteAccount`) }}</h4>
+        <i class="bi bi-chevron-down" v-if="app.deleteCollapse.value"></i>
+        <i class="bi bi-chevron-up" v-else></i>
       </div>
 
       <!-- Body -->
-      <div class="custom-body">
+      <div class="custom-body" :class="{ disabled: app.deleteCollapse.value }">
         <div class="card-text">{{ app.t(`app.deleteNotice`) }}</div>
 
         <div class="form-group">
@@ -494,7 +504,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { LangConst } from "@/const/lang.const";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import type { ProfileUpdateEmits, ProfileUpdateProps } from "./ProfileComponent";
 import type { Ref } from "vue";
 import type { SeekerModel } from "@/models/seeker.model";
@@ -506,6 +516,12 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public profile: Ref<SeekerModel> = this.computed(() => props.profile);
 
+    public isDisplayed: Ref<boolean> = this.ref(false);
+    public infoCollapse: Ref<boolean> = this.ref(false);
+    public emailCollapse: Ref<boolean> = this.ref(false);
+    public passwordCollapse: Ref<boolean> = this.ref(false);
+    public preferencesCollapse: Ref<boolean> = this.ref(false);
+    public deleteCollapse: Ref<boolean> = this.ref(false);
     public requirementsIndexArray: Ref<Array<string>> = this.ref(Object.keys(this.i18n.tm(`app.requirements`)));
     public newEmail: Ref<string> = this.ref("");
     public currentPassword: Ref<string> = this.ref("");
@@ -567,6 +583,10 @@ const app = defineClassComponent(
       );
     }
 
+    public onToggleHeader = (target: any) => {
+      target.value = !target.value;
+    };
+
     public onToggleEmail = () => {
       const element = document.getElementById("emailSection");
 
@@ -586,13 +606,13 @@ const app = defineClassComponent(
       } else {
         this.errorName.value = "";
       }
-      if (!this.email.value || !PrimitiveHelper.isValidEmail(this.email.value)) {
+      if (!this.email.value || !ValidateHelper.isValidEmail(this.email.value)) {
         isValidInput = false;
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorEmail.value = "";
       }
-      if (this.phoneNumber.value && !PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
+      if (this.phoneNumber.value && !ValidateHelper.isValidPhoneNumber(this.phoneNumber.value)) {
         isValidInput = false;
         this.errorPhoneNumber.value = this.t(`message.errorPhoneNumber`);
       } else {
@@ -619,7 +639,7 @@ const app = defineClassComponent(
 
     public onUpdateEmail = () => {
       let isValidInput = true;
-      if (!this.newEmail.value || !PrimitiveHelper.isValidEmail(this.newEmail.value)) {
+      if (!this.newEmail.value || !ValidateHelper.isValidEmail(this.newEmail.value)) {
         isValidInput = false;
         this.errorNewEmail.value = this.t(`message.errorEmail`);
       } else {
@@ -632,22 +652,16 @@ const app = defineClassComponent(
 
     public onUpdatePassword = () => {
       let isValidInput = true;
-      if (!this.currentPassword.value || !PrimitiveHelper.isValidPassword(this.currentPassword.value)) {
+      ValidateHelper.checkValidPassword(this.currentPassword.value).forEach((value) => {
+        this.errorCurrentPassword.value += this.t(value) + "\n";
+      });
+      ValidateHelper.checkValidPassword(this.newPassword.value).forEach((value) => {
+        this.errorNewPassword.value += this.t(value) + "\n";
+      });
+      if (this.errorCurrentPassword.value || this.errorNewPassword.value) {
         isValidInput = false;
-        this.errorCurrentPassword.value = this.t(`message.errorPassword`);
-      } else {
-        this.errorCurrentPassword.value = "";
       }
-      if (!this.newPassword.value || !PrimitiveHelper.isValidPassword(this.newPassword.value)) {
-        isValidInput = false;
-        this.errorNewPassword.value = this.t(`message.errorPassword`);
-      } else {
-        this.errorNewPassword.value = "";
-      }
-      if (!this.confirmNewPassword.value || !PrimitiveHelper.isValidPassword(this.confirmNewPassword.value)) {
-        isValidInput = false;
-        this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
-      } else if (this.confirmNewPassword.value !== this.newPassword.value) {
+      if (this.confirmNewPassword.value !== this.newPassword.value) {
         isValidInput = false;
         this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
       } else {
@@ -725,7 +739,7 @@ const app = defineClassComponent(
   flex-wrap: wrap;
 
   & .custom-card {
-    margin-bottom: 1.5rem;
+    margin-bottom: 1rem;
 
     & .custom-header {
       display: flex;
@@ -733,7 +747,7 @@ const app = defineClassComponent(
       justify-content: space-between;
       gap: 0.5rem;
       padding: 1rem 1.3125rem;
-      border-bottom: 0.0625rem solid $border;
+      cursor: pointer;
 
       & .card-title {
         font-size: 1rem;
@@ -744,7 +758,19 @@ const app = defineClassComponent(
     }
 
     & .custom-body {
+      border-top: 0.0625rem solid $border;
       padding: 1.3125rem 1.3125rem;
+      opacity: 1;
+      visibility: visible;
+      transition: transform 1s ease-in-out;
+
+      &.disabled {
+        display: none;
+        opacity: 0;
+        visibility: hidden;
+        border: 0;
+        transform: translate3d(0, -100%, 0);
+      }
 
       & .success-message,
       & .fail-message {
@@ -819,7 +845,7 @@ const app = defineClassComponent(
               color: $dark;
               background-color: $white;
               outline: 0;
-              border-color: rgba($blue, 0.6);
+              border-color: rgba($user-primary, 0.6);
               box-shadow: 0 0 10px rgba(55, 125, 255, 0.1);
             }
           }
@@ -842,6 +868,7 @@ const app = defineClassComponent(
             margin-top: 0.25rem;
             font-size: 80%;
             color: $danger;
+            white-space: pre-line;
           }
         }
 

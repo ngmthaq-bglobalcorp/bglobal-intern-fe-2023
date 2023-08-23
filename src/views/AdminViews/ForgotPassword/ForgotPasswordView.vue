@@ -9,32 +9,41 @@
             <span>{{ app.t(`app.forgotPasswordTitle`) }}</span>
           </div>
 
+          <div class="success-message" v-if="app.successMessage.value">
+            {{ app.successMessage.value }}
+          </div>
+          <div class="fail-message" v-if="app.failMessage.value">
+            {{ app.failMessage.value }}
+          </div>
+
           <!-- Form Group -->
           <div class="form-group">
             <label class="input-label" for="organizationEmail">{{ app.t(`app.organizationEmail`) }}</label>
 
-            <input
-              type="email"
-              :class="['input-form', { 'is-invalid': app.errorEmail.value }]"
-              name="email"
-              id="organizationEmail"
-              placeholder="Email@organization.com"
-              v-model="app.email.value"
-              @focus="app.focusEmail"
-            />
+            <div class="item">
+              <input
+                type="email"
+                :class="['input-form', { 'is-invalid': app.errorEmail.value }]"
+                name="email"
+                id="organizationEmail"
+                placeholder="Email@organization.com"
+                v-model="app.email.value"
+                @focus="app.focusEmail"
+              />
+
+              <button class="g-btn send-btn" @click.prevent="app.sendOtp" :disabled="app.seconds.value > 0">
+                <span v-if="app.seconds.value > 0">{{ app.seconds.value }}</span>
+                <span v-else>{{ app.t(`app.sendOtp`) }}</span>
+              </button>
+            </div>
 
             <div class="invalid-feedback" v-if="app.errorEmail.value">{{ app.errorEmail.value }}</div>
           </div>
           <!-- End Form Group -->
 
           <!-- Form Group -->
-          <div class="form-group" v-if="app.isValidEmail.value">
-            <label class="input-label" for="emailOtp">
-              <span class="item">
-                {{ app.t(`app.emailOtp`) }}
-                <button class="resend-btn" @click.prevent="app.resendOtp">{{ app.t(`app.resendOtp`) }}</button>
-              </span>
-            </label>
+          <div class="form-group">
+            <label class="input-label" for="emailOtp">{{ app.t(`app.emailOtp`) }}</label>
 
             <input
               type="text"
@@ -47,6 +56,48 @@
             />
 
             <div class="invalid-feedback" v-if="app.errorOtp.value">{{ app.errorOtp.value }}</div>
+          </div>
+          <!-- End Form Group -->
+
+          <!-- Form Group -->
+          <div class="form-group">
+            <label class="input-label" for="newPassword">{{ app.t(`app.newPassword`) }}</label>
+
+            <div class="custom-input-group">
+              <input
+                type="password"
+                :class="['input-form', { 'is-invalid': app.errorNewPassword.value }]"
+                name="newPassword"
+                id="newPassword"
+                :placeholder="app.t(`app.enterNewPassword`)"
+                v-model="app.newPassword.value"
+                @focus="app.focusNewPassword"
+              />
+
+              <div class="invalid-feedback" v-if="app.errorNewPassword.value">{{ app.errorNewPassword.value }}</div>
+            </div>
+          </div>
+          <!-- End Form Group -->
+
+          <!-- Form Group -->
+          <div class="form-group">
+            <label class="input-label" for="confirmNewPassword">{{ app.t(`app.confirmNewPassword`) }}</label>
+
+            <div class="custom-input-group">
+              <input
+                type="password"
+                :class="['input-form', { 'is-invalid': app.errorConfirmNewPassword.value }]"
+                name="confirmNewPassword"
+                id="confirmNewPassword"
+                :placeholder="app.t(`app.confirmNewPassword`)"
+                v-model="app.confirmNewPassword.value"
+                @focus="app.focusConfirmNewPassword"
+              />
+
+              <div class="invalid-feedback" v-if="app.errorConfirmNewPassword.value">
+                {{ app.errorConfirmNewPassword.value }}
+              </div>
+            </div>
           </div>
           <!-- End Form Group -->
 
@@ -66,8 +117,9 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
+import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
@@ -75,39 +127,92 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
 
+    public successMessage: Ref<string> = this.ref("");
+    public failMessage: Ref<string> = this.ref("");
     public email: Ref<string> = this.ref("");
     public emailOtp: Ref<string> = this.ref("");
-    public isValidEmail: Ref<Boolean> = this.ref(false);
+    public newPassword: Ref<string> = this.ref("");
+    public confirmNewPassword: Ref<string> = this.ref("");
     public errorEmail: Ref<string> = this.ref("");
     public errorOtp: Ref<string> = this.ref("");
+    public errorNewPassword: Ref<string> = this.ref("");
+    public errorConfirmNewPassword: Ref<string> = this.ref("");
+    public seconds: Ref<number> = this.ref(0);
 
     public constructor() {
       super();
     }
 
-    public resendOtp = () => {
-      console.log("Resend OTP");
+    public countdown = () => {
+      this.seconds.value = AppConst.DEFAULT.countdownSeconds;
+
+      var timer = setInterval(() => {
+        this.seconds.value--;
+        if (this.seconds.value <= 0) {
+          this.seconds.value = 0;
+          clearInterval(timer);
+        }
+      }, 1000);
     };
 
-    public submitForm = () => {
-      if (!this.email.value || !PrimitiveHelper.isValidEmail(this.email.value)) {
+    public sendOtp = async () => {
+      this.failMessage.value = "";
+      this.successMessage.value = "";
+      if (!this.email.value || !ValidateHelper.isValidEmail(this.email.value)) {
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
-        this.errorEmail.value = "";
-        this.isValidEmail.value = true;
-
-        if (!this.emailOtp.value) {
-          this.errorOtp.value = this.t(`message.errorOtp`);
+        this.commonStore.setIsLoading(true);
+        const isSuccess = await this.authStore.fetchForgotPassword(this.email.value);
+        if (isSuccess) {
+          this.successMessage.value = app.t(`message.sendOtpSuccess`);
+          this.countdown();
         } else {
-          this.errorOtp.value = "";
+          this.failMessage.value = app.t(`message.sendOtpFail`);
         }
+        this.commonStore.setIsLoading(false);
+      }
+    };
+
+    public submitForm = async () => {
+      let isValidInput = true;
+      if (!this.emailOtp.value) {
+        isValidInput = false;
+        this.errorOtp.value = this.t(`message.errorOtp`);
+      } else {
+        this.errorOtp.value = "";
+      }
+      ValidateHelper.checkValidPassword(this.newPassword.value).forEach((value) => {
+        this.errorNewPassword.value += this.t(value) + "\n";
+      });
+      if (this.errorNewPassword.value) {
+        isValidInput = false;
+      }
+      if (this.confirmNewPassword.value !== this.newPassword.value) {
+        isValidInput = false;
+        this.errorConfirmNewPassword.value = this.t(`message.errorConfirmPassword`);
+      } else {
+        this.errorConfirmNewPassword.value = "";
+      }
+      if (isValidInput) {
+        const data = {
+          emailOtp: this.emailOtp.value,
+          newPassword: this.newPassword.value,
+        };
+        this.commonStore.setIsLoading(true);
+        const isSuccess = await this.authStore.fetchResetPassword(data);
+        if (isSuccess) {
+          this.successMessage.value = app.t(`message.updateSuccess`);
+          this.router.push(PathConst.adminSignin);
+        } else {
+          this.failMessage.value = app.t(`message.errorOtp`);
+        }
+        this.commonStore.setIsLoading(false);
       }
     };
 
     public focusEmail = () => {
       if (this.errorEmail.value) {
         this.errorEmail.value = "";
-        this.email.value = "";
       }
     };
 
@@ -115,6 +220,20 @@ const app = defineClassComponent(
       if (this.errorOtp.value) {
         this.errorOtp.value = "";
         this.emailOtp.value = "";
+      }
+    };
+
+    public focusNewPassword = () => {
+      if (this.errorNewPassword.value) {
+        this.errorNewPassword.value = "";
+        this.newPassword.value = "";
+      }
+    };
+
+    public focusConfirmNewPassword = () => {
+      if (this.errorConfirmNewPassword.value) {
+        this.errorConfirmNewPassword.value = "";
+        this.confirmNewPassword.value = "";
       }
     };
   },
@@ -152,34 +271,48 @@ const app = defineClassComponent(
       }
     }
 
+    & .success-message {
+      color: $success;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
+    & .fail-message {
+      color: $danger;
+      text-align: center;
+      margin-bottom: 0.5rem;
+    }
+
     & .form-group {
       margin-bottom: 1.5rem;
       transition: all 0.2s ease-in-out;
+
+      & .item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+
+        & .send-btn {
+          width: 20%;
+          height: calc(1.5em + 1.875rem);
+          color: $white;
+          background-color: $blue-light;
+          border-color: $blue-light;
+          padding: 0;
+          margin-left: 0.25rem;
+
+          &:hover {
+            background-color: $blue;
+            border-color: $blue;
+          }
+        }
+      }
 
       & .input-label {
         display: block;
         color: $black;
         font-size: 0.875rem;
         margin-bottom: 0.5rem;
-
-        & .item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-
-          & .resend-btn {
-            color: #8c98a4 !important;
-            border: none;
-            outline: none;
-            background-color: transparent;
-            font-size: 0.8125rem;
-            margin-left: 0.25rem;
-
-            &:hover {
-              color: $blue !important;
-            }
-          }
-        }
       }
 
       & .input-form {
@@ -206,7 +339,7 @@ const app = defineClassComponent(
           color: $dark;
           background-color: $white;
           outline: 0;
-          border-color: rgba(55, 125, 255, 0.4);
+          border-color: rgba($blue, 0.6);
           box-shadow: 0 0 10px rgba(55, 125, 255, 0.1);
         }
       }
@@ -229,6 +362,7 @@ const app = defineClassComponent(
         margin-top: 0.25rem;
         font-size: 80%;
         color: $danger;
+        white-space: pre-line;
       }
     }
 

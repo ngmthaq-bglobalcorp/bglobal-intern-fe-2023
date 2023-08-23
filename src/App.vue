@@ -19,10 +19,6 @@ const app = defineClassComponent(
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.authStore.getAdminUser();
-      });
-
       this.watch(
         () => this.route.fullPath,
         () => {

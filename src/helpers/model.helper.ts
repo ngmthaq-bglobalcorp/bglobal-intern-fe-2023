@@ -1,10 +1,12 @@
 import { JobModel } from "@/models/job.model";
 import { LocationModel } from "@/models/location.model";
+import { OrganizationModel } from "@/models/organization.model";
 import { SearchLabelModel } from "@/models/searchLabel.model";
+import { SeekerModel } from "@/models/seeker.model";
 
 export class ModelHelper {
   public static getJobModel = (data: any) => {
-    const job = {
+    return new JobModel({
       id: data.id,
       mainImageUrl: data.mainImage.url,
       mainImageDesc: data.mainImage.description,
@@ -40,7 +42,44 @@ export class ModelHelper {
       expiresAt: data.expiresAt,
       updatedAt: data.updatedAt,
       createdAt: data.createdAt,
-    };
-    return new JobModel(job);
+    });
+  };
+
+  public static getSeekerModel = (data: any) => {
+    return new SeekerModel({
+      id: data.id,
+      userId: data.user.id,
+      username: data.user.username,
+      name: data.name,
+      email: data.user.email,
+      phoneNumber: data.phoneNumber,
+      avatar: data.photo,
+      birthday: data.dob,
+      address: data.address,
+      website: data.website,
+      education: data.education,
+      experience: data.experience,
+      skills: data.skills,
+      achievements: data.achievements,
+      otherDetails: data.other_details,
+      status: data.user.status,
+    });
+  };
+
+  public static getOrganizationModel = (data: any) => {
+    return new OrganizationModel({
+      id: data.id,
+      userId: data.user.id,
+      username: data.user.username,
+      name: data.name,
+      email: data.user.email,
+      phoneNumber: data.phoneNumber,
+      avatar: data.photo,
+      website: data.website,
+      address: data.address,
+      introduction: data.introduction,
+      organizationType: data.organizationType,
+      status: data.user.status,
+    });
   };
 }

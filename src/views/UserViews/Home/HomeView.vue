@@ -4,7 +4,7 @@
       <ul class="OK">
         <li class="ok" v-for="(n, index) in 3" :key="n">
           <i class="bi bi-check-circle-fill"></i>
-          <p>{{ app.t(`jobsApp.header.secondHeader.${index}.title`) }}</p>
+          <span class="ok-info">{{ app.t(`jobsApp.header.secondHeader.${index}.title`) }}</span>
         </li>
       </ul>
 
@@ -14,7 +14,7 @@
       <FormSearch />
       <div class="search-condition">
         <img class="" src="@/assets/img/ic_search.svg" />
-        <p class="">{{ app.t("jobsApp.form.applicable.searchCondition") }}</p>
+        <span class="text">{{ app.t("jobsApp.form.applicable.searchCondition") }}</span>
       </div>
       <NewsList :news-array="app.newsArray.value" />
       <CompanyDescribe />
@@ -30,13 +30,17 @@ import FormSearch from "@/components/UserComponents/HomeContent/Form/FormSearch.
 import NewsList from "@/components/UserComponents/HomeContent/News/NewsList.vue";
 import CompanyDescribe from "@/components/UserComponents/HomeContent/CompanyDescribe/CompanyDescribe.vue";
 import FooterComponent from "@/components/UserComponents/Footer/FooterComponent.vue";
+import { KeyConst } from "@/const/key.const";
+import { StorageHelper } from "@/helpers/storage.helper";
 import { useAdminStore } from "@/stores/admin.store";
+import { useSeekersStore } from "@/stores/seekers.store";
 import type { Ref } from "vue";
 import type { NewsModel } from "@/models/news.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public adminStore = useAdminStore();
+    public seekersStore = useSeekersStore();
 
     public newsArray: Ref<Array<NewsModel>> = this.computed(() => this.adminStore.newsList);
 
@@ -45,6 +49,11 @@ const app = defineClassComponent(
 
       this.onBeforeMount(async () => {
         this.commonStore.setIsLoading(true);
+        const data: any = StorageHelper.getLocalStorage(KeyConst.keys.searchCondition);
+
+        await this.commonStore.fetchAllLocations();
+        await this.commonStore.fetchAllSearchLabels();
+        await this.seekersStore.fetchTotalJobsWithCondition(data);
         await this.adminStore.fetchAllNews();
         this.commonStore.setIsLoading(false);
       });
@@ -75,16 +84,18 @@ const app = defineClassComponent(
       color: #fff;
       display: flex;
       align-items: center;
-      margin-left: 10px;
+      margin-right: 8px;
       justify-content: center;
 
-      & p {
+      &:last-child {
+        margin-right: 0;
+      }
+
+      & .ok-info {
         font-size: 12px;
-        font-weight: 700;
+        font-weight: 600;
         line-height: 17px;
-        margin-top: 8px;
-        margin-bottom: 8px;
-        margin-left: 1px;
+        letter-spacing: 0.00714em;
       }
     }
   }
@@ -100,6 +111,7 @@ const app = defineClassComponent(
 }
 .userlayout {
   padding: 0 12px;
+
   & .search-condition {
     width: 210px;
     height: 40px;
@@ -113,7 +125,8 @@ const app = defineClassComponent(
     background-repeat: no-repeat;
     background-position: top center;
     background-image: url(@/assets/img/tab.png);
-    & p {
+
+    & .text {
       color: #000;
       font-size: 16px;
       font-weight: 400;

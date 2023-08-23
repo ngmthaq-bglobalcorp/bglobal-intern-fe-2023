@@ -390,7 +390,10 @@ const app = defineClassComponent(
         await this.commonStore.fetchAllLocations();
         await this.commonStore.fetchAllSearchLabels();
         if (this.isUpdate.value) {
-          this.organizationStore.fetchFindJobById(props.jobId);
+          const isSuccess = await this.organizationStore.fetchFindJobById(props.jobId);
+          if (!isSuccess) {
+            this.router.push(PathConst.notFound);
+          }
         }
         this.commonStore.setIsLoading(false);
       });

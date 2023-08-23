@@ -12,7 +12,7 @@
             </span>
           </div>
 
-          <div class="signin-google" v-if="app.show.value">
+          <div class="signin-google" v-if="app.isDisplayed.value">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
                 <img src="@\assets\img\google.svg" alt="Google" class="image avatar" />
@@ -21,7 +21,7 @@
             </button>
           </div>
 
-          <div class="content-or" v-if="app.show.value">
+          <div class="content-or" v-if="app.isDisplayed.value">
             <span class="divider text-muted">{{ app.t(`app.or`) }}</span>
           </div>
 
@@ -71,16 +71,8 @@
           </div>
           <!-- End Form Group -->
 
-          <!-- Forgot Password -->
-          <div class="form-group" v-if="app.show.value">
-            <router-link :to="PathConst.userForgot" class="link forgot-password">
-              {{ app.t(`app.forgotPassword`) }}
-            </router-link>
-          </div>
-          <!-- End Forgot Password -->
-
           <!-- Checkbox -->
-          <div class="form-group">
+          <div class="form-group group-flex">
             <div class="input-group">
               <input
                 type="checkbox"
@@ -94,6 +86,10 @@
                 {{ app.t(`app.rememberMe`) }}
               </label>
             </div>
+
+            <router-link :to="PathConst.userForgot" class="link forgot-password">
+              {{ app.t(`app.forgotPassword`) }}
+            </router-link>
           </div>
           <!-- End Checkbox -->
 
@@ -109,7 +105,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import UserLayout from "@/layouts/UserLayout/UserLayout.vue";
 import { PathConst } from "@/const/path.const";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
@@ -117,7 +113,7 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
 
-    public show: Ref<boolean> = this.ref(false);
+    public isDisplayed: Ref<boolean> = this.ref(false);
     public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");
     public remember: Ref<boolean> = this.ref(true);
@@ -137,17 +133,19 @@ const app = defineClassComponent(
       } else {
         this.errorUsername.value = "";
       }
-      if (!this.password.value || !PrimitiveHelper.isValidPassword(this.password.value)) {
-        this.errorPassword.value = this.t(`message.errorPassword`);
+      ValidateHelper.checkValidPassword(this.password.value).forEach((value) => {
+        this.errorPassword.value += this.t(value) + "\n";
+      });
+      if (this.errorPassword.value) {
         isValidInput = false;
-      } else {
-        this.errorPassword.value = "";
       }
       if (isValidInput) {
         this.commonStore.setIsLoading(true);
         const isSuccess = await this.authStore.fetchAdminSignIn(this.username.value, this.password.value);
         if (isSuccess) {
           window.location.replace(PathConst.home.path);
+          // window.location.href = PathConst.home.path;
+          // this.router.push(PathConst.home);
         } else {
           this.errorUsernameOrPassword.value = this.t(`message.errorUsernameOrPassword`);
           this.password.value = "";
@@ -276,6 +274,12 @@ const app = defineClassComponent(
     & .form-group {
       margin-bottom: 1.5rem;
 
+      &.group-flex {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
       & .input-label {
         display: block;
         color: $black;
@@ -311,7 +315,7 @@ const app = defineClassComponent(
           color: $dark;
           background-color: $white;
           outline: 0;
-          border-color: rgba(55, 125, 255, 0.4);
+          border-color: rgba($user-primary, 0.6);
           box-shadow: 0 0 10px rgba(55, 125, 255, 0.1);
         }
       }
@@ -334,6 +338,7 @@ const app = defineClassComponent(
         margin-top: 0.25rem;
         font-size: 0.8125rem;
         color: $danger;
+        white-space: pre-line;
       }
 
       & .input-group {
@@ -342,6 +347,7 @@ const app = defineClassComponent(
         display: block;
         min-height: 1.4rem;
         padding-left: 1.5rem;
+        width: auto;
 
         & .custom-control-input {
           position: absolute;

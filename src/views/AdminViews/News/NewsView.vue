@@ -21,6 +21,7 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import TimelineList from "@/components/AdminComponents/TimelineList/TimelineListComponent.vue";
+import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
 import { useAdminStore } from "@/stores/admin.store";
 import type { Ref } from "vue";
@@ -30,7 +31,7 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public adminStore = useAdminStore();
 
-    public limit: Ref<number> = this.ref(5);
+    public limit: Ref<number> = this.ref(AppConst.DEFAULT.limit);
 
     public news: Ref<Array<NewsModel>> = this.computed(() => this.adminStore.newsList);
 

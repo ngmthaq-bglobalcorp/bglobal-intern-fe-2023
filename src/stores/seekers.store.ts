@@ -12,9 +12,10 @@ export const api = new Api();
 export const useSeekersStore = defineClassStore(
   class Store extends BaseStore {
     public name: string = "seekers";
-    public job: Ref<JobModel> = this.ref(new JobModel({}));
+
     public profile: Ref<SeekerModel> = this.ref(new SeekerModel({}));
     public jobs: Ref<Array<JobModel>> = this.ref([]);
+    public job: Ref<JobModel> = this.ref(new JobModel({}));
     public totalJobs: Ref<number> = this.ref(0);
     public totalJobsWithCondition: Ref<number> = this.ref(0);
     public listLikeJobs: Ref<Array<JobModel>> = this.ref([]);
@@ -25,31 +26,10 @@ export const useSeekersStore = defineClassStore(
         const res = await api.get(ApiConst.seekersEndpoints.getSeekerProfile);
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
-          console.log(data);
-          const profile = {
-            id: data.id,
-            userId: data.user.id,
-            username: data.user.username,
-            name: data.name,
-            email: data.user.email,
-            phoneNumber: data.phoneNumber,
-            avatar: data.photo,
-            birthday: data.dob,
-            address: data.address,
-            website: data.website,
-            education: data.education,
-            experience: data.experience,
-            skills: data.skills,
-            achievements: data.achievements,
-            otherDetails: data.other_details,
-            status: data.user.status,
-          };
-          this.profile.value = new SeekerModel(profile);
-          console.log(this.profile.value);
+          this.profile.value = ModelHelper.getSeekerModel(data);
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
         return false;
@@ -59,25 +39,23 @@ export const useSeekersStore = defineClassStore(
     public fetchUpdateProfile = async (data: SeekerModel) => {
       try {
         const profile = {
-          name: data.name,
-          phone_number: data.phoneNumber,
-          profileImageUrl: data.avatar,
-          dob: data.birthday,
-          address: data.address,
-          website: data.website,
-          education: data.education,
-          experience: data.experience,
-          skills: data.skills,
-          achievements: data.achievements,
-          other_details: data.otherDetails,
+          name: data.name ? data.name : this.profile.value.name,
+          phone_number: data.phoneNumber ? data.phoneNumber : this.profile.value.phoneNumber,
+          profileImageUrl: data.avatar ? data.avatar : this.profile.value.avatar,
+          dob: data.birthday ? data.birthday : this.profile.value.birthday,
+          address: data.address ? data.address : this.profile.value.address,
+          website: data.website ? data.website : this.profile.value.website,
+          education: data.education ? data.education : this.profile.value.education,
+          experience: data.experience ? data.experience : this.profile.value.experience,
+          skills: data.skills ? data.skills : this.profile.value.skills,
+          achievements: data.achievements ? data.achievements : this.profile.value.achievements,
+          other_details: data.otherDetails ? data.otherDetails : this.profile.value.otherDetails,
         };
-        console.log(profile);
         const res = await api.post(ApiConst.seekersEndpoints.updateSeekerProfile, profile);
         if (res.status === ApiConst.status.ok) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
         return false;
@@ -88,14 +66,11 @@ export const useSeekersStore = defineClassStore(
       try {
         const res = await api.get(ApiConst.seekersEndpoints.getAllSeekerJobs, { only_meta: "true" });
         if (res.status === ApiConst.status.ok) {
-          const data: any = await res.text();
-          console.log(data);
-          this.totalJobs.value = parseInt(data);
-          console.log(this.totalJobs.value);
+          const data: any = await res.json();
+          this.totalJobs.value = parseInt(data.allResult);
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
         return false;
@@ -107,6 +82,12 @@ export const useSeekersStore = defineClassStore(
         const params = [];
         params.push(["only_meta", "true"]);
         params.push(["advanceSearch", "true"]);
+        if (data.startAtPagination >= 0) {
+          params.push(["startAtPagination", data.startAtPagination]);
+        }
+        if (data.endAtPagination >= 0) {
+          params.push(["endAtPagination", data.endAtPagination]);
+        }
         if (data.startTime != AppConst.DEFAULT.time) {
           params.push(["startTime", data.startTime]);
         }
@@ -127,14 +108,12 @@ export const useSeekersStore = defineClassStore(
         });
         const res = await api.get(ApiConst.seekersEndpoints.getAllSeekerJobs, params);
         if (res.status === ApiConst.status.ok) {
-          const data: any = await res.text();
-          console.log(data);
-          this.totalJobsWithCondition.value = parseInt(data);
-          console.log(this.totalJobsWithCondition.value);
+          const data: any = await res.json();
+          this.totalJobs.value = parseInt(data.allResult);
+          this.totalJobsWithCondition.value = parseInt(data.searchResult);
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
         return false;
@@ -146,6 +125,12 @@ export const useSeekersStore = defineClassStore(
         const params = [];
         params.push(["only_meta", "false"]);
         params.push(["advanceSearch", "true"]);
+        if (data.startAtPagination >= 0) {
+          params.push(["startAtPagination", data.startAtPagination]);
+        }
+        if (data.endAtPagination >= 0) {
+          params.push(["endAtPagination", data.endAtPagination]);
+        }
         if (data.startTime != AppConst.DEFAULT.time) {
           params.push(["startTime", data.startTime]);
         }
@@ -167,13 +152,10 @@ export const useSeekersStore = defineClassStore(
         const res = await api.get(ApiConst.seekersEndpoints.getAllSeekerJobs, params);
         if (res.status === ApiConst.status.ok) {
           const data: any[] = await res.json();
-          console.log(data);
           this.jobs.value = data.map((data) => ModelHelper.getJobModel(data));
-          console.log(this.jobs.value);
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
         return false;
@@ -185,13 +167,10 @@ export const useSeekersStore = defineClassStore(
         const res = await api.get(ApiConst.commonEndpoints.findJobById.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
-          console.log(data);
           this.job.value = ModelHelper.getJobModel(data);
-          console.log(this.job.value);
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
         return false;
@@ -205,9 +184,8 @@ export const useSeekersStore = defineClassStore(
         );
         if (res.status === ApiConst.status.ok) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
         return false;
@@ -219,7 +197,6 @@ export const useSeekersStore = defineClassStore(
         const res = await api.get(ApiConst.seekersEndpoints.getSeekerHistory);
         if (res.status === ApiConst.status.ok) {
           const data: any[] = await res.json();
-          console.log(data);
           this.listLikeJobs.value = [];
           this.listHistoryJobs.value = [];
           data.forEach((value: any) => {
@@ -228,12 +205,9 @@ export const useSeekersStore = defineClassStore(
             }
             this.listHistoryJobs.value.push(ModelHelper.getJobModel(value.job));
           });
-          console.log(this.listLikeJobs.value);
-          console.log(this.listHistoryJobs.value);
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
         return false;

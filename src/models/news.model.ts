@@ -1,6 +1,5 @@
 import { AppConst } from "@/const/app.const";
 import { BaseModel } from "./base.model";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
 
 export class NewsModel extends BaseModel implements INews {
   public id: number;

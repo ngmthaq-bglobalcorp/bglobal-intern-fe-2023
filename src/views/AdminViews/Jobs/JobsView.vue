@@ -29,7 +29,9 @@
         </li>
       </ul>
     </div>
-    <ul class="jobs-list list">
+
+    <!-- Job Card List -->
+    <ul class="jobs-list list" v-if="app.filtersJobs.value.length > 0">
       <li class="jobs-item" v-for="item in app.filtersJobs.value" :key="item.id">
         <JobCard
           :data="item"
@@ -39,35 +41,25 @@
         />
       </li>
     </ul>
+    <!-- End Job Card List -->
+
+    <!-- Message -->
+    <div class="jobs-message" v-else>
+      <img src="@/assets/img/oc-collaboration.svg" alt="Hi" class="image" />
+      <h1 class="title">{{ app.t(`app.hello`) }}</h1>
+      <span class="desc">{{ app.t(`app.enjoy`) }}</span>
+      <button class="small-btn primary-btn" @click="app.onToggleCreateButton">{{ app.t(`app.create`) }}</button>
+    </div>
+    <!-- End Message -->
 
     <!-- Pagination -->
-    <div class="footer-pagination">
-      <ul class="list">
-        <li class="page-item">
-          <button
-            :class="['page-btn small-btn primary-btn', { disabled: app.pageNumber.value <= 1 }]"
-            @click.prevent="app.onTogglePrev"
-          >
-            <i class="bi bi-caret-left"></i>
-          </button>
-        </li>
-        <li class="page-item" v-for="page in app.totalPages.value" :key="page">
-          <button
-            :class="['page-btn small-btn primary-btn', { active: app.pageNumber.value === page }]"
-            @click.prevent="app.onTogglePage(page)"
-          >
-            {{ page }}
-          </button>
-        </li>
-        <li class="page-item">
-          <button
-            :class="['page-btn small-btn primary-btn', { disabled: app.pageNumber.value >= app.totalPages.value }]"
-            @click.prevent="app.onToggleNext"
-          >
-            <i class="bi bi-caret-right"></i>
-          </button>
-        </li>
-      </ul>
+    <div class="footer-pagination" v-if="app.totalPages.value > 0">
+      <Pagination
+        :current-page="app.pageNumber.value"
+        :page-size="app.pageSize.value"
+        :total-count="app.totalData.value"
+        @on-page-change="app.onPageChange"
+      />
     </div>
     <!-- End Pagination -->
   </AdminLayout>
@@ -78,6 +70,7 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import JobCard from "@/components/AdminComponents/JobCard/JobCardComponent.vue";
+import Pagination from "@/components/AdminComponents/Pagination/PaginationComponent.vue";
 import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
 import { useOrganizationStore } from "@/stores/organization.store";
@@ -89,8 +82,8 @@ const app = defineClassComponent(
     public organizationStore = useOrganizationStore();
 
     public view: Ref<string> = this.ref(AppConst.VIEW.columnView);
-    public pageNumber: Ref<number> = this.ref(1);
-    public pageSize: Ref<number> = this.ref(10);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
+    public pageSize: Ref<number> = this.ref(AppConst.DEFAULT.pageSize);
 
     public totalData: Ref<number> = this.computed(() => this.organizationStore.jobs.length);
     public totalPages: Ref<number> = this.computed(() => {
@@ -120,6 +113,10 @@ const app = defineClassComponent(
       this.router.push(PathConst.adminAddJob);
     };
 
+    public onToggleCreateButton = () => {
+      this.router.push(PathConst.adminAddJob);
+    };
+
     public onClickCard = (id: number) => {
       this.router.push({ ...PathConst.adminJobDetail, params: { jobId: id } });
     };
@@ -145,22 +142,9 @@ const app = defineClassComponent(
       this.view.value = AppConst.VIEW.listView;
     };
 
-    public onTogglePrev = () => {
-      if (this.pageNumber.value > 1) {
-        this.pageNumber.value = this.pageNumber.value - 1;
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }
-    };
-
-    public onTogglePage = (page: number) => {
-      this.pageNumber.value = page;
-      window.scrollTo({ top: 0, behavior: "smooth" });
-    };
-
-    public onToggleNext = () => {
-      if (this.pageNumber.value < this.totalPages.value) {
-        this.pageNumber.value = this.pageNumber.value + 1;
-        window.scrollTo({ top: 0, behavior: "smooth" });
+    public onPageChange = (page: number) => {
+      if (page >= 1 && page <= this.totalPages.value) {
+        this.pageNumber.value = page;
       }
     };
   },
@@ -231,40 +215,37 @@ const app = defineClassComponent(
   }
 }
 
+.jobs-message {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 2rem;
+
+  & .image {
+    width: 100%;
+    max-width: 16rem;
+    height: auto;
+    vertical-align: middle;
+    margin-bottom: 2rem;
+  }
+
+  & .title {
+    color: $black;
+    font-size: 1.4109375rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin-top: 0;
+    margin-bottom: 0.5rem;
+  }
+
+  & .desc {
+    margin-top: 0;
+    margin-bottom: 1rem;
+  }
+}
+
 .footer-pagination {
   margin-top: 20px;
-
-  & .list {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    & .page-item {
-      margin-right: 0.5rem;
-
-      & .page-btn {
-        color: $blue;
-        background-color: transparent;
-        padding: 0.5rem 1rem;
-        font-size: 1rem;
-
-        &:hover {
-          color: $blue;
-          background-color: $light;
-        }
-
-        &.active {
-          color: $white;
-          background-color: $blue;
-          border-color: $blue;
-        }
-
-        &.disabled {
-          color: $disabled-color !important;
-          pointer-events: none;
-        }
-      }
-    }
-  }
 }
 </style>

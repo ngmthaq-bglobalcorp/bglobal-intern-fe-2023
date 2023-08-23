@@ -1,7 +1,7 @@
 <template>
   <div class="body_all">
-    <div id="body">
-      <div class="display_details" style="height: calc(100% - 183px)">
+    <div id="body" :style="{ height: app.calcHeight.value }">
+      <div class="body_button">
         <button class="return_btn" tabindex="0" type="button" @click="app.onToggleReturn">
           <i class="bi bi-caret-left"></i>
           <span class="content">{{ app.t(`jobsApp.jobCard.return`) }}</span>
@@ -12,7 +12,8 @@
             :class="{ active: app.isLike.value }"
             tabindex="0"
             type="button"
-            id="like-button-id"
+            id="like_button_id"
+            :disabled="app.isExpired"
             @click="app.onToggleLikeButton"
           >
             <i class="bi bi-bookmark icon"></i>
@@ -23,19 +24,27 @@
             :class="{ active: app.isDislike.value }"
             tabindex="0"
             type="button"
-            id="dislike-button-id"
+            id="dislike_button_id"
+            :disabled="app.isExpired"
             @click="app.onToggleDislikeButton"
           >
             <i class="bi bi-x-lg icon"></i>
             <span class="content">{{ app.t(`jobsApp.jobCard.dislike`) }}</span>
           </button>
         </div>
-        <img :src="app.job.value.mainImageUrl" alt="Main image" v-if="app.job.value.mainImageUrl" />
-        <img :src="app.job.value.subImages[0].url" alt="Main image" v-else-if="app.job.value.subImages.length > 0" />
+      </div>
+      <div class="body_details">
+        <img :src="app.job.value.mainImageUrl" alt="Main image" class="main_image" v-if="app.job.value.mainImageUrl" />
+        <img
+          :src="app.job.value.subImages[0].url"
+          alt="Main image"
+          class="main_image"
+          v-else-if="app.job.value.subImages.length > 0"
+        />
         <div style="padding: 20px" v-else></div>
         <div class="details_content">
-          <p class="title_1" v-if="app.job.value.title">{{ app.job.value.title }}</p>
-          <p class="title_2" v-if="app.job.value.jobTitleCatchPhrase">{{ app.job.value.jobTitleCatchPhrase }}</p>
+          <div class="title_1" v-if="app.job.value.jobTitleCatchPhrase">{{ app.job.value.jobTitleCatchPhrase }}</div>
+          <div class="title_2" v-if="app.job.value.title">{{ app.job.value.title }}</div>
           <div class="card_infor">
             <div class="card_infor_item" v-if="app.job.value.location">
               <i class="bi bi-geo-alt"></i>
@@ -55,17 +64,17 @@
               {{ label.name }}
             </div>
           </div>
-          <p class="catch_text" v-if="app.job.value.catchText">
+          <div class="catch_text" v-if="app.job.value.catchText">
             {{ app.job.value.catchText }}
-          </p>
-          <p class="lead_text" v-if="app.job.value.leadText">
+          </div>
+          <div class="lead_text" v-if="app.job.value.leadText">
             {{ app.job.value.leadText }}
-          </p>
+          </div>
           <hr class="" v-if="app.job.value.subImages.length > 0" />
           <div class="sub_images" v-if="app.job.value.subImages.length > 0">
             <div class="sub_image" v-for="subImage in app.job.value.subImages" :key="subImage.id">
               <img class="image" :src="subImage.url" alt="Sub Image" />
-              <p class="description">{{ subImage.description }}</p>
+              <span class="description">{{ subImage.description }}</span>
             </div>
           </div>
           <div class="properties" v-if="app.job.value.properties.length > 0">
@@ -98,13 +107,13 @@
           </div>
         </div>
       </div>
-      <div class="" id="fixed-area-id">
-        <a class="link" :href="app.job.value.webApplication" target="_blank">Web</a>
-        <div class="information"></div>
-        <p class="MuiTypography-root MuiTypography-body1 jss310 css-9l3uo3">
-          {{ PrimitiveHelper.getPostPeriod(app.job.value.opensAt, app.job.value.expiresAt) }}
-        </p>
-      </div>
+    </div>
+    <div class="body_footer" id="footer_area_id">
+      <a class="link" :href="app.job.value.webApplication" target="_blank">Web</a>
+      <div class="information"></div>
+      <span class="post-period">
+        {{ PrimitiveHelper.getPostPeriod(app.job.value.opensAt, app.job.value.expiresAt) }}
+      </span>
     </div>
   </div>
 </template>
@@ -112,6 +121,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { useSeekersStore } from "@/stores/seekers.store";
 import type { JobDetailEmits, JobDetailProps } from "./JobDetails";
 import type { Ref } from "vue";
@@ -124,27 +134,40 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public seekersStore = useSeekersStore();
 
+    public calcHeight: Ref<string> = this.ref("");
     public job: Ref<JobModel> = this.computed(() => props.data);
     public isLike: Ref<boolean> = this.computed(() => {
       const job = app.seekersStore.listLikeJobs.find((value) => value.id == props.data.id);
-      if (job) {
-        return true;
-      } else {
-        return false;
-      }
+      return job ? true : false;
     });
     public isDislike: Ref<boolean> = this.computed(() => {
       const job = app.seekersStore.listHistoryJobs.find((value) => value.id == props.data.id);
-      if (job && !this.isLike.value) {
-        return true;
-      } else {
-        return false;
-      }
+      return job && !this.isLike.value ? true : false;
     });
 
     public constructor() {
       super();
+
+      this.onMounted(() => {
+        const footer = document.getElementById("footer_area_id");
+        if (footer) {
+          this.calcHeight.value = `calc(100% - ${footer.offsetHeight}px)`;
+        }
+      });
+
+      this.onUpdated(() => {
+        const footer = document.getElementById("footer_area_id");
+        if (footer) {
+          this.calcHeight.value = `calc(100% - ${footer.offsetHeight}px)`;
+        }
+      });
     }
+
+    public isExpired = () => {
+      if (this.job.value.id > 0) {
+        return ValidateHelper.isExpired(this.job.value.opensAt, this.job.value.expiresAt);
+      }
+    };
 
     public onToggleReturn = () => {
       emits("onToggleReturn");
@@ -174,19 +197,19 @@ const app = defineClassComponent(
   & #body {
     width: 100%;
     height: 100%;
+    position: relative;
     padding: 20px 12px;
 
-    & .display_details {
-      width: 100%;
-      position: relative;
-      overflow-y: scroll;
-      border-radius: 25px;
-      background-color: #fff;
+    & .body_button {
+      width: calc(100% - 24px - 30px);
+      position: absolute;
+      top: 35px;
+      left: 27px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
 
       & .return_btn {
-        position: absolute;
-        top: 10px;
-        left: 10px;
         color: #9f085f;
         background: rgba(255, 255, 255, 0.5);
         border: 2px solid #9f085f;
@@ -217,10 +240,7 @@ const app = defineClassComponent(
       }
 
       & .like_and_dislike_button {
-        top: 10px;
-        right: 10px;
         display: flex;
-        position: absolute;
         align-items: flex-end;
         justify-content: space-between;
 
@@ -251,7 +271,7 @@ const app = defineClassComponent(
             box-shadow 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms, border-color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms,
             color 250ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
 
-          &#like-button-id {
+          &#like_button_id {
             color: #000;
             background-color: #fff;
             margin-right: 10px;
@@ -262,7 +282,7 @@ const app = defineClassComponent(
             }
           }
 
-          &#dislike-button-id {
+          &#dislike_button_id {
             color: #000;
             background-color: #fff;
 
@@ -270,6 +290,10 @@ const app = defineClassComponent(
               color: #000;
               background-color: #b2b2b2;
             }
+          }
+
+          &:disabled {
+            pointer-events: none;
           }
 
           & .icon {
@@ -284,16 +308,26 @@ const app = defineClassComponent(
           }
         }
       }
+    }
+
+    & .body_details {
+      width: 100%;
+      height: 100%;
+      overflow-y: scroll;
+      border-radius: 25px;
+      background-color: #fff;
 
       & .main_image {
         width: 100%;
         height: auto;
+        object-fit: cover;
         overflow-clip-margin: content-box;
       }
 
       & .details_content {
         padding: 15px;
         padding-bottom: 20px;
+
         & .title_1 {
           color: #000;
           font-size: 13px;
@@ -312,13 +346,14 @@ const app = defineClassComponent(
 
         & .card_infor {
           margin-bottom: 10px;
+
           & .card_infor_item {
             margin-bottom: 5px;
             align-items: center;
             color: #000;
             display: flex;
             font-size: 13px;
-            font-weight: 700;
+            font-weight: 600;
             justify-content: flex-start;
             line-height: 19px;
 
@@ -439,47 +474,43 @@ const app = defineClassComponent(
         }
       }
     }
+  }
 
-    & .display_details::-webkit-scrollbar {
-      display: none;
+  & .body_footer {
+    width: 100%;
+    position: relative;
+    left: 0;
+    bottom: 0;
+    padding: 15px;
+    text-align: center;
+
+    & .link {
+      color: #fff;
+      width: 100%;
+      height: 47px;
+      display: flex;
+      background: linear-gradient(180deg, #e65078 0%, #c0296b 100%);
+      box-shadow: 0px 4px 8px rgba(157, 6, 95, 0.3);
+      align-items: center;
+      border-radius: 30px;
+      margin-bottom: 10px;
+      justify-content: center;
+      text-decoration: none;
     }
 
-    & #fixed-area-id {
-      left: 0;
-      width: 100%;
-      bottom: 0;
-      padding-top: 30px;
-      position: relative;
+    & .information {
+      font-size: 13px;
+      text-align: center;
+      font-weight: 400;
+      line-height: 20px;
+      margin-bottom: 10px;
+    }
 
-      & .link {
-        color: #fff;
-        width: 100%;
-        height: 47px;
-        display: flex;
-        background: linear-gradient(180deg, #e65078 0%, #c0296b 100%);
-        box-shadow: 0px 4px 8px rgba(157, 6, 95, 0.3);
-        align-items: center;
-        border-radius: 30px;
-        margin-bottom: 10px;
-        justify-content: center;
-        text-decoration: none;
-      }
-
-      & .information {
-        font-size: 13px;
-        text-align: center;
-        font-weight: 400;
-        line-height: 20px;
-        margin-bottom: 10px;
-      }
-
-      & p {
-        color: #000;
-        font-size: 11px;
-        text-align: center;
-        font-weight: 400;
-        line-height: 16px;
-      }
+    & .post-period {
+      color: #000;
+      font-size: 11px;
+      font-weight: 400;
+      line-height: 16px;
     }
   }
 }

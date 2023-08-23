@@ -7,15 +7,15 @@
       <li class="users-item" v-for="item in app.filterData.value" :key="item.id">
         <template v-for="column in app.columns.value" :key="column.field">
           <router-link
-            :to="{ ...PathConst.adminUserProfile, params: { username: item.userId } }"
+            :to="{ ...PathConst.adminUserProfile, params: { userId: item.userId } }"
             class="item-name link-default"
-            v-if="column.field === 'name'"
+            v-if="item.userId && column.field === 'name'"
           >
             <div class="avatar">
               <AvatarComponent
                 :avatar-image="item.avatar"
                 avatar-alt="Avatar"
-                :avatar-init="item.name[0] || item.username[0]"
+                :avatar-init="item.name || item.username"
               />
             </div>
             <span class="name" v-if="item.name">{{ item.name }}</span>
@@ -38,17 +38,17 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import AvatarComponent from "../Avatar/AvatarComponent.vue";
 import { AppConst } from "@/const/app.const";
+import { PathConst } from "@/const/path.const";
 import type { UserListProps } from "./UserListComponent";
 import type { Ref } from "vue";
 import type { SeekerModel } from "@/models/seeker.model";
-import { PathConst } from "@/const/path.const";
 
 const props = defineProps<UserListProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public columns: Ref<Array<any>> = this.ref(props.columns);
-    public pageNumber: Ref<number> = this.ref(1);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
 
     public pageSize: Ref<number> = this.computed(() => props.data.length);
     public totalData: Ref<number> = this.computed(() => props.data.length);

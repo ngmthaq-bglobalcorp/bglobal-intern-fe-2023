@@ -80,16 +80,24 @@
       </li>
     </ul>
     <div class="d-grid">
-      <button class="load-more-btn g-btn" @click="app.onToggleMoreData">
+      <button class="load-more-btn g-btn" @click="app.onToggleMoreData" v-if="app.isShowLoadButton.value">
         <i class="bi bi-arrow-clockwise icon" :class="{ loading: app.isLoading.value }"></i>
         {{ app.t(`app.loadMore`, { value: app.target.value }) }}
       </button>
+      <Pagination
+        :current-page="app.pageNumber.value"
+        :page-size="app.pageSize.value"
+        :total-count="app.totalData.value"
+        @on-page-change="app.onPageChange"
+        v-if="app.totalPages.value > 0"
+      />
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import Pagination from "../Pagination/PaginationComponent.vue";
 import { AppConst } from "@/const/app.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
@@ -102,18 +110,32 @@ const emits = defineEmits<TimelineListEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public target: Ref<string> = this.ref(props.target);
-    public limit: Ref<number> = this.ref(props.limit);
     public isLoading: Ref<boolean> = this.ref(false);
+    public isShowLoadButton: Ref<boolean> = this.ref(props.isShowLoadButton || false);
+    public target: Ref<string> = this.ref(props.target);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
+    public pageSize: Ref<number> = this.ref(props.limit);
+
+    public totalData: Ref<number> = this.computed(() => props.data.length);
+    public totalPages: Ref<number> = this.computed(() => {
+      return Math.ceil(this.totalData.value / this.pageSize.value);
+    });
 
     public filtersData: Ref<Array<NewsModel>> = this.computed(() => {
       return props.data.filter((_, index) => {
-        return index < this.limit.value;
+        return (
+          index >= (this.pageNumber.value - 1) * this.pageSize.value &&
+          index < this.pageNumber.value * this.pageSize.value
+        );
       });
     });
 
     public constructor() {
       super();
+
+      this.onUpdated(() => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
     }
 
     public onToggleEditButton = (id: number) => {
@@ -127,11 +149,17 @@ const app = defineClassComponent(
     public onToggleMoreData = () => {
       this.isLoading.value = true;
       setTimeout(() => {
-        if (this.limit.value < props.data.length) {
-          this.limit.value += props.limit;
+        if (this.pageSize.value < props.data.length) {
+          this.pageSize.value += props.limit;
         }
         this.isLoading.value = false;
       }, 1600);
+    };
+
+    public onPageChange = (page: number) => {
+      if (page >= 1 && page <= this.totalPages.value) {
+        this.pageNumber.value = page;
+      }
     };
   },
 );
@@ -147,6 +175,7 @@ const app = defineClassComponent(
 
   & .timeline-list {
     position: relative;
+    margin-bottom: 0.5rem;
 
     & .timeline-item {
       display: flex;
@@ -304,6 +333,7 @@ const app = defineClassComponent(
     color: $dark;
     background-color: $white;
     border-color: $border;
+    margin-bottom: 0.5rem;
 
     &:hover {
       color: $blue;

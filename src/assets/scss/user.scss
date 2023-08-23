@@ -32,6 +32,10 @@
   border: 0.0625rem solid $border;
   border-radius: 0.3125rem !important;
   transition: all 0.2s ease-in-out;
+
+  &:disabled {
+    pointer-events: none;
+  }
 }
 
 .small-btn {

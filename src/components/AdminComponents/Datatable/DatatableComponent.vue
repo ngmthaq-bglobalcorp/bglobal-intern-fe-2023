@@ -74,14 +74,15 @@
             <td class="sorting-1" v-for="column in props.columns" :key="column.field">
               <template v-if="column.field === 'username'">
                 <router-link
-                  :to="{ ...PathConst.adminUserProfile, params: { username: data.userId } }"
+                  :to="{ ...PathConst.adminUserProfile, params: { userId: data.userId } }"
                   class="item-name link-default"
+                  v-if="data.userId"
                 >
                   <div class="avatar">
                     <AvatarComponent
                       :avatar-image="data.avatar || ''"
                       avatar-alt="Avatar"
-                      :avatar-init="data[column.field][0]"
+                      :avatar-init="data[column.field]"
                     />
                   </div>
                   <span>{{ data[column.field] }}</span>
@@ -202,8 +203,8 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public sortingField: Ref<string> = this.ref("");
     public sortingDirection: Ref<string> = this.ref("");
-    public pageSize: Ref<number> = this.ref(10);
-    public pageNumber: Ref<number> = this.ref(1);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
+    public pageSize: Ref<number> = this.ref(AppConst.DEFAULT.pageSize);
     public selectedAll: Ref<boolean> = this.ref(false);
 
     public totalData: Ref<number> = this.computed(() => props.data.length);

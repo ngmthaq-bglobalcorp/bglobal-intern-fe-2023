@@ -2,7 +2,8 @@
   <div class="avatar-container">
     <div class="avatar-wrapper">
       <img :src="props.avatarImage" :alt="props.avatarAlt" class="avatar-img image" v-if="props.avatarImage" />
-      <span class="avatar-initials" v-else>{{ props.avatarInit }}</span>
+      <span class="avatar-initials" v-else-if="props.avatarInit">{{ props.avatarInit[0] }}</span>
+      <span class="avatar-initials" v-else></span>
     </div>
   </div>
 </template>

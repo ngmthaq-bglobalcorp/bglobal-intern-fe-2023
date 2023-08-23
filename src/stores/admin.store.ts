@@ -1,10 +1,11 @@
 import type { Ref } from "vue";
+import type { OrganizationModel } from "@/models/organization.model";
+import type { SeekerModel } from "@/models/seeker.model";
 import { BaseStore, defineClassStore } from "@/plugins/store.plugin";
 import { Api } from "@/plugins/api.plugin";
 import { ApiConst } from "@/const/api.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
-import { SeekerModel } from "@/models/seeker.model";
-import { OrganizationModel } from "@/models/organization.model";
+import { ModelHelper } from "@/helpers/model.helper";
 import { NewsModel } from "@/models/news.model";
 
 export const api = new Api();
@@ -23,36 +24,16 @@ export const useAdminStore = defineClassStore(
         const res = await api.get(ApiConst.adminEndpoints.getAllSeekers);
         if (res.status === ApiConst.status.ok) {
           const data: any[] = await res.json();
-          console.log(data);
           const seekers = data.map((data) => {
-            const seeker = {
-              id: data.id,
-              userId: data.user.id,
-              username: data.user.username,
-              name: data.name,
-              email: data.email,
-              phoneNumber: data.phoneNumber,
-              avatar: data.photo,
-              birthday: data.dob,
-              address: data.address,
-              website: data.website,
-              education: data.education,
-              experience: data.experience,
-              skills: data.skills,
-              achievements: data.achievements,
-              otherDetails: data.other_details,
-              status: data.user.status,
-            };
-            return new SeekerModel(seeker);
+            return ModelHelper.getSeekerModel(data);
           });
           this.seekers.value = seekers;
-          console.log(this.seekers.value);
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
@@ -61,11 +42,11 @@ export const useAdminStore = defineClassStore(
         const res = await api.delete(ApiConst.adminEndpoints.deleteSeeker.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
@@ -74,32 +55,15 @@ export const useAdminStore = defineClassStore(
         const res = await api.get(ApiConst.adminEndpoints.getAllOrganizations);
         if (res.status === ApiConst.status.ok) {
           const data: any[] = await res.json();
-          console.log(data);
-          const organizations = data.map((data) => {
-            const organization = {
-              id: data.id,
-              userId: data.user.id,
-              username: data.user.username,
-              name: data.name,
-              email: data.email,
-              phoneNumber: data.phoneNumber,
-              avatar: data.photo,
-              website: data.website,
-              address: data.address,
-              introduction: data.introduction,
-              organizationType: data.organizationType,
-              status: data.user.status,
-            };
-            return new OrganizationModel(organization);
+          this.organizations.value = data.map((data) => {
+            return ModelHelper.getOrganizationModel(data);
           });
-          this.organizations.value = organizations;
-          console.log(this.organizations.value);
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
@@ -108,11 +72,11 @@ export const useAdminStore = defineClassStore(
         const res = await api.delete(ApiConst.adminEndpoints.deleteOrganization.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
@@ -121,11 +85,11 @@ export const useAdminStore = defineClassStore(
         const res = await api.post(ApiConst.adminEndpoints.changeUserStatus.replace(":id", id), status);
         if (res.status === ApiConst.status.ok) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
@@ -134,7 +98,6 @@ export const useAdminStore = defineClassStore(
         const res = await api.get(ApiConst.commonEndpoints.getAllNews);
         if (res.status === ApiConst.status.ok) {
           const data: any[] = await res.json();
-          console.log(data);
           const news = data.map((data) => {
             const news = {
               id: data.id,
@@ -153,13 +116,12 @@ export const useAdminStore = defineClassStore(
             return new NewsModel(news);
           });
           this.newsList.value = news;
-          console.log(this.newsList.value);
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
@@ -168,7 +130,6 @@ export const useAdminStore = defineClassStore(
         const res = await api.get(ApiConst.adminEndpoints.findNewsById.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           const data: any = await res.json();
-          console.log(data);
           const news = {
             id: data.id,
             title: data.title,
@@ -184,74 +145,60 @@ export const useAdminStore = defineClassStore(
             createdAt: data.createdAt,
           };
           this.news.value = new NewsModel(news);
-          console.log(this.news.value);
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
     public fetchCreateNews = async (data: NewsModel) => {
       try {
         const news = {
-          title: data.title || "",
-          subTitle: data.subtitle || "",
-          category: data.category || "",
-          body: data.body || "",
-          eventPageUrl: data.eventPageUrl || "",
-          eventStartAt: data.eventStartAt
-            ? DatetimeHelper.getDateTime(data.eventStartAt)
-            : DatetimeHelper.getDateTime(new Date()),
-          eventEndAt: data.eventEndAt
-            ? DatetimeHelper.getDateTime(data.eventEndAt)
-            : DatetimeHelper.getDateTime(new Date()),
-          opensAt: data.opensAt ? DatetimeHelper.getDateTime(data.opensAt) : DatetimeHelper.getDateTime(new Date()),
-          expiresAt: data.expiresAt
-            ? DatetimeHelper.getDateTime(data.expiresAt)
-            : DatetimeHelper.getDateTime(new Date()),
+          title: data.title,
+          subTitle: data.subtitle,
+          category: data.category,
+          body: data.body,
+          eventPageUrl: data.eventPageUrl,
+          eventStartAt: DatetimeHelper.getDateTime(data.eventStartAt),
+          eventEndAt: DatetimeHelper.getDateTime(data.eventEndAt),
+          opensAt: DatetimeHelper.getDateTime(data.opensAt),
+          expiresAt: DatetimeHelper.getDateTime(data.expiresAt),
         };
-        console.log(news);
         const res = await api.post(ApiConst.adminEndpoints.createNews, news);
         if (res.status === ApiConst.status.ok) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
     public fetchUpdateNews = async (id: string, data: NewsModel) => {
       try {
         const news = {
-          title: data.title || "",
-          subTitle: data.subtitle || "",
-          category: data.category || "",
-          body: data.body || "",
-          eventPageUrl: data.eventPageUrl || "",
-          eventStartAt: data.eventStartAt
-            ? DatetimeHelper.getDateTime(data.eventStartAt)
-            : DatetimeHelper.getDateTime(new Date()),
-          eventEndAt: data.eventEndAt
-            ? DatetimeHelper.getDateTime(data.eventEndAt)
-            : DatetimeHelper.getDateTime(new Date()),
-          opensAt: data.opensAt ? DatetimeHelper.getDateTime(data.opensAt) : DatetimeHelper.getDateTime(new Date()),
-          expiresAt: data.expiresAt
-            ? DatetimeHelper.getDateTime(data.expiresAt)
-            : DatetimeHelper.getDateTime(new Date()),
+          title: data.title,
+          subTitle: data.subtitle,
+          category: data.category,
+          body: data.body,
+          eventPageUrl: data.eventPageUrl,
+          eventStartAt: DatetimeHelper.getDateTime(data.eventStartAt),
+          eventEndAt: DatetimeHelper.getDateTime(data.eventEndAt),
+          opensAt: DatetimeHelper.getDateTime(data.opensAt),
+          expiresAt: DatetimeHelper.getDateTime(data.expiresAt),
         };
         const res = await api.put(ApiConst.adminEndpoints.deleteNews.replace(":id", id), news);
         if (res.status === ApiConst.status.ok) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
 
@@ -260,11 +207,11 @@ export const useAdminStore = defineClassStore(
         const res = await api.delete(ApiConst.adminEndpoints.deleteNews.replace(":id", id));
         if (res.status === ApiConst.status.ok) {
           return true;
-        } else {
-          return false;
         }
+        return false;
       } catch (error) {
         console.log(error);
+        return false;
       }
     };
   },
