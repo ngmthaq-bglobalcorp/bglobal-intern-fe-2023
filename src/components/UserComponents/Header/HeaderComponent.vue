@@ -1,7 +1,7 @@
 <template>
   <div class="first-header">
     <RouterLink to="/" class="logo text-header" :class="{ disabled: props.isAuth }">
-      <h4 class="logo-title">Job Searchers</h4>
+      <h4 class="logo-title">{{ app.t("jobsApp.header.logo") }}</h4>
     </RouterLink>
     <div class="list-items" v-if="!props.isAuth">
       <div class="items-detail">

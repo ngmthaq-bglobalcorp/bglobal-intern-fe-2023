@@ -89,6 +89,7 @@ export const useAuthStore = defineClassStore(
           }
           return true;
         }
+        res.text();
         return false;
       } catch (error) {
         console.log(error);
@@ -110,6 +111,7 @@ export const useAuthStore = defineClassStore(
           this.user.value = new UserModel({});
           return true;
         }
+        res.text();
         return false;
       } catch (error) {
         console.log(error);
@@ -202,6 +204,39 @@ export const useAuthStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           return true;
         }
+        res.text();
+        return false;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    };
+
+    public fetchForgotPassword = async (email: string) => {
+      try {
+        const res = await api.post(ApiConst.authEndpoints.forgotPassword + "?email=" + email);
+        if (res.status === ApiConst.status.ok) {
+          return true;
+        }
+        res.text();
+        return false;
+      } catch (error) {
+        console.log(error);
+        return false;
+      }
+    };
+
+    public fetchResetPassword = async (data: any) => {
+      try {
+        const token = data.emailOtp;
+        const password = data.newPassword;
+        const res = await api.post(
+          ApiConst.authEndpoints.resetPassword + "?newPassword=" + password + "&token=" + token,
+        );
+        if (res.status === ApiConst.status.ok) {
+          return true;
+        }
+        res.text();
         return false;
       } catch (error) {
         console.log(error);

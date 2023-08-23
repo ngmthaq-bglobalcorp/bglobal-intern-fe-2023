@@ -42,15 +42,12 @@ export class AppConst {
   public static DEFAULT = {
     location: "_defautl",
     time: "_defautl",
+    limit: 5,
     pageNumber: 1,
     pageSize: 10,
     index: 0,
     step: 5,
-  };
-
-  public static JOBS_PAGINATION = {
-    pageNumberDefault: 1,
-    pageSizeDefault: 2,
-    stepDefault: 1,
+    countdownSeconds: 30,
+    imagePrefix: "res.cloudinary.com",
   };
 }

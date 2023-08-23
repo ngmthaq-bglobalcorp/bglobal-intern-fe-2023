@@ -38,17 +38,17 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import AvatarComponent from "../Avatar/AvatarComponent.vue";
 import { AppConst } from "@/const/app.const";
+import { PathConst } from "@/const/path.const";
 import type { UserListProps } from "./UserListComponent";
 import type { Ref } from "vue";
 import type { SeekerModel } from "@/models/seeker.model";
-import { PathConst } from "@/const/path.const";
 
 const props = defineProps<UserListProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public columns: Ref<Array<any>> = this.ref(props.columns);
-    public pageNumber: Ref<number> = this.ref(1);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
 
     public pageSize: Ref<number> = this.computed(() => props.data.length);
     public totalData: Ref<number> = this.computed(() => props.data.length);

@@ -47,10 +47,11 @@ const app = defineClassComponent(
     public isShowFormSearch: Ref<boolean> = this.ref(false);
     public formSearchHide: Ref<string> = this.ref("");
     public searchHeight: Ref<string> = this.ref("");
-    public pageNumber: Ref<number> = this.ref(AppConst.JOBS_PAGINATION.pageNumberDefault);
-    public pageSize: Ref<number> = this.ref(AppConst.JOBS_PAGINATION.pageSizeDefault);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
+    public pageSize: Ref<number> = this.ref(AppConst.DEFAULT.pageSize);
     public currentIndex: Ref<number> = this.ref(AppConst.DEFAULT.index);
     public filtersIndex: Ref<number> = this.ref(AppConst.DEFAULT.index);
+    public isFetch: Ref<boolean> = this.ref(false);
 
     public searchData: Ref<any> = this.computed(() => {
       const data: any = StorageHelper.getLocalStorage(KeyConst.keys.searchCondition);
@@ -79,15 +80,12 @@ const app = defineClassComponent(
         (jobs) => {
           jobs.forEach((value) => {
             this.filtersJobs.value.push(value);
-            if (
-              this.filtersJobs.value.length >
-                2 * AppConst.JOBS_PAGINATION.pageSizeDefault - AppConst.JOBS_PAGINATION.stepDefault &&
-              this.filtersIndex.value > 0
-            ) {
-              this.filtersJobs.value.shift();
-              this.filtersIndex.value--;
-            }
           });
+          while (this.filtersIndex.value > 0) {
+            this.filtersJobs.value.shift();
+            this.filtersIndex.value--;
+          }
+          this.isFetch.value = true;
         },
       );
     }
@@ -139,18 +137,19 @@ const app = defineClassComponent(
 
     public onToggleSkipButton = async () => {
       if (this.currentIndex.value < this.seekersStore.totalJobsWithCondition - 1) {
-        this.filtersIndex.value++;
         this.currentIndex.value++;
-        if (this.filtersIndex.value >= this.filtersJobs.value.length / 2) {
-          if (this.pageNumber.value * this.pageSize.value >= this.seekersStore.totalJobsWithCondition) {
-            this.pageNumber.value = 1;
-          } else {
-            this.pageNumber.value++;
-          }
-          await this.seekersStore.fetchAllJobs(this.searchData.value);
-        }
       } else {
         this.currentIndex.value = 0;
+      }
+      if (this.pageNumber.value * this.pageSize.value < this.seekersStore.totalJobsWithCondition) {
+        this.pageNumber.value++;
+      } else {
+        this.pageNumber.value = 1;
+      }
+      this.filtersIndex.value++;
+      if (this.filtersIndex.value >= this.filtersJobs.value.length / 2 && this.isFetch.value) {
+        this.isFetch.value = false;
+        await this.seekersStore.fetchAllJobs(this.searchData.value);
       }
     };
 

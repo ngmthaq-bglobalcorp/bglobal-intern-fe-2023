@@ -99,6 +99,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import AvatarComponent from "@/components/AdminComponents/Avatar/AvatarComponent.vue";
 import LoadingComponent from "@/components/AppComponents/LoadingComponent/LoadingComponent.vue";
+import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
 import type { ProfileHeaderEmits, ProfileHeaderProps } from "./ProfileHeaderComponent";
 import type { Ref } from "vue";
@@ -144,7 +145,7 @@ const app = defineClassComponent(
       this.watch(
         () => this.avatar.value,
         (avatar) => {
-          this.isUpdateAvatar.value = avatar.length > 0 && !avatar.includes("res.cloudinary.com/");
+          this.isUpdateAvatar.value = avatar.length > 0 && !avatar.includes(AppConst.DEFAULT.imagePrefix);
         },
       );
     }

@@ -22,7 +22,7 @@
 
                 <div class="custom-input-group">
                   <div class="input-image" v-for="image of input.model" :key="image">
-                    <LoadingComponent :is-loading="!image.includes('res.cloudinary.com')" />
+                    <LoadingComponent :is-loading="!image.includes(AppConst.DEFAULT.imagePrefix)" />
                     <img :src="image" :alt="input.label" class="image" v-if="image" />
                     <button class="delete-btn" @click.prevent="app.onToggleDeleteImage(input, image)">
                       <i class="bi bi-x-circle"></i>
@@ -380,6 +380,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import LoadingComponent from "@/components/AppComponents/LoadingComponent/LoadingComponent.vue";
+import { AppConst } from "@/const/app.const";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import { ValidateHelper } from "@/helpers/validate.helper";
 import type { FormDataEmits, FormDataProps } from "./FormDataComponent";

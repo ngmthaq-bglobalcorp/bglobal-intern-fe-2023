@@ -71,16 +71,8 @@
           </div>
           <!-- End Form Group -->
 
-          <!-- Forgot Password -->
-          <div class="form-group" v-if="app.isDisplayed.value">
-            <router-link :to="PathConst.userForgot" class="link forgot-password">
-              {{ app.t(`app.forgotPassword`) }}
-            </router-link>
-          </div>
-          <!-- End Forgot Password -->
-
           <!-- Checkbox -->
-          <div class="form-group">
+          <div class="form-group group-flex">
             <div class="input-group">
               <input
                 type="checkbox"
@@ -94,6 +86,10 @@
                 {{ app.t(`app.rememberMe`) }}
               </label>
             </div>
+
+            <router-link :to="PathConst.userForgot" class="link forgot-password">
+              {{ app.t(`app.forgotPassword`) }}
+            </router-link>
           </div>
           <!-- End Checkbox -->
 
@@ -278,6 +274,12 @@ const app = defineClassComponent(
     & .form-group {
       margin-bottom: 1.5rem;
 
+      &.group-flex {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+
       & .input-label {
         display: block;
         color: $black;
@@ -313,7 +315,7 @@ const app = defineClassComponent(
           color: $dark;
           background-color: $white;
           outline: 0;
-          border-color: rgba(55, 125, 255, 0.4);
+          border-color: rgba($user-primary, 0.6);
           box-shadow: 0 0 10px rgba(55, 125, 255, 0.1);
         }
       }
@@ -345,6 +347,7 @@ const app = defineClassComponent(
         display: block;
         min-height: 1.4rem;
         padding-left: 1.5rem;
+        width: auto;
 
         & .custom-control-input {
           position: absolute;
