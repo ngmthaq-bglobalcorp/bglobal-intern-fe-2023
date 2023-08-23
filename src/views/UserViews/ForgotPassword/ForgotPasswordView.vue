@@ -67,7 +67,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import UserLayout from "@/layouts/UserLayout/UserLayout.vue";
 import { PathConst } from "@/const/path.const";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
@@ -90,7 +90,7 @@ const app = defineClassComponent(
     };
 
     public submitForm = () => {
-      if (!this.email.value || !PrimitiveHelper.isValidEmail(this.email.value)) {
+      if (!this.email.value || !ValidateHelper.isValidEmail(this.email.value)) {
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.errorEmail.value = "";
@@ -227,6 +227,7 @@ const app = defineClassComponent(
         margin-top: 0.25rem;
         font-size: 80%;
         color: $danger;
+        white-space: pre-line;
       }
     }
 

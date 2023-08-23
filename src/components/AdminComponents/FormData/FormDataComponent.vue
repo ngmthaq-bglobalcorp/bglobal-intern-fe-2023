@@ -381,6 +381,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import LoadingComponent from "@/components/AppComponents/LoadingComponent/LoadingComponent.vue";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import type { FormDataEmits, FormDataProps } from "./FormDataComponent";
 import type { Ref } from "vue";
 import type { SearchLabelModel } from "@/models/searchLabel.model";
@@ -465,7 +466,7 @@ const app = defineClassComponent(
         if (value.required && !value.model.toString()) {
           value.error = this.t(`message.notBlank`, { value: value.label });
           return false;
-        } else if (value.name === "countHours" && !PrimitiveHelper.isValidCountHours(value.model)) {
+        } else if (value.name === "countHours" && !ValidateHelper.isValidCountHours(value.model)) {
           value.error = app.t(`message.errorCountHours`);
           return false;
         } else {
@@ -633,6 +634,7 @@ const app = defineClassComponent(
             margin-top: 0.25rem;
             font-size: 80%;
             color: $danger;
+            white-space: pre-line;
           }
 
           & .input-image {

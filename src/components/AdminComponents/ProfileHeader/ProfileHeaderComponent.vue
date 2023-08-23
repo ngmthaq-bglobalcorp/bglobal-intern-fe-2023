@@ -27,7 +27,7 @@
           <AvatarComponent
             :avatar-image="app.avatar.value"
             avatar-alt="Avatar"
-            :avatar-init="app.profile.value.name ? app.profile.value.name.split(' ')[0] : app.profile.value.username"
+            :avatar-init="app.profile.value.name || app.profile.value.username"
           />
 
           <template v-if="props.editable">
@@ -73,12 +73,14 @@
     <div class="profile-nav" v-if="!props.isUpdate">
       <ul class="nav-list list">
         <li class="nav-item" v-for="item in app.navList.value" :key="item.name">
-          <router-link
-            :to="item.link"
-            :class="['nav-link link', { active: item.name === app.route.name, disabled: item.disabled }]"
-          >
-            {{ item.text }}
-          </router-link>
+          <template v-if="item.isDisplayed">
+            <router-link
+              :to="item.link"
+              :class="['nav-link link', { active: item.name === app.route.name, disabled: item.disabled }]"
+            >
+              {{ item.text }}
+            </router-link>
+          </template>
         </li>
 
         <li class="nav-item ms-auto">
@@ -108,7 +110,7 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public profile: Ref<any> = this.computed(() => props.profile);
 
-    public avatar: Ref<string> = this.ref("");
+    public avatar: Ref<string> = this.ref(this.profile.value.avatar);
     public cover: Ref<string> = this.ref("");
     public isUpdateAvatar: Ref<boolean> = this.ref(false);
     public isEditCover: Ref<boolean> = this.ref(false);
@@ -118,12 +120,14 @@ const app = defineClassComponent(
         name: PathConst.adminUserProfile.name,
         text: this.t(`app.profile`),
         disabled: true,
+        isDisplayed: true,
       },
       {
         link: PathConst.adminJobsList.path,
         name: PathConst.adminJobsList.name,
         text: this.t(`app.jobsList`),
         disabled: true,
+        isDisplayed: false,
       },
     ]);
 
@@ -131,9 +135,9 @@ const app = defineClassComponent(
       super();
 
       this.watch(
-        () => this.profile.value,
-        (profile) => {
-          this.avatar.value = profile.avatar;
+        () => this.profile.value.avatar,
+        (avatar) => {
+          this.avatar.value = avatar;
         },
       );
 
@@ -303,7 +307,7 @@ const app = defineClassComponent(
   & .profile-header {
     text-align: center;
     margin-top: -1rem;
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
 
     & .page-header-title {
       margin-bottom: 0.5rem;

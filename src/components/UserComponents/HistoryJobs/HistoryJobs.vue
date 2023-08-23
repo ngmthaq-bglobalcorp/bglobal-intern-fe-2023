@@ -28,7 +28,7 @@
               alt="Main image"
               v-else-if="app.job.value.subImages.length > 0"
             />
-            <div class="company_name" v-if="app.show.value">
+            <div class="company_name" v-if="app.isDisplayed.value">
               <div class="card_header_types">
                 <div class="card_header_types_item">A</div>
                 <div class="card_header_types_item">B</div>
@@ -71,7 +71,7 @@ const emits = defineEmits<HistoryJobsEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public show: Ref<boolean> = this.ref(false);
+    public isDisplayed: Ref<boolean> = this.ref(false);
 
     public job: Ref<JobModel> = this.computed(() => props.data);
     public isAvailable: Ref<boolean> = this.computed(() => {

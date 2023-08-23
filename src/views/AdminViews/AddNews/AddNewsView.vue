@@ -255,7 +255,10 @@ const app = defineClassComponent(
       this.onBeforeMount(async () => {
         this.commonStore.setIsLoading(true);
         if (this.isUpdate.value) {
-          await this.adminStore.fetchFindNewsById(props.newsId);
+          const isSuccess = await this.adminStore.fetchFindNewsById(props.newsId);
+          if (!isSuccess) {
+            this.router.push(PathConst.notFound);
+          }
         }
         this.commonStore.setIsLoading(false);
       });

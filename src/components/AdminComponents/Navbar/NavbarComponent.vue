@@ -28,7 +28,7 @@
                 <AvatarComponent
                   :avatar-image="app.profile.value.avatar || ''"
                   avatar-alt="Avatar"
-                  :avatar-init="app.profile.value.name[0] || app.profile.value.username[0]"
+                  :avatar-init="app.profile.value.name || app.profile.value.username"
                 />
                 <span class="status status-available"></span>
               </div>
@@ -39,7 +39,7 @@
                   <AvatarComponent
                     :avatar-image="app.profile.value.avatar"
                     avatar-alt="Avatar"
-                    :avatar-init="app.profile.value.name[0] || app.profile.value.username[0]"
+                    :avatar-init="app.profile.value.name || app.profile.value.username"
                   />
                 </div>
                 <div class="media-body">
@@ -50,15 +50,19 @@
               </div>
               <div class="dropdown-divider"></div>
               <router-link
-                :to="{ ...PathConst.adminUserProfile, params: { username: app.profile.value.username } }"
+                :to="{ ...PathConst.adminProfile, params: { username: app.profile.value.username } }"
                 class="link"
-                v-if="!app.isAdmin.value"
+                v-if="app.profile.value.username && !app.isAdmin.value"
               >
                 <div class="dropdown-item">
                   {{ app.t(`app.profile`) }}
                 </div>
               </router-link>
-              <router-link :to="PathConst.adminUpdateProfile" class="link" v-if="!app.isAdmin.value">
+              <router-link
+                :to="{ ...PathConst.adminUpdateProfile, params: { username: app.profile.value.username } }"
+                class="link"
+                v-if="app.profile.value.username && !app.isAdmin.value"
+              >
                 <div class="dropdown-item">
                   {{ app.t(`app.settings`) }}
                 </div>
@@ -80,12 +84,14 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import AvatarComponent from "@/components/AdminComponents/Avatar/AvatarComponent.vue";
+import AvatarComponent from "../Avatar/AvatarComponent.vue";
 import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
 import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 import type { UserModel } from "@/models/user.model";
+import type { SeekerModel } from "@/models/seeker.model";
+import type { OrganizationModel } from "@/models/organization.model";
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
@@ -96,13 +102,19 @@ const app = defineClassComponent(
     public isAdmin: Ref<Boolean> = this.computed(() =>
       this.authStore.user.role === AppConst.ROLE.organization ? false : true,
     );
-    public profile: Ref<UserModel> = this.computed(() => this.authStore.user);
+    public profile: Ref<UserModel | SeekerModel | OrganizationModel> = this.computed(() => this.authStore.profile);
 
     public constructor() {
       super();
 
-      this.onBeforeMount(() => {
-        this.authStore.getAdminUser();
+      this.onBeforeMount(async () => {
+        if (this.route.name === PathConst.adminDashboard.name) {
+          this.commonStore.setIsLoading(true);
+          await this.authStore.getAdminUser();
+          this.commonStore.setIsLoading(false);
+        } else {
+          await this.authStore.getAdminUser();
+        }
       });
     }
 
@@ -115,12 +127,9 @@ const app = defineClassComponent(
     };
 
     public onToggleSignOut = async () => {
-      const isSuccess = await this.authStore.fetchAdminSignOut();
-      if (isSuccess) {
-        window.location.href = PathConst.adminSignin.path;
-      } else {
-        window.location.href = PathConst.adminSignin.path;
-      }
+      this.commonStore.setIsLoading(true);
+      await this.authStore.fetchAdminSignOut();
+      this.commonStore.setIsLoading(false);
     };
   },
 );

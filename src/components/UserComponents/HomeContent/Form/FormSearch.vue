@@ -1,9 +1,9 @@
 <template>
-  <form class="form-search" id="homepage_search_form_id" @submit.prevent="app.onSubmitForm">
+  <form class="form-search" id="search_form_id" ref="searchFormRef" @submit.prevent="app.onSubmitForm">
     <div class="select-1">
       <div class="location-time">
-        <p>{{ app.t("jobsApp.form.location") }}</p>
-        <select class="first_search_row custom_select" style="width: 136px" v-model="app.firstLocation.value">
+        <span class="text">{{ app.t("jobsApp.form.location") }}</span>
+        <select class="first_search_row custom_select" v-model="app.firstLocation.value">
           <option :value="AppConst.DEFAULT.location">{{ app.t("jobsApp.form.location") }}</option>
           <option :value="location.name" v-for="location in app.locations.value" :key="location.id">
             {{ location.name }}
@@ -12,7 +12,7 @@
       </div>
       <i class="bi bi-x" style="font-size: 1.5rem"></i>
       <div class="location-time">
-        <p>{{ app.t("jobsApp.form.startTime") }}</p>
+        <span class="text">{{ app.t("jobsApp.form.startTime") }}</span>
         <select class="jss86 custom_select" v-model="app.startTime.value">
           <option :value="AppConst.DEFAULT.time">{{ app.t("jobsApp.form.startTime") }}</option>
           <option :value="hour" v-for="hour in PrimitiveHelper.getTime()" :key="hour">{{ hour }}</option>
@@ -20,7 +20,7 @@
       </div>
       <i class="bi bi-x" style="font-size: 1.5rem"></i>
       <div class="location-time">
-        <p>{{ app.t("jobsApp.form.endTime") }}</p>
+        <span class="text">{{ app.t("jobsApp.form.endTime") }}</span>
         <select class="jss86 custom_select" v-model="app.endTime.value">
           <option :value="AppConst.DEFAULT.time">{{ app.t("jobsApp.form.endTime") }}</option>
           <option :value="hour" v-for="hour in PrimitiveHelper.getTime()" :key="hour">{{ hour }}</option>
@@ -29,7 +29,7 @@
     </div>
     <div class="select-2">
       <div class="location-sub-2-3">
-        <p>{{ app.t("jobsApp.form.secondLocation") }}</p>
+        <span class="text">{{ app.t("jobsApp.form.secondLocation") }}</span>
         <select class="custom_select" v-model="app.secondLocation.value">
           <option :value="AppConst.DEFAULT.location">{{ app.t("jobsApp.form.location") }}</option>
           <option :value="location.name" v-for="location in app.locations.value" :key="location.id">
@@ -38,7 +38,7 @@
         </select>
       </div>
       <div class="location-sub-2-3">
-        <p>{{ app.t("jobsApp.form.thirdLocation") }}</p>
+        <span class="text">{{ app.t("jobsApp.form.thirdLocation") }}</span>
         <select class="custom_select" v-model="app.thirdLocation.value">
           <option :value="AppConst.DEFAULT.location">{{ app.t("jobsApp.form.location") }}</option>
           <option :value="location.name" v-for="location in app.locations.value" :key="location.id">
@@ -48,7 +48,7 @@
       </div>
     </div>
     <div class="condition">
-      <p>{{ app.t("jobsApp.form.conditions.title") }}</p>
+      <span class="condition-title">{{ app.t("jobsApp.form.conditions.title") }}</span>
       <div class="tag">
         <label
           :for="label.id.toString()"
@@ -71,21 +71,21 @@
         </label>
       </div>
     </div>
-    <div class="applicable">
+    <div class="applicable" id="applicable_id" ref="applicableRef">
       <div class="suitable">
-        <p class="title">{{ app.t("jobsApp.form.applicable.title") }}</p>
+        <span class="title">{{ app.t("jobsApp.form.applicable.title") }}</span>
 
         <div class="result">
-          <p class="result-match">{{ app.totalJobsWithContion.value }}</p>
-          <p class="jobs">&nbsp;/&nbsp;</p>
-          <p class="result-sum">{{ app.totalJobsNumber.value }}</p>
-          <p class="jobs">{{ app.t("jobsApp.form.applicable.jobs") }}</p>
+          <span class="result-match">{{ app.totalJobsWithContion.value }}</span>
+          <span class="jobs">&nbsp;/&nbsp;</span>
+          <span class="result-sum">{{ app.totalJobsNumber.value }}</span>
+          <span class="jobs">{{ app.t("jobsApp.form.applicable.jobs") }}</span>
         </div>
       </div>
       <button
         class="view-result"
         type="submit"
-        form="homepage_search_form_id"
+        form="search_form_id"
         tabindex="0"
         :disabled="app.isDisableSearchButton.value"
       >
@@ -103,16 +103,17 @@ import { KeyConst } from "@/const/key.const";
 import { PathConst } from "@/const/path.const";
 import { StorageHelper } from "@/helpers/storage.helper";
 import { useSeekersStore } from "@/stores/seekers.store";
-import type { FormSearchProps } from "./FormSearch";
+import type { FormSearchEmits, FormSearchProps } from "./FormSearch";
 import type { Ref } from "vue";
 import type { LocationModel } from "@/models/location.model";
 import type { SearchLabelModel } from "@/models/searchLabel.model";
 
 const props = defineProps<FormSearchProps>();
+const emits = defineEmits<FormSearchEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public seekerStore = useSeekersStore();
+    public seekersStore = useSeekersStore();
 
     public isDisableSearchButton: Ref<boolean> = this.ref(Boolean(props.isDisableSearchButton));
     public startTime: Ref<string> = this.ref(AppConst.DEFAULT.time);
@@ -122,8 +123,8 @@ const app = defineClassComponent(
     public thirdLocation: Ref<string> = this.ref(AppConst.DEFAULT.location);
     public searchLabelsArray: Ref<Array<number>> = this.ref([]);
 
-    public totalJobsNumber: Ref<number> = this.computed(() => this.seekerStore.totalJobs);
-    public totalJobsWithContion: Ref<number> = this.computed(() => this.seekerStore.totalJobsWithCondition);
+    public totalJobsNumber: Ref<number> = this.computed(() => this.seekersStore.totalJobs);
+    public totalJobsWithContion: Ref<number> = this.computed(() => this.seekersStore.totalJobsWithCondition);
     public locations: Ref<Array<LocationModel>> = this.computed(() => this.commonStore.locations);
     public filtersSearchLabels: Ref<Array<SearchLabelModel>> = this.computed(() => {
       return this.commonStore.searchLabels.filter((value) => value.isEnabled);
@@ -134,7 +135,6 @@ const app = defineClassComponent(
 
       this.onBeforeMount(async () => {
         const data: any = StorageHelper.getLocalStorage(KeyConst.keys.searchCondition);
-        this.commonStore.setIsLoading(true);
         if (data) {
           this.startTime.value = data.startTime || AppConst.DEFAULT.time;
           this.endTime.value = data.endTime || AppConst.DEFAULT.time;
@@ -142,12 +142,23 @@ const app = defineClassComponent(
           this.secondLocation.value = data.secondLocation || AppConst.DEFAULT.location;
           this.thirdLocation.value = data.thirdLocation || AppConst.DEFAULT.location;
           this.searchLabelsArray.value = data.searchLabelsArray || [];
-          await this.seekerStore.fetchTotalJobs();
-          await this.seekerStore.fetchTotalJobsWithCondition(data);
         }
-        await this.commonStore.fetchAllLocations();
-        await this.commonStore.fetchAllSearchLabels();
-        this.commonStore.setIsLoading(false);
+      });
+
+      this.onMounted(() => {
+        const searchForm = document.getElementById("search_form_id");
+        const applicable = document.getElementById("applicable_id");
+        if (searchForm && applicable) {
+          emits("getHeight", searchForm.offsetHeight, applicable.offsetHeight);
+        }
+      });
+
+      this.onUpdated(() => {
+        const searchForm = document.getElementById("search_form_id");
+        const applicable = document.getElementById("applicable_id");
+        if (searchForm && applicable) {
+          emits("getHeight", searchForm.offsetHeight, applicable.offsetHeight);
+        }
       });
 
       this.commonStore.eventBus.on("showFormSearch", () => {
@@ -178,10 +189,12 @@ const app = defineClassComponent(
       };
       this.commonStore.setIsLoading(true);
       let isSuccess = true;
-      isSuccess = await this.seekerStore.fetchAllJobs(data);
-      isSuccess = await this.seekerStore.fetchTotalJobsWithCondition(data);
+      isSuccess = await this.seekersStore.fetchTotalJobsWithCondition(data);
+      isSuccess = await this.seekersStore.fetchAllJobs(data);
       if (isSuccess) {
         StorageHelper.setLocalStorage(KeyConst.keys.searchCondition, data);
+        this.isDisableSearchButton.value = true;
+        emits("onSubmitForm");
         this.router.push(PathConst.userJobsList);
       }
       this.commonStore.setIsLoading(false);
@@ -207,7 +220,7 @@ const app = defineClassComponent(
     & .location-time {
       flex: 1;
 
-      & p {
+      & .text {
         font-size: 14px;
         font-weight: 700;
         line-height: 20px;
@@ -240,15 +253,15 @@ const app = defineClassComponent(
     margin-top: 8px;
     align-items: center;
     justify-content: space-between;
+    gap: 15px;
 
     & .location-sub-2-3 {
       width: 100%;
       flex-grow: 5;
       flex-shrink: 1;
       flex-basis: 0%;
-      margin-right: 15px;
 
-      & p {
+      & .text {
         font-size: 14px;
         font-weight: 700;
         line-height: 20px;
@@ -280,7 +293,7 @@ const app = defineClassComponent(
   & .condition {
     margin-top: 15px;
 
-    & p {
+    & .condition-title {
       font-size: 14px;
       font-weight: 700;
       line-height: 20px;
@@ -318,7 +331,7 @@ const app = defineClassComponent(
         -webkit-line-clamp: 1;
         -webkit-box-orient: vertical;
         display: -webkit-box;
-        line-break: anywhere;
+        line-break: auto;
         overflow: hidden;
         text-overflow: ellipsis;
         margin: 0 5px 10px 5px;

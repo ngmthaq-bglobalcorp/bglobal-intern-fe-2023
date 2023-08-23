@@ -35,12 +35,14 @@
       <div class="page-nav">
         <ul class="nav-list list">
           <li class="nav-item" v-for="item in app.navList.value" :key="item.name">
-            <router-link
-              :to="item.link"
-              :class="['nav-link link', { active: item.name === app.route.name, disabled: item.disabled }]"
-            >
-              {{ item.text }}
-            </router-link>
+            <template v-if="item.isDisplayed">
+              <router-link
+                :to="item.link"
+                :class="['nav-link link', { active: item.name === app.route.name, disabled: item.disabled }]"
+              >
+                {{ item.text }}
+              </router-link>
+            </template>
           </li>
 
           <li class="nav-item ms-auto">
@@ -79,12 +81,14 @@ const app = defineClassComponent(
         name: PathConst.adminJobDetail.name,
         text: this.t(`app.overview`),
         disabled: true,
+        isDisplayed: true,
       },
       {
         link: "",
         name: this.t(`app.activity`),
         text: this.t(`app.activity`),
         disabled: true,
+        isDisplayed: false,
       },
     ]);
 

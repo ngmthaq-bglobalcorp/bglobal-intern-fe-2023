@@ -159,7 +159,7 @@ export class PathConst {
   };
 
   public static adminUserProfile: Route = {
-    path: "/admin/:username",
+    path: "/admin/user/:userId",
     name: "adminUserProfile",
     component: UserProfileAdminViewVue,
     props: true,
@@ -169,13 +169,25 @@ export class PathConst {
     },
   };
 
+  public static adminProfile: Route = {
+    path: "/admin/:username",
+    name: "adminProfile",
+    component: UserProfileAdminViewVue,
+    props: true,
+    meta: {
+      title: "title.admin.userProfile",
+      auth: AppConst.ROLE.organization,
+    },
+  };
+
   public static adminUpdateProfile: Route = {
-    path: "/admin/user/profile/update",
+    path: "/admin/:username/update",
     name: "adminUpdateProfile",
     component: UpdateProfileAdminViewVue,
+    props: true,
     meta: {
       title: "title.admin.updateProfile",
-      auth: AppConst.ROLE.all,
+      auth: AppConst.ROLE.organization,
     },
   };
 

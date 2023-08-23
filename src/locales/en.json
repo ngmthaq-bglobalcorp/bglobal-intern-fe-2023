@@ -34,10 +34,11 @@
     "errorUsernameOrPassword": "Please enter a valid username or password.",
     "errorUsernameExists": "This username already exists.",
     "errorNameExists": "This name has been taken.",
-    "errorEmailExists": "This username already exists.",
+    "errorEmailExists": "Email {value} already exists.",
     "errorUsername": "Please enter a valid username.",
     "errorPassword": "Your password is invalid. Please try again.",
     "errorConfirmPassword": "Password does not match the confirm password.",
+    "errorPasswordContain": "Password must contain {value}.",
     "errorName": "Please enter your name.",
     "errorEmail": "Please enter a valid email address.",
     "errorPhoneNumber": "Please enter a valid phone number.",
@@ -46,6 +47,7 @@
     "errorOtp": "Please enter a valid OTP.",
     "errorUrl": "Please enter a valid url.",
     "errorCountHours": "CountHour must be within the range of 0 to 24.",
+    "passwordNotBlank": "Password cannot be blank",
     "notBlank": "{value} cannot be blank",
     "updateSuccess": "Update successfull",
     "updateFailed": "Update failed"
@@ -151,13 +153,13 @@
     "confirmNewPassword": "Confirm new password",
     "passwordRequirements": "Password requirements:",
     "ensureRequirements": "Ensure that these requirements are met:",
-    "requirements": [
-      "Minimum 8 characters long - the more, the better.",
-      "At least one uppercase letter (A-Z).",
-      "At least one digit (0-9).",
-      "At least one special character.",
-      "Any combination of uppercase letters, lowercase letters, digits, and special characters"
-    ],
+    "requirements": {
+      "minLength": "Minimum 8 characters long - the more, the better.",
+      "haveUppercase": "At least one uppercase letter (A-Z).",
+      "haveDigit": "At least one digit (0-9).",
+      "haveSpecial": "At least one special character.",
+      "anyCombination": "Any combination of uppercase letters, lowercase letters, digits, and special characters"
+    },
     "language": "Language",
     "timezone": "Time zone",
     "yourTimezone": "Your time zone",
@@ -207,6 +209,7 @@
     "userLikeJob": "User like job",
     "hello": "Hello, nice to see you!",
     "enjoy": "You are now minutes away from creativity than ever before. Enjoy!",
+    "create": "Create my first job",
     "notFound": "Sorry, the page you're looking for cannot be found.",
     "internalError": "The server encountered an internal error or misconfiguration and was unable to complete your request."
   },
@@ -267,7 +270,8 @@
       "license": {
         "company": "HAJ Co., Ltd. Hokkaido part-time job information company",
         "title": "(c) Hokkaido Arbeit Johosha co.,ltd. All Rights Reserved."
-      }
+      },
+      "version": "v1.0.0"
     },
     "newsCategory": {
       "seminar": "Seminar",

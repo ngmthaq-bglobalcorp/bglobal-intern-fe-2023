@@ -1,7 +1,7 @@
 <template>
   <div class="profile-card-container">
     <!-- Card -->
-    <div class="profile-card-complete custom-card">
+    <div class="profile-card-complete custom-card" v-if="app.isDisplayed.value">
       <h5 class="complete-title">{{ app.t(`app.completeProfile`) }}</h5>
 
       <!-- Progress -->
@@ -108,6 +108,8 @@ const props = defineProps<ProfileCardProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
+    public isDisplayed: Ref<boolean> = this.ref(false);
+
     public profile: Ref<any> = this.computed(() => props.profile);
     public profilePercent: Ref<string> = this.computed(() => {
       let total = Object.values(this.profile.value).length;

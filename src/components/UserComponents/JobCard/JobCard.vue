@@ -26,7 +26,7 @@
                 alt="Main image"
                 v-else-if="app.job.value.subImages.length > 0"
               />
-              <div class="card_header_hiring_title" v-if="app.show.value">
+              <div class="card_header_hiring_title" v-if="app.isDisplayed.value">
                 <div class="card_header_types">
                   <div class="card_header_types_item">A</div>
                   <div class="card_header_types_item">B</div>
@@ -66,6 +66,7 @@
         <button
           class="swiper_action_button like_button"
           style="transform: scale(1); display: block"
+          :disabled="app.isExpired"
           @click="app.onToggleLikeButton"
         >
           <img src="@/assets/img/img_btn_keep.png" class="" />
@@ -73,6 +74,7 @@
         <button
           class="swiper_action_button dislike_button"
           style="transform: scale(1); display: block"
+          :disabled="app.isExpired"
           @click="app.onToggleDislikeButton"
         >
           <img src="@/assets/img/img_btn_ng.png" class="" />
@@ -172,6 +174,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { JobModel } from "@/models/job.model";
 import type { JobCardEmits, JobCardProps } from "./JobCard";
 import type { Ref } from "vue";
@@ -181,7 +184,7 @@ const emits = defineEmits<JobCardEmits>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
-    public show: Ref<boolean> = this.ref(false);
+    public isDisplayed: Ref<boolean> = this.ref(false);
     public isShowTutorial: Ref<boolean> = this.ref(false);
     public isShowUserGuild: Ref<boolean> = this.ref(false);
 
@@ -197,6 +200,12 @@ const app = defineClassComponent(
         },
       );
     }
+
+    public isExpired = () => {
+      if (this.job.value.id > 0) {
+        return ValidateHelper.isExpired(this.job.value.opensAt, this.job.value.expiresAt);
+      }
+    };
 
     public onToggleShowTutorial = (isShow: boolean) => {
       this.isShowTutorial.value = isShow;
@@ -240,7 +249,7 @@ const app = defineClassComponent(
     position: relative;
     touch-action: none;
     width: 100%;
-    height: calc(100% - 52px) !important;
+    height: calc(100% - 54px);
     overflow: hidden;
     transition: bottom 0.25s linear, opacity 0.25s ease-in 0.2s, -webkit-transform 0.05s linear;
     transition: transform 0.05s linear, bottom 0.25s linear, opacity 0.25s ease-in 0.2s;
@@ -249,8 +258,8 @@ const app = defineClassComponent(
     & .card {
       position: absolute;
       width: 90%;
-      height: 70vh;
-      padding: 35px 25px 15px;
+      height: calc(95% - 80px);
+      padding: 25px 25px 15px;
       background-color: #fff;
       border-radius: 25px;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -309,7 +318,7 @@ const app = defineClassComponent(
             -webkit-box-orient: vertical;
             color: #000;
             display: -webkit-box;
-            line-break: anywhere;
+            line-break: auto;
             margin: 0;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -317,16 +326,16 @@ const app = defineClassComponent(
         }
 
         & .card_header_img_const {
-          margin-bottom: 10px;
+          margin-bottom: 12px;
           align-items: flex-start;
           display: flex;
           height: 100%;
 
           & img {
-            height: 60px;
+            height: 90px;
             margin-right: 15px;
             object-fit: cover;
-            width: 100px;
+            width: 150px;
           }
 
           & .card_header_hiring_title {
@@ -367,10 +376,10 @@ const app = defineClassComponent(
       }
 
       & .card_infor {
-        margin-bottom: 10px;
+        margin-bottom: 12px;
 
         & .card_infor_item {
-          margin-bottom: 2px;
+          margin-bottom: 8px;
           align-items: center;
           color: #000;
           display: flex;
@@ -393,9 +402,9 @@ const app = defineClassComponent(
         display: -webkit-box;
         font-size: 13px;
         font-weight: 400;
-        line-break: anywhere;
+        line-break: auto;
         line-height: 19px;
-        margin-bottom: 10px;
+        margin-bottom: 12px;
         overflow: hidden;
         overflow-wrap: break-word;
         text-overflow: ellipsis;
@@ -439,6 +448,10 @@ const app = defineClassComponent(
       position: absolute;
       width: 90px;
       z-index: 1;
+
+      &:disabled {
+        pointer-events: none;
+      }
 
       &.like_button {
         bottom: 88px;
@@ -504,6 +517,7 @@ const app = defineClassComponent(
       background: transparent;
       font-weight: 500;
       line-height: 24px;
+      margin-left: 8px;
       margin-right: 8px;
       border-radius: 40px;
       display: inline-flex;
@@ -636,6 +650,31 @@ const app = defineClassComponent(
         line-height: 1.5;
         letter-spacing: 0.00938em;
         margin-left: 6px;
+      }
+    }
+  }
+}
+
+@media screen and (max-height: $breakpoint-md) {
+  .job-card-container {
+    & #swiper {
+      & .card {
+        & .card_header {
+          & .card_header_types_const {
+            & .card_header_button_const {
+              & button {
+                padding: 4px 16px;
+              }
+            }
+          }
+
+          & .card_header_img_const {
+            & img {
+              height: 60px;
+              width: 100px;
+            }
+          }
+        }
       }
     }
   }

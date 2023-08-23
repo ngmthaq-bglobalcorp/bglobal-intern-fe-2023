@@ -1,15 +1,18 @@
 <template>
-  <div class="not-found-container">
-    <img src="@/assets/img/oc-thinking.svg" alt="404" class="image" />
-    <div class="content">
-      <h1 class="title">404</h1>
-      <span class="desc">{{ app.t("app.notFound") }}</span>
+  <AdminLayout>
+    <div class="not-found-container">
+      <img src="@/assets/img/oc-thinking.svg" alt="404" class="image" />
+      <div class="content">
+        <h1 class="title">404</h1>
+        <span class="desc">{{ app.t("app.notFound") }}</span>
+      </div>
     </div>
-  </div>
+  </AdminLayout>
 </template>
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 
 const app = defineClassComponent(
   class View extends BaseComponent {

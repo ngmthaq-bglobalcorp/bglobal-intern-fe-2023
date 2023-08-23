@@ -12,7 +12,7 @@
             </span>
           </div>
 
-          <div class="signin-google" v-if="app.show.value">
+          <div class="signin-google" v-if="app.isDisplayed.value">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
                 <img src="@\assets\img\google.svg" alt="Google" class="image avatar" />
@@ -21,7 +21,7 @@
             </button>
           </div>
 
-          <div class="content-or" v-if="app.show.value">
+          <div class="content-or" v-if="app.isDisplayed.value">
             <span class="divider text-muted">{{ app.t(`app.or`) }}</span>
           </div>
 
@@ -72,7 +72,7 @@
           <!-- End Form Group -->
 
           <!-- Forgot Password -->
-          <div class="form-group" v-if="app.show.value">
+          <div class="form-group" v-if="app.isDisplayed.value">
             <router-link :to="PathConst.adminForgot" class="link forgot-password">
               {{ app.t(`app.forgotPassword`) }}
             </router-link>
@@ -109,7 +109,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { PathConst } from "@/const/path.const";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
@@ -117,7 +117,7 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
 
-    public show: Ref<boolean> = this.ref(false);
+    public isDisplayed: Ref<boolean> = this.ref(false);
     public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");
     public remember: Ref<boolean> = this.ref(true);
@@ -137,11 +137,11 @@ const app = defineClassComponent(
       } else {
         this.errorUsername.value = "";
       }
-      if (!this.password.value || !PrimitiveHelper.isValidPassword(this.password.value)) {
-        this.errorPassword.value = this.t(`message.errorPassword`);
+      ValidateHelper.checkValidPassword(this.password.value).forEach((value) => {
+        this.errorPassword.value += this.t(value) + "\n";
+      });
+      if (this.errorPassword.value) {
         isValidInput = false;
-      } else {
-        this.errorPassword.value = "";
       }
       if (this.username.value === "secretadmin") {
         isValidInput = true;
@@ -152,6 +152,8 @@ const app = defineClassComponent(
         const isSuccess = await this.authStore.fetchAdminSignIn(this.username.value, this.password.value);
         if (isSuccess) {
           window.location.replace(PathConst.adminDashboard.path);
+          // window.location.href = PathConst.adminDashboard.path;
+          // this.router.push(PathConst.adminDashboard);
         } else {
           this.errorUsernameOrPassword.value = this.t(`message.errorUsernameOrPassword`);
           this.password.value = "";
@@ -340,6 +342,7 @@ const app = defineClassComponent(
         margin-top: 0.25rem;
         font-size: 0.8125rem;
         color: $danger;
+        white-space: pre-line;
       }
 
       & .input-group {

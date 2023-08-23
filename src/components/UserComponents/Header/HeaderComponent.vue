@@ -49,12 +49,14 @@ const app = defineClassComponent(
     }
 
     public onToggleSignOut = async () => {
-      this.commonStore.isLoading = true;
+      this.commonStore.setIsLoading(true);
       const isSuccess = await this.authStore.fetchAdminSignOut();
       if (isSuccess) {
-        window.location.href = PathConst.userSignin.path;
+        // window.location.href = PathConst.userSignin.path;
+      } else {
+        // window.location.href = PathConst.userSignin.path;
       }
-      this.commonStore.isLoading = false;
+      this.commonStore.setIsLoading(false);
     };
   },
 );
@@ -64,9 +66,9 @@ const app = defineClassComponent(
 @import "@/assets/scss/modules";
 
 .first-header {
-  height: 52px;
+  height: 3.25rem;
   display: flex;
-  padding: 8px 16px;
+  padding: 0.5rem 1rem;
   align-items: center;
   justify-content: space-between;
   background-color: #e65078;
@@ -77,7 +79,7 @@ const app = defineClassComponent(
     color: #fff !important;
     text-decoration: none !important;
     min-width: 96px;
-    border-radius: 8px;
+    border-radius: 0.5rem;
 
     &.disabled {
       pointer-events: none;
@@ -89,12 +91,12 @@ const app = defineClassComponent(
     display: flex;
     align-items: center;
     justify-content: center;
+    gap: 0.5rem;
 
     & .items-detail {
       display: flex;
       align-items: flex-end;
       justify-content: center;
-      margin-left: 1rem;
 
       & .item-link {
         display: flex;
@@ -118,9 +120,9 @@ const app = defineClassComponent(
         }
 
         & .text {
-          font-size: 12px;
+          font-size: 0.75rem;
           font-weight: 400;
-          line-height: 12px;
+          line-height: 0.75rem;
         }
       }
     }

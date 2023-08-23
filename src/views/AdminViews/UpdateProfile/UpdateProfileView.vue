@@ -35,7 +35,7 @@
               {{ app.t(`app.preferences`) }}
             </a>
           </li>
-          <li class="nav-item">
+          <li class="nav-item" v-if="app.isDisplayed.value">
             <a class="nav-link" href="#deleteAccountSection" scroll="smooth">
               <i class="bi bi-trash icon"></i>
               {{ app.t(`app.deleteAccount`) }}
@@ -84,13 +84,17 @@ import { PathConst } from "@/const/path.const";
 import { OrganizationModel } from "@/models/organization.model";
 import { useAuthStore } from "@/stores/auth.store";
 import { useOrganizationStore } from "@/stores/organization.store";
+import type { UpdateProfileProps } from "./UpdateProfileView";
 import type { Ref } from "vue";
+
+const props = defineProps<UpdateProfileProps>();
 
 const app = defineClassComponent(
   class Component extends BaseComponent {
     public organizationStore = useOrganizationStore();
     public authStore = useAuthStore();
 
+    public isDisplayed: Ref<boolean> = this.ref(false);
     public messageInfoUpdateSuccess: Ref<string> = this.ref("");
     public messageInfoUpdateFailed: Ref<string> = this.ref("");
     public messageEmailUpdateSuccess: Ref<string> = this.ref("");
@@ -111,7 +115,7 @@ const app = defineClassComponent(
     }
 
     public onToggleButton = () => {
-      this.router.push({ ...PathConst.adminUserProfile, params: { username: this.profile.value.username } });
+      this.router.push({ ...PathConst.adminProfile, params: { username: this.profile.value.username } });
     };
 
     public onUpdateAvatar = async (avatarUrl: string) => {
@@ -147,7 +151,7 @@ const app = defineClassComponent(
         this.organizationStore.profile.email = email;
         this.messageEmailUpdateSuccess.value = this.t(`message.updateSuccess`);
       } else {
-        this.messageEmailUpdateFailed.value = this.t(`message.updateFailed`);
+        this.messageEmailUpdateFailed.value = this.t(`message.errorEmailExists`, { value: email });
       }
       this.commonStore.setIsLoading(false);
     };
@@ -184,6 +188,7 @@ const app = defineClassComponent(
   display: flex;
   justify-content: center;
   flex-wrap: wrap;
+  gap: 1.5rem;
 
   & .profile-nav {
     flex: 3;
@@ -226,7 +231,6 @@ const app = defineClassComponent(
 
   & .profile-content {
     flex: 9;
-    margin-left: 1.5rem;
   }
 }
 </style>

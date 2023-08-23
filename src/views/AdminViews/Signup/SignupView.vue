@@ -12,7 +12,7 @@
             </span>
           </div>
 
-          <div class="signup-google" v-if="app.show.value">
+          <div class="signup-google" v-if="app.isDisplayed.value">
             <button type="button" class="g-btn google-btn" @click.prevent="">
               <span class="item">
                 <img src="@\assets\img\google.svg" alt="Google" class="image avatar" />
@@ -21,7 +21,7 @@
             </button>
           </div>
 
-          <div class="content-or" v-if="app.show.value">
+          <div class="content-or" v-if="app.isDisplayed.value">
             <span class="divider text-muted">{{ app.t(`app.or`) }}</span>
           </div>
 
@@ -202,7 +202,7 @@
 
           <button type="submit" class="g-btn submit-btn">{{ app.t(`app.buttonCreate`) }}</button>
 
-          <button type="submit" class="g-btn trial-btn" v-if="app.show.value">
+          <button type="submit" class="g-btn trial-btn" v-if="app.isDisplayed.value">
             {{ app.t(`app.startTrial`) }}
             <i class="tio-chevron-right"></i>
           </button>
@@ -217,7 +217,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import CoverLayout from "@/layouts/CoverLayout/CoverLayout.vue";
 import { PathConst } from "@/const/path.const";
-import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { useAuthStore } from "@/stores/auth.store";
 import type { Ref } from "vue";
 
@@ -225,7 +225,7 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public authStore = useAuthStore();
 
-    public show: Ref<boolean> = this.ref(false);
+    public isDisplayed: Ref<boolean> = this.ref(false);
     public username: Ref<string> = this.ref("");
     public password: Ref<string> = this.ref("");
     public confirmPassword: Ref<string> = this.ref("");
@@ -256,18 +256,15 @@ const app = defineClassComponent(
       } else {
         this.errorUsername.value = "";
       }
-      if (!this.password.value || !PrimitiveHelper.isValidPassword(this.password.value)) {
-        this.errorPassword.value = this.t("message.errorPassword");
+      ValidateHelper.checkValidPassword(this.password.value).forEach((value) => {
+        this.errorPassword.value += this.t(value) + "\n";
+      });
+      if (this.errorPassword.value) {
         isValidInput = false;
-      } else {
-        this.errorPassword.value = "";
       }
-      if (!this.confirmPassword.value || !PrimitiveHelper.isValidPassword(this.confirmPassword.value)) {
-        this.errorConfirmPassword.value = this.t("message.errorConfirmPassword");
+      if (this.confirmPassword.value !== this.password.value) {
         isValidInput = false;
-      } else if (this.confirmPassword.value !== this.password.value) {
-        this.errorConfirmPassword.value = this.t("message.errorConfirmPassword");
-        isValidInput = false;
+        this.errorConfirmPassword.value = this.t(`message.errorConfirmPassword`);
       } else {
         this.errorConfirmPassword.value = "";
       }
@@ -277,13 +274,13 @@ const app = defineClassComponent(
       } else {
         this.errorName.value = "";
       }
-      if (!this.email.value || !PrimitiveHelper.isValidEmail(this.email.value)) {
+      if (!this.email.value || !ValidateHelper.isValidEmail(this.email.value)) {
         this.errorEmail.value = this.t("message.errorEmail");
         isValidInput = false;
       } else {
         this.errorEmail.value = "";
       }
-      if (!this.phoneNumber.value || !PrimitiveHelper.isValidPhoneNumber(this.phoneNumber.value)) {
+      if (!this.phoneNumber.value || !ValidateHelper.isValidPhoneNumber(this.phoneNumber.value)) {
         isValidInput = false;
         this.errorPhoneNumber.value = this.t(`message.errorPhoneNumber`);
       } else {
@@ -322,10 +319,12 @@ const app = defineClassComponent(
             this.errorInput.value = this.t(`message.errorNameExists`);
             this.errorName.value = this.t("message.errorName");
           } else if (isSuccess.includes("Email ")) {
-            this.errorInput.value = this.t(`message.errorEmailExists`);
+            this.errorInput.value = this.t(`message.errorEmailExists`, { value: this.email.value });
             this.errorEmail.value = this.t("message.errorEmail");
           } else {
             window.location.replace(PathConst.adminDashboard.path);
+            // window.location.href = PathConst.adminDashboard.path;
+            // this.router.push(PathConst.adminDashboard);
           }
         } else {
           this.errorInput.value = this.t(`message.errorUsernameOrPassword`);
@@ -545,6 +544,7 @@ const app = defineClassComponent(
         margin-top: 0.25rem;
         font-size: 80%;
         color: $danger;
+        white-space: pre-line;
       }
 
       & .input-group {

@@ -7,15 +7,15 @@
       <li class="users-item" v-for="item in app.filterData.value" :key="item.id">
         <template v-for="column in app.columns.value" :key="column.field">
           <router-link
-            :to="{ ...PathConst.adminUserProfile, params: { username: item.userId } }"
+            :to="{ ...PathConst.adminUserProfile, params: { userId: item.userId } }"
             class="item-name link-default"
-            v-if="column.field === 'name'"
+            v-if="item.userId && column.field === 'name'"
           >
             <div class="avatar">
               <AvatarComponent
                 :avatar-image="item.avatar"
                 avatar-alt="Avatar"
-                :avatar-init="item.name[0] || item.username[0]"
+                :avatar-init="item.name || item.username"
               />
             </div>
             <span class="name" v-if="item.name">{{ item.name }}</span>
