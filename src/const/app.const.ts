@@ -46,6 +46,7 @@ export class AppConst {
     pageSize: 10,
     index: 0,
     step: 5,
+    countdownSeconds: 30,
   };
 
   public static JOBS_PAGINATION = {

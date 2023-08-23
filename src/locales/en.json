@@ -49,6 +49,8 @@
     "errorCountHours": "CountHour must be within the range of 0 to 24.",
     "passwordNotBlank": "Password cannot be blank",
     "notBlank": "{value} cannot be blank",
+    "sendOtpSuccess": "Send OTP successfull",
+    "sendOtpFail": "Send OTP failed",
     "updateSuccess": "Update successfull",
     "updateFailed": "Update failed"
   },
@@ -95,7 +97,7 @@
     "rememberMe": "Remember me",
     "forgotPasswordTitle": "Enter the email address you used when you joined and we'll send you instructions to reset your password.",
     "emailOtp": "Email OTP",
-    "resendOtp": "Resend OTP?",
+    "sendOtp": "Send OTP",
     "submit": "Submit",
     "backToSignin": "Back to Sign in",
     "search": "Search...",

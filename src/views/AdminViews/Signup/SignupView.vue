@@ -521,7 +521,7 @@ const app = defineClassComponent(
           color: $dark;
           background-color: $white;
           outline: 0;
-          border-color: rgba(55, 125, 255, 0.4);
+          border-color: rgba($blue, 0.6);
           box-shadow: 0 0 10px rgba(55, 125, 255, 0.1);
         }
       }
