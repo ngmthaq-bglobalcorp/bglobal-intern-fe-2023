@@ -203,8 +203,8 @@ const app = defineClassComponent(
   class Component extends BaseComponent {
     public sortingField: Ref<string> = this.ref("");
     public sortingDirection: Ref<string> = this.ref("");
-    public pageSize: Ref<number> = this.ref(10);
-    public pageNumber: Ref<number> = this.ref(1);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
+    public pageSize: Ref<number> = this.ref(AppConst.DEFAULT.pageSize);
     public selectedAll: Ref<boolean> = this.ref(false);
 
     public totalData: Ref<number> = this.computed(() => props.data.length);

@@ -113,7 +113,7 @@ const app = defineClassComponent(
     public isLoading: Ref<boolean> = this.ref(false);
     public isShowLoadButton: Ref<boolean> = this.ref(props.isShowLoadButton || false);
     public target: Ref<string> = this.ref(props.target);
-    public pageNumber: Ref<number> = this.ref(1);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
     public pageSize: Ref<number> = this.ref(props.limit);
 
     public totalData: Ref<number> = this.computed(() => props.data.length);

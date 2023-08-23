@@ -59,7 +59,6 @@
         :page-size="app.pageSize.value"
         :total-count="app.totalData.value"
         @on-page-change="app.onPageChange"
-        v-if="app.totalPages.value > 0"
       />
     </div>
     <!-- End Pagination -->
@@ -71,6 +70,7 @@ import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin"
 import AdminLayout from "@/layouts/AdminLayout/AdminLayout.vue";
 import PageHeader from "@/components/AdminComponents/PageHeader/PageHeaderComponent.vue";
 import JobCard from "@/components/AdminComponents/JobCard/JobCardComponent.vue";
+import Pagination from "@/components/AdminComponents/Pagination/PaginationComponent.vue";
 import { AppConst } from "@/const/app.const";
 import { PathConst } from "@/const/path.const";
 import { useOrganizationStore } from "@/stores/organization.store";
@@ -82,8 +82,8 @@ const app = defineClassComponent(
     public organizationStore = useOrganizationStore();
 
     public view: Ref<string> = this.ref(AppConst.VIEW.columnView);
-    public pageNumber: Ref<number> = this.ref(1);
-    public pageSize: Ref<number> = this.ref(10);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
+    public pageSize: Ref<number> = this.ref(AppConst.DEFAULT.pageSize);
 
     public totalData: Ref<number> = this.computed(() => this.organizationStore.jobs.length);
     public totalPages: Ref<number> = this.computed(() => {

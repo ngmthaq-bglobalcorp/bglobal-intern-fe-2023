@@ -162,8 +162,7 @@ const app = defineClassComponent(
         this.errorEmail.value = this.t(`message.errorEmail`);
       } else {
         this.commonStore.setIsLoading(true);
-        // const isSuccess = await this.authStore.fetchForgotPassword(this.email.value);
-        const isSuccess = true;
+        const isSuccess = await this.authStore.fetchForgotPassword(this.email.value);
         if (isSuccess) {
           this.successMessage.value = app.t(`message.sendOtpSuccess`);
           this.countdown();

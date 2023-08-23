@@ -2,7 +2,7 @@
   <div class="waiting-overlay" :class="{ waiting: props.isWaiting }">
     <div class="content">
       <img class="logo" src="@/assets/img/logo.svg" alt="Logo" />
-      <h1 class="title">Please Wait</h1>
+      <h1 class="title">{{ app.t(`app.pleaseWait`) }}</h1>
       <div class="waiting-animation">
         <div class="dot dot-1"></div>
         <div class="dot dot-2"></div>

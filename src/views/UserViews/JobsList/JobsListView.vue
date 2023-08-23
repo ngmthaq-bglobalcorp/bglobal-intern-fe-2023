@@ -47,8 +47,8 @@ const app = defineClassComponent(
     public isShowFormSearch: Ref<boolean> = this.ref(false);
     public formSearchHide: Ref<string> = this.ref("");
     public searchHeight: Ref<string> = this.ref("");
-    public pageNumber: Ref<number> = this.ref(AppConst.JOBS_PAGINATION.pageNumberDefault);
-    public pageSize: Ref<number> = this.ref(AppConst.JOBS_PAGINATION.pageSizeDefault);
+    public pageNumber: Ref<number> = this.ref(AppConst.DEFAULT.pageNumber);
+    public pageSize: Ref<number> = this.ref(AppConst.DEFAULT.pageSize);
     public currentIndex: Ref<number> = this.ref(AppConst.DEFAULT.index);
     public filtersIndex: Ref<number> = this.ref(AppConst.DEFAULT.index);
 
@@ -132,7 +132,7 @@ const app = defineClassComponent(
 
     public onToggleSkipButton = async () => {
       if (this.currentIndex.value < this.seekersStore.totalJobsWithCondition - 1) {
-        if (this.filtersIndex.value >= AppConst.JOBS_PAGINATION.stepDefault) {
+        if (this.filtersIndex.value >= AppConst.DEFAULT.step) {
           await this.seekersStore.fetchAllJobs(this.searchData.value);
         }
         this.currentIndex.value++;
