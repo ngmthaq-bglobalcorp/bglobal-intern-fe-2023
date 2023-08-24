@@ -496,7 +496,7 @@ const app = defineClassComponent(
       app.input.value.map((input: any) => {
         input.children.map((value: any) => {
           if (value.type === "dateTime") {
-            value.model += value.children[1].model + " " + value.children[0].model;
+            value.model = value.children[1].model + " " + value.children[0].model;
             data = {
               ...data,
               [value.name]: new Date(value.model),

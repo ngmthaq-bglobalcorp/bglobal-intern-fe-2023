@@ -277,7 +277,6 @@ const app = defineClassComponent(
           this.router.push(PathConst.adminNews);
         }
       } else {
-        console.log(news);
         const isSuccess = await this.adminStore.fetchCreateNews(news);
         if (isSuccess) {
           this.router.push(PathConst.adminNews);
