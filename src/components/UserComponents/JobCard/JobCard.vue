@@ -1,6 +1,8 @@
 <template>
   <div class="job-card-container">
-    <div id="swiper">
+    <LoadingComponent :is-loading="!app.job.value" v-if="!app.job.value" />
+
+    <div id="swiper" v-else>
       <div
         class="card"
         style="bottom: calc(0% + 80px); transform: translateX(-50%) scale(1); opacity: 1"
@@ -146,6 +148,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import LoadingComponent from "@/components/AppComponents/LoadingComponent/LoadingComponent.vue";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import { ValidateHelper } from "@/helpers/validate.helper";
 import { JobModel } from "@/models/job.model";
