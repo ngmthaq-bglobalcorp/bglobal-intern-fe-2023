@@ -123,9 +123,13 @@ const app = defineClassComponent(
       return this.isShowFormSearch.value;
     };
 
-    public onSubmitForm = () => {
+    public onSubmitForm = async (data: any) => {
+      this.commonStore.setIsLoading(true);
       this.isShowFormSearch.value = false;
       this.commonStore.eventBus.emit("hideFormSearch", null);
+      await this.seekersStore.fetchTotalJobsWithCondition(data);
+      await this.seekersStore.fetchAllJobs(data);
+      this.commonStore.setIsLoading(false);
     };
 
     public onClickCard = (id: number) => {
