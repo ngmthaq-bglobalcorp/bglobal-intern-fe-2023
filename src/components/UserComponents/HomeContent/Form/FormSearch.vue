@@ -187,17 +187,9 @@ const app = defineClassComponent(
         thirdLocation: this.thirdLocation.value,
         searchLabelsArray: this.searchLabelsArray.value,
       };
-      this.commonStore.setIsLoading(true);
-      let isSuccess = true;
-      isSuccess = await this.seekersStore.fetchTotalJobsWithCondition(data);
-      isSuccess = await this.seekersStore.fetchAllJobs(data);
-      if (isSuccess) {
-        StorageHelper.setLocalStorage(KeyConst.keys.searchCondition, data);
-        this.isDisableSearchButton.value = true;
-        emits("onSubmitForm");
-        this.router.push(PathConst.userJobsList);
-      }
-      this.commonStore.setIsLoading(false);
+      StorageHelper.setLocalStorage(KeyConst.keys.searchCondition, data);
+      emits("onSubmitForm", data);
+      this.router.push(PathConst.userJobsList);
     };
   },
 );

@@ -1,8 +1,8 @@
 <template>
-  <div class="job-card-container">
-    <LoadingComponent :is-loading="!app.job.value" v-if="!app.job.value" />
+  <LoadingComponent :is-loading="!app.job.value" v-if="!app.job.value" />
 
-    <div id="swiper" v-else>
+  <div class="job-card-container" v-else-if="app.job.value.id > 0">
+    <div id="swiper">
       <div
         class="card"
         style="bottom: calc(0% + 80px); transform: translateX(-50%) scale(1); opacity: 1"
