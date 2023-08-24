@@ -1,178 +1,151 @@
 <template>
   <div class="job-card-container">
-    <slot></slot>
-
-    <template v-if="app.job.value && app.job.value.id > 0">
-      <div id="swiper">
-        <div
-          class="card"
-          style="bottom: calc(0% + 80px); transform: translateX(-50%) scale(1); opacity: 1"
-          @click="app.onClickCard"
-        >
-          <div class="card_header">
-            <div class="card_header_types_const">
-              <div class="card_header_button_const">
-                <button @click="app.onToggleViewDetail">
-                  <span>{{ app.t(`jobsApp.jobCard.viewDetail`) }}</span>
-                  <img src="@/assets/img/ic_arrow_forward.svg" alt="Forward" />
-                </button>
-              </div>
-              <div class="card_header_title" v-if="app.job.value.title">{{ app.job.value.title }}</div>
-            </div>
-            <div class="card_header_img_const">
-              <img :src="app.job.value.mainImageUrl" alt="Main image" v-if="app.job.value.mainImageUrl" />
-              <img
-                :src="app.job.value.subImages[0].url"
-                alt="Main image"
-                v-else-if="app.job.value.subImages.length > 0"
-              />
-              <div class="card_header_hiring_title" v-if="app.isDisplayed.value">
-                <div class="card_header_types">
-                  <div class="card_header_types_item">A</div>
-                  <div class="card_header_types_item">B</div>
-                </div>
-                <span>JOBS</span>
-              </div>
-            </div>
-          </div>
-          <div class="card_infor">
-            <div class="card_infor_item" v-if="app.job.value.location.name">
-              <i class="bi bi-geo-alt"></i>
-              {{ app.job.value.location.name }}
-            </div>
-            <div class="card_infor_item" v-if="app.job.value.salary">
-              <i class="bi bi-cash-coin"></i>
-              {{ PrimitiveHelper.getSalary(app.job.value.salary) }}
-            </div>
-            <div class="card_infor_item" v-if="app.job.value.workingHours.length > 0">
-              <i class="bi bi-clock"></i>
-              {{ PrimitiveHelper.getWorkingHours(app.job.value.workingHours) }}
-            </div>
-          </div>
-          <div class="card_body" v-if="app.job.value.catchText">
-            {{ app.job.value.catchText }}
-          </div>
-          <div class="card_footer" v-if="app.job.value.searchLabels.length > 0">
-            <div class="card_footer_label" v-for="label in app.job.value.searchLabels" :key="label.id">
-              {{ label.name }}
-            </div>
-          </div>
-          <div class="card_period" v-if="app.job.value.opensAt && app.job.value.expiresAt">
-            <span>
-              {{ PrimitiveHelper.getPostPeriod(app.job.value.opensAt, app.job.value.expiresAt) }}
-            </span>
-          </div>
-        </div>
-        <button
-          class="swiper_action_button like_button"
-          style="transform: scale(1); display: block"
-          :disabled="app.isExpired"
-          @click="app.onToggleLikeButton"
-        >
-          <img src="@/assets/img/img_btn_keep.png" class="" />
-        </button>
-        <button
-          class="swiper_action_button dislike_button"
-          style="transform: scale(1); display: block"
-          :disabled="app.isExpired"
-          @click="app.onToggleDislikeButton"
-        >
-          <img src="@/assets/img/img_btn_ng.png" class="" />
-        </button>
-        <button
-          class="swiper_action_button skip_button"
-          style="transform: translateX(-50%) scale(1); display: block"
-          @click="app.onToggleSkipButton"
-        >
-          <img src="@/assets/img/img_btn_pass.png" class="" />
-        </button>
-      </div>
-      <div class="guide">
-        <button class="guide_swipe" tabindex="0" type="button" @click="app.onToggleShowTutorial(true)">
-          <svg
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06"
-            focusable="false"
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            data-testid="SwipeOutlinedIcon"
-          >
-            <path
-              d="M20.5 2v2.02C18.18 2.13 15.22 1 12 1S5.82 2.13 3.5 4.02V2H2v5h5V5.5H4.09c2.11-1.86 4.88-3 7.91-3s5.79 1.14 7.91 3H17V7h5V2h-1.5z"
-            ></path>
-            <path
-              d="m18.89 13.77-3.8-1.67c-.13-.06-.28-.1-.44-.1H14V7.63c0-1.32-.96-2.5-2.27-2.62C10.25 4.88 9 6.05 9 7.5v8.15l-1.87-.4c-.19-.03-1.02-.15-1.73.56L4 17.22l5.12 5.19c.37.38.88.59 1.41.59h6.55c.98 0 1.81-.7 1.97-1.67l.92-5.44c.15-.86-.29-1.72-1.08-2.12zM18 15.56 17.08 21h-6.55l-3.7-3.78 4.17.89V7.5c0-.28.22-.5.5-.5s.5.22.5.5v6.18h1.76L18 15.56z"
-            ></path>
-          </svg>
-          <p class="title">{{ app.t(`jobsApp.jobCard.methodOperation`) }}</p>
-        </button>
-        <button class="guide_swipe" tabindex="0" type="button" @click="app.onToggleShowUserGuide(true)">
-          <svg
-            class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06"
-            focusable="false"
-            aria-hidden="true"
-            viewBox="0 0 24 24"
-            data-testid="QuestionMarkIcon"
-          >
-            <path
-              d="M11.07 12.85c.77-1.39 2.25-2.21 3.11-3.44.91-1.29.4-3.7-2.18-3.7-1.69 0-2.52 1.28-2.87 2.34L6.54 6.96C7.25 4.83 9.18 3 11.99 3c2.35 0 3.96 1.07 4.78 2.41.7 1.15 1.11 3.3.03 4.9-1.2 1.77-2.35 2.31-2.97 3.45-.25.46-.35.76-.35 2.24h-2.89c-.01-.78-.13-2.05.48-3.15zM14 20c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"
-            ></path>
-          </svg>
-          <p class="title">{{ app.t(`jobsApp.jobCard.whatKeep`) }}</p>
-        </button>
-      </div>
+    <div id="swiper">
       <div
-        class="guide_content_swiper"
-        :class="{ hide: !app.isShowTutorial.value }"
-        @click="app.onToggleShowTutorial(false)"
+        class="card"
+        style="bottom: calc(0% + 80px); transform: translateX(-50%) scale(1); opacity: 1"
+        @click="app.onClickCard"
       >
-        <button tabindex="0" type="button" @click="app.onToggleShowTutorial(false)">
-          <i class="bi bi-x-circle" style="font-size: 2rem"></i>
-
-          <span class="MuiTouchRipple-root css-w0pj6f"></span>
-        </button>
-        <img src="@/assets/img/img_tutorial.png" />
+        <div class="card_header">
+          <div class="card_header_types_const">
+            <div class="card_header_button_const">
+              <button @click="app.onToggleViewDetail">
+                <span>{{ app.t(`jobsApp.jobCard.viewDetail`) }}</span>
+                <img src="@/assets/img/ic_arrow_forward.svg" alt="Forward" />
+              </button>
+            </div>
+            <div class="card_header_title" v-if="app.job.value.title">{{ app.job.value.title }}</div>
+          </div>
+          <div class="card_header_img_const">
+            <img :src="app.job.value.mainImageUrl" alt="Main image" v-if="app.job.value.mainImageUrl" />
+            <img
+              :src="app.job.value.subImages[0].url"
+              alt="Main image"
+              v-else-if="app.job.value.subImages.length > 0"
+            />
+            <div class="card_header_hiring_title" v-if="app.isDisplayed.value">
+              <div class="card_header_types">
+                <div class="card_header_types_item">A</div>
+                <div class="card_header_types_item">B</div>
+              </div>
+              <span>JOBS</span>
+            </div>
+          </div>
+        </div>
+        <div class="card_infor">
+          <div class="card_infor_item" v-if="app.job.value.location.name">
+            <i class="bi bi-geo-alt"></i>
+            {{ app.job.value.location.name }}
+          </div>
+          <div class="card_infor_item" v-if="app.job.value.salary">
+            <i class="bi bi-cash-coin"></i>
+            {{ PrimitiveHelper.getSalary(app.job.value.salary) }}
+          </div>
+          <div class="card_infor_item" v-if="app.job.value.workingHours.length > 0">
+            <i class="bi bi-clock"></i>
+            {{ PrimitiveHelper.getWorkingHours(app.job.value.workingHours) }}
+          </div>
+        </div>
+        <div class="card_body" v-if="app.job.value.catchText">
+          {{ app.job.value.catchText }}
+        </div>
+        <div class="card_footer" v-if="app.job.value.searchLabels.length > 0">
+          <div class="card_footer_label" v-for="label in app.job.value.searchLabels" :key="label.id">
+            {{ label.name }}
+          </div>
+        </div>
+        <div class="card_period" v-if="app.job.value.opensAt && app.job.value.expiresAt">
+          <span>
+            {{ PrimitiveHelper.getPostPeriod(app.job.value.opensAt, app.job.value.expiresAt) }}
+          </span>
+        </div>
       </div>
-      <div
-        class="guide_content_button"
-        :class="{ hide: !app.isShowUserGuild.value }"
-        @click="app.onToggleShowUserGuide(false)"
+      <button
+        class="swiper_action_button like_button"
+        style="transform: scale(1); display: block"
+        :disabled="app.isExpired()"
+        @click="app.onToggleLikeButton"
       >
-        <button tabindex="0" type="button" @click="app.onToggleShowUserGuide(false)">
-          <i class="bi bi-x-circle" style="font-size: 2rem"></i>
+        <img src="@/assets/img/img_btn_keep.png" class="" />
+      </button>
+      <button
+        class="swiper_action_button dislike_button"
+        style="transform: scale(1); display: block"
+        :disabled="app.isExpired()"
+        @click="app.onToggleDislikeButton"
+      >
+        <img src="@/assets/img/img_btn_ng.png" class="" />
+      </button>
+      <button
+        class="swiper_action_button skip_button"
+        style="transform: translateX(-50%) scale(1); display: block"
+        @click="app.onToggleSkipButton"
+      >
+        <img src="@/assets/img/img_btn_pass.png" class="" />
+      </button>
+    </div>
+    <div class="guide">
+      <button class="guide_swipe" tabindex="0" type="button" @click="app.onToggleShowTutorial(true)">
+        <svg
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06"
+          focusable="false"
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          data-testid="SwipeOutlinedIcon"
+        >
+          <path
+            d="M20.5 2v2.02C18.18 2.13 15.22 1 12 1S5.82 2.13 3.5 4.02V2H2v5h5V5.5H4.09c2.11-1.86 4.88-3 7.91-3s5.79 1.14 7.91 3H17V7h5V2h-1.5z"
+          ></path>
+          <path
+            d="m18.89 13.77-3.8-1.67c-.13-.06-.28-.1-.44-.1H14V7.63c0-1.32-.96-2.5-2.27-2.62C10.25 4.88 9 6.05 9 7.5v8.15l-1.87-.4c-.19-.03-1.02-.15-1.73.56L4 17.22l5.12 5.19c.37.38.88.59 1.41.59h6.55c.98 0 1.81-.7 1.97-1.67l.92-5.44c.15-.86-.29-1.72-1.08-2.12zM18 15.56 17.08 21h-6.55l-3.7-3.78 4.17.89V7.5c0-.28.22-.5.5-.5s.5.22.5.5v6.18h1.76L18 15.56z"
+          ></path>
+        </svg>
+        <p class="title">{{ app.t(`jobsApp.jobCard.methodOperation`) }}</p>
+      </button>
+      <button class="guide_swipe" tabindex="0" type="button" @click="app.onToggleShowUserGuide(true)">
+        <svg
+          class="MuiSvgIcon-root MuiSvgIcon-fontSizeSmall css-1k33q06"
+          focusable="false"
+          aria-hidden="true"
+          viewBox="0 0 24 24"
+          data-testid="QuestionMarkIcon"
+        >
+          <path
+            d="M11.07 12.85c.77-1.39 2.25-2.21 3.11-3.44.91-1.29.4-3.7-2.18-3.7-1.69 0-2.52 1.28-2.87 2.34L6.54 6.96C7.25 4.83 9.18 3 11.99 3c2.35 0 3.96 1.07 4.78 2.41.7 1.15 1.11 3.3.03 4.9-1.2 1.77-2.35 2.31-2.97 3.45-.25.46-.35.76-.35 2.24h-2.89c-.01-.78-.13-2.05.48-3.15zM14 20c0 1.1-.9 2-2 2s-2-.9-2-2 .9-2 2-2 2 .9 2 2z"
+          ></path>
+        </svg>
+        <p class="title">{{ app.t(`jobsApp.jobCard.whatKeep`) }}</p>
+      </button>
+    </div>
+    <div
+      class="guide_content_swiper"
+      :class="{ hide: !app.isShowTutorial.value }"
+      @click="app.onToggleShowTutorial(false)"
+    >
+      <button tabindex="0" type="button" @click="app.onToggleShowTutorial(false)">
+        <i class="bi bi-x-circle" style="font-size: 2rem"></i>
 
-          <span class="MuiTouchRipple-root css-w0pj6f"></span>
-        </button>
-        <img src="@/assets/img/img_user_guide.png" />
-      </div>
-    </template>
+        <span class="MuiTouchRipple-root css-w0pj6f"></span>
+      </button>
+      <img src="@/assets/img/img_tutorial.png" />
+    </div>
+    <div
+      class="guide_content_button"
+      :class="{ hide: !app.isShowUserGuild.value }"
+      @click="app.onToggleShowUserGuide(false)"
+    >
+      <button tabindex="0" type="button" @click="app.onToggleShowUserGuide(false)">
+        <i class="bi bi-x-circle" style="font-size: 2rem"></i>
 
-    <template v-else>
-      <div class="message">
-        <div class="title">
-          <span>{{ app.t(`jobsApp.jobCard.message.title.0`) }}</span>
-          <span>{{ app.t(`jobsApp.jobCard.message.title.1`) }}</span>
-        </div>
-        <div class="info">
-          <span>{{ app.t(`jobsApp.jobCard.message.nextUpdate`) }}</span>
-        </div>
-        <div class="date">
-          <span>{{ DatetimeHelper.getFullDate(new Date(DatetimeHelper.getCurrentUTCMilliseconds() + 86400000)) }}</span>
-        </div>
-        <div class="info">
-          <span>{{ app.t(`jobsApp.jobCard.message.is`) }}</span>
-        </div>
-        <div class="desc">
-          <img src="@/assets/img/history.svg" alt="" class="image" />
-          <span>{{ app.t(`jobsApp.jobCard.message.info`) }}</span>
-        </div>
-      </div>
-    </template>
+        <span class="MuiTouchRipple-root css-w0pj6f"></span>
+      </button>
+      <img src="@/assets/img/img_user_guide.png" />
+    </div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
-import { DatetimeHelper } from "@/helpers/datetime.helper";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import { ValidateHelper } from "@/helpers/validate.helper";
 import { JobModel } from "@/models/job.model";
@@ -592,66 +565,6 @@ const app = defineClassComponent(
 
   & .guide_content_button {
     background: white;
-  }
-
-  & .message {
-    top: 50%;
-    left: 50%;
-    width: 100%;
-    position: absolute;
-    transform: translate(-50%, -50%);
-
-    & .title {
-      color: #000;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      font-size: 16px;
-      font-weight: 600;
-      line-height: 23px;
-      white-space: pre-line;
-      margin-bottom: 40px;
-    }
-
-    & .info {
-      color: #000;
-      text-align: center;
-      font-size: 16px;
-      font-weight: 400;
-      line-height: 23px;
-    }
-
-    & .date {
-      color: #e65078;
-      text-align: center;
-      font-size: 36px;
-      flex-shrink: 0;
-      font-weight: 500;
-      line-height: 52px;
-      margin-right: 6px;
-    }
-
-    & .desc {
-      color: #9f085f;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      text-decoration: none;
-      margin-top: 40px;
-
-      & .image {
-        color: inherit;
-      }
-
-      & span {
-        font-weight: 400;
-        font-size: 1rem;
-        line-height: 1.5;
-        letter-spacing: 0.00938em;
-        margin-left: 6px;
-      }
-    }
   }
 }
 

@@ -1,29 +1,51 @@
 <template>
   <UserLayout>
-    <JobCard
-      :data="app.filtersJobs.value[app.filtersIndex.value]"
-      @on-click-card="app.onClickCard"
-      @on-toggle-view-detail="app.onToggleViewDetail"
-      @on-toggle-like-button="app.onToggleLikeButton"
-      @on-toggle-dislike-button="app.onToggleDislikeButton"
-      @on-toggle-skip-button="app.onToggleSkipButton"
-    >
-      <div class="result_search" :style="{ height: app.searchHeight.value }">
-        <div class="search_bar" :style="{ top: app.isShowFormSearch.value ? 0 : app.formSearchHide.value }">
-          <FormSearch is-disable-search-button @get-height="app.setHeight" @on-submit-form="app.onSubmitForm" />
-          <div class="search-condition" @click="app.onOpenFormSearch()">
-            <div class="content" v-if="app.isShowFormSearch.value">
-              <i class="bi bi-arrow-up-short" style="font-size: 18px; color: #9f085f"></i>
-              <p class="">{{ app.t(`jobsApp.jobCard.close`) }}</p>
-            </div>
-            <div class="content" v-else>
-              <i class="bi bi-arrow-down-short" style="font-size: 18px; color: #9f085f"></i>
-              <p class="">{{ app.t(`jobsApp.jobCard.currentSearch`) }}</p>
-            </div>
+    <div class="result_search" :style="{ height: app.searchHeight.value }">
+      <div class="search_bar" :style="{ top: app.isShowFormSearch.value ? 0 : app.formSearchHide.value }">
+        <FormSearch is-disable-search-button @get-height="app.setHeight" @on-submit-form="app.onSubmitForm" />
+        <div class="search-condition" @click="app.onOpenFormSearch()">
+          <div class="content" v-if="app.isShowFormSearch.value">
+            <i class="bi bi-arrow-up-short" style="font-size: 18px; color: #9f085f"></i>
+            <p class="">{{ app.t(`jobsApp.jobCard.close`) }}</p>
+          </div>
+          <div class="content" v-else>
+            <i class="bi bi-arrow-down-short" style="font-size: 18px; color: #9f085f"></i>
+            <p class="">{{ app.t(`jobsApp.jobCard.currentSearch`) }}</p>
           </div>
         </div>
       </div>
-    </JobCard>
+    </div>
+    <template v-if="app.seekersStore.totalJobsWithCondition > 0">
+      <JobCard
+        :data="app.filtersJobs.value[app.filtersIndex.value]"
+        @on-click-card="app.onClickCard"
+        @on-toggle-view-detail="app.onToggleViewDetail"
+        @on-toggle-like-button="app.onToggleLikeButton"
+        @on-toggle-dislike-button="app.onToggleDislikeButton"
+        @on-toggle-skip-button="app.onToggleSkipButton"
+      />
+    </template>
+    <template v-else>
+      <div class="message">
+        <div class="title">
+          <span>{{ app.t(`jobsApp.jobCard.message.title.0`) }}</span>
+          <span>{{ app.t(`jobsApp.jobCard.message.title.1`) }}</span>
+        </div>
+        <div class="info">
+          <span>{{ app.t(`jobsApp.jobCard.message.nextUpdate`) }}</span>
+        </div>
+        <div class="date">
+          <span>{{ DatetimeHelper.getFullDate(new Date(DatetimeHelper.getCurrentUTCMilliseconds() + 86400000)) }}</span>
+        </div>
+        <div class="info">
+          <span>{{ app.t(`jobsApp.jobCard.message.is`) }}</span>
+        </div>
+        <div class="desc">
+          <img src="@/assets/img/history.svg" alt="" class="image" />
+          <span>{{ app.t(`jobsApp.jobCard.message.info`) }}</span>
+        </div>
+      </div>
+    </template>
   </UserLayout>
 </template>
 
@@ -35,6 +57,7 @@ import FormSearch from "@/components/UserComponents/HomeContent/Form/FormSearch.
 import { AppConst } from "@/const/app.const";
 import { KeyConst } from "@/const/key.const";
 import { PathConst } from "@/const/path.const";
+import { DatetimeHelper } from "@/helpers/datetime.helper";
 import { StorageHelper } from "@/helpers/storage.helper";
 import { useSeekersStore } from "@/stores/seekers.store";
 import type { Ref } from "vue";
@@ -205,6 +228,66 @@ const app = defineClassComponent(
           padding-left: 6px;
         }
       }
+    }
+  }
+}
+
+.message {
+  top: 50%;
+  left: 50%;
+  width: 100%;
+  position: absolute;
+  transform: translate(-50%, -50%);
+
+  & .title {
+    color: #000;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 600;
+    line-height: 23px;
+    white-space: pre-line;
+    margin-bottom: 40px;
+  }
+
+  & .info {
+    color: #000;
+    text-align: center;
+    font-size: 16px;
+    font-weight: 400;
+    line-height: 23px;
+  }
+
+  & .date {
+    color: #e65078;
+    text-align: center;
+    font-size: 36px;
+    flex-shrink: 0;
+    font-weight: 500;
+    line-height: 52px;
+    margin-right: 6px;
+  }
+
+  & .desc {
+    color: #9f085f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-decoration: none;
+    margin-top: 40px;
+
+    & .image {
+      color: inherit;
+    }
+
+    & span {
+      font-weight: 400;
+      font-size: 1rem;
+      line-height: 1.5;
+      letter-spacing: 0.00938em;
+      margin-left: 6px;
     }
   }
 }
