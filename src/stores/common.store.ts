@@ -34,19 +34,22 @@ export const useCommonStore = defineClassStore(
 
     public fetchAllLocations = async () => {
       try {
-        const res = await api.get(ApiConst.commonEndpoints.getAllLocations);
-        if (res.status === ApiConst.status.ok) {
-          const data: any[] = await res.json();
-          this.locations.value = data.map((data) => {
-            const location = {
-              id: data.id,
-              name: data.city,
-            };
-            return new LocationModel(location);
-          });
-          return true;
+        if (this.locations.value.length <= 0) {
+          const res = await api.get(ApiConst.commonEndpoints.getAllLocations);
+          if (res.status === ApiConst.status.ok) {
+            const data: any[] = await res.json();
+            this.locations.value = data.map((data) => {
+              const location = {
+                id: data.id,
+                name: data.city,
+              };
+              return new LocationModel(location);
+            });
+            return true;
+          }
+          return false;
         }
-        return false;
+        return true;
       } catch (error) {
         console.log(error);
         return false;
@@ -59,20 +62,23 @@ export const useCommonStore = defineClassStore(
 
     public fetchAllSearchLabels = async () => {
       try {
-        const res = await api.get(ApiConst.commonEndpoints.getAllSearchLabel);
-        if (res.status === ApiConst.status.ok) {
-          const data: any[] = await res.json();
-          this.searchLabels.value = data.map((data) => {
-            const label = {
-              id: data.id,
-              name: data.name,
-              isEnabled: data.isEnabled,
-            };
-            return new SearchLabelModel(label);
-          });
-          return true;
+        if (this.searchLabels.value.length <= 0) {
+          const res = await api.get(ApiConst.commonEndpoints.getAllSearchLabel);
+          if (res.status === ApiConst.status.ok) {
+            const data: any[] = await res.json();
+            this.searchLabels.value = data.map((data) => {
+              const label = {
+                id: data.id,
+                name: data.name,
+                isEnabled: data.isEnabled,
+              };
+              return new SearchLabelModel(label);
+            });
+            return true;
+          }
+          return false;
         }
-        return false;
+        return true;
       } catch (error) {
         console.log(error);
         return false;

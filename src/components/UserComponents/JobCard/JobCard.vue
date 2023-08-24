@@ -1,5 +1,7 @@
 <template>
-  <div class="job-card-container">
+  <LoadingComponent :is-loading="!app.job.value" v-if="!app.job.value" />
+
+  <div class="job-card-container" v-else-if="app.job.value.id > 0">
     <div id="swiper">
       <div
         class="card"
@@ -146,6 +148,7 @@
 
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
+import LoadingComponent from "@/components/AppComponents/LoadingComponent/LoadingComponent.vue";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
 import { ValidateHelper } from "@/helpers/validate.helper";
 import { JobModel } from "@/models/job.model";
