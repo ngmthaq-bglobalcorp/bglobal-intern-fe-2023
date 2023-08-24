@@ -13,7 +13,7 @@
             tabindex="0"
             type="button"
             id="like_button_id"
-            :disabled="app.isExpired"
+            :disabled="app.isExpired()"
             @click="app.onToggleLikeButton"
           >
             <i class="bi bi-bookmark icon"></i>
@@ -25,7 +25,7 @@
             tabindex="0"
             type="button"
             id="dislike_button_id"
-            :disabled="app.isExpired"
+            :disabled="app.isExpired()"
             @click="app.onToggleDislikeButton"
           >
             <i class="bi bi-x-lg icon"></i>

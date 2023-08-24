@@ -4,6 +4,7 @@ import { Api } from "@/plugins/api.plugin";
 import { ApiConst } from "@/const/api.const";
 import { AppConst } from "@/const/app.const";
 import { ModelHelper } from "@/helpers/model.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import { SeekerModel } from "@/models/seeker.model";
 import { JobModel } from "@/models/job.model";
 
@@ -153,6 +154,12 @@ export const useSeekersStore = defineClassStore(
         if (res.status === ApiConst.status.ok) {
           const data: any[] = await res.json();
           this.jobs.value = data.map((data) => ModelHelper.getJobModel(data));
+          // this.jobs.value = [];
+          // data.forEach((data) => {
+          //   if (!ValidateHelper.isExpired(new Date(data.opensAt), new Date(data.expiresAt))) {
+          //     this.jobs.value.push(ModelHelper.getJobModel(data));
+          //   }
+          // });
           return true;
         }
         return false;
