@@ -30,18 +30,31 @@
       </ul>
     </div>
 
-    <!-- Job Card List -->
-    <ul class="jobs-list list" v-if="app.filtersJobs.value.length > 0">
-      <li class="jobs-item" v-for="item in app.filtersJobs.value" :key="item.id">
-        <JobCard
-          :data="item"
-          @on-click-card="app.onClickCard"
-          @on-toggle-update-button="app.onToggleUpdateButton"
-          @on-toggle-delete-button="app.onToggleDeleteButton"
+    <div class="jobs-list-wrapper" v-if="app.filtersJobs.value.length > 0">
+      <!-- Job Card List -->
+      <ul class="jobs-list list">
+        <li class="jobs-item" v-for="item in app.filtersJobs.value" :key="item.id">
+          <JobCard
+            :data="item"
+            @on-click-card="app.onClickCard"
+            @on-toggle-update-button="app.onToggleUpdateButton"
+            @on-toggle-delete-button="app.onToggleDeleteButton"
+          />
+        </li>
+      </ul>
+      <!-- End Job Card List -->
+
+      <!-- Pagination -->
+      <div class="footer-pagination" v-if="app.totalPages.value > 0">
+        <Pagination
+          :current-page="app.pageNumber.value"
+          :page-size="app.pageSize.value"
+          :total-count="app.totalData.value"
+          @on-page-change="app.onPageChange"
         />
-      </li>
-    </ul>
-    <!-- End Job Card List -->
+      </div>
+      <!-- End Pagination -->
+    </div>
 
     <!-- Message -->
     <div class="jobs-message" v-else>
@@ -51,17 +64,6 @@
       <button class="small-btn primary-btn" @click="app.onToggleCreateButton">{{ app.t(`app.create`) }}</button>
     </div>
     <!-- End Message -->
-
-    <!-- Pagination -->
-    <div class="footer-pagination" v-if="app.totalPages.value > 0">
-      <Pagination
-        :current-page="app.pageNumber.value"
-        :page-size="app.pageSize.value"
-        :total-count="app.totalData.value"
-        @on-page-change="app.onPageChange"
-      />
-    </div>
-    <!-- End Pagination -->
   </AdminLayout>
 </template>
 
@@ -203,15 +205,21 @@ const app = defineClassComponent(
   }
 }
 
-.jobs-list {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  width: 80%;
-  margin: auto;
+.jobs-list-wrapper {
+  & .jobs-list {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    width: 80%;
+    margin: auto;
 
-  & .jobs-item {
-    padding: 0 0.75rem;
-    margin-bottom: 2rem;
+    & .jobs-item {
+      padding: 0 0.75rem;
+      margin-bottom: 2rem;
+    }
+  }
+
+  & .footer-pagination {
+    margin-top: 20px;
   }
 }
 
@@ -243,9 +251,5 @@ const app = defineClassComponent(
     margin-top: 0;
     margin-bottom: 1rem;
   }
-}
-
-.footer-pagination {
-  margin-top: 20px;
 }
 </style>

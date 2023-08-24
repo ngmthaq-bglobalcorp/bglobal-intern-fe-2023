@@ -27,6 +27,11 @@
               <span v-if="item.desc">{{ item.desc }}</span>
             </li>
           </ul>
+          <div class="job-message-wrapper" v-if="app.isExpired()">
+            <div class="job-message">
+              <span class="message">{{ app.t(`app.expired`) }}</span>
+            </div>
+          </div>
         </div>
       </div>
       <!-- End Page Header -->
@@ -66,6 +71,7 @@
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PathConst } from "@/const/path.const";
 import { DatetimeHelper } from "@/helpers/datetime.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import type { DetailPageHeaderEmits, DetailPageHeaderProps } from "./DetailPageHeaderComponent";
 import type { Ref } from "vue";
 import type { JobModel } from "@/models/job.model";
@@ -114,6 +120,10 @@ const app = defineClassComponent(
     public constructor() {
       super();
     }
+
+    public isExpired = () => {
+      return ValidateHelper.isExpired(this.job.value.opensAt, this.job.value.expiresAt);
+    };
 
     public onToggleUpdate = () => {
       emits("onToggleUpdateButton");
@@ -175,6 +185,24 @@ const app = defineClassComponent(
 
             & .first {
               margin-right: 0.25rem;
+            }
+          }
+        }
+
+        & .job-message-wrapper {
+          margin-top: 1rem;
+
+          & .job-message {
+            color: $white;
+            background-color: $danger;
+            text-align: center;
+            padding: 0.25rem 0.75rem;
+            border-radius: 0.5rem;
+
+            & .message {
+              font-size: 0.875rem;
+              font-weight: 400;
+              line-height: 1;
             }
           }
         }

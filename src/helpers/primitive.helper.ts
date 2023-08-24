@@ -74,9 +74,9 @@ export class PrimitiveHelper {
     workingHours.forEach((value, index) => {
       text += `${DatetimeHelper.getHourAndMinute(value.startTime)}~${DatetimeHelper.getHourAndMinute(value.endTime)}`;
       if (value.isFullTime) {
-        text += `(fulltime)`;
+        text += ` (fulltime)`;
       } else {
-        text += `(${value.countHours} hours)`;
+        text += ` (${value.countHours} hours)`;
       }
       if (index < workingHours.length - 1) {
         text += `, `;

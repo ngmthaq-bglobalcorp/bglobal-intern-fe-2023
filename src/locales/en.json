@@ -214,7 +214,8 @@
     "create": "Create my first job",
     "pleaseWait": "Please Wait",
     "notFound": "Sorry, the page you're looking for cannot be found.",
-    "internalError": "The server encountered an internal error or misconfiguration and was unable to complete your request."
+    "internalError": "The server encountered an internal error or misconfiguration and was unable to complete your request.",
+    "expired": "Expired"
   },
   "jobsApp": {
     "header": {

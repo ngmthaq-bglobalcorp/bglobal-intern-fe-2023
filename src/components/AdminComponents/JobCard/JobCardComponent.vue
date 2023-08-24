@@ -1,5 +1,13 @@
 <template>
   <div class="job-card-container">
+    <!-- Message -->
+    <div class="job-message-wrapper" v-if="app.isExpired()">
+      <div class="job-message">
+        <span class="message">{{ app.t(`app.expired`) }}</span>
+      </div>
+    </div>
+    <!-- End Message -->
+
     <!-- Card -->
     <div class="job-wrapper" @click="app.onClickCard(app.job.value.id)">
       <div class="job-header">
@@ -10,6 +18,7 @@
           class="main-img"
           v-else-if="app.job.value.subImages.length > 0"
         />
+        <div style="padding: 20px" v-else></div>
         <h2 class="job-title">{{ app.job.value.title }}</h2>
       </div>
       <div class="job-body">
@@ -30,13 +39,13 @@
         <div class="body-desc" v-if="app.job.value.catchText">
           {{ app.job.value.catchText }}
         </div>
-      </div>
-      <div class="job-footer">
-        <ul class="footer-label list" v-if="app.job.value.searchLabels.length > 0">
+        <ul class="body-label list" v-if="app.job.value.searchLabels.length > 0">
           <li class="search-label" v-for="label in app.job.value.searchLabels" :key="label.id">
             {{ label.name }}
           </li>
         </ul>
+      </div>
+      <div class="job-footer">
         <div class="opens-expires" v-if="app.job.value.opensAt && app.job.value.expiresAt">
           <span>
             {{ PrimitiveHelper.getPostPeriod(app.job.value.opensAt, app.job.value.expiresAt) }}
@@ -68,6 +77,7 @@
 <script setup lang="ts">
 import { BaseComponent, defineClassComponent } from "@/plugins/component.plugin";
 import { PrimitiveHelper } from "@/helpers/primitive.helper";
+import { ValidateHelper } from "@/helpers/validate.helper";
 import type { JobCardEmits, JobCardProps } from "./JobCardComponent";
 import type { Ref } from "vue";
 import type { JobModel } from "@/models/job.model";
@@ -82,6 +92,10 @@ const app = defineClassComponent(
     public constructor() {
       super();
     }
+
+    public isExpired = () => {
+      return ValidateHelper.isExpired(this.job.value.opensAt, this.job.value.expiresAt);
+    };
 
     public onClickCard = (id: number) => {
       emits("onClickCard", id);
@@ -119,10 +133,29 @@ const app = defineClassComponent(
     box-shadow: 0 0.1875rem 0.75rem rgba(140, 152, 164, 0.25);
   }
 
+  & .job-message-wrapper {
+    position: absolute;
+    top: 1rem;
+    left: -0.5rem;
+
+    & .job-message {
+      color: $white;
+      background-color: $danger;
+      text-align: center;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.5rem;
+
+      & .message {
+        font-size: 0.875rem;
+        font-weight: 400;
+        line-height: 1;
+      }
+    }
+  }
+
   & .job-wrapper {
     display: flex;
     flex-direction: column;
-    flex-wrap: wrap;
     padding: 1.3125rem;
 
     & .job-header {
@@ -152,7 +185,7 @@ const app = defineClassComponent(
       & .body-info {
         display: flex;
         flex-direction: column;
-        flex-wrap: wrap;
+        flex-wrap: nowrap;
         margin-bottom: 1rem;
 
         & .info-detail {
@@ -170,16 +203,13 @@ const app = defineClassComponent(
 
       & .body-desc {
         display: block;
+        margin-bottom: 1rem;
       }
-    }
 
-    & .job-footer {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-
-      & .footer-label {
+      & .body-label {
         display: flex;
+        align-items: center;
+        justify-content: center;
         flex-wrap: wrap;
         gap: 0.5rem;
 
@@ -191,6 +221,12 @@ const app = defineClassComponent(
           padding: 0 0.5rem;
         }
       }
+    }
+
+    & .job-footer {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
 
       & .opens-expires {
         margin-top: 0.5rem;
